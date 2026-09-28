@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { FormField, form, required, submit } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import {
@@ -7,16 +7,27 @@ import {
   missionNeedsReadiness,
   type MissionOutcome,
 } from '../../../core/domain/mission';
-import type { MissionInstance, ReadinessStatus } from '../../../core/domain/models';
+import type {
+  LocalDate,
+  MissionInstance,
+  ReadinessStatus,
+  TrialResult,
+} from '../../../core/domain/models';
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
+import { isChapterOneComplete } from '../../../core/program/chapter-one-completion';
 import {
   getChapterOneActivityChoicesForDate,
   getChapterOneMissionsForDate,
 } from '../../../core/program/chapter-one-missions';
-import { getTodaysOrders } from '../../../core/program/campaign';
+import {
+  getCampaignDay,
+  getChapterOneTargetDay,
+  getTodaysOrders,
+} from '../../../core/program/campaign';
 import { loadChapterOneWorkout } from '../../../core/program/chapter-one-workouts';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MissionHistory } from '../../../core/state/mission-history';
+import { TrialHistory } from '../../../core/state/trial-history';
 import { Icon, type IconName } from '../../../shared/icon/icon';
 import { ActivityChoice } from '../activity-choice/activity-choice';
 import { ReadinessStrip } from '../readiness-strip/readiness-strip';
@@ -47,11 +58,13 @@ const OUTCOME_OPTIONS: ReadonlyArray<{ value: MissionOutcome; label: string }> =
   styleUrl: './mission-page.css',
   templateUrl: './mission-page.html',
 })
-export class MissionPage implements OnInit {
+export class MissionPage {
   protected readonly state = inject(CampaignState);
   private readonly history = inject(MissionHistory);
+  private readonly trialHistory = inject(TrialHistory);
 
   protected readonly records = signal<MissionInstance[]>([]);
+  private readonly completedTrials = signal<TrialResult[]>([]);
   protected readonly historyLoading = signal(true);
   protected readonly historyError = signal<string | null>(null);
   protected readonly saving = signal(false);
@@ -59,6 +72,12 @@ export class MissionPage implements OnInit {
   protected readonly recordAnother = signal(false);
   protected readonly selectedActivityId = signal<string | null>(null);
   protected readonly outcomeOptions = OUTCOME_OPTIONS;
+  private loadedDate: LocalDate | null = null;
+  private loadSequence = 0;
+
+  protected readonly chapterComplete = computed(() =>
+    isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
+  );
 
   protected readonly activityChoices = computed(() => {
     const campaign = this.state.campaign();
@@ -162,8 +181,11 @@ export class MissionPage implements OnInit {
     });
   });
 
-  ngOnInit(): void {
-    void this.load();
+  constructor() {
+    effect(() => {
+      const date = this.state.today();
+      untracked(() => this.beginDateLoad(date));
+    });
   }
 
   protected readinessLabel(): string {
@@ -215,7 +237,14 @@ export class MissionPage implements OnInit {
   protected async save(event: Event): Promise<void> {
     event.preventDefault();
     this.saveError.set(null);
-    if (this.saving() || (this.latestRecord() && !this.recordAnother())) return;
+    if (this.saving() || this.historyLoading()) return;
+    const date = this.state.today();
+    await this.state.initialize();
+    if (date !== this.state.today() || this.loadedDate !== date) {
+      this.saveError.set('A new day started. Review today’s mission before saving.');
+      return;
+    }
+    if (this.latestRecord() && !this.recordAnother()) return;
 
     await submit(this.missionForm, async () => {
       const definition = this.definition();
@@ -229,16 +258,16 @@ export class MissionPage implements OnInit {
       this.saving.set(true);
       try {
         const record = createMissionRecord({
-          id: `mission-${this.state.today()}-${crypto.randomUUID()}`,
+          id: `mission-${date}-${crypto.randomUUID()}`,
           definition,
-          date: this.state.today(),
+          date,
           outcome,
           recordedAt: new Date().toISOString(),
           readiness: this.readiness(),
           notes: values.notes,
         });
         await this.history.add(record);
-        this.records.update((items) => [...items, record]);
+        if (date === this.state.today()) this.records.update((items) => [...items, record]);
         this.recordAnother.set(false);
         this.missionForm().reset({ outcome: '', notes: '' });
       } catch (error) {
@@ -252,17 +281,43 @@ export class MissionPage implements OnInit {
   }
 
   protected retry(): void {
-    void this.load();
+    void this.load(this.state.today());
   }
 
-  private async load(): Promise<void> {
+  private beginDateLoad(date: LocalDate): void {
+    if (this.loadedDate === date) return;
+    this.loadedDate = date;
+    // A rollover must clear yesterday's records and unfinished outcome at once.
+    this.records.set([]);
+    this.completedTrials.set([]);
+    this.selectedActivityId.set(null);
+    this.recordAnother.set(false);
+    this.missionForm().reset({ outcome: '', notes: '' });
+    this.saveError.set(null);
+    void this.load(date);
+  }
+
+  private async load(date: LocalDate): Promise<void> {
+    const sequence = ++this.loadSequence;
     this.historyLoading.set(true);
     this.historyError.set(null);
     try {
       await this.state.initialize();
-      if (this.state.campaign()) {
-        const records = await this.history.forDate(this.state.today());
+      if (this.state.today() !== date) return;
+      const campaign = this.state.campaign();
+      if (campaign) {
+        const needsTrialHistory =
+          campaign.currentChapterId === chapterOneDefinition.id &&
+          getCampaignDay(campaign.startDate, date) > getChapterOneTargetDay(campaign.startDate);
+        const [records, trials] = await Promise.all([
+          this.history.forDate(date),
+          needsTrialHistory
+            ? this.trialHistory.forTrial(chapterOneDefinition.trialId)
+            : Promise.resolve([]),
+        ]);
+        if (sequence !== this.loadSequence || this.state.today() !== date) return;
         this.records.set(records);
+        this.completedTrials.set(trials);
         const choiceIds = new Set(this.activityChoices().map((choice) => choice.id));
         this.selectedActivityId.set(
           records.filter((record) => choiceIds.has(record.definitionId)).at(-1)?.definitionId ??
@@ -270,11 +325,13 @@ export class MissionPage implements OnInit {
         );
       }
     } catch {
-      this.historyError.set(
-        'Local mission history is unavailable. Check browser storage settings, then try again.',
-      );
+      if (sequence === this.loadSequence) {
+        this.historyError.set(
+          'Local mission or Gate Trial history is unavailable. Check browser storage settings, then try again.',
+        );
+      }
     } finally {
-      this.historyLoading.set(false);
+      if (sequence === this.loadSequence) this.historyLoading.set(false);
     }
   }
 }

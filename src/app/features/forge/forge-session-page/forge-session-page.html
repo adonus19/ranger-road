@@ -27,6 +27,18 @@
         >Resume {{ active.definitionSnapshot.title }}</a
       >
     </section>
+  } @else if (error() && !draft()) {
+    <section class="notice" role="alert">
+      <h1>Session unavailable</h1>
+      <p>{{ error() }}</p>
+      <button type="button" (click)="load()">Try again</button>
+    </section>
+  } @else if (chapterComplete() && !draft()) {
+    <section class="notice" aria-labelledby="session-chapter-complete-title">
+      <h1 id="session-chapter-complete-title">Chapter I complete</h1>
+      <p>Your four full weeks and completed Gate Trial are on record.</p>
+      <a routerLink="/forge">Return to Forge</a>
+    </section>
   } @else if ((!definition() || !allowed()) && !draft()) {
     <section class="notice">
       <h1>Session unavailable</h1>
@@ -70,6 +82,12 @@
             }
           </div>
         }
+        @if (weekFourVolume(); as guide) {
+          <p class="volume-guide">
+            Week 4 volume: <strong>{{ completedSets() }} completed</strong> of around
+            {{ guide.aroundCompletedSets }} work sets · {{ skippedSets() }} skipped.
+          </p>
+        }
         <div class="action-dock">
           <button
             type="button"
@@ -100,6 +118,14 @@
               <p>{{ instruction }}</p>
             }
           </div>
+        }
+
+        @if (weekFourVolume(); as guide) {
+          <p class="volume-guide">
+            Week 4 volume: <strong>{{ completedSets() }} completed</strong> of around
+            {{ guide.aroundCompletedSets }} work sets · {{ skippedSets() }} skipped of
+            {{ guide.plannedSets }} planned.
+          </p>
         }
 
         <div class="set-heading">
@@ -273,6 +299,13 @@
               : 'Review the finish before saving this session.'
           }}
         </p>
+        @if (weekFourVolume(); as guide) {
+          <p class="volume-guide">
+            Week 4 volume: <strong>{{ completedSets() }} completed</strong> of around
+            {{ guide.aroundCompletedSets }} work sets · {{ skippedSets() }} skipped of
+            {{ guide.plannedSets }} planned.
+          </p>
+        }
         @if (session.definitionSnapshot.finish?.length) {
           <div class="finish-step">
             <h2>Prescribed finish</h2>

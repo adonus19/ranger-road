@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { TrialCircuitMovement } from '../../../core/domain/models';
+import type { TrialCircuitMovement, TrialResult } from '../../../core/domain/models';
 import {
   getCampaignDay,
   getChapterOneLeadInDays,
@@ -8,10 +8,12 @@ import {
   getGateTrialTargetDate,
 } from '../../../core/program/campaign';
 import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
+import { isChapterOneComplete } from '../../../core/program/chapter-one-completion';
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
 import { formatChapterLine, loadChapterSeed } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { RoadHistory, type SavedRoadSession } from '../../../core/state/road-history';
+import { TrialHistory } from '../../../core/state/trial-history';
 import { formatLongDate, formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
 import { roadSessionParts } from '../road-session-summary';
@@ -26,10 +28,17 @@ import { RouteChart } from '../route-chart/route-chart';
 export class RoadPage implements OnInit {
   protected readonly state = inject(CampaignState);
   private readonly history = inject(RoadHistory);
+  private readonly trialHistory = inject(TrialHistory);
 
   protected readonly walks = signal<SavedRoadSession[]>([]);
   protected readonly walksLoading = signal(true);
   protected readonly walksError = signal(false);
+  protected readonly trialHistoryLoading = signal(true);
+  protected readonly trialHistoryError = signal(false);
+  private readonly completedTrials = signal<TrialResult[]>([]);
+  protected readonly chapterComplete = computed(() =>
+    isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
+  );
   protected readonly walkParts = roadSessionParts;
   protected readonly walkDate = formatShortDate;
 
@@ -80,6 +89,9 @@ export class RoadPage implements OnInit {
   });
 
   protected readonly trialTarget = computed(() => {
+    if (this.chapterComplete()) {
+      return 'Chapter I complete. Your Gate Trial is saved on this device.';
+    }
     const campaign = this.state.campaign();
     if (!campaign) {
       return 'Planned for the end of Week 4. You can take it when ready.';
@@ -100,6 +112,21 @@ export class RoadPage implements OnInit {
   ngOnInit(): void {
     void this.state.initialize();
     void this.loadWalks();
+    void this.loadTrialHistory();
+  }
+
+  protected async loadTrialHistory(): Promise<void> {
+    this.trialHistoryLoading.set(true);
+    this.trialHistoryError.set(false);
+    try {
+      await this.state.initialize();
+      if (!this.state.campaign()) return;
+      this.completedTrials.set(await this.trialHistory.forTrial(chapterOneDefinition.trialId));
+    } catch {
+      this.trialHistoryError.set(true);
+    } finally {
+      this.trialHistoryLoading.set(false);
+    }
   }
 
   protected async loadWalks(): Promise<void> {

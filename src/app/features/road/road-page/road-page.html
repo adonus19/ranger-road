@@ -7,7 +7,9 @@
     <div class="road-band__inner">
       <h1 id="road-title">{{ seed.chapter.name }}</h1>
       <p class="road-band__theme">{{ seed.chapter.theme }}</p>
-      <p class="road-band__meta">{{ chapterLine() }} · Current chapter</p>
+      <p class="road-band__meta">
+        {{ chapterLine() }} · {{ chapterComplete() ? 'Chapter I complete' : 'Current chapter' }}
+      </p>
 
       @if (state.loading()) {
         <p class="road-band__message" role="status">Opening your campaign…</p>
@@ -33,8 +35,19 @@
   <div class="page road-body">
     <section class="trial" aria-labelledby="trial-title">
       <h2 id="trial-title">The Gate Trial</h2>
-      <p class="trial__target">{{ trialTarget() }}</p>
-      <a class="trial__open" routerLink="/road/gate-trial">Review the Gate Trial plan</a>
+      @if (trialHistoryLoading()) {
+        <p class="trial__target" role="status">Checking your Gate Trial record…</p>
+      } @else if (trialHistoryError()) {
+        <p class="trial__target" role="alert">
+          Gate Trial history could not open from this device.
+        </p>
+        <button class="trial__retry" type="button" (click)="loadTrialHistory()">Try again</button>
+      } @else {
+        <p class="trial__target">{{ trialTarget() }}</p>
+        <a class="trial__open" routerLink="/road/gate-trial">{{
+          chapterComplete() ? 'View Gate Trial record' : 'Review the Gate Trial plan'
+        }}</a>
+      }
       <ol class="trial__phases">
         @for (phase of seed.trial.phases; track phase.id) {
           <li>

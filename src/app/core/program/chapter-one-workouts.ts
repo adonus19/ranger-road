@@ -81,7 +81,21 @@ export function loadChapterOneWorkout(id: string): WorkoutDefinition | undefined
   return definition ? structuredClone(definition) : undefined;
 }
 
-/** Week-specific instructions stay visible; an exact reduced prescription is not invented here. */
+/** Week 4 uses the documented approximate volume reduction without choosing skipped sets. */
+export function chapterOneWeekFourVolumeGuide(
+  id: string,
+  week: number,
+): { plannedSets: number; aroundCompletedSets: number; aroundSkippedSets: number } | undefined {
+  if (id !== chapterOneForgeB.id || week !== 4) return undefined;
+  const plannedSets = chapterOneForgeB.exercises.reduce(
+    (total, exercise) => total + (exercise.sets ?? 1),
+    0,
+  );
+  const aroundCompletedSets = Math.round(plannedSets * 0.75);
+  return { plannedSets, aroundCompletedSets, aroundSkippedSets: plannedSets - aroundCompletedSets };
+}
+
+/** Week-specific instructions stay visible in the saved session snapshot. */
 export function chapterOneWorkoutWeekNote(id: string, week: number): string | undefined {
   if (id === chapterOneForgeA.id && week === 2) {
     return 'Progress only if Week 1 was clean.';
@@ -90,7 +104,8 @@ export function chapterOneWorkoutWeekNote(id: string, week: number): string | un
     return 'Reduced effort. Do not chase progression.';
   }
   if (week === 4 && id === chapterOneForgeB.id) {
-    return 'Reduce volume about 25%. Do not chase progression.';
+    const guide = chapterOneWeekFourVolumeGuide(id, week)!;
+    return `Reduce volume about 25%: aim for around ${guide.aroundCompletedSets} of ${guide.plannedSets} work sets. Mark around ${guide.aroundSkippedSets} sets skipped. Choose which sets fit today; do not chase progression.`;
   }
   return undefined;
 }

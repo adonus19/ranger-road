@@ -5,6 +5,7 @@ import type {
   CompletedSet,
   DeepReadonly,
   ExercisePrescription,
+  TrialResult,
   WorkoutDraft,
   WorkoutSession,
   WorkoutStep,
@@ -18,11 +19,14 @@ import {
 } from '../../../core/program/chapter-one-workout-access';
 import { getChapterOneSchedule } from '../../../core/program/campaign';
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
+import { isChapterOneComplete } from '../../../core/program/chapter-one-completion';
 import {
   chapterOneWorkoutWeekNote,
+  chapterOneWeekFourVolumeGuide,
   loadChapterOneWorkout,
 } from '../../../core/program/chapter-one-workouts';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { TrialHistory } from '../../../core/state/trial-history';
 import { WorkoutHistory } from '../../../core/state/workout-history';
 import { formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
@@ -57,6 +61,7 @@ function firstPending(draft: WorkoutDraft): { exercise: number; set: number } {
 export class ForgeSessionPage implements OnInit, OnDestroy {
   protected readonly state = inject(CampaignState);
   private readonly history = inject(WorkoutHistory);
+  private readonly trialHistory = inject(TrialHistory);
   private readonly route = inject(ActivatedRoute);
   protected readonly workoutId = this.route.snapshot.paramMap.get('workoutId') ?? '';
   protected readonly loading = signal(true);
@@ -65,6 +70,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   protected readonly draft = signal<WorkoutDraft | null>(null);
   protected readonly otherDraft = signal<WorkoutDraft | null>(null);
   protected readonly savedSession = signal<WorkoutSession | null>(null);
+  private readonly completedTrials = signal<TrialResult[]>([]);
   protected readonly panel = signal<Panel>(null);
   protected readonly recordingSet = signal(false);
   protected readonly helpExerciseId = signal<string | null>(null);
@@ -128,6 +134,31 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     const schedule = getChapterOneSchedule(campaign.startDate, this.state.today());
     return schedule ? chapterOneWorkoutWeekNote(this.workoutId, schedule.contentWeek) : undefined;
   });
+  protected readonly weekFourVolume = computed(() => {
+    const campaign = this.state.campaign();
+    if (!campaign) return undefined;
+    const schedule = getChapterOneSchedule(
+      campaign.startDate,
+      this.draft()?.date ?? this.state.today(),
+    );
+    return schedule
+      ? chapterOneWeekFourVolumeGuide(this.workoutId, schedule.contentWeek)
+      : undefined;
+  });
+  protected readonly completedSets = computed(
+    () =>
+      this.draft()?.exerciseResults.reduce(
+        (total, result) => total + result.sets.filter((set) => set.completed === true).length,
+        0,
+      ) ?? 0,
+  );
+  protected readonly skippedSets = computed(
+    () =>
+      this.draft()?.exerciseResults.reduce(
+        (total, result) => total + result.sets.filter((set) => set.completed === false).length,
+        0,
+      ) ?? 0,
+  );
   protected readonly planned = computed(() => {
     const campaign = this.state.campaign();
     return campaign
@@ -139,9 +170,13 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     return Boolean(
       campaign &&
       campaign.currentChapterId === chapterOneDefinition.id &&
+      !this.chapterComplete() &&
       chapterOneWorkoutsForDate(campaign.startDate, this.state.today()).includes(this.workoutId),
     );
   });
+  protected readonly chapterComplete = computed(() =>
+    isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
+  );
   protected readonly isRestoration = this.workoutId === 'chapter-1-restoration';
   protected readonly painLocked = computed(
     () =>
@@ -156,6 +191,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     const draft = this.draft();
     if (draft && draft.date !== this.state.today())
       return 'This session was started on another day. Save the partial work and start fresh today.';
+    if (this.chapterComplete()) return 'Chapter I is complete. Save this session as partial work.';
     if (!this.readiness()) return 'Check readiness today before training.';
     if (!this.isRestoration && this.readiness()?.status === 'red')
       return 'Red readiness means no strength work today.';
@@ -185,7 +221,11 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     this.error.set(null);
     try {
       await this.state.initialize();
-      const active = await this.history.active();
+      const [active, completedTrials] = await Promise.all([
+        this.history.active(),
+        this.trialHistory.forTrial(chapterOneDefinition.trialId),
+      ]);
+      this.completedTrials.set(completedTrials);
       if (active?.workoutDefinitionId === this.workoutId) {
         this.draft.set(active);
         this.syncForms(active);
@@ -200,12 +240,14 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   }
 
   protected async start(): Promise<void> {
-    const definition = this.definition();
-    const campaign = this.state.campaign();
-    if (!definition || !campaign || !this.allowed() || this.saving()) return;
+    if (this.saving()) return;
     this.saving.set(true);
     this.error.set(null);
     try {
+      await this.state.initialize();
+      const definition = this.definition();
+      const campaign = this.state.campaign();
+      if (!definition || !campaign || !this.allowed()) return;
       const schedule = getChapterOneSchedule(campaign.startDate, this.state.today());
       const note = this.weekNote();
       const reduced = schedule?.contentWeek === 4 && !this.isRestoration;
@@ -473,7 +515,14 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
 
   protected async complete(): Promise<void> {
     const draft = this.draft();
-    if (!draft || this.saving() || this.blocked()) return;
+    if (!draft || this.saving()) return;
+    try {
+      await this.state.initialize();
+    } catch (error) {
+      this.showError(error);
+      return;
+    }
+    if (this.blocked()) return;
     if (!this.allSetsMarked()) {
       this.error.set('Mark each set done or skipped before finishing.');
       return;
@@ -526,6 +575,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     this.saving.set(true);
     this.error.set(null);
     try {
+      await this.state.initialize();
+      if (this.blocked()) return;
       const changed = structuredClone(draft);
       edit(changed);
       const saved = await this.history.saveDraft(changed);

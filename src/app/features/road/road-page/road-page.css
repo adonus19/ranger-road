@@ -121,6 +121,19 @@
   color: var(--action-hover);
 }
 
+.trial__retry {
+  min-height: var(--touch-target);
+  margin-bottom: 1.25rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-page);
+  color: var(--action);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .trial__phases {
   margin: 0;
   padding: 0;

@@ -2,11 +2,18 @@ import { computed, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { describe, expect, it, vi } from 'vitest';
-import type { Campaign, MissionInstance, ReadinessCheck } from '../../../core/domain/models';
+import type {
+  Campaign,
+  MissionInstance,
+  ReadinessCheck,
+  TrialResult,
+} from '../../../core/domain/models';
+import { createMissionRecord } from '../../../core/domain/mission';
 import { getCampaignDay } from '../../../core/program/campaign';
 import { getChapterOneMissionsForDate } from '../../../core/program/chapter-one-missions';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MissionHistory } from '../../../core/state/mission-history';
+import { TrialHistory } from '../../../core/state/trial-history';
 import { MissionPage } from './mission-page';
 
 const date = '2026-09-21';
@@ -51,8 +58,9 @@ function setup(check: ReadinessCheck | null, today = date, initialRecords: Missi
     error: signal<string | null>(null),
     initialize: vi.fn(async () => undefined),
   };
-  const forDate = vi.fn(async (): Promise<MissionInstance[]> => initialRecords);
+  const forDate = vi.fn(async (_date: string): Promise<MissionInstance[]> => initialRecords);
   const add = vi.fn(async (_record: MissionInstance): Promise<void> => undefined);
+  const forTrial = vi.fn(async (_trialId: string): Promise<TrialResult[]> => []);
 
   TestBed.configureTestingModule({
     imports: [MissionPage],
@@ -69,11 +77,12 @@ function setup(check: ReadinessCheck | null, today = date, initialRecords: Missi
         },
       },
       { provide: MissionHistory, useValue: { forDate, add } },
+      { provide: TrialHistory, useValue: { forTrial } },
     ],
   });
 
   const fixture = TestBed.createComponent(MissionPage);
-  return { fixture, state, forDate, add };
+  return { fixture, state, forDate, add, forTrial };
 }
 
 async function ready(fixture: ReturnType<typeof setup>['fixture']): Promise<HTMLElement> {
@@ -392,5 +401,57 @@ describe('MissionPage', () => {
 
     expect(root.textContent).toContain('Recorded today');
     expect(root.querySelector('.walk-link')).toBeNull();
+  });
+
+  it('clears the old day’s records and unsaved outcome when the date changes in an open mission', async () => {
+    const definition = getChapterOneMissionsForDate(campaign.startDate, date)[1]!;
+    const oldRecord = createMissionRecord({
+      id: 'yesterday-mission',
+      definition,
+      date,
+      outcome: 'full',
+      recordedAt: '2026-09-21T20:00:00.000Z',
+      readiness: readiness('green'),
+    });
+    const { fixture, state, forDate } = setup(readiness('green'), date, [oldRecord]);
+    forDate.mockImplementation(async (queriedDate) => (queriedDate === date ? [oldRecord] : []));
+    const root = await ready(fixture);
+    expect(root.textContent).toContain('Recorded today');
+
+    state.today.set('2026-09-22');
+    state.readiness.set(null);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(forDate).toHaveBeenCalledWith('2026-09-22');
+    expect(root.querySelector('#order-title')?.textContent).toContain('25-minute walk');
+    expect(root.textContent).not.toContain('Recorded today');
+    expect(option(root, 'full')).toBeNull();
+  });
+
+  it('shows Chapter I completion on the direct mission route after four full weeks and a completed trial', async () => {
+    const { fixture, state, forTrial } = setup(null, '2026-10-19');
+    forTrial.mockResolvedValue([{ trialId: 'gate-trial' } as TrialResult]);
+    const root = await ready(fixture);
+
+    expect(forTrial).toHaveBeenCalledWith('gate-trial');
+    expect(root.textContent).toContain('Chapter I complete');
+    expect(root.textContent).not.toContain('Record your outcome');
+    expect(root.querySelector<HTMLAnchorElement>('.page-state a')?.getAttribute('href')).toBe(
+      '/road',
+    );
+    expect(state.today()).toBe('2026-10-19');
+  });
+
+  it('does not claim completion or show repeated orders when Gate Trial history cannot load', async () => {
+    const { fixture, forTrial } = setup(null, '2026-10-19');
+    forTrial.mockRejectedValue(new Error('History unavailable'));
+    const root = await ready(fixture);
+
+    expect(root.querySelector('[role="alert"]')?.textContent).toContain(
+      'Gate Trial history is unavailable',
+    );
+    expect(root.textContent).not.toContain('Chapter I complete');
+    expect(root.textContent).not.toContain('Record your outcome');
   });
 });

@@ -1,7 +1,14 @@
 <section class="keep-band" aria-labelledby="chapter-title">
   <picture class="keep-band__scene">
     <source srcset="images/forest-band.webp" type="image/webp" />
-    <img src="images/forest-band.png" alt="" width="1728" height="960" decoding="async" fetchpriority="high" />
+    <img
+      src="images/forest-band.png"
+      alt=""
+      width="1728"
+      height="960"
+      decoding="async"
+      fetchpriority="high"
+    />
   </picture>
 
   @if (!state.loading() && !state.error() && seed(); as seed) {
@@ -26,13 +33,20 @@
             </div>
           }
           <div>
-            <dt>Days until Gate Trial</dt>
-            <dd>{{ daysUntilTrial() }}</dd>
+            @if (chapterComplete()) {
+              <dt>Gate Trial</dt>
+              <dd>Done</dd>
+            } @else {
+              <dt>Days until Gate Trial</dt>
+              <dd>{{ daysUntilTrial() }}</dd>
+            }
           </div>
         </dl>
 
         <p class="keep-band__note">
-          @if (isLeadIn()) {
+          @if (chapterComplete()) {
+            Chapter I complete. Your Gate Trial is saved on this device.
+          } @else if (isLeadIn()) {
             Lead-in through Sunday. Week 1 begins Monday.
           } @else {
             Gate Trial target: end of Week 4. You can take it when ready.

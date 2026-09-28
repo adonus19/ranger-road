@@ -349,3 +349,4 @@ Later:
 Historical records are immutable except explicit user edits.
 Program definition updates must not rewrite prior completed sessions.
 When Chapter I scheduling changes, reconcile only the campaign's generated planning date. Preserve any separately chosen target date and every historical row. Dated mission attempts retain their definition snapshots and remain readable even when their old week-based ID differs from the newly scheduled order.
+Chapter I completion is derived from the campaign start date, the current day being after the fourth full week's Sunday, and the presence of a completed Gate Trial result. It does not mutate the Campaign or TrialResult, and it does not start Chapter II.

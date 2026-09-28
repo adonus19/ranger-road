@@ -1,6 +1,7 @@
-import { Component, OnInit, computed, inject } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { ReadinessStatus } from '../../../core/domain/models';
+import type { ReadinessStatus, TrialResult } from '../../../core/domain/models';
+import { isChapterOneComplete } from '../../../core/program/chapter-one-completion';
 import {
   getChapterOneSchedule,
   getTodaysOrders,
@@ -10,6 +11,7 @@ import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
 import { getChapterOneWeekContent } from '../../../core/program/chapter-one-daily.seed';
 import { loadChapterSeed } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { TrialHistory } from '../../../core/state/trial-history';
 import { Icon, type IconName } from '../../../shared/icon/icon';
 import { CheckInReminder } from '../check-in-reminder/check-in-reminder';
 import { GateTrialRecoveryReminder } from '../gate-trial-recovery-reminder/gate-trial-recovery-reminder';
@@ -64,6 +66,13 @@ const READINESS_COPY: Readonly<Record<ReadinessStatus | 'pending', ReadinessCopy
 })
 export class KeepPage implements OnInit {
   protected readonly state = inject(CampaignState);
+  private readonly trialHistory = inject(TrialHistory);
+  protected readonly trialLoading = signal(true);
+  protected readonly trialError = signal(false);
+  private readonly completedTrials = signal<TrialResult[]>([]);
+  protected readonly chapterComplete = computed(() =>
+    isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
+  );
 
   /** The current chapter's content; Chapter I before a campaign exists. */
   protected readonly seed = computed(() =>
@@ -108,7 +117,7 @@ export class KeepPage implements OnInit {
   });
 
   ngOnInit(): void {
-    void this.state.initialize();
+    void this.load();
   }
 
   protected watchIcon(order: TodayOrder): IconName {
@@ -116,6 +125,22 @@ export class KeepPage implements OnInit {
   }
 
   protected retry(): void {
-    void this.state.retry();
+    void this.load(true);
+  }
+
+  private async load(retry = false): Promise<void> {
+    this.trialLoading.set(true);
+    this.trialError.set(false);
+    try {
+      if (retry) await this.state.retry();
+      else await this.state.initialize();
+      if (this.state.error()) return;
+      if (!this.state.campaign() || this.state.beforeDayOne()) return;
+      this.completedTrials.set(await this.trialHistory.forTrial(chapterOneDefinition.trialId));
+    } catch {
+      this.trialError.set(true);
+    } finally {
+      this.trialLoading.set(false);
+    }
   }
 }

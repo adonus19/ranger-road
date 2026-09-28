@@ -1,6 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { WorkoutDraft, WorkoutSession } from '../../../core/domain/models';
+import type { TrialResult, WorkoutDraft, WorkoutSession } from '../../../core/domain/models';
+import { isChapterOneComplete } from '../../../core/program/chapter-one-completion';
 import {
   chapterOneWorkoutsForDate,
   chapterOneWorkoutIsPlanned,
@@ -8,6 +9,7 @@ import {
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
 import { loadChapterOneWorkout } from '../../../core/program/chapter-one-workouts';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { TrialHistory } from '../../../core/state/trial-history';
 import { WorkoutHistory } from '../../../core/state/workout-history';
 import { formatShortDate } from '../../../shared/format-date';
 
@@ -20,10 +22,15 @@ import { formatShortDate } from '../../../shared/format-date';
 export class ForgePage implements OnInit {
   protected readonly state = inject(CampaignState);
   private readonly history = inject(WorkoutHistory);
+  private readonly trialHistory = inject(TrialHistory);
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
   protected readonly active = signal<WorkoutDraft | null>(null);
   protected readonly sessions = signal<WorkoutSession[]>([]);
+  private readonly completedTrials = signal<TrialResult[]>([]);
+  protected readonly chapterComplete = computed(() =>
+    isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
+  );
   protected readonly shortDate = formatShortDate;
 
   protected readonly choices = computed(() => {
@@ -62,12 +69,14 @@ export class ForgePage implements OnInit {
     this.error.set(null);
     try {
       await this.state.initialize();
-      const [active, sessions] = await Promise.all([
+      const [active, sessions, completedTrials] = await Promise.all([
         this.history.active(),
         this.history.forDate(this.state.today()),
+        this.trialHistory.forTrial(chapterOneDefinition.trialId),
       ]);
       this.active.set(active ?? null);
       this.sessions.set(sessions);
+      this.completedTrials.set(completedTrials);
     } catch {
       this.error.set(
         'Local workout history is unavailable. Check browser storage settings, then try again.',

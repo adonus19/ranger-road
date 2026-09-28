@@ -2,9 +2,10 @@ import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { describe, expect, it, vi } from 'vitest';
-import type { Campaign } from '../../../core/domain/models';
+import type { Campaign, TrialResult } from '../../../core/domain/models';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { RoadHistory, type SavedRoadSession } from '../../../core/state/road-history';
+import { TrialHistory } from '../../../core/state/trial-history';
 import { RoadPage } from './road-page';
 
 async function render(
@@ -12,6 +13,7 @@ async function render(
   today: string,
   walks: SavedRoadSession[] = [],
   trialTargetDate?: string,
+  completedTrials: TrialResult[] = [],
 ): Promise<HTMLElement> {
   const campaign: Campaign = {
     id: 'primary',
@@ -35,6 +37,7 @@ async function render(
         },
       },
       { provide: RoadHistory, useValue: { recent: vi.fn(async () => walks) } },
+      { provide: TrialHistory, useValue: { forTrial: vi.fn(async () => completedTrials) } },
     ],
   });
   const fixture = TestBed.createComponent(RoadPage);
@@ -44,6 +47,14 @@ async function render(
   await fixture.whenStable();
   return fixture.nativeElement as HTMLElement;
 }
+
+const completedTrial: TrialResult = {
+  id: 'gate-result-1',
+  trialId: 'gate-trial',
+  date: '2026-10-31',
+  phaseResults: [],
+  reflection: '',
+};
 
 describe('RoadPage', () => {
   it('names the planned Gate Trial date and shows its phases in the documented order', async () => {
@@ -136,5 +147,33 @@ describe('RoadPage', () => {
     expect(element.querySelector('.walks__state')?.textContent?.trim()).toBe(
       'Walks you log will appear here.',
     );
+  });
+
+  it('keeps Chapter I current through Week 4 Sunday after an early trial', async () => {
+    const element = await render('2026-10-05', '2026-11-01', [], undefined, [completedTrial]);
+
+    expect(element.querySelector('.road-band__meta')?.textContent).toContain('Current chapter');
+    expect(element.querySelector('.trial__target')?.textContent).toContain(
+      'Planned for the end of Week 4',
+    );
+  });
+
+  it('shows Chapter I complete after the full four weeks and a completed Gate Trial', async () => {
+    const element = await render('2026-10-05', '2026-11-02', [], undefined, [completedTrial]);
+
+    expect(element.querySelector('.road-band__meta')?.textContent).toContain('Chapter I complete');
+    expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
+      'Chapter I complete. Your Gate Trial is saved on this device.',
+    );
+    expect(element.querySelector('.trial__open')?.textContent?.trim()).toBe(
+      'View Gate Trial record',
+    );
+  });
+
+  it('keeps the trial pending after Week 4 without a completed result', async () => {
+    const element = await render('2026-10-05', '2026-11-02');
+
+    expect(element.querySelector('.road-band__meta')?.textContent).toContain('Current chapter');
+    expect(element.querySelector('.trial__target')?.textContent).toContain('The Week 4 target was');
   });
 });

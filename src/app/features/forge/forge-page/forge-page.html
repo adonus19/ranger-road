@@ -20,6 +20,17 @@
       </p>
       <a routerLink="/keep">Go to Keep</a>
     </div>
+  } @else if (chapterComplete()) {
+    <section class="notice" aria-labelledby="forge-complete-title">
+      <h2 id="forge-complete-title">Chapter I complete</h2>
+      <p>Your four full weeks and completed Gate Trial are on record.</p>
+      @if (active(); as draft) {
+        <p>A session started {{ shortDate(draft.date) }} still has partial work to save.</p>
+        <a [routerLink]="['/forge/session', draft.workoutDefinitionId]">Open saved session</a>
+      } @else {
+        <a routerLink="/road/gate-trial">View Gate Trial record</a>
+      }
+    </section>
   } @else {
     @if (active(); as draft) {
       <section class="active-card" aria-labelledby="active-title">

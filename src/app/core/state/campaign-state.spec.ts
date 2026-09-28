@@ -18,11 +18,12 @@ describe('CampaignState', () => {
   beforeEach(async () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date(2026, 8, 25, 9, 0));
-    await deleteDatabase();
     TestBed.resetTestingModule();
+    await deleteDatabase();
   });
 
   afterEach(() => {
+    TestBed.resetTestingModule();
     vi.useRealTimers();
   });
 
@@ -118,5 +119,88 @@ describe('CampaignState', () => {
 
     await expect(state.startCampaign('2026-02-30')).rejects.toThrow(RangeError);
     expect(state.campaign()).toBeNull();
+  });
+
+  it('clears yesterday’s readiness when the app returns after midnight', async () => {
+    const state = TestBed.inject(CampaignState);
+    await state.initialize();
+    await state.recordReadiness({
+      date: '2026-09-25',
+      sleepHours: 7,
+      poorSleep: false,
+      energy: 3,
+      backPain: 0,
+      shoulderPain: 0,
+      neckPain: 0,
+      redFlags: {
+        significantSymptomIncrease: false,
+        newNeurologicalOrRadiatingSymptoms: false,
+        illness: false,
+        otherConcerningSymptoms: false,
+      },
+    });
+    expect(state.readiness()?.date).toBe('2026-09-25');
+
+    vi.setSystemTime(new Date(2026, 8, 26, 0, 1));
+    window.dispatchEvent(new Event('focus'));
+    expect(state.today()).toBe('2026-09-26');
+    expect(state.readiness()).toBeNull();
+    await expect(
+      state.recordReadiness({
+        date: '2026-09-25',
+        sleepHours: 7,
+        poorSleep: false,
+        energy: 3,
+        backPain: 0,
+        shoulderPain: 0,
+        neckPain: 0,
+        redFlags: {
+          significantSymptomIncrease: false,
+          newNeurologicalOrRadiatingSymptoms: false,
+          illness: false,
+          otherConcerningSymptoms: false,
+        },
+      }),
+    ).rejects.toThrow(/new day started/i);
+  });
+
+  it('moves the open app to the new civil day without waiting for navigation', async () => {
+    vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] });
+    vi.setSystemTime(new Date(2026, 8, 25, 23, 59, 59));
+    const state = TestBed.inject(CampaignState);
+    await state.initialize();
+    expect(state.today()).toBe('2026-09-25');
+
+    await vi.advanceTimersByTimeAsync(2_100);
+    expect(state.today()).toBe('2026-09-26');
+    expect(state.readiness()).toBeNull();
+  });
+
+  it('refreshes readiness saved in another tab when this tab regains focus', async () => {
+    const state = TestBed.inject(CampaignState);
+    await state.initialize();
+    const database = await RoadDatabase.open();
+    await database.addReadinessCheck({
+      id: 'other-tab-check',
+      date: '2026-09-25',
+      checkedAt: '2026-09-25T13:00:00.000Z',
+      sleepHours: 7,
+      poorSleep: false,
+      energy: 3,
+      backPain: 0,
+      shoulderPain: 0,
+      neckPain: 0,
+      redFlags: {
+        significantSymptomIncrease: false,
+        newNeurologicalOrRadiatingSymptoms: false,
+        illness: false,
+        otherConcerningSymptoms: false,
+      },
+      status: 'green',
+    });
+    database.close();
+
+    window.dispatchEvent(new Event('focus'));
+    await vi.waitFor(() => expect(state.readiness()?.id).toBe('other-tab-check'));
   });
 });

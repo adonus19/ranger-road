@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
 import type { Campaign, LocalDate, ReadinessCheck, ReadinessInput } from '../domain/models';
 import { classifyReadiness } from '../domain/readiness';
 import { RoadDatabase } from '../persistence/road-database';
@@ -21,6 +21,7 @@ export function localDateToday(now = new Date()): LocalDate {
 
 @Injectable({ providedIn: 'root' })
 export class CampaignState {
+  private readonly destroyRef = inject(DestroyRef);
   readonly campaign = signal<Campaign | null>(null);
   readonly readiness = signal<ReadinessCheck | null>(null);
   readonly today = signal<LocalDate>(localDateToday());
@@ -38,15 +39,48 @@ export class CampaignState {
 
   private database: RoadDatabase | null = null;
   private pendingLoad: Promise<void> | null = null;
+  private dayTimer: ReturnType<typeof setTimeout> | null = null;
+  private readinessRequest = 0;
+
+  constructor() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+    const refresh = () => void this.initialize().catch(() => undefined);
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === 'visible') refresh();
+    };
+    window.addEventListener('focus', refresh);
+    window.addEventListener('pageshow', refresh);
+    document.addEventListener('visibilitychange', refreshWhenVisible);
+    this.destroyRef.onDestroy(() => {
+      window.removeEventListener('focus', refresh);
+      window.removeEventListener('pageshow', refresh);
+      document.removeEventListener('visibilitychange', refreshWhenVisible);
+      if (this.dayTimer) clearTimeout(this.dayTimer);
+      this.database?.close();
+    });
+    this.scheduleDayRefresh();
+  }
 
   async initialize(): Promise<void> {
-    this.today.set(localDateToday());
+    const date = localDateToday();
+    if (date !== this.today()) {
+      this.today.set(date);
+      // Hide the previous day's check as soon as the date changes.
+      this.readiness.set(null);
+    }
+    this.scheduleDayRefresh();
     if (!this.pendingLoad) {
       this.pendingLoad = this.load();
     }
     await this.pendingLoad;
-    if (this.database && this.readiness()?.date !== this.today()) {
-      this.readiness.set((await this.database.getLatestReadinessForDate(this.today())) ?? null);
+    if (this.database) {
+      const requestedDate = this.today();
+      const request = ++this.readinessRequest;
+      const latest = await this.database.getLatestReadinessForDate(requestedDate);
+      if (request === this.readinessRequest && requestedDate === this.today()) {
+        this.readiness.set(latest ?? null);
+      }
     }
   }
 
@@ -86,6 +120,9 @@ export class CampaignState {
     if (!this.database) {
       throw new Error('Local storage is unavailable. Your check was not saved.');
     }
+    if (input.date !== this.today()) {
+      throw new Error('A new day started. Review and save a readiness check for today.');
+    }
 
     const check: ReadinessCheck = {
       ...input,
@@ -94,8 +131,25 @@ export class CampaignState {
       status: classifyReadiness(input),
     };
     await this.database.addReadinessCheck(check);
-    this.readiness.set(check);
+    if (input.date === this.today()) {
+      this.readinessRequest += 1;
+      this.readiness.set(check);
+    }
     return check;
+  }
+
+  private scheduleDayRefresh(): void {
+    if (typeof window === 'undefined') return;
+    if (this.dayTimer) clearTimeout(this.dayTimer);
+    const now = new Date();
+    const nextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 1);
+    this.dayTimer = setTimeout(
+      () => {
+        this.dayTimer = null;
+        void this.initialize().catch(() => undefined);
+      },
+      Math.max(1, nextDay.getTime() - now.getTime()),
+    );
   }
 
   private async load(): Promise<void> {
@@ -109,7 +163,6 @@ export class CampaignState {
         await this.database.putCampaign(campaign);
       }
       this.campaign.set(campaign);
-      this.readiness.set((await this.database.getLatestReadinessForDate(this.today())) ?? null);
     } catch {
       this.database = null;
       this.error.set(

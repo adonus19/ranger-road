@@ -2,10 +2,11 @@ import { computed, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { describe, expect, it } from 'vitest';
-import type { Campaign, ReadinessCheck } from '../../../core/domain/models';
+import type { Campaign, ReadinessCheck, TrialResult } from '../../../core/domain/models';
 import { getCampaignDay } from '../../../core/program/campaign';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MeasurementHistory } from '../../../core/state/measurement-history';
+import { TrialHistory } from '../../../core/state/trial-history';
 import { KeepPage } from './keep-page';
 
 function fakeState(campaign: Campaign | null, readiness: ReadinessCheck | null = null) {
@@ -39,6 +40,7 @@ const campaign: Campaign = {
 async function render(
   state: ReturnType<typeof fakeState>,
   measurements: unknown[] = [],
+  completedTrials: TrialResult[] = [],
 ): Promise<HTMLElement> {
   TestBed.configureTestingModule({
     imports: [KeepPage],
@@ -46,6 +48,10 @@ async function render(
       provideRouter([]),
       { provide: CampaignState, useValue: state },
       { provide: MeasurementHistory, useValue: { all: async () => measurements } },
+      {
+        provide: TrialHistory,
+        useValue: { forTrial: async () => completedTrials, recoveries: async () => [] },
+      },
     ],
   });
   const fixture = TestBed.createComponent(KeepPage);
@@ -57,6 +63,14 @@ async function render(
 
 const text = (element: HTMLElement, selector: string) =>
   element.querySelector(selector)?.textContent?.replace(/\s+/g, ' ').trim();
+
+const completedTrial: TrialResult = {
+  id: 'gate-result-1',
+  trialId: 'gate-trial',
+  date: '2026-10-31',
+  phaseResults: [],
+  reflection: '',
+};
 
 describe('KeepPage', () => {
   it('asks for Day 1 on first launch while still introducing the chapter', async () => {
@@ -144,5 +158,54 @@ describe('KeepPage', () => {
       },
     ]);
     expect(done.querySelector('.reminder')).toBeNull();
+  });
+
+  it('keeps dated orders through Week 4 Sunday even when the Gate Trial was completed early', async () => {
+    const state = fakeState({
+      ...campaign,
+      startDate: '2026-10-05',
+      trialTargetDate: '2026-11-01',
+    });
+    state.today.set('2026-11-01');
+    const element = await render(state, [], [completedTrial]);
+
+    expect(text(element, '.main-order h3')).toBe('Rest and worship');
+    expect(text(element, '.keep-band__counts div:last-child dd')).toBe('0');
+    expect(element.querySelector('.mission-cta')).not.toBeNull();
+    expect(element.querySelector('.chapter-complete')).toBeNull();
+  });
+
+  it('acknowledges Chapter I after four full weeks and a completed trial while retaining reminders', async () => {
+    const state = fakeState({
+      ...campaign,
+      startDate: '2026-10-05',
+      trialTargetDate: '2026-11-01',
+    });
+    state.today.set('2026-11-02');
+    const element = await render(state, [], [completedTrial]);
+
+    expect(text(element, '#chapter-complete-title')).toBe('Chapter I complete');
+    expect(text(element, '.keep-band__counts div:last-child dd')).toBe('Done');
+    expect(text(element, '.keep-band__note')).toContain('Chapter I complete');
+    expect(element.querySelector('.chapter-complete a')?.getAttribute('href')).toBe(
+      '/road/gate-trial',
+    );
+    expect(element.querySelector('.orders')).toBeNull();
+    expect(element.querySelector('.mission-cta')).toBeNull();
+    expect(text(element, '.reminder strong')).toBe('Monthly check-in');
+  });
+
+  it('continues Week 4 orders after its target while the trial remains pending', async () => {
+    const state = fakeState({
+      ...campaign,
+      startDate: '2026-10-05',
+      trialTargetDate: '2026-11-01',
+    });
+    state.today.set('2026-11-02');
+    const element = await render(state);
+
+    expect(text(element, '.main-order h3')).toBe('Forge A at reduced effort');
+    expect(text(element, '.keep-band__counts div:last-child dd')).toBe('0');
+    expect(element.querySelector('.chapter-complete')).toBeNull();
   });
 });

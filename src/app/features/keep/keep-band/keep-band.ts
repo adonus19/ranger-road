@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import {
   getCampaignDay,
   getChapterOneSchedule,
@@ -17,6 +17,7 @@ import { CampaignState } from '../../../core/state/campaign-state';
 })
 export class KeepBand {
   protected readonly state = inject(CampaignState);
+  readonly chapterComplete = input(false);
 
   /** Before a campaign exists, the band still introduces the first chapter. */
   protected readonly seed = computed(() =>

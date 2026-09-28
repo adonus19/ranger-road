@@ -1,11 +1,10 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormField, form, submit, validate } from '@angular/forms/signals';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import type { JournalEntry } from '../../../core/domain/models';
 import { getChapterOneContentForDate } from '../../../core/program/chapter-one-missions';
 import { CampaignState } from '../../../core/state/campaign-state';
-import { localDateToday } from '../../../core/state/campaign-state';
 import { Icon } from '../../../shared/icon/icon';
 import {
   EVENING_PROMPTS,
@@ -34,7 +33,7 @@ export class WatchPage implements OnInit {
     const value = this.params().get('watch');
     return value === 'morning' || value === 'evening' ? value : null;
   });
-  protected readonly today = signal(localDateToday());
+  protected readonly today = this.campaignState.today;
   protected readonly dateLabel = computed(() => formatJournalDate(this.today()));
   protected readonly dailyContent = computed(() => {
     const campaign = this.campaignState.campaign();
@@ -70,6 +69,33 @@ export class WatchPage implements OnInit {
         : { kind: 'required', message: 'Write at least one line before saving.' },
     );
   });
+  private shownDate = this.today();
+  private needsRolloverReview = false;
+
+  constructor() {
+    effect(() => {
+      const date = this.today();
+      untracked(() => {
+        if (date === this.shownDate) return;
+        const wasSaved = !!this.saved();
+        this.shownDate = date;
+        this.saved.set(null);
+        if (wasSaved) {
+          this.morningForm().reset({ familyNeed: '' });
+          this.eveningForm().reset({ win: '', missedStandard: '', gratitude: '', tomorrow: '' });
+        }
+        this.needsRolloverReview =
+          !wasSaved &&
+          (!!this.morningModel().familyNeed.trim() ||
+            Object.values(this.eveningModel()).some((answer) => !!answer.trim()));
+        this.saveError.set(
+          this.needsRolloverReview
+            ? 'A new day started. Review this entry before saving it for today.'
+            : null,
+        );
+      });
+    });
+  }
 
   ngOnInit(): void {
     void this.campaignState.initialize();
@@ -81,22 +107,32 @@ export class WatchPage implements OnInit {
     if (!kind || this.saving()) {
       return;
     }
-    this.today.set(localDateToday());
-    this.saveError.set(null);
     this.saving.set(true);
     try {
+      const date = this.today();
+      await this.campaignState.initialize();
+      if (date !== this.today()) {
+        this.saveError.set('A new day started. Review this entry before saving it for today.');
+        return;
+      }
+      if (this.needsRolloverReview) {
+        this.needsRolloverReview = false;
+        this.saveError.set('Review the date and entry, then press Save again.');
+        return;
+      }
+      this.saveError.set(null);
       if (kind === 'morning') {
         await submit(this.morningForm, async () => {
-          this.saved.set(
-            await this.store.saveMorning(this.today(), this.morningModel().familyNeed),
-          );
+          const saved = await this.store.saveMorning(date, this.morningModel().familyNeed);
+          if (date === this.today()) this.saved.set(saved);
         });
       } else {
         await submit(this.eveningForm, async () => {
-          this.saved.set(await this.store.saveEvening(this.today(), this.eveningModel()));
+          const saved = await this.store.saveEvening(date, this.eveningModel());
+          if (date === this.today()) this.saved.set(saved);
         });
       }
-      if (!this.saved() && kind === 'evening') {
+      if (!this.saved() && kind === 'evening' && date === this.today()) {
         this.saveError.set('Write at least one line before saving.');
       }
     } catch (error) {

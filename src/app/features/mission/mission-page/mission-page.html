@@ -28,6 +28,15 @@
       <p>Your campaign has not reached Day 1 yet.</p>
       <a routerLink="/keep">View your start date</a>
     </div>
+  } @else if (chapterComplete()) {
+    <section class="page-state" aria-labelledby="chapter-complete-title">
+      <h2 id="chapter-complete-title">Chapter I complete</h2>
+      <p>
+        Your four full weeks and the Gate Trial are recorded. Your Chapter I history remains on this
+        device.
+      </p>
+      <a routerLink="/road">Review the Road</a>
+    </section>
   } @else if (activityChoices().length) {
     <app-readiness-strip
       [status]="readiness()?.status ?? 'pending'"
