@@ -11,13 +11,18 @@ export interface ChapterOneActivityContent {
   definitionId?: string;
   /** A target in the manual, never an automatic trial completion. */
   plannedTrialId?: string;
+  /** The day includes the week's fieldcraft, so its description is shown with the order. */
+  fieldcraftPractice?: boolean;
 }
 
 export interface ChapterOneDayContent {
   scriptureReference: string;
   activity: ChapterOneActivityContent;
   readingMinutes?: number;
+  /** Shown in the Evening Watch. */
   reflectionPrompt?: string;
+  /** A reflection about the day ahead, shown in the Morning Watch instead. */
+  morningReflectionPrompt?: string;
   optionalFamilyQuest?: string;
 }
 
@@ -43,7 +48,7 @@ export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
       1: {
         scriptureReference: 'Proverbs 4:20–27',
         activity: { title: 'Forge A', missionType: 'strength', definitionId: 'chapter-1-forge-a' },
-        reflectionPrompt: 'What requires my attention today?',
+        morningReflectionPrompt: 'What requires my attention today?',
       },
       2: {
         scriptureReference: '1 Corinthians 9:24–27',
@@ -137,6 +142,7 @@ export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
           missionType: 'conditioning',
           estimatedMinutes: 40,
           details: ['Fieldcraft practice.'],
+          fieldcraftPractice: true,
         },
       },
       7: {

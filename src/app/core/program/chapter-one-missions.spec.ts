@@ -206,4 +206,21 @@ describe('Chapter I main activity choices', () => {
     expect(afterTarget.map((choice) => choice.id)).toEqual(fourthWeek.map((choice) => choice.id));
     expect(afterTarget.map((choice) => choice.missionType)).toEqual(['restoration']);
   });
+
+  it('shows the week’s tool inspection with Week 2 Saturday’s fieldcraft practice', () => {
+    const saturday = getChapterOneMissionsForDate('2026-09-07', '2026-09-19')[1];
+    expect(saturday.title).toBe('40-minute continuous walk');
+    expect(saturday.activityDetails).toEqual([
+      'Fieldcraft practice.',
+      expect.stringContaining('Inspect axe/maul'),
+    ]);
+  });
+
+  it('asks Week 1 Monday’s reflection with the Morning Watch', () => {
+    const [morning, , evening] = getChapterOneMissionsForDate('2026-09-07', '2026-09-07');
+    expect(morning.reflectionPrompt).toBe('What requires my attention today?');
+    expect(evening.reflectionPrompt).toBeUndefined();
+    const sunday = getChapterOneMissionsForDate('2026-09-07', '2026-09-13')[2];
+    expect(sunday.reflectionPrompt).toBe('Where am I allowing comfort to make decisions for me?');
+  });
 });

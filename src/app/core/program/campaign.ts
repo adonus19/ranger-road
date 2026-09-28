@@ -1,10 +1,10 @@
-import type { Campaign, LocalDate, ReadinessCheck } from '../domain/models';
+import type { Campaign, LocalDate, MissionType, ReadinessCheck } from '../domain/models';
 import { chapterOneDefinition, chapterOneWeeklyRhythm, type Weekday } from './chapter-one.seed';
 import { getChapterOneDailyContent } from './chapter-one-daily.seed';
 
 export const CHAPTER_ONE_FULL_WEEKS = 4;
 export const CHAPTER_ONE_WEEK_DAYS = 7;
-export const CHAPTER_ONE_SCHEDULE_VERSION = 2;
+export const CHAPTER_ONE_SCHEDULE_VERSION = 3;
 
 export interface ChapterOneSchedule {
   campaignDay: number;
@@ -23,6 +23,8 @@ export interface TodayOrder {
   title: string;
   kind: 'watch' | 'weekly';
   guidance?: string;
+  /** The dated order's kind, so screens can choose a fitting pictogram. */
+  missionType?: MissionType;
 }
 
 /** Parse a date-only value as a civil day, independent of local time and DST. */
@@ -73,7 +75,7 @@ export function getDaysUntil(date: LocalDate, today: LocalDate): number {
   return Math.max(0, civilDay(date) - civilDay(today));
 }
 
-/** End of Week 4 is the default planning target; a chosen date can replace it. */
+/** The Week 4 Saturday trial order is the default planning target; a chosen date can replace it. */
 export function getDaysUntilGateTrial(
   startDate: LocalDate,
   today: LocalDate,
@@ -98,9 +100,17 @@ export function getChapterOneTargetDay(startDate: LocalDate): number {
   return getChapterOneLeadInDays(startDate) + CHAPTER_ONE_FULL_WEEKS * CHAPTER_ONE_WEEK_DAYS;
 }
 
-/** End of the fourth full Monday–Sunday week, used only as a planning date. */
+/** Campaign day of the Week 4 Saturday Gate Trial order, the day before four full weeks close. */
+export function getGateTrialPlannedDay(startDate: LocalDate): number {
+  return getChapterOneTargetDay(startDate) - 1;
+}
+
+/**
+ * The Week 4 Saturday Gate Trial order, used only as a planning date. Sunday still
+ * closes the fourth week, and the trial can be recorded on any day once Day 1 arrives.
+ */
 export function getGateTrialTargetDate(startDate: LocalDate): LocalDate {
-  return addDays(startDate, getChapterOneTargetDay(startDate) - 1);
+  return addDays(startDate, getGateTrialPlannedDay(startDate) - 1);
 }
 
 /** Resolve a Chapter I date without making a partial first week count as Week 1. */
@@ -131,9 +141,10 @@ export function getChapterOneSchedule(
 }
 
 /**
- * Older campaigns saved Day 1 + 27 as their default planning target. Reconcile
- * only that generated value; an explicitly different target remains the user's.
- * This changes campaign planning metadata, never any append-only history row.
+ * Older campaigns saved a generated planning target: Day 1 + 27 (schedule 1) or the
+ * Sunday that closes Week 4 (schedule 2). Reconcile only those generated values; an
+ * explicitly different target remains the user's. This changes campaign planning
+ * metadata, never any append-only history row.
  */
 export function reconcileChapterOneCampaign(campaign: Campaign): Campaign {
   if (
@@ -141,9 +152,12 @@ export function reconcileChapterOneCampaign(campaign: Campaign): Campaign {
     (campaign.scheduleVersion ?? 0) >= CHAPTER_ONE_SCHEDULE_VERSION
   )
     return campaign;
-  const oldDefaultTarget = addDays(campaign.startDate, 27);
+  const generatedTargets = [
+    addDays(campaign.startDate, 27),
+    addDays(campaign.startDate, getChapterOneTargetDay(campaign.startDate) - 1),
+  ];
   const targetWasGenerated =
-    !campaign.trialTargetDate || campaign.trialTargetDate === oldDefaultTarget;
+    !campaign.trialTargetDate || generatedTargets.includes(campaign.trialTargetDate);
   return {
     ...campaign,
     scheduleVersion: CHAPTER_ONE_SCHEDULE_VERSION,
@@ -201,7 +215,13 @@ export function getTodaysOrders(
       kind: 'watch',
       guidance: content.scriptureReference,
     },
-    { id: `weekday-${slot.weekday}`, title, kind: 'weekly', ...(guidance ? { guidance } : {}) },
+    {
+      id: `weekday-${slot.weekday}`,
+      title,
+      kind: 'weekly',
+      missionType: content.activity.missionType,
+      ...(guidance ? { guidance } : {}),
+    },
     { id: 'evening-watch', title: 'Evening Watch', kind: 'watch' },
   ];
 }

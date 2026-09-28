@@ -46,7 +46,14 @@ export function getChapterOneMissionsForDate(
   const week = schedule.week;
   const day = schedule.weekday;
   const content = getChapterOneDailyContent(schedule.contentWeek, day);
-  const readingBookTitle = getChapterOneWeekContent(schedule.contentWeek).readingBookTitle;
+  const weekContent = getChapterOneWeekContent(schedule.contentWeek);
+  const readingBookTitle = weekContent.readingBookTitle;
+  const activityDetails = [
+    ...(content.activity.details ?? []),
+    ...(content.activity.fieldcraftPractice && weekContent.fieldcraft
+      ? [weekContent.fieldcraft]
+      : []),
+  ];
 
   const shared = { chapterId: chapterOneDefinition.id, week, day, required: true };
   const idPrefix =
@@ -62,6 +69,9 @@ export function getChapterOneMissionsForDate(
       title: 'Morning Watch',
       contentReferences: ['morning-watch'],
       scriptureReference: content.scriptureReference,
+      ...(content.morningReflectionPrompt
+        ? { reflectionPrompt: content.morningReflectionPrompt }
+        : {}),
     },
     {
       ...shared,
@@ -74,7 +84,7 @@ export function getChapterOneMissionsForDate(
       ...(content.activity.estimatedMinutes !== undefined
         ? { estimatedMinutes: content.activity.estimatedMinutes }
         : {}),
-      ...(content.activity.details ? { activityDetails: [...content.activity.details] } : {}),
+      ...(activityDetails.length ? { activityDetails } : {}),
       ...(content.activity.plannedTrialId
         ? { plannedTrialId: content.activity.plannedTrialId }
         : {}),

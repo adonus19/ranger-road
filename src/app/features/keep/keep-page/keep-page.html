@@ -1,4 +1,4 @@
-<app-keep-band [chapterComplete]="chapterComplete()" />
+<app-keep-band [chapterComplete]="chapterComplete()" [trialDone]="trialDone()" />
 
 @if (state.loading() || trialLoading()) {
   <p class="keep-state" role="status">Opening your campaign…</p>

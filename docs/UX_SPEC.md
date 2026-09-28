@@ -28,17 +28,19 @@ Must show:
 - a quiet check-in reminder while the Day 1 or monthly check-in is due, or while tests held by a Red day wait (not shown on a Red day)
 - optional quick stats
 
+The trial countdown points at the Week 4 Saturday Gate Trial order. Once a completed Gate Trial is saved, the countdown reads Done, and on the trial's Saturday the main order says it is complete instead of asking for it again.
+
 Once the fourth full Monday–Sunday week has ended and a completed Gate Trial result exists, Keep shows Chapter I complete in place of the trial countdown and daily mission board. Check-in and trial recovery reminders remain available. An early completed trial stays in history while the remaining dated Week 4 orders continue through Sunday.
 
 ## Today's Mission
 
-Chapter I uses the dated orders in the [Muster content pack](rangers-road-full-program-content/01_THE_MUSTER.md). The lead-in uses Week 1's matching weekday orders and distinct mission IDs. Wednesday offers restoration plus the specified nonexertional skill in Week 2 (tool inspection) and Week 3 (basic knots). Weeks 1 and 4 have restoration only. Restoration requires a same-day readiness check; the two nonexertional skills do not. Weeks 1–3 Friday offers the documented easy walk or restoration; Week 4 Friday is easy mobility or rest. Each choice has its own mission definition, and saved attempts keep that definition as a snapshot. A later attempt is added to history without replacing the first. A record whose old week-based ID no longer matches the day's order remains visible with its saved snapshot. The Week 4 Saturday Gate Trial is a plan; a completed trial uses its dedicated result flow.
+Chapter I uses the dated orders in the [Muster content pack](rangers-road-full-program-content/01_THE_MUSTER.md). The lead-in uses Week 1's matching weekday orders and distinct mission IDs. Wednesday offers restoration plus the specified nonexertional skill in Week 2 (tool inspection) and Week 3 (basic knots). Weeks 1 and 4 have restoration only. Restoration requires a same-day readiness check; the two nonexertional skills do not. Weeks 1–3 Friday offers the documented easy walk or restoration; Week 4 Friday is easy mobility or rest. Until a same-day readiness check is saved, a path that needs one says so; after that, each path describes itself instead. Week 2 Saturday's fieldcraft practice shows that week's tool-inspection description. On a Red day, a walk or workout's own instructions (such as brisk intervals) are hidden and the Restoration routine is linked instead; Week 4 Friday's easy mobility links the same routine. Each choice has its own mission definition, and saved attempts keep that definition as a snapshot. A later attempt is added to history without replacing the first. A record whose old week-based ID no longer matches the day's order remains visible with its saved snapshot. The Week 4 Saturday Gate Trial is a plan; a completed trial uses its dedicated result flow, and once one is saved the order reads Gate Trial complete with a link to the record.
 
 ## Road — Campaign
 
 Visual 9-chapter campaign map.
 
-Current build: Chapter I only. Its four full weeks are drawn as a route after any short lead-in, with a Today mark and the Gate Trial at the end. Before Day 1 the route shows the start date. After the end-of-Week-4 planning target, the Today mark rests on the trial and the countdown stays at zero. Chapters II–IX join the map once their content is seeded.
+Current build: Chapter I only. Its four full weeks are drawn as a route after any short lead-in, with a Today mark and the Gate Trial at the end, on the Week 4 Saturday trial order. Before Day 1 the route shows the start date. From that Saturday on, the Today mark rests on the trial and the countdown stays at zero. The Gate Trial section says the plan is Saturday and that Sunday is open too; once a completed trial is saved, it names the day it was completed and links to the record. Chapters II–IX join the map once their content is seeded.
 
 An older campaign may retain a separately chosen Gate Trial target date. In that case the route endpoint is labeled End of Week 4, while the Gate Trial section names the chosen date. The chart does not move the four-week program to match that date.
 
@@ -104,7 +106,7 @@ Journal ends with Your records, because every record lives only on the device:
 - A file that isn't a copy, is damaged, or came from a newer version of the app is refused, and nothing changes.
 
 Entries:
-- daily watch
+- daily watch (a day's reflection appears in the Evening Watch, except Week 1 Monday's "What requires my attention today?", which the Morning Watch asks)
 - trial reflections
 - weight
 - waist

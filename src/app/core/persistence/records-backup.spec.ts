@@ -17,13 +17,29 @@ function emptyStores(): StoreRecords {
 function sampleStores(): StoreRecords {
   return {
     ...emptyStores(),
-    campaigns: [{ id: 'primary', startDate: '2026-10-05', currentChapterId: 'chapter-1', status: 'active' }],
-    readinessChecks: [
-      { id: 'readiness-1', date: '2026-10-05', checkedAt: '2026-10-05T11:00:00.000Z', status: 'green' },
-      { id: 'readiness-2', date: '2026-10-07', checkedAt: '2026-10-07T11:00:00.000Z', status: 'yellow' },
+    campaigns: [
+      { id: 'primary', startDate: '2026-10-05', currentChapterId: 'chapter-1', status: 'active' },
     ],
-    journalEntries: [{ id: 'watch-1', date: '2026-10-06', type: 'morning-watch', response: 'Patience.' }],
-    postMissionFunctions: [{ id: 'recovery-1', trialResultId: 'gate-1', recordedAt: '2026-10-31T15:00:00.000Z' }],
+    readinessChecks: [
+      {
+        id: 'readiness-1',
+        date: '2026-10-05',
+        checkedAt: '2026-10-05T11:00:00.000Z',
+        status: 'green',
+      },
+      {
+        id: 'readiness-2',
+        date: '2026-10-07',
+        checkedAt: '2026-10-07T11:00:00.000Z',
+        status: 'yellow',
+      },
+    ],
+    journalEntries: [
+      { id: 'watch-1', date: '2026-10-06', type: 'morning-watch', response: 'Patience.' },
+    ],
+    postMissionFunctions: [
+      { id: 'recovery-1', trialResultId: 'gate-1', recordedAt: '2026-10-31T15:00:00.000Z' },
+    ],
   };
 }
 
@@ -55,15 +71,17 @@ describe('records backup file', () => {
   it('refuses files that are not a copy of these records', () => {
     expect(() => parseRecordsBackup('not json')).toThrow(NOT_A_RECORDS_COPY);
     expect(() => parseRecordsBackup('[]')).toThrow(NOT_A_RECORDS_COPY);
-    expect(() => parseRecordsBackup(JSON.stringify({ format: 'something-else', stores: {} }))).toThrow(
-      NOT_A_RECORDS_COPY,
-    );
+    expect(() =>
+      parseRecordsBackup(JSON.stringify({ format: 'something-else', stores: {} })),
+    ).toThrow(NOT_A_RECORDS_COPY);
   });
 
   it('refuses a copy from a newer app or schema instead of dropping what it cannot read', () => {
     const backup = createRecordsBackup(sampleStores());
 
-    expect(() => parseRecordsBackup(JSON.stringify({ ...backup, version: 2 }))).toThrow(NEWER_RECORDS_COPY);
+    expect(() => parseRecordsBackup(JSON.stringify({ ...backup, version: 2 }))).toThrow(
+      NEWER_RECORDS_COPY,
+    );
     expect(() =>
       parseRecordsBackup(JSON.stringify({ ...backup, databaseVersion: DATABASE_VERSION + 1 })),
     ).toThrow(NEWER_RECORDS_COPY);
@@ -77,20 +95,24 @@ describe('records backup file', () => {
     expect(() => parseRecordsBackup(JSON.stringify({ ...backup, savedAt: 'yesterday' }))).toThrow(
       DAMAGED_RECORDS_COPY,
     );
-    expect(() => parseRecordsBackup(withStores({ unknownStore: [] }))).toThrow(DAMAGED_RECORDS_COPY);
-    expect(() => parseRecordsBackup(withStores({ journalEntries: {} }))).toThrow(DAMAGED_RECORDS_COPY);
-    expect(() => parseRecordsBackup(withStores({ journalEntries: [{ date: '2026-10-06' }] }))).toThrow(
+    expect(() => parseRecordsBackup(withStores({ unknownStore: [] }))).toThrow(
       DAMAGED_RECORDS_COPY,
     );
+    expect(() => parseRecordsBackup(withStores({ journalEntries: {} }))).toThrow(
+      DAMAGED_RECORDS_COPY,
+    );
+    expect(() =>
+      parseRecordsBackup(withStores({ journalEntries: [{ date: '2026-10-06' }] })),
+    ).toThrow(DAMAGED_RECORDS_COPY);
     expect(() =>
       parseRecordsBackup(withStores({ journalEntries: [{ id: 'same' }, { id: 'same' }] })),
     ).toThrow(DAMAGED_RECORDS_COPY);
     expect(() =>
       parseRecordsBackup(withStores({ campaigns: [{ id: 'primary', startDate: '2026-02-30' }] })),
     ).toThrow(DAMAGED_RECORDS_COPY);
-    expect(() => parseRecordsBackup(withStores({ readinessChecks: [{ id: 'readiness-1' }] }))).toThrow(
-      DAMAGED_RECORDS_COPY,
-    );
+    expect(() =>
+      parseRecordsBackup(withStores({ readinessChecks: [{ id: 'readiness-1' }] })),
+    ).toThrow(DAMAGED_RECORDS_COPY);
     expect(() =>
       parseRecordsBackup(withStores({ workoutDrafts: [{ id: 'draft-1' }, { id: 'draft-2' }] })),
     ).toThrow(DAMAGED_RECORDS_COPY);

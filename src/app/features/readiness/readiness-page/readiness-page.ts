@@ -3,6 +3,7 @@ import { FormField, form, pattern, required, submit, validate } from '@angular/f
 import { RouterLink } from '@angular/router';
 import type { ReadinessCheck, ReadinessInput } from '../../../core/domain/models';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { formatLongDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
 
 @Component({
@@ -18,6 +19,7 @@ export class ReadinessPage implements OnInit {
   protected readonly saving = signal(false);
   protected readonly saveError = signal<string | null>(null);
   protected readonly saved = signal<ReadinessCheck | null>(null);
+  protected readonly longDate = formatLongDate;
 
   protected readonly formModel = signal({
     sleepHours: '',

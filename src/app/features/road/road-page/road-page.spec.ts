@@ -61,7 +61,7 @@ describe('RoadPage', () => {
     const element = await render('2026-09-21', '2026-09-25');
 
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'Planned for the end of Week 4, Sunday, October 18. You can take it when ready.',
+      'Planned for Saturday, October 17. If Saturday doesn’t work, Sunday is open too.',
     );
     expect(element.querySelector('.trial__open')?.getAttribute('href')).toBe('/road/gate-trial');
     expect(element.querySelector('ol.trial__phases')).not.toBeNull();
@@ -88,10 +88,10 @@ describe('RoadPage', () => {
     const element = await render('2026-08-20', '2026-09-25');
 
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'The Week 4 target was Sunday, September 20. You can take the Gate Trial when ready.',
+      'The Week 4 target was Saturday, September 19. You can take the Gate Trial when ready.',
     );
     expect(element.querySelector('.route')?.getAttribute('aria-label')).toContain(
-      'A 4-day lead-in ends before Week 1 begins on day 5. Gate Trial target on day 32.',
+      'A 4-day lead-in ends before Week 1 begins on day 5. Gate Trial target on day 31.',
     );
   });
 
@@ -149,12 +149,15 @@ describe('RoadPage', () => {
     );
   });
 
-  it('keeps Chapter I current through Week 4 Sunday after an early trial', async () => {
+  it('keeps Chapter I current through Week 4 Sunday and shows the saved trial', async () => {
     const element = await render('2026-10-05', '2026-11-01', [], undefined, [completedTrial]);
 
     expect(element.querySelector('.road-band__meta')?.textContent).toContain('Current chapter');
-    expect(element.querySelector('.trial__target')?.textContent).toContain(
-      'Planned for the end of Week 4',
+    expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
+      'Completed Saturday, October 31. Chapter I closes after Week 4.',
+    );
+    expect(element.querySelector('.trial__open')?.textContent?.trim()).toBe(
+      'View Gate Trial record',
     );
   });
 

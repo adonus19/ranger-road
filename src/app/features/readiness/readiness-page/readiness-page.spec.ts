@@ -82,6 +82,9 @@ describe('ReadinessPage', () => {
     await fixture.whenStable();
 
     expect(recordReadiness).toHaveBeenCalledOnce();
+    expect(root.querySelector('.saved-result__label')?.textContent?.trim()).toBe(
+      'Saved for Friday, September 25',
+    );
     expect(recordReadiness.mock.calls[0][0]).toMatchObject({
       date: '2026-09-25',
       sleepHours: 6.5,

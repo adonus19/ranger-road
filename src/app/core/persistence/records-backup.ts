@@ -35,7 +35,8 @@ export interface RecordsSummary {
 
 export const NOT_A_RECORDS_COPY =
   'This file isn’t a copy of your records. Choose a file made with Save a copy.';
-export const DAMAGED_RECORDS_COPY = 'This copy can’t be read, so nothing changed. Try another copy.';
+export const DAMAGED_RECORDS_COPY =
+  'This copy can’t be read, so nothing changed. Try another copy.';
 export const NEWER_RECORDS_COPY =
   'This copy came from a newer version of the app. Close and reopen the app to update it, then try again.';
 
@@ -88,7 +89,11 @@ export function parseRecordsBackup(text: string): RecordsBackup {
   for (const name of STORE_NAMES) {
     checked[name] = checkRows(stores[name] ?? [], name);
   }
-  if (checked.campaigns.length > 1 || checked.workoutDrafts.length > 1 || checked.trialDrafts.length > 1) {
+  if (
+    checked.campaigns.length > 1 ||
+    checked.workoutDrafts.length > 1 ||
+    checked.trialDrafts.length > 1
+  ) {
     throw new Error(DAMAGED_RECORDS_COPY);
   }
 

@@ -45,7 +45,7 @@
       } @else {
         <p class="trial__target">{{ trialTarget() }}</p>
         <a class="trial__open" routerLink="/road/gate-trial">{{
-          chapterComplete() ? 'View Gate Trial record' : 'Review the Gate Trial plan'
+          trialDone() ? 'View Gate Trial record' : 'Review the Gate Trial plan'
         }}</a>
       }
       <ol class="trial__phases">

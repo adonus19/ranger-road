@@ -89,6 +89,12 @@
   line-height: 1;
 }
 
+/* A word is wider than two digits; on phones it steps down so it stays inside the band. */
+.keep-band__counts .keep-band__word {
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+
 .keep-band__note {
   grid-column: 1 / -1;
   margin: 0.375rem 0 0;
@@ -145,8 +151,10 @@
     font-size: 0.8125rem;
   }
 
-  .keep-band__counts dd {
+  .keep-band__counts dd,
+  .keep-band__counts .keep-band__word {
     font-size: 2.5rem;
+    line-height: 1;
   }
 
   .keep-band__note {

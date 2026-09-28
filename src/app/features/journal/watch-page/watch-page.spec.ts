@@ -3,14 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { describe, expect, it, vi } from 'vitest';
-import type { JournalEntry } from '../../../core/domain/models';
+import type { Campaign, JournalEntry } from '../../../core/domain/models';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { JournalStore, type EveningAnswers } from '../journal-store';
 import { WatchPage } from './watch-page';
 
-function setup(watch: 'morning' | 'evening') {
+function setup(watch: 'morning' | 'evening', campaign: Campaign | null = null) {
   const state = {
-    campaign: signal(null),
+    campaign: signal<Campaign | null>(campaign),
     today: signal('2026-09-21'),
     initialize: vi.fn(async () => undefined),
   };
@@ -130,5 +130,27 @@ describe('WatchPage', () => {
     await fixture.whenStable();
     expect(root.textContent).not.toContain('Morning Watch saved');
     expect(root.querySelector<HTMLTextAreaElement>('#family-need')?.value).toBe('');
+  });
+
+  it('asks Week 1 Monday’s reflection in the Morning Watch, not the Evening Watch', async () => {
+    const campaign: Campaign = {
+      id: 'primary',
+      startDate: '2026-09-21',
+      currentChapterId: 'chapter-1',
+      status: 'active',
+    };
+    const morning = setup('morning', campaign);
+    await morning.fixture.whenStable();
+    const morningRoot = morning.fixture.nativeElement as HTMLElement;
+    expect(morningRoot.querySelector('.watch-steps')?.textContent).toContain(
+      'Reflect: What requires my attention today?',
+    );
+
+    TestBed.resetTestingModule();
+    const evening = setup('evening', campaign);
+    await evening.fixture.whenStable();
+    expect((evening.fixture.nativeElement as HTMLElement).textContent).not.toContain(
+      'What requires my attention today?',
+    );
   });
 });

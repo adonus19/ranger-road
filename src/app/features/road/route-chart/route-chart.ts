@@ -94,6 +94,6 @@ export class RouteChart {
     if (!this.started()) {
       return `Chapter route, not started. ${this.startLabel()}. ${leadIn}${trial}.`;
     }
-    return `Chapter route. Today is day ${this.day()} of ${this.targetDay()}. ${leadIn}${trial}.`;
+    return `Chapter route. Today is day ${this.day()}. ${leadIn}${trial}.`;
   });
 }

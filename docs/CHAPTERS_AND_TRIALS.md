@@ -41,7 +41,7 @@ Trial: **The Gate Trial**
 
 The [Chapter I content pack](rangers-road-full-program-content/01_THE_MUSTER.md) supplies the exact Forge A/B prescriptions, daily walking doses, six circuit stations, and trial prompts. Complete the Gate Trial phases in the documented order: Road, Gate Circuit, Mind, Spirit, then Oath. Rest 5–10 minutes after the walk before starting the circuit; at least 5 minutes is required, and longer than 10 minutes is allowed when needed to recover safely. Spend 10–15 quiet minutes in prayer; at least 10 minutes is required, and longer is allowed. Record the actual rest and prayer durations on a new completed trial result. The circuit is controlled; its completion time is recorded without a speed target.
 
-For a Chapter I dashboard countdown, the Sunday at the end of the fourth full Monday–Sunday week is a planning target, not a required trial date. It is campaign day 28 for a Monday Day 1, or day 29–34 when a short lead-in follows a Tuesday–Sunday start. The Week 4 Saturday Gate Trial listing remains the planned activity; the countdown uses Sunday to mark the end of that full week. Readiness and circumstances may change when the trial is attempted.
+For a Chapter I dashboard countdown, the Week 4 Saturday Gate Trial order is the planning target, not a required trial date. It is campaign day 27 for a Monday Day 1, or day 28–33 when a short lead-in follows a Tuesday–Sunday start. Sunday, which closes the fourth full Monday–Sunday week, remains open if Saturday does not work. Readiness and circumstances may change when the trial is attempted.
 The Gate Trial can be recorded on or after campaign Day 1; the planning target is not a minimum attempt date.
 
 ---

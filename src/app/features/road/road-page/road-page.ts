@@ -5,10 +5,14 @@ import {
   getCampaignDay,
   getChapterOneLeadInDays,
   getChapterOneTargetDay,
+  getGateTrialPlannedDay,
   getGateTrialTargetDate,
 } from '../../../core/program/campaign';
 import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
-import { isChapterOneComplete } from '../../../core/program/chapter-one-completion';
+import {
+  hasCompletedChapterOneTrial,
+  isChapterOneComplete,
+} from '../../../core/program/chapter-one-completion';
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
 import { formatChapterLine, loadChapterSeed } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
@@ -39,6 +43,9 @@ export class RoadPage implements OnInit {
   protected readonly chapterComplete = computed(() =>
     isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
   );
+  protected readonly trialDone = computed(() =>
+    hasCompletedChapterOneTrial(this.state.campaign(), this.completedTrials()),
+  );
   protected readonly walkParts = roadSessionParts;
   protected readonly walkDate = formatShortDate;
 
@@ -68,20 +75,27 @@ export class RoadPage implements OnInit {
     return campaign ? getChapterOneLeadInDays(campaign.startDate) : 0;
   });
 
-  protected readonly targetDay = computed(() => {
+  /** An older campaign's own trial date stays in the card; its chart ends after four full weeks. */
+  private readonly customTarget = computed(() => {
     const campaign = this.state.campaign();
-    return campaign ? getChapterOneTargetDay(campaign.startDate) : 28;
+    return Boolean(
+      campaign?.trialTargetDate &&
+      campaign.trialTargetDate !== getGateTrialTargetDate(campaign.startDate),
+    );
   });
 
-  /** A custom trial date stays in the card; the chart still ends after four full weeks. */
-  protected readonly chartTargetLabel = computed(() => {
+  /** The route ends at the Week 4 Saturday trial order; Sunday rests on it. */
+  protected readonly targetDay = computed(() => {
     const campaign = this.state.campaign();
-    return campaign &&
-      campaign.trialTargetDate &&
-      campaign.trialTargetDate !== getGateTrialTargetDate(campaign.startDate)
-      ? 'End of Week 4'
-      : 'Gate Trial';
+    if (!campaign) return 27;
+    return this.customTarget()
+      ? getChapterOneTargetDay(campaign.startDate)
+      : getGateTrialPlannedDay(campaign.startDate);
   });
+
+  protected readonly chartTargetLabel = computed(() =>
+    this.customTarget() ? 'End of Week 4' : 'Gate Trial',
+  );
 
   protected readonly startLabel = computed(() => {
     const campaign = this.state.campaign();
@@ -92,9 +106,13 @@ export class RoadPage implements OnInit {
     if (this.chapterComplete()) {
       return 'Chapter I complete. Your Gate Trial is saved on this device.';
     }
+    const latest = this.trialDone() ? this.completedTrials()[0] : undefined;
+    if (latest) {
+      return `Completed ${formatLongDate(latest.date)}. Chapter I closes after Week 4.`;
+    }
     const campaign = this.state.campaign();
     if (!campaign) {
-      return 'Planned for the end of Week 4. You can take it when ready.';
+      return 'Planned for Saturday of Week 4. You can take it when ready.';
     }
     const defaultTarget = getGateTrialTargetDate(campaign.startDate);
     const target = campaign.trialTargetDate ?? defaultTarget;
@@ -106,7 +124,7 @@ export class RoadPage implements OnInit {
     // Civil dates in YYYY-MM-DD form compare correctly as strings.
     return this.state.today() > target
       ? `The Week 4 target was ${formatLongDate(target)}. You can take the Gate Trial when ready.`
-      : `Planned for the end of Week 4, ${formatLongDate(target)}. You can take it when ready.`;
+      : `Planned for ${formatLongDate(target)}. If Saturday doesn’t work, Sunday is open too.`;
   });
 
   ngOnInit(): void {

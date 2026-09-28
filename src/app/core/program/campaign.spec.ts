@@ -6,6 +6,7 @@ import {
   getChapterOneSchedule,
   getChapterOneTargetDay,
   getDaysUntilGateTrial,
+  getGateTrialPlannedDay,
   getGateTrialTargetDate,
   getTodaysOrders,
   isLocalDate,
@@ -34,12 +35,13 @@ describe('campaign calendar', () => {
     expect(getCampaignDay('2026-03-07', '2026-03-09')).toBe(3);
   });
 
-  it('treats the end of four full weeks as a countdown target without a negative count', () => {
-    expect(getGateTrialTargetDate('2026-09-07')).toBe('2026-10-04');
+  it('counts down to the Week 4 Saturday trial order without a negative count', () => {
+    expect(getGateTrialTargetDate('2026-09-07')).toBe('2026-10-03');
+    expect(getGateTrialPlannedDay('2026-09-07')).toBe(27);
     expect(getChapterOneTargetDay('2026-09-07')).toBe(28);
-    expect(getDaysUntilGateTrial('2026-09-07', '2026-09-07')).toBe(27);
+    expect(getDaysUntilGateTrial('2026-09-07', '2026-09-07')).toBe(26);
+    expect(getDaysUntilGateTrial('2026-09-07', '2026-10-03')).toBe(0);
     expect(getDaysUntilGateTrial('2026-09-07', '2026-10-04')).toBe(0);
-    expect(getDaysUntilGateTrial('2026-09-07', '2026-10-05')).toBe(0);
     expect(getDaysUntilGateTrial('2026-09-07', '2026-10-05', '2026-10-10')).toBe(5);
   });
 
@@ -48,7 +50,7 @@ describe('campaign calendar', () => {
     expect(getChapterOneLeadInDays('2026-09-10')).toBe(4);
     expect(getChapterOneLeadInDays('2026-09-13')).toBe(1);
     expect(getChapterOneTargetDay('2026-09-10')).toBe(32);
-    expect(getGateTrialTargetDate('2026-09-10')).toBe('2026-10-11');
+    expect(getGateTrialTargetDate('2026-09-10')).toBe('2026-10-10');
     expect(getChapterOneSchedule('2026-09-10', '2026-09-10')).toMatchObject({
       campaignDay: 1,
       week: 0,
@@ -82,7 +84,7 @@ describe('campaign calendar', () => {
   });
 
   it('calculates the planning date over a leap day', () => {
-    expect(getGateTrialTargetDate('2024-02-02')).toBe('2024-03-03');
+    expect(getGateTrialTargetDate('2024-02-02')).toBe('2024-03-02');
   });
 
   it('upgrades only an older generated target and preserves a separately chosen target', () => {
@@ -94,13 +96,17 @@ describe('campaign calendar', () => {
       trialTargetDate: '2026-10-07',
     };
     const upgraded = reconcileChapterOneCampaign(saved);
-    expect(upgraded).toMatchObject({ scheduleVersion: 2, trialTargetDate: '2026-10-11' });
+    expect(upgraded).toMatchObject({ scheduleVersion: 3, trialTargetDate: '2026-10-10' });
     expect(saved.trialTargetDate).toBe('2026-10-07');
     expect(reconcileChapterOneCampaign(upgraded)).toBe(upgraded);
+    // Schedule 2 generated the Sunday that closes Week 4; it moves to that week's Saturday.
+    expect(
+      reconcileChapterOneCampaign({ ...saved, scheduleVersion: 2, trialTargetDate: '2026-10-11' }),
+    ).toMatchObject({ scheduleVersion: 3, trialTargetDate: '2026-10-10' });
     expect(reconcileChapterOneCampaign({ ...saved, trialTargetDate: '2026-10-20' })).toMatchObject({
       trialTargetDate: '2026-10-20',
     });
-    const future = { ...saved, scheduleVersion: 3 };
+    const future = { ...saved, scheduleVersion: 4 };
     expect(reconcileChapterOneCampaign(future)).toBe(future);
   });
 

@@ -4,10 +4,12 @@ import {
   getChapterOneSchedule,
   getDaysUntil,
   getDaysUntilGateTrial,
+  getGateTrialTargetDate,
 } from '../../../core/program/campaign';
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
 import { formatChapterLine, loadChapterSeed } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { formatShortDate } from '../../../shared/format-date';
 
 /** The painted forest band at the top of Keep: the chapter, its theme, and the two counts. */
 @Component({
@@ -18,6 +20,8 @@ import { CampaignState } from '../../../core/state/campaign-state';
 export class KeepBand {
   protected readonly state = inject(CampaignState);
   readonly chapterComplete = input(false);
+  /** A completed Gate Trial is saved, possibly before the four weeks end. */
+  readonly trialDone = input(false);
 
   /** Before a campaign exists, the band still introduces the first chapter. */
   protected readonly seed = computed(() =>
@@ -42,6 +46,15 @@ export class KeepBand {
   protected readonly daysUntilStart = computed(() => {
     const campaign = this.state.campaign();
     return campaign ? getDaysUntil(campaign.startDate, this.state.today()) : 0;
+  });
+
+  /** The Week 4 Saturday order by default; an older campaign may keep a date of its own. */
+  protected readonly trialNote = computed(() => {
+    const campaign = this.state.campaign();
+    const target = campaign?.trialTargetDate;
+    return campaign && target && target !== getGateTrialTargetDate(campaign.startDate)
+      ? `Gate Trial target: ${formatShortDate(target)}. You can take it when ready.`
+      : 'Gate Trial: Saturday of Week 4. You can take it when ready.';
   });
 
   protected readonly daysUntilTrial = computed(() => {

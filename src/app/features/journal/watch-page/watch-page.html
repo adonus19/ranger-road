@@ -21,6 +21,9 @@
           <li>Read {{ dailyContent()?.scriptureReference ?? 'Scripture' }}.</li>
           <li>Pray briefly.</li>
           <li><a routerLink="/keep">Review Today’s Orders</a>.</li>
+          @if (dailyContent()?.morningReflectionPrompt; as prompt) {
+            <li>Reflect: {{ prompt }}</li>
+          }
         </ol>
         <form class="watch-form" (submit)="save($event)" novalidate>
           <div class="watch-field">

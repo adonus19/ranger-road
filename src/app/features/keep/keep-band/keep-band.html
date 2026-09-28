@@ -33,9 +33,9 @@
             </div>
           }
           <div>
-            @if (chapterComplete()) {
+            @if (chapterComplete() || trialDone()) {
               <dt>Gate Trial</dt>
-              <dd>Done</dd>
+              <dd class="keep-band__word">Done</dd>
             } @else {
               <dt>Days until Gate Trial</dt>
               <dd>{{ daysUntilTrial() }}</dd>
@@ -46,10 +46,12 @@
         <p class="keep-band__note">
           @if (chapterComplete()) {
             Chapter I complete. Your Gate Trial is saved on this device.
+          } @else if (trialDone()) {
+            Gate Trial saved. Chapter I closes after Week 4.
           } @else if (isLeadIn()) {
             Lead-in through Sunday. Week 1 begins Monday.
           } @else {
-            Gate Trial target: end of Week 4. You can take it when ready.
+            {{ trialNote() }}
           }
         </p>
       }

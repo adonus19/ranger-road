@@ -11,11 +11,15 @@ import { LocalRecords } from '../../../core/state/local-records';
 import { RecordsSection } from './records-section';
 
 function stores(overrides: Partial<StoreRecords> = {}): StoreRecords {
-  const empty = Object.fromEntries(STORE_NAMES.map((name) => [name, []])) as unknown as StoreRecords;
+  const empty = Object.fromEntries(
+    STORE_NAMES.map((name) => [name, []]),
+  ) as unknown as StoreRecords;
   return {
     ...empty,
     campaigns: [{ id: 'primary', startDate: '2026-10-05' }],
-    readinessChecks: [{ id: 'readiness-1', date: '2026-10-05', checkedAt: '2026-10-05T11:00:00.000Z' }],
+    readinessChecks: [
+      { id: 'readiness-1', date: '2026-10-05', checkedAt: '2026-10-05T11:00:00.000Z' },
+    ],
     ...overrides,
   };
 }
@@ -38,13 +42,17 @@ function render(records: Partial<LocalRecords>): ComponentFixture<RecordsSection
 
 function chooseFile(root: HTMLElement, contents: string): void {
   const input = root.querySelector<HTMLInputElement>('input[type="file"]')!;
-  const file = new File([contents], 'rangers-road-records-2026-10-12.json', { type: 'application/json' });
+  const file = new File([contents], 'rangers-road-records-2026-10-12.json', {
+    type: 'application/json',
+  });
   Object.defineProperty(input, 'files', { value: [file], configurable: true });
   input.dispatchEvent(new Event('change'));
 }
 
 function button(root: HTMLElement, text: string): HTMLButtonElement {
-  const match = Array.from(root.querySelectorAll('button')).find((item) => item.textContent?.includes(text));
+  const match = Array.from(root.querySelectorAll('button')).find((item) =>
+    item.textContent?.includes(text),
+  );
   if (!match) throw new Error(`No button labeled ${text}`);
   return match;
 }
@@ -73,7 +81,9 @@ describe('RecordsSection', () => {
       },
     });
     Object.defineProperty(URL, 'revokeObjectURL', { configurable: true, value: () => undefined });
-    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (this: HTMLAnchorElement) {
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (
+      this: HTMLAnchorElement,
+    ) {
       links.push({ download: this.download, href: this.href });
     });
     const fixture = render({ backup: async () => backup });
@@ -84,7 +94,9 @@ describe('RecordsSection', () => {
     root.querySelector<HTMLButtonElement>('#records-save')!.click();
     root = await settle(fixture);
 
-    expect(links).toEqual([{ download: 'rangers-road-records-2026-10-12.json', href: 'blob:records-copy' }]);
+    expect(links).toEqual([
+      { download: 'rangers-road-records-2026-10-12.json', href: 'blob:records-copy' },
+    ]);
     expect(files[0].type).toBe('application/json');
     expect(parseRecordsBackup(await files[0].text())).toEqual(backup);
     expect(root.textContent).toContain('Last saved Mon, Oct 12 at 7:02\u00a0PM');

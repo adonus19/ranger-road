@@ -164,22 +164,66 @@ describe('KeepPage', () => {
     const state = fakeState({
       ...campaign,
       startDate: '2026-10-05',
-      trialTargetDate: '2026-11-01',
+      trialTargetDate: '2026-10-31',
     });
     state.today.set('2026-11-01');
     const element = await render(state, [], [completedTrial]);
 
     expect(text(element, '.main-order h3')).toBe('Rest and worship');
-    expect(text(element, '.keep-band__counts div:last-child dd')).toBe('0');
+    expect(text(element, '.keep-band__counts div:last-child dd')).toBe('Done');
+    expect(text(element, '.keep-band__note')).toBe(
+      'Gate Trial saved. Chapter I closes after Week 4.',
+    );
     expect(element.querySelector('.mission-cta')).not.toBeNull();
     expect(element.querySelector('.chapter-complete')).toBeNull();
+  });
+
+  it('counts down to the Saturday trial order, then marks that order complete once saved', async () => {
+    const yellow: ReadinessCheck = {
+      id: 'yellow-trial-day',
+      date: '2026-10-31',
+      checkedAt: '2026-10-31T11:00:00.000Z',
+      sleepHours: 6,
+      poorSleep: true,
+      energy: 3,
+      backPain: 1,
+      shoulderPain: 0,
+      neckPain: 0,
+      redFlags: {
+        significantSymptomIncrease: false,
+        newNeurologicalOrRadiatingSymptoms: false,
+        illness: false,
+        otherConcerningSymptoms: false,
+      },
+      status: 'yellow',
+    };
+    const state = fakeState(
+      { ...campaign, startDate: '2026-10-05', trialTargetDate: '2026-10-31' },
+      yellow,
+    );
+    state.today.set('2026-10-31');
+    const pending = await render(state);
+
+    expect(text(pending, '.keep-band__counts div:last-child dd')).toBe('0');
+    expect(text(pending, '.keep-band__note')).toBe(
+      'Gate Trial: Saturday of Week 4. You can take it when ready.',
+    );
+    expect(text(pending, '.main-order h3')).toBe('Gate Trial waits for Green');
+
+    TestBed.resetTestingModule();
+    const saved = await render(state, [], [completedTrial]);
+    expect(text(saved, '.main-order h3')).toBe('Gate Trial');
+    expect(text(saved, '.main-order__guidance')).toBe(
+      'Complete. Your result is saved on this device.',
+    );
+    expect(text(saved, '.keep-band__counts div:last-child dd')).toBe('Done');
   });
 
   it('acknowledges Chapter I after four full weeks and a completed trial while retaining reminders', async () => {
     const state = fakeState({
       ...campaign,
       startDate: '2026-10-05',
-      trialTargetDate: '2026-11-01',
+      trialTargetDate: '2026-10-31',
     });
     state.today.set('2026-11-02');
     const element = await render(state, [], [completedTrial]);
@@ -199,7 +243,7 @@ describe('KeepPage', () => {
     const state = fakeState({
       ...campaign,
       startDate: '2026-10-05',
-      trialTargetDate: '2026-11-01',
+      trialTargetDate: '2026-10-31',
     });
     state.today.set('2026-11-02');
     const element = await render(state);

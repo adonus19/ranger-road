@@ -454,4 +454,62 @@ describe('MissionPage', () => {
     expect(root.textContent).not.toContain('Chapter I complete');
     expect(root.textContent).not.toContain('Record your outcome');
   });
+
+  it('says a Friday path needs readiness only until a check is saved', async () => {
+    const details = (root: HTMLElement) =>
+      [...root.querySelectorAll('.activity-choice__copy > span')].map((span) =>
+        span.textContent?.trim(),
+      );
+    const unchecked = setup(null, friday);
+    expect(details(await ready(unchecked.fixture))).toEqual([
+      'Check readiness first',
+      'Check readiness first',
+    ]);
+
+    TestBed.resetTestingModule();
+    const checked = setup(readiness('green', friday), friday);
+    expect(details(await ready(checked.fixture))).toEqual([
+      'Log the walk details after',
+      'Gentle mobility and a 1-minute easy walk',
+    ]);
+
+    TestBed.resetTestingModule();
+    const skill = setup(null, skillWednesday);
+    expect(details(await ready(skill.fixture))).toContain('No readiness check needed');
+  });
+
+  it('drops a walk’s brisk intervals on a Red day and links the Restoration routine', async () => {
+    const { fixture } = setup(readiness('red', '2026-10-06'), '2026-10-06');
+    const root = await ready(fixture);
+
+    expect(root.querySelector('#order-title')?.textContent).toContain(
+      'Restoration or easy movement',
+    );
+    expect(root.textContent).not.toContain('5 rounds of 1 minute brisk');
+    expect(root.querySelector('.workout-link')?.getAttribute('href')).toBe(
+      '/forge/session/chapter-1-restoration',
+    );
+  });
+
+  it('offers the Restoration routine as Week 4 Friday’s easy mobility', async () => {
+    const { fixture } = setup(readiness('green', '2026-10-16'), '2026-10-16');
+    const root = await ready(fixture);
+
+    expect(root.querySelector('#order-title')?.textContent).toContain('Easy mobility or rest');
+    expect(root.querySelector('.workout-link')?.getAttribute('href')).toBe(
+      '/forge/session/chapter-1-restoration',
+    );
+  });
+
+  it('marks the Saturday trial order complete once the Gate Trial is saved', async () => {
+    const { fixture, forTrial } = setup(readiness('yellow', '2026-10-17'), '2026-10-17');
+    forTrial.mockResolvedValue([{ trialId: 'gate-trial' } as TrialResult]);
+    const root = await ready(fixture);
+
+    expect(root.querySelector('#order-title')?.textContent?.trim()).toBe('Gate Trial');
+    expect(root.textContent).toContain('Gate Trial complete');
+    expect(root.textContent).not.toContain('Gate Trial planned');
+    expect(root.textContent).not.toContain('Record the trial through its dedicated flow');
+    expect(root.querySelector('.recorded a')?.getAttribute('href')).toBe('/road/gate-trial');
+  });
 });

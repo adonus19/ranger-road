@@ -22,8 +22,8 @@
 - startDate
 - currentChapterId
 - status
-- trialTargetDate? (planning date; Chapter I initially uses the end of Week 4)
-- scheduleVersion? (Chapter I version 2 adds a short lead-in before four complete Monday–Sunday weeks; older campaigns may lack it)
+- trialTargetDate? (planning date; Chapter I uses the Week 4 Saturday Gate Trial order)
+- scheduleVersion? (Chapter I version 2 adds a short lead-in before four complete Monday–Sunday weeks; version 3 moves a generated target from the Sunday that closes Week 4 to that week's Saturday trial order, leaving a separately chosen target alone; older campaigns may lack it)
 
 ### ChapterDefinition
 

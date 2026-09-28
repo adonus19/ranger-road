@@ -1,8 +1,8 @@
 <section class="records" aria-labelledby="records-title">
   <h2 id="records-title">Your records</h2>
   <p class="records__intro">
-    Your records are kept only on this device. Save a copy now and then, and you can bring everything
-    back if the phone is lost or reset.
+    Your records are kept only on this device. Save a copy now and then, and you can bring
+    everything back if the phone is lost or reset.
   </p>
 
   <div class="records__rows">
@@ -16,7 +16,9 @@
       <span class="records-row__icon"><app-icon name="tray-arrow-up" /></span>
       <span class="records-row__text">
         <strong>{{ saving() ? 'Preparing a copy…' : 'Save a copy' }}</strong>
-        <span>{{ shares ? 'Keep it in Files, iCloud or email.' : 'Download a file to keep somewhere safe.' }}</span>
+        <span>{{
+          shares ? 'Keep it in Files, iCloud or email.' : 'Download a file to keep somewhere safe.'
+        }}</span>
         <small>{{ savedLine() }}</small>
       </span>
     </button>
@@ -27,7 +29,9 @@
       [disabled]="reading() || restoring()"
       (click)="chooseCopy()"
     >
-      <span class="records-row__icon records-row__icon--ink"><app-icon name="tray-arrow-down" /></span>
+      <span class="records-row__icon records-row__icon--ink"
+        ><app-icon name="tray-arrow-down"
+      /></span>
       <span class="records-row__text">
         <strong>{{ reading() ? 'Reading the copy…' : 'Restore from a copy' }}</strong>
         <span>Replace this device’s records with a copy you saved.</span>
@@ -66,7 +70,9 @@
   @if (candidate(); as pending) {
     <section class="records-confirm" aria-labelledby="records-confirm-title">
       <h3 id="records-confirm-title" tabindex="-1">Replace this device’s records?</h3>
-      <p class="records-confirm__saved">This copy was saved {{ describe(pending.backup.savedAt) }}.</p>
+      <p class="records-confirm__saved">
+        This copy was saved {{ describe(pending.backup.savedAt) }}.
+      </p>
       <table class="records-compare">
         <thead>
           <tr>

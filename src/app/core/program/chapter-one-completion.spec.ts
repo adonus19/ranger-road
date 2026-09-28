@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Campaign } from '../domain/models';
-import { isChapterOneComplete } from './chapter-one-completion';
+import { hasCompletedChapterOneTrial, isChapterOneComplete } from './chapter-one-completion';
 
 const campaign: Campaign = {
   id: 'primary',
@@ -36,5 +36,14 @@ describe('isChapterOneComplete', () => {
         { trialId: 'gate-trial' },
       ]),
     ).toBe(false);
+  });
+});
+
+describe('hasCompletedChapterOneTrial', () => {
+  it('sees a saved Gate Trial before the four weeks end, and nothing else', () => {
+    expect(hasCompletedChapterOneTrial(campaign, [{ trialId: 'gate-trial' }])).toBe(true);
+    expect(hasCompletedChapterOneTrial(campaign, [])).toBe(false);
+    expect(hasCompletedChapterOneTrial(campaign, [{ trialId: 'another-trial' }])).toBe(false);
+    expect(hasCompletedChapterOneTrial(null, [{ trialId: 'gate-trial' }])).toBe(false);
   });
 });

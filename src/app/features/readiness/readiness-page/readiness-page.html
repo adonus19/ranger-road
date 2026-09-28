@@ -11,7 +11,7 @@
     <div class="notice notice--error" role="alert">{{ storageError }}</div>
   } @else if (saved(); as check) {
     <section class="saved-result" [class.saved-result--yellow]="check.status === 'yellow'" [class.saved-result--red]="check.status === 'red'" aria-labelledby="saved-title" role="status">
-      <span class="saved-result__label">Saved for {{ check.date }}</span>
+      <span class="saved-result__label">Saved for {{ longDate(check.date) }}</span>
       @switch (check.status) {
         @case ('green') {
           <h2 id="saved-title">Green · Ready</h2>

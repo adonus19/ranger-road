@@ -14,16 +14,15 @@ import type {
   TrialResult,
 } from '../../../core/domain/models';
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
-import { isChapterOneComplete } from '../../../core/program/chapter-one-completion';
+import {
+  hasCompletedChapterOneTrial,
+  isChapterOneComplete,
+} from '../../../core/program/chapter-one-completion';
 import {
   getChapterOneActivityChoicesForDate,
   getChapterOneMissionsForDate,
 } from '../../../core/program/chapter-one-missions';
-import {
-  getCampaignDay,
-  getChapterOneTargetDay,
-  getTodaysOrders,
-} from '../../../core/program/campaign';
+import { getTodaysOrders } from '../../../core/program/campaign';
 import { loadChapterOneWorkout } from '../../../core/program/chapter-one-workouts';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MissionHistory } from '../../../core/state/mission-history';
@@ -78,6 +77,9 @@ export class MissionPage {
   protected readonly chapterComplete = computed(() =>
     isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
   );
+  protected readonly trialDone = computed(() =>
+    hasCompletedChapterOneTrial(this.state.campaign(), this.completedTrials()),
+  );
 
   protected readonly activityChoices = computed(() => {
     const campaign = this.state.campaign();
@@ -112,11 +114,14 @@ export class MissionPage {
   protected readonly mainOrder = computed(() => {
     const campaign = this.state.campaign();
     if (!campaign) return null;
-    return (
+    const order =
       getTodaysOrders(campaign.startDate, this.state.today(), this.readiness()?.status).find(
-        (order) => order.kind === 'weekly',
-      ) ?? null
-    );
+        (item) => item.kind === 'weekly',
+      ) ?? null;
+    // A saved Gate Trial no longer waits for a Green day.
+    return order?.missionType === 'trial' && this.trialDone()
+      ? { ...order, title: 'Gate Trial' }
+      : order;
   });
 
   protected readonly mainOrderIcon = computed<IconName>(() => {
@@ -130,6 +135,31 @@ export class MissionPage {
   protected readonly needsReadiness = computed(() => {
     const definition = this.definition();
     return definition ? missionNeedsReadiness(definition) : false;
+  });
+
+  /**
+   * On Red, a walk's or workout's own instructions (such as brisk intervals) are not today's
+   * plan, and a saved Gate Trial no longer needs its instructions for recording.
+   */
+  protected readonly showActivityDetails = computed(() => {
+    const mission = this.definition();
+    if (!mission) return true;
+    if (mission.plannedTrialId && this.trialDone()) return false;
+    return !(
+      this.readiness()?.status === 'red' &&
+      this.needsReadiness() &&
+      mission.missionType !== 'restoration'
+    );
+  });
+
+  /** Restoration stays open on Red, and it serves as the easy mobility on a mobility day. */
+  protected readonly restorationLink = computed(() => {
+    const mission = this.definition();
+    const check = this.readiness();
+    if (!mission || !check || this.workoutId()) return false;
+    return (
+      mission.missionType === 'restoration' || (check.status === 'red' && this.needsReadiness())
+    );
   });
 
   protected readonly workoutId = computed(
@@ -306,9 +336,8 @@ export class MissionPage {
       if (this.state.today() !== date) return;
       const campaign = this.state.campaign();
       if (campaign) {
-        const needsTrialHistory =
-          campaign.currentChapterId === chapterOneDefinition.id &&
-          getCampaignDay(campaign.startDate, date) > getChapterOneTargetDay(campaign.startDate);
+        // The trial order and the chapter's end both depend on a saved Gate Trial.
+        const needsTrialHistory = campaign.currentChapterId === chapterOneDefinition.id;
         const [records, trials] = await Promise.all([
           this.history.forDate(date),
           needsTrialHistory

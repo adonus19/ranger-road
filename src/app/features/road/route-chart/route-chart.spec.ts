@@ -29,7 +29,7 @@ describe('RouteChart', () => {
       /^M3\.00 /,
     );
     expect(element.querySelector('.route')?.getAttribute('aria-label')).toBe(
-      'Chapter route. Today is day 16 of 28. Gate Trial target on day 28.',
+      'Chapter route. Today is day 16. Gate Trial target on day 28.',
     );
   });
 
@@ -58,7 +58,7 @@ describe('RouteChart', () => {
     const firstTick = element.querySelector<HTMLElement>('.route__tick');
     expect(Number(firstTick?.style.getPropertyValue('--x'))).toBeGreaterThan(3);
     expect(element.querySelector('.route')?.getAttribute('aria-label')).toBe(
-      'Chapter route. Today is day 4 of 32. A 4-day lead-in ends before Week 1 begins on day 5. Gate Trial target on day 32.',
+      'Chapter route. Today is day 4. A 4-day lead-in ends before Week 1 begins on day 5. Gate Trial target on day 32.',
     );
     expect(element.querySelectorAll('.route__week')).toHaveLength(4);
   });

@@ -1,7 +1,10 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { ReadinessStatus, TrialResult } from '../../../core/domain/models';
-import { isChapterOneComplete } from '../../../core/program/chapter-one-completion';
+import {
+  hasCompletedChapterOneTrial,
+  isChapterOneComplete,
+} from '../../../core/program/chapter-one-completion';
 import {
   getChapterOneSchedule,
   getTodaysOrders,
@@ -17,17 +20,6 @@ import { CheckInReminder } from '../check-in-reminder/check-in-reminder';
 import { GateTrialRecoveryReminder } from '../gate-trial-recovery-reminder/gate-trial-recovery-reminder';
 import { KeepBand } from '../keep-band/keep-band';
 import { StartDay } from '../start-day/start-day';
-
-/** Pictograms for the documented weekday slots. Presentation only; the orders come from the seed. */
-const WEEKDAY_ICONS: Readonly<Record<string, IconName>> = {
-  'weekday-1': 'anvil',
-  'weekday-2': 'footprints',
-  'weekday-3': 'renew',
-  'weekday-4': 'anvil',
-  'weekday-5': 'footprints',
-  'weekday-6': 'footprints',
-  'weekday-7': 'book-open',
-};
 
 const WATCH_ICONS: Readonly<Record<string, IconName>> = {
   'morning-watch': 'sunrise',
@@ -73,6 +65,9 @@ export class KeepPage implements OnInit {
   protected readonly chapterComplete = computed(() =>
     isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
   );
+  protected readonly trialDone = computed(() =>
+    hasCompletedChapterOneTrial(this.state.campaign(), this.completedTrials()),
+  );
 
   /** The current chapter's content; Chapter I before a campaign exists. */
   protected readonly seed = computed(() =>
@@ -86,20 +81,30 @@ export class KeepPage implements OnInit {
       : [];
   });
 
-  protected readonly mainOrder = computed(() =>
-    this.orders().find((order) => order.kind === 'weekly'),
-  );
+  /** Once the Gate Trial is saved, its dated order says so instead of asking for it again. */
+  protected readonly mainOrder = computed(() => {
+    const order = this.orders().find((item) => item.kind === 'weekly');
+    return order?.missionType === 'trial' && this.trialDone()
+      ? {
+          ...order,
+          title: 'Gate Trial',
+          guidance: 'Complete. Your result is saved on this device.',
+        }
+      : order;
+  });
   protected readonly watches = computed(() =>
     this.orders().filter((order) => order.kind === 'watch'),
   );
 
+  /** Pictograms follow the order's kind, as on Today's Mission. Presentation only. */
   protected readonly mainOrderIcon = computed<IconName>(() => {
     const order = this.mainOrder();
-    if (!order) {
-      return 'footprints';
+    if (!order) return 'footprints';
+    if (order.missionType === 'reflection') return 'book-open';
+    if (order.missionType === 'restoration' || this.state.readiness()?.status === 'red') {
+      return 'renew';
     }
-    const restoring = this.state.readiness()?.status === 'red' && order.id !== 'weekday-7';
-    return restoring ? 'renew' : (WEEKDAY_ICONS[order.id] ?? 'footprints');
+    return order.missionType === 'strength' ? 'anvil' : 'footprints';
   });
 
   protected readonly readinessStatus = computed(() => this.state.readiness()?.status ?? 'pending');

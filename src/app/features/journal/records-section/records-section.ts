@@ -153,7 +153,9 @@ export class RecordsSection {
       });
       this.focus('#records-confirm-title');
     } catch {
-      this.restoreError.set('This device’s records couldn’t be read, so nothing changed. Try again.');
+      this.restoreError.set(
+        'This device’s records couldn’t be read, so nothing changed. Try again.',
+      );
     } finally {
       this.reading.set(false);
     }
@@ -172,7 +174,9 @@ export class RecordsSection {
     try {
       await this.records.restore(candidate.backup);
       this.candidate.set(null);
-      this.restoredNote.set(`Restored the copy saved ${describeInstant(candidate.backup.savedAt)}.`);
+      this.restoredNote.set(
+        `Restored the copy saved ${describeInstant(candidate.backup.savedAt)}.`,
+      );
       this.restored.emit();
       this.focus('#records-restored');
     } catch {
