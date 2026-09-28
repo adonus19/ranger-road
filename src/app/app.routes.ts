@@ -30,6 +30,15 @@ export const routes: Routes = [
     data: { headerOverScene: true },
   },
   {
+    path: 'road/gate-trial/recovery/:resultId',
+    loadComponent: () =>
+      import('./features/road/gate-trial-recovery-page/gate-trial-recovery-page').then(
+        (m) => m.GateTrialRecoveryPage,
+      ),
+    title: 'Recovery Check | The Ranger’s Road',
+    data: { headerOverScene: true },
+  },
+  {
     path: 'road/gate-trial',
     loadComponent: () =>
       import('./features/road/gate-trial-page/gate-trial-page').then((m) => m.GateTrialPage),

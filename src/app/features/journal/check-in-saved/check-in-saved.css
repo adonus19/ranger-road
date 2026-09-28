@@ -43,6 +43,15 @@ p {
   display: block;
 }
 
+/* Values keep the serif; their names read in the UI sans, so the record has a hierarchy. */
+.name,
+.separator {
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
 .saved__held {
   margin-top: 0.75rem;
 }

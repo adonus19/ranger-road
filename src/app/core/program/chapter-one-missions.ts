@@ -46,6 +46,7 @@ export function getChapterOneMissionsForDate(
   const week = schedule.week;
   const day = schedule.weekday;
   const content = getChapterOneDailyContent(schedule.contentWeek, day);
+  const readingBookTitle = getChapterOneWeekContent(schedule.contentWeek).readingBookTitle;
 
   const shared = { chapterId: chapterOneDefinition.id, week, day, required: true };
   const idPrefix =
@@ -78,6 +79,7 @@ export function getChapterOneMissionsForDate(
         ? { plannedTrialId: content.activity.plannedTrialId }
         : {}),
       ...(content.readingMinutes !== undefined ? { readingMinutes: content.readingMinutes } : {}),
+      ...(content.readingMinutes !== undefined && readingBookTitle ? { readingBookTitle } : {}),
       ...(content.optionalFamilyQuest ? { optionalFamilyQuest: content.optionalFamilyQuest } : {}),
     },
     {

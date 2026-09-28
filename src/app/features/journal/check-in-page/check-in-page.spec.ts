@@ -271,8 +271,8 @@ describe('CheckInPage', () => {
 
   it('asks for readiness before tests while still allowing a body-only check-in', async () => {
     const { harness, root, add } = await open('/journal/check-in', { today: '2026-10-13' });
-    expect(text(root, '.test-readiness')).toContain('Check readiness first to take tests in this check-in.');
-    expect(text(root, '.test-readiness')).toContain('Saving the body values now finishes this check-in without tests.');
+    expect(text(root, '.test-readiness')).toContain('Check readiness first to take tests in this check\u2011in.');
+    expect(text(root, '.test-readiness')).toContain('Saving the body values now finishes this check\u2011in without tests.');
     expect(root.querySelector<HTMLAnchorElement>('.test-readiness a')?.getAttribute('href')).toBe('/readiness');
     expect(root.querySelector('#pushups')).toBeNull();
     expect(root.querySelector('#pullup')).toBeNull();

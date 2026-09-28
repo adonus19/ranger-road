@@ -1,0 +1,41 @@
+:host {
+  display: block;
+}
+
+.field-manual-page {
+  max-width: 47rem;
+  margin-inline: auto;
+  padding: 1rem var(--page-gutter) 2rem;
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+}
+
+h1 {
+  margin: 0 0 1.5rem;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.reading {
+  padding-block: 1rem;
+  border-block: 1px solid var(--line);
+}
+
+.reading h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.3125rem;
+  line-height: 1.2;
+}
+
+.reading p {
+  margin: 0;
+  max-width: 65ch;
+}
+
+.coming-soon {
+  margin: 1.5rem 0 0;
+  color: var(--text-secondary);
+}

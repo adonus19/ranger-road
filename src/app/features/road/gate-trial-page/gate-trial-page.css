@@ -306,6 +306,39 @@
   margin-top: 0.25rem;
 }
 
+.station-history__recovery {
+  display: grid;
+  margin: 0.5rem 0 0;
+}
+
+.station-history__recovery div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.station-history__recovery dt {
+  color: var(--text-secondary);
+}
+
+.station-history__recovery dd {
+  margin: 0;
+  font-weight: 650;
+  text-align: right;
+}
+
+.station-history__recovery-link {
+  display: inline-flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  margin-top: 0.5rem;
+  color: var(--action);
+  font-weight: 650;
+  text-underline-offset: 0.2em;
+}
+
 .station-history__error {
   margin-top: 1.5rem;
   color: var(--status-red-text);

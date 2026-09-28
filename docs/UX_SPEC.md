@@ -125,7 +125,7 @@ Trial should feel distinct:
 
 The Gate Trial preparation screen uses the Station composition to show the five documented parts, readiness guidance, and the full circuit. A same-day Green check opens the active trial. The active screen saves a resumable local draft through Road, Gate Circuit, Mind, Spirit, and Oath. It records actual results for each of the six circuit stations in each of three rounds, keeps exercise help and generated movement media on the circuit screen, and saves pain immediately. Stop trial asks once before it ends the attempt; stopping retains a partial attempt and its pain notes in history. A review precedes the completed result, which remains in local campaign history. If a later readiness check is Yellow or Red, or pain or a reduced response changes the attempt, the full trial waits for another Green day.
 
-Save a completed trial without forcing an early post-mission function answer. That recovery assessment belongs 60–120 minutes after the effort; a separate follow-up capture flow still needs to be built.
+Save a completed trial without forcing an early post-mission function answer. A separate recovery check opens 60 minutes after the circuit ends and suggests answering within 120 minutes. Completion, the Keep reminder, and recorded trial history link to it; the Keep reminder lasts 12 hours. The check captures one plain-language answer for energy, soreness, irritability, helping at home, and family life, plus an optional note. It is saved once as a linked local record without changing the completed trial. An older result without a circuit-end timestamp uses its final save time for the delay.
 
 ## Pain Flow
 

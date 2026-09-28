@@ -340,6 +340,7 @@
       'orders cta'
       'orders hearth'
       'orders reminder'
+      'orders recovery'
       'orders .';
     grid-template-columns: minmax(0, 1.45fr) minmax(19rem, 1fr);
     grid-template-rows: auto auto auto auto 1fr;
@@ -367,6 +368,10 @@
 
   .check-in-reminder {
     grid-area: reminder;
+  }
+
+  .recovery-reminder {
+    grid-area: recovery;
   }
 }
 

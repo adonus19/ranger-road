@@ -308,6 +308,12 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
       } else {
         const saved = await this.write((next) => {
           next.currentPhaseIndex = Math.max(next.currentPhaseIndex, index + 1);
+          if (index === 1 && !next.phaseResults[1].metrics?.['effortEndedAt']) {
+            next.phaseResults[1].metrics = {
+              ...next.phaseResults[1].metrics,
+              effortEndedAt: new Date().toISOString(),
+            };
+          }
         });
         this.phaseIndex.set(index + 1);
         this.selectFirstMissing(saved);
@@ -600,9 +606,11 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
         const rest = numeric(value.restMinutes);
         const minutes = numeric(value.circuitMinutes);
         const timerStart = previous.metrics?.['circuitStartedAt'];
+        const effortEndedAt = previous.metrics?.['effortEndedAt'];
         return { ...previous,
           metrics: {
             ...(typeof timerStart === 'string' ? { circuitStartedAt: timerStart } : {}),
+            ...(typeof effortEndedAt === 'string' ? { effortEndedAt } : {}),
             ...(rest !== undefined ? { restAfterWalkMinutes: rest } : {}),
             ...(minutes !== undefined ? { durationMinutes: minutes } : {}),
             roundsCompleted: previous.circuitRounds?.length ?? 0,

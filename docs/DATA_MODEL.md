@@ -49,7 +49,7 @@
 - content references
 - scriptureReference? (dated Chapter I Morning Watch; reference only, without Bible translation text)
 - reflectionPrompt? (dated reflection, when the program supplies one)
-- activityDetails?, readingMinutes?, optionalFamilyQuest? (dated program content)
+- activityDetails?, readingMinutes?, readingBookTitle?, optionalFamilyQuest? (dated program content; the Week 1 book title is kept in saved mission snapshots)
 - plannedTrialId? (a plan shown in Today's Mission; completion is stored as a TrialResult)
 
 Mission types:
@@ -261,7 +261,7 @@ Measurement entries are append-only; held tests are added as a new `tests` entry
 - date
 - phaseResults (new completed Gate Trial results contain all five phases in order: Road, Gate Circuit, Mind, Spirit, Oath)
   - Road: 2-mile walk time, RPE, knee and back response, recovery after 5 minutes; average heart rate optional
-  - Gate Circuit: completion time, at least 5 minutes of rest after the walk, and completed reps or holds for every prescribed station in each of three rounds
+  - Gate Circuit: completion time, at least 5 minutes of rest after the walk, completed reps or holds for every prescribed station in each of three rounds, and `effortEndedAt` when the person advances from the circuit to Mind
   - Mind: the three written responses about body, character, and family
   - Spirit: Psalm 121 and prayer confirmation, at least 10 minutes of prayer, and the husband/father reflection
   - Oath: the written personal Ranger's Oath
@@ -273,7 +273,17 @@ Measurement entries are append-only; held tests are added as a new `tests` entry
 - recordedAt? (required on new results; older local rows may lack it)
 - definitionSnapshot? (a copy of the completed trial's definition, required on new results; older local rows may lack it)
 
-New completed results are immutable. The later 60–120 minute post-mission function answer needs a separate linked follow-up record rather than replacing the completed result.
+New completed results are immutable. The later post-mission function answer is a separate linked follow-up record, so the completed result is never rewritten.
+
+### PostMissionFunction
+
+- id, trialId, trialResultId
+- effortEndedAt (copied from the linked trial's Gate Circuit timestamp; older trials fall back to their final save time)
+- recordedAt, minutesAfter (elapsed from physical effort)
+- energy, soreness, irritability, helpAtHome, familyLife (one plain-language choice each)
+- note? (optional, up to 500 characters)
+
+The check opens 60 minutes after physical effort and suggests 60–120 minutes as the assessment window. It is saved once for a completed result in the append-only `postMissionFunctions` store. Keep offers a reminder for 12 hours after the physical effort; Road history continues to offer the check afterward. A legacy result with its old inline `postMissionFunction` remains readable and does not receive a second reminder.
 
 ### TrialDraft
 
@@ -325,6 +335,7 @@ MVP:
 - schema versioning
 - schema version 2 adds `workoutDrafts` without changing existing version 1 history stores or rows
 - schema version 3 adds `trialDrafts` and `trialAttempts` without changing version 1 or 2 history and workout draft rows
+- schema version 4 adds `postMissionFunctions` without changing version 1–3 historical rows or drafts
 
 Later:
 

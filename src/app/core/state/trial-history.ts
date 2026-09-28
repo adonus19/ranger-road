@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
-import type { LocalDate, TrialAttempt, TrialDraft, TrialResult } from '../domain/models';
+import type {
+  LocalDate,
+  PostMissionFunction,
+  TrialAttempt,
+  TrialDraft,
+  TrialResult,
+} from '../domain/models';
+import type { RecoveryInput } from '../domain/post-mission-function';
 import type { SavedGateTrialResult } from '../domain/trial';
 import type { RecordedTrialPainEvent, TrialPainInput } from '../domain/trial-draft';
 import { RoadDatabase } from '../persistence/road-database';
@@ -81,6 +88,24 @@ export class TrialHistory {
     const database = await RoadDatabase.open();
     try {
       return await database.getStoppedTrialAttemptsForTrial(trialId);
+    } finally {
+      database.close();
+    }
+  }
+
+  async recoveries(): Promise<PostMissionFunction[]> {
+    const database = await RoadDatabase.open();
+    try {
+      return await database.getPostMissionFunctions();
+    } finally {
+      database.close();
+    }
+  }
+
+  async addRecovery(input: RecoveryInput): Promise<PostMissionFunction> {
+    const database = await RoadDatabase.open();
+    try {
+      return await database.addPostMissionFunction(input);
     } finally {
       database.close();
     }

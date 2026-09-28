@@ -85,7 +85,7 @@ describe('JournalPage', () => {
     expect(weight.querySelector('small')?.textContent).toBe('Last: 222.4 lb, Sun, Oct 11');
 
     const early = await render('2026-10-20', []);
-    expect(early.querySelector('.measures__note')?.textContent).toBe('Your first check-in opens on Day 1.');
+    expect(early.querySelector('.measures__note')?.textContent).toBe('Your first check\u2011in opens on Day 1.');
     expect(early.querySelectorAll('.measures .watch-link')).toHaveLength(1);
   });
 });

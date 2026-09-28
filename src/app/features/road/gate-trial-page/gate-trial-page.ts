@@ -1,6 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type {
+  PostMissionFunction,
   ReadinessStatus,
   TrialAttempt,
   TrialCircuitMovement,
@@ -9,12 +10,13 @@ import type {
   TrialPhaseResult,
   TrialResult,
 } from '../../../core/domain/models';
+import { RECOVERY_AREAS, recoveryOpensAt, recoveryWord } from '../../../core/domain/post-mission-function';
 import type { RecordedTrialPainEvent } from '../../../core/domain/trial-draft';
 import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
 import { gateTrialDefinition } from '../../../core/program/chapter-one-trial.seed';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory } from '../../../core/state/trial-history';
-import { formatShortDate } from '../../../shared/format-date';
+import { formatMinutes, formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
 
 const READINESS_GUIDANCE: Record<ReadinessStatus, string> = {
@@ -34,10 +36,15 @@ export class GateTrialPage implements OnInit {
   private readonly history = inject(TrialHistory);
   protected readonly trial = gateTrialDefinition;
   protected readonly shortDate = formatShortDate;
+  protected readonly minutes = formatMinutes;
+  protected readonly recoveryWord = recoveryWord;
+  protected readonly recoveryOpensAt = recoveryOpensAt;
+  protected readonly recoveryAreas = RECOVERY_AREAS;
   protected readonly historyLoading = signal(true);
   protected readonly historyError = signal(false);
   protected readonly activeDraft = signal<TrialDraft | null>(null);
   protected readonly completedResults = signal<TrialResult[]>([]);
+  protected readonly recoveries = signal<Record<string, PostMissionFunction>>({});
   protected readonly stoppedAttempts = signal<TrialAttempt[]>([]);
   protected readonly painByAttempt = signal<Record<string, RecordedTrialPainEvent[]>>({});
   protected readonly walk = gateTrialDefinition.phases[0];
@@ -92,13 +99,15 @@ export class GateTrialPage implements OnInit {
       if (retry) await this.state.retry();
       else await this.state.initialize();
       if (this.state.error()) return;
-      const [draft, completed, stopped] = await Promise.all([
+      const [draft, completed, stopped, recoveries] = await Promise.all([
         this.history.activeDraft(),
         this.history.forTrial(this.trial.id),
         this.history.stoppedForTrial(this.trial.id),
+        this.history.recoveries(),
       ]);
       this.activeDraft.set(draft ?? null);
       this.completedResults.set(completed);
+      this.recoveries.set(Object.fromEntries(recoveries.map((entry) => [entry.trialResultId, entry])));
       this.stoppedAttempts.set(stopped);
       const painRows = await Promise.all(
         completed.map(async (result) => [result.id, await this.history.painForAttempt(result.id)] as const),

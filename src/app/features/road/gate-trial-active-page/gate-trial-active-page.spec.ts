@@ -236,6 +236,26 @@ describe('active Gate Trial', () => {
     expect(history.finishDraft).not.toHaveBeenCalled();
   });
 
+  it('marks the end of physical effort when advancing from the completed circuit', async () => {
+    const { root, fixture, history } = await render({ draft: draftAt(2) });
+    const before = Date.now();
+    root.querySelector<HTMLButtonElement>('.trial-progress button[aria-label^="Part 2"]')!.click();
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      expect(root.querySelector('#trial-all-stations')).not.toBeNull();
+    });
+    root.querySelector<HTMLButtonElement>('.trial-dock .trial-primary')!.click();
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      const writes = history.saveDraft.mock.calls.map(([draft]) => draft);
+      const marked = writes.find((draft) => draft.phaseResults[1].metrics?.['effortEndedAt']);
+      expect(marked).toBeDefined();
+      const time = Date.parse(marked!.phaseResults[1].metrics!['effortEndedAt'] as string);
+      expect(time).toBeGreaterThanOrEqual(before);
+      expect(time).toBeLessThanOrEqual(Date.now());
+    });
+  });
+
   it('names a later Yellow check instead of asking for a check that exists', async () => {
     const { root } = await render({
       draft: draftAt(1),

@@ -6,6 +6,7 @@ import type {
   MeasurementEntry,
   MissionInstance,
   PainEvent,
+  PostMissionFunction,
   ReadinessCheck,
   RoadSession,
   TrialAttempt,
@@ -19,6 +20,7 @@ import {
   summarizeReadiness,
   type SavedMeasurement,
 } from '../domain/measurement';
+import { createPostMissionFunction, type RecoveryInput } from '../domain/post-mission-function';
 import { classifyReadiness } from '../domain/readiness';
 import { createRoadSession } from '../domain/road-session';
 import { validateCompletedGateTrialResult, type SavedGateTrialResult } from '../domain/trial';
@@ -47,9 +49,9 @@ import { addDays, getCampaignDay } from '../program/campaign';
 import { checkInSaveError, testsHeldFor } from '../program/check-in-schedule';
 
 export const DATABASE_NAME = 'rangers-road';
-export const DATABASE_VERSION = 3;
+export const DATABASE_VERSION = 4;
 
-const STORE_NAMES = [
+export const STORE_NAMES = [
   'campaigns',
   'readinessChecks',
   'missionInstances',
@@ -62,7 +64,10 @@ const STORE_NAMES = [
   'workoutDrafts',
   'trialDrafts',
   'trialAttempts',
+  'postMissionFunctions',
 ] as const;
+
+export type StoreName = (typeof STORE_NAMES)[number];
 
 export type HistoricalStoreName =
   | 'missionInstances'
@@ -817,6 +822,56 @@ export class RoadDatabase {
       transaction.onabort = () =>
         reject(failure ?? transaction.error ?? new Error('Unable to save the check-in.'));
     });
+  }
+
+  /**
+   * A recovery check links to one completed result, in the same transaction that
+   * confirms the result exists and has no check yet.
+   */
+  addPostMissionFunction(
+    input: RecoveryInput,
+    now: IsoTimestamp = new Date().toISOString(),
+  ): Promise<PostMissionFunction> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(
+        ['trialResults', 'postMissionFunctions'],
+        'readwrite',
+      );
+      let saved: PostMissionFunction | undefined;
+      let failure: Error | undefined;
+      const fail = (error: unknown) => {
+        failure = error instanceof Error ? error : new Error('The recovery check could not be saved.');
+        transaction.abort();
+      };
+      const resultRequest = transaction.objectStore('trialResults').get(input.trialResultId);
+      resultRequest.onsuccess = () => {
+        const result = resultRequest.result as TrialResult | undefined;
+        if (!result) {
+          fail(new Error('This Gate Trial record was not found on this device.'));
+          return;
+        }
+        const existing = transaction.objectStore('postMissionFunctions').getAll();
+        existing.onsuccess = () => {
+          try {
+            const entries = existing.result as PostMissionFunction[];
+            if (entries.some((entry) => entry.trialResultId === result.id)) {
+              throw new Error('This trial already has a recovery check.');
+            }
+            saved = createPostMissionFunction(result, input, now);
+            transaction.objectStore('postMissionFunctions').add(saved);
+          } catch (error) {
+            fail(error);
+          }
+        };
+      };
+      transaction.oncomplete = () => resolve(saved!);
+      transaction.onabort = () =>
+        reject(failure ?? transaction.error ?? new Error('Unable to save the recovery check.'));
+    });
+  }
+
+  getPostMissionFunctions(): Promise<PostMissionFunction[]> {
+    return this.readAll<PostMissionFunction>('postMissionFunctions');
   }
 
   /** Historical writes use add, so an existing record cannot be silently replaced. */

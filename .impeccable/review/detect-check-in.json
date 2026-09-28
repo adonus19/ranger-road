@@ -1,12 +1,24 @@
 [
   {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/check-in-page/check-in-page.html",
+    "line": 0,
+    "snippet": "text color rgb(0, 0, 0) on div \"{{ backLabel }} @for (word of titleWords\" is outside DESIGN.md colors",
+    "advisory": true,
+    "ignoreValue": "rgb(0, 0, 0)"
+  },
+  {
     "antipattern": "design-system-font-size",
     "name": "Font size outside DESIGN.md",
     "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
     "severity": "advisory",
     "category": "quality",
     "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/check-in-page/check-in-page.css",
-    "line": 111,
+    "line": 156,
     "snippet": "font-size: 0.9375rem is off the DESIGN.md type ramp",
     "advisory": true,
     "ignoreValue": "0.9375rem"
@@ -18,7 +30,7 @@
     "severity": "advisory",
     "category": "quality",
     "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/check-in-page/check-in-page.css",
-    "line": 157,
+    "line": 202,
     "snippet": "font-size: 3rem is off the DESIGN.md type ramp",
     "advisory": true,
     "ignoreValue": "3rem"
@@ -29,14 +41,11 @@
     "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
     "severity": "advisory",
     "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/check-in-page/check-in-page.html",
+    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/readiness-lookback/readiness-lookback.html",
     "line": 0,
-    "snippet": "text color rgb(0, 0, 0) on div \"{{ backLabel }} @for (word of titleWords\" is outside DESIGN.md colors",
+    "snippet": "text color rgb(0, 0, 0) on div \"@if (error()) { Your readiness checks co\" is outside DESIGN.md colors",
     "advisory": true,
-    "ignoreValue": "rgb(0, 0, 0)",
-    "importedBy": [
-      "check-in-page.spec.ts"
-    ]
+    "ignoreValue": "rgb(0, 0, 0)"
   },
   {
     "antipattern": "design-system-font-size",
@@ -116,47 +125,11 @@
     "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
     "severity": "advisory",
     "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/readiness-lookback/readiness-lookback.html",
-    "line": 0,
-    "snippet": "text color rgb(0, 0, 0) on div \"@if (error()) { Your readiness checks co\" is outside DESIGN.md colors",
-    "advisory": true,
-    "ignoreValue": "rgb(0, 0, 0)"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/check-in-saved/check-in-saved.css",
-    "line": 61,
-    "snippet": "font-size: 1.0625rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "1.0625rem"
-  },
-  {
-    "antipattern": "design-system-color",
-    "name": "Color outside DESIGN.md",
-    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
-    "severity": "advisory",
-    "category": "quality",
     "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/check-in-saved/check-in-saved.html",
     "line": 0,
     "snippet": "text color rgb(0, 0, 0) on section \"{{ title() }} {{ date() }} @for (line of\" is outside DESIGN.md colors",
     "advisory": true,
     "ignoreValue": "rgb(0, 0, 0)"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/body-log-page/body-log-page.css",
-    "line": 53,
-    "snippet": "font-size: 3rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "3rem"
   },
   {
     "antipattern": "design-system-color",
@@ -168,94 +141,7 @@
     "line": 0,
     "snippet": "text color rgb(0, 0, 0) on div \"Back to Journal Weight and waist {{ date\" is outside DESIGN.md colors",
     "advisory": true,
-    "ignoreValue": "rgb(0, 0, 0)",
-    "importedBy": [
-      "body-log-page.spec.ts"
-    ]
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/journal-page/journal-page.css",
-    "line": 105,
-    "snippet": "font-size: 1.140625rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "1.140625rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/journal-page/journal-page.css",
-    "line": 111,
-    "snippet": "font-size: 0.875rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "0.875rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/journal-page/journal-page.css",
-    "line": 117,
-    "snippet": "font-size: 0.8125rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "0.8125rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/journal-page/journal-page.css",
-    "line": 184,
-    "snippet": "font-size: 1.140625rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "1.140625rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/journal-page/journal-page.css",
-    "line": 189,
-    "snippet": "font-size: 0.8125rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "0.8125rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/journal-page/journal-page.css",
-    "line": 215,
-    "snippet": "font-size: 0.875rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "0.875rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/journal/journal-page/journal-page.css",
-    "line": 229,
-    "snippet": "font-size: 3rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "3rem"
+    "ignoreValue": "rgb(0, 0, 0)"
   },
   {
     "antipattern": "design-system-color",
@@ -267,34 +153,7 @@
     "line": 0,
     "snippet": "text color rgb(0, 0, 0) on h1 \"Journal\" is outside DESIGN.md colors",
     "advisory": true,
-    "ignoreValue": "rgb(0, 0, 0)",
-    "importedBy": [
-      "journal-page.spec.ts"
-    ]
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/keep/check-in-reminder/check-in-reminder.css",
-    "line": 34,
-    "snippet": "font-size: 1.140625rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "1.140625rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/keep/check-in-reminder/check-in-reminder.css",
-    "line": 40,
-    "snippet": "font-size: 0.8125rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "0.8125rem"
+    "ignoreValue": "rgb(0, 0, 0)"
   },
   {
     "antipattern": "design-system-color",
@@ -307,101 +166,5 @@
     "snippet": "text color rgb(0, 0, 0) on strong \"{{ overview.title }}\" is outside DESIGN.md colors",
     "advisory": true,
     "ignoreValue": "rgb(0, 0, 0)"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/styles/entry-form.css",
-    "line": 18,
-    "snippet": "font-size: 0.9375rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "0.9375rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/styles/entry-form.css",
-    "line": 107,
-    "snippet": "font-size: 0.9375rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "0.9375rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/styles/entry-form.css",
-    "line": 187,
-    "snippet": "font-size: 0.8125rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "0.8125rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/styles/entry-form.css",
-    "line": 198,
-    "snippet": "font-size: 1.375rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "1.375rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/styles/entry-form.css",
-    "line": 207,
-    "snippet": "font-size: 0.8125rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "0.8125rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/styles/entry-form.css",
-    "line": 235,
-    "snippet": "font-size: 1.0625rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "1.0625rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/road/road-log-page/road-log-page.css",
-    "line": 67,
-    "snippet": "font-size: 0.875rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "0.875rem"
-  },
-  {
-    "antipattern": "design-system-font-size",
-    "name": "Font size outside DESIGN.md",
-    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
-    "severity": "advisory",
-    "category": "quality",
-    "file": "/Users/apple/Documents/dev/rangers-road/src/app/features/road/road-log-page/road-log-page.css",
-    "line": 103,
-    "snippet": "font-size: 3rem is off the DESIGN.md type ramp",
-    "advisory": true,
-    "ignoreValue": "3rem"
   }
 ]

@@ -109,6 +109,14 @@ h1 {
   font-size: 0.875rem;
 }
 
+.reading-link {
+  display: inline-flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
 .workout-link {
   display: flex;
   min-height: var(--touch-target);

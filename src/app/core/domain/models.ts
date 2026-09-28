@@ -72,6 +72,7 @@ export interface MissionDefinition {
   reflectionPrompt?: string;
   activityDetails?: string[];
   readingMinutes?: number;
+  readingBookTitle?: string;
   optionalFamilyQuest?: string;
   /** A planned trial is completed through TrialResult, never the generic mission logger. */
   plannedTrialId?: string;
@@ -411,6 +412,32 @@ export interface TrialResult {
   readinessId?: string;
   /** Time saved, separate from the trial's local date. */
   recordedAt?: IsoTimestamp;
+}
+
+export type RecoveryEnergy = 'low' | 'steady' | 'good';
+export type RecoverySoreness = 'sore' | 'a-little' | 'not-sore';
+export type RecoveryIrritability = 'irritable' | 'a-little' | 'calm';
+export type RecoveryCapacity = 'not-really' | 'partly' | 'fully';
+
+/**
+ * Post-mission function, assessed 60–120 minutes after a completed trial. Each area is
+ * one of three plain words, never a number, linked to the immutable result it follows.
+ */
+export interface PostMissionFunction {
+  id: string;
+  trialId: string;
+  trialResultId: string;
+  /** End of physical effort, copied from the linked result for a readable delay. */
+  effortEndedAt: IsoTimestamp;
+  recordedAt: IsoTimestamp;
+  /** Whole minutes between completion and this record. */
+  minutesAfter: number;
+  energy: RecoveryEnergy;
+  soreness: RecoverySoreness;
+  irritability: RecoveryIrritability;
+  helpAtHome: RecoveryCapacity;
+  familyLife: RecoveryCapacity;
+  note?: string;
 }
 
 /** Only one Gate Trial draft can be active. Partial phase entries are kept in order. */

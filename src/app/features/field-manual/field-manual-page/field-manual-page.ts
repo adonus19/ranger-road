@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { getChapterOneWeekContent } from '../../../core/program/chapter-one-daily.seed';
 
 @Component({
   imports: [],
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './field-manual-page.css',
   templateUrl: './field-manual-page.html',
 })
-export class FieldManualPage {}
+export class FieldManualPage {
+  protected readonly weekOneReading = getChapterOneWeekContent(1).reading;
+}

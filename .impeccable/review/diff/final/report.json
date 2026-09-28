@@ -1,26 +1,26 @@
 {
   "tool": "comp-diff",
   "version": 1,
-  "createdAt": "2026-09-26T19:21:18.729Z",
-  "label": "hero-repro",
+  "createdAt": "2026-09-28T15:57:02.020Z",
+  "label": "final",
   "comp": ".impeccable/mocks/decision/check-in-lookback.png",
   "build": ".impeccable/review/hero-repro.png",
   "spec": ".impeccable/build/spec.json",
   "compSize": "864x1872",
   "buildSize": "864x1872",
   "align": "top",
-  "overall": 0.9104,
+  "overall": 0.9173,
   "verdict": "match",
   "scores": {
-    "overall": 0.9104,
-    "structure": 0.9081,
-    "color": 0.9494,
-    "colorIntersection": 0.925,
-    "paletteMatch": 0.9625,
-    "detail": 0.8328,
-    "detailRaw": 0.8797,
-    "detailAdded": 0.0938,
-    "bands": 0.98
+    "overall": 0.9173,
+    "structure": 0.9102,
+    "color": 0.9503,
+    "colorIntersection": 0.9251,
+    "paletteMatch": 0.9639,
+    "detail": 0.8445,
+    "detailRaw": 0.8862,
+    "detailAdded": 0.0833,
+    "bands": 1
   },
   "palette": {
     "comp": [
@@ -51,24 +51,24 @@
     ],
     "build": [
       {
-        "hex": "#f4f4e4",
-        "coverage": 0.8265
+        "hex": "#f5f5e5",
+        "coverage": 0.8267
       },
       {
         "hex": "#1e2b26",
-        "coverage": 0.1469
+        "coverage": 0.1467
       },
       {
         "hex": "#5d675d",
-        "coverage": 0.015
+        "coverage": 0.0163
       },
       {
-        "hex": "#c0beb7",
-        "coverage": 0.0064
+        "hex": "#c7c5be",
+        "coverage": 0.0046
       },
       {
-        "hex": "#898987",
-        "coverage": 0.004
+        "hex": "#979791",
+        "coverage": 0.0045
       },
       {
         "hex": "#d8b878",
@@ -221,15 +221,15 @@
       "h": 0.0481,
       "kind": "text",
       "score": {
-        "overall": 0.6043,
-        "structure": 0.4193,
-        "color": 0.8127,
-        "colorIntersection": 0.6456,
-        "paletteMatch": 0.9027,
-        "detail": 0.7433,
-        "detailRaw": 0.7589,
-        "detailAdded": 0.0313,
-        "bands": 0.8
+        "overall": 0.6612,
+        "structure": 0.6292,
+        "color": 0.8073,
+        "colorIntersection": 0.6435,
+        "paletteMatch": 0.8956,
+        "detail": 0.7429,
+        "detailRaw": 0.7533,
+        "detailAdded": 0.0208,
+        "bands": 0.3333
       },
       "verdict": "drift",
       "inkBox": {
@@ -243,7 +243,7 @@
           "x": 1,
           "y": 0,
           "w": 641,
-          "h": 90
+          "h": 84
         }
       }
     },
@@ -255,15 +255,15 @@
       "h": 0.0214,
       "kind": "text",
       "score": {
-        "overall": 0.7376,
-        "structure": 0.672,
-        "color": 0.8522,
-        "colorIntersection": 0.7526,
-        "paletteMatch": 0.9059,
-        "detail": 0.7571,
-        "detailRaw": 0.8196,
-        "detailAdded": 0.125,
-        "bands": 0.75
+        "overall": 0.6078,
+        "structure": 0.5403,
+        "color": 0.8538,
+        "colorIntersection": 0.7534,
+        "paletteMatch": 0.9079,
+        "detail": 0.5391,
+        "detailRaw": 0.6693,
+        "detailAdded": 0.2604,
+        "bands": 0.4333
       },
       "verdict": "drift",
       "inkBox": {
@@ -275,7 +275,7 @@
         },
         "build": {
           "x": 0,
-          "y": 8,
+          "y": 3,
           "w": 419,
           "h": 36
         }
@@ -289,15 +289,15 @@
       "h": 0.039,
       "kind": "text",
       "score": {
-        "overall": 0.7412,
-        "structure": 0.6692,
-        "color": 0.8226,
-        "colorIntersection": 0.6587,
-        "paletteMatch": 0.9109,
-        "detail": 0.7563,
-        "detailRaw": 0.7875,
-        "detailAdded": 0.0625,
-        "bands": 0.875
+        "overall": 0.5852,
+        "structure": 0.4778,
+        "color": 0.8239,
+        "colorIntersection": 0.6609,
+        "paletteMatch": 0.9118,
+        "detail": 0.7022,
+        "detailRaw": 0.7543,
+        "detailAdded": 0.1042,
+        "bands": 0.35
       },
       "verdict": "drift",
       "inkBox": {
@@ -309,9 +309,9 @@
         },
         "build": {
           "x": 2,
-          "y": 4,
+          "y": 0,
           "w": 448,
-          "h": 65
+          "h": 64
         }
       }
     },
@@ -323,15 +323,15 @@
       "h": 0.187,
       "kind": "chrome",
       "score": {
-        "overall": 0.8812,
-        "structure": 0.9178,
-        "color": 0.9671,
-        "colorIntersection": 0.9342,
-        "paletteMatch": 0.9849,
-        "detail": 0.7721,
-        "detailRaw": 0.7982,
-        "detailAdded": 0.0521,
-        "bands": 0.8343
+        "overall": 0.8701,
+        "structure": 0.8821,
+        "color": 0.968,
+        "colorIntersection": 0.9405,
+        "paletteMatch": 0.9829,
+        "detail": 0.7289,
+        "detailRaw": 0.781,
+        "detailAdded": 0.1042,
+        "bands": 0.9143
       },
       "verdict": "match",
       "inkBox": {
@@ -343,9 +343,9 @@
         },
         "build": {
           "x": 26,
-          "y": 43,
+          "y": 38,
           "w": 738,
-          "h": 284
+          "h": 285
         }
       }
     },
@@ -357,15 +357,15 @@
       "h": 0.0134,
       "kind": "text",
       "score": {
-        "overall": 0.8773,
-        "structure": 0.8407,
-        "color": 0.9204,
+        "overall": 0.8179,
+        "structure": 0.7766,
+        "color": 0.9242,
         "colorIntersection": 0.8465,
-        "paletteMatch": 0.9602,
-        "detail": 0.8454,
-        "detailRaw": 0.8454,
-        "detailAdded": 0,
-        "bands": 1
+        "paletteMatch": 0.966,
+        "detail": 0.6906,
+        "detailRaw": 0.7531,
+        "detailAdded": 0.125,
+        "bands": 0.95
       },
       "verdict": "match",
       "inkBox": {
@@ -377,7 +377,7 @@
         },
         "build": {
           "x": 2,
-          "y": 15,
+          "y": 11,
           "w": 222,
           "h": 18
         }
@@ -391,15 +391,15 @@
       "h": 0.0465,
       "kind": "text",
       "score": {
-        "overall": 0.7707,
-        "structure": 0.7195,
-        "color": 0.8314,
-        "colorIntersection": 0.6772,
-        "paletteMatch": 0.9145,
-        "detail": 0.6874,
-        "detailRaw": 0.6978,
-        "detailAdded": 0.0208,
-        "bands": 1
+        "overall": 0.6977,
+        "structure": 0.7466,
+        "color": 0.8257,
+        "colorIntersection": 0.6763,
+        "paletteMatch": 0.9061,
+        "detail": 0.5198,
+        "detailRaw": 0.5823,
+        "detailAdded": 0.125,
+        "bands": 0.4
       },
       "verdict": "drift",
       "inkBox": {
@@ -411,9 +411,9 @@
         },
         "build": {
           "x": 2,
-          "y": 2,
+          "y": 0,
           "w": 146,
-          "h": 79
+          "h": 77
         }
       }
     },
@@ -425,15 +425,15 @@
       "h": 0.0182,
       "kind": "text",
       "score": {
-        "overall": 0.6849,
-        "structure": 0.6387,
-        "color": 0.8853,
+        "overall": 0.5433,
+        "structure": 0.5431,
+        "color": 0.878,
         "colorIntersection": 0.788,
-        "paletteMatch": 0.9377,
-        "detail": 0.4949,
-        "detailRaw": 0.5678,
-        "detailAdded": 0.1458,
-        "bands": 0.7
+        "paletteMatch": 0.9264,
+        "detail": 0.3484,
+        "detailRaw": 0.4578,
+        "detailAdded": 0.2188,
+        "bands": 0
       },
       "verdict": "drift",
       "inkBox": {
@@ -445,7 +445,7 @@
         },
         "build": {
           "x": 7,
-          "y": 7,
+          "y": 3,
           "w": 84,
           "h": 30
         }
@@ -459,13 +459,13 @@
       "h": 0.1181,
       "kind": "chrome",
       "score": {
-        "overall": 0.9307,
-        "structure": 0.9924,
-        "color": 0.963,
-        "colorIntersection": 0.9197,
+        "overall": 0.9344,
+        "structure": 0.9926,
+        "color": 0.9626,
+        "colorIntersection": 0.9185,
         "paletteMatch": 0.9863,
-        "detail": 0.7705,
-        "detailRaw": 0.7705,
+        "detail": 0.7854,
+        "detailRaw": 0.7854,
         "detailAdded": 0,
         "bands": 1
       },
@@ -483,15 +483,15 @@
       "h": 0.0128,
       "kind": "text",
       "score": {
-        "overall": 0.6344,
-        "structure": 0.6598,
-        "color": 0.9253,
+        "overall": 0.7928,
+        "structure": 0.7062,
+        "color": 0.9204,
         "colorIntersection": 0.859,
-        "paletteMatch": 0.961,
-        "detail": 0.4877,
-        "detailRaw": 0.545,
-        "detailAdded": 0.1146,
-        "bands": 0
+        "paletteMatch": 0.9535,
+        "detail": 0.7305,
+        "detailRaw": 0.7305,
+        "detailAdded": 0,
+        "bands": 1
       },
       "verdict": "drift",
       "inkBox": {
@@ -503,7 +503,7 @@
         },
         "build": {
           "x": 2,
-          "y": 20,
+          "y": 16,
           "w": 128,
           "h": 16
         }
@@ -517,17 +517,17 @@
       "h": 0.023,
       "kind": "text",
       "score": {
-        "overall": 0.8331,
-        "structure": 0.8119,
-        "color": 0.8628,
-        "colorIntersection": 0.7315,
-        "paletteMatch": 0.9336,
-        "detail": 0.7429,
-        "detailRaw": 0.7638,
-        "detailAdded": 0.0417,
-        "bands": 1
+        "overall": 0.6485,
+        "structure": 0.6347,
+        "color": 0.8665,
+        "colorIntersection": 0.7407,
+        "paletteMatch": 0.9342,
+        "detail": 0.3636,
+        "detailRaw": 0.4574,
+        "detailAdded": 0.1875,
+        "bands": 0.6
       },
-      "verdict": "match",
+      "verdict": "drift",
       "inkBox": {
         "comp": {
           "x": 3,
@@ -537,7 +537,7 @@
         },
         "build": {
           "x": 2,
-          "y": 6,
+          "y": 1,
           "w": 65,
           "h": 35
         }
@@ -551,15 +551,15 @@
       "h": 0.0123,
       "kind": "text",
       "score": {
-        "overall": 0.642,
-        "structure": 0.6091,
-        "color": 0.923,
-        "colorIntersection": 0.8568,
-        "paletteMatch": 0.9587,
-        "detail": 0.4888,
-        "detailRaw": 0.5669,
-        "detailAdded": 0.1563,
-        "bands": 0.3333
+        "overall": 0.7472,
+        "structure": 0.6186,
+        "color": 0.9216,
+        "colorIntersection": 0.8564,
+        "paletteMatch": 0.9567,
+        "detail": 0.761,
+        "detailRaw": 0.761,
+        "detailAdded": 0,
+        "bands": 0.9333
       },
       "verdict": "drift",
       "inkBox": {
@@ -571,7 +571,7 @@
         },
         "build": {
           "x": 1,
-          "y": 20,
+          "y": 15,
           "w": 200,
           "h": 16
         }
@@ -585,15 +585,15 @@
       "h": 0.0235,
       "kind": "text",
       "score": {
-        "overall": 0.7493,
-        "structure": 0.7446,
-        "color": 0.8566,
+        "overall": 0.598,
+        "structure": 0.6849,
+        "color": 0.8581,
         "colorIntersection": 0.7134,
-        "paletteMatch": 0.9337,
-        "detail": 0.6859,
-        "detailRaw": 0.6859,
-        "detailAdded": 0,
-        "bands": 0.6
+        "paletteMatch": 0.9361,
+        "detail": 0.2734,
+        "detailRaw": 0.3567,
+        "detailAdded": 0.1667,
+        "bands": 0
       },
       "verdict": "drift",
       "inkBox": {
@@ -605,7 +605,7 @@
         },
         "build": {
           "x": 3,
-          "y": 6,
+          "y": 2,
           "w": 60,
           "h": 34
         }
@@ -619,15 +619,15 @@
       "h": 0.0123,
       "kind": "text",
       "score": {
-        "overall": 0.6646,
-        "structure": 0.6533,
-        "color": 0.9147,
-        "colorIntersection": 0.8389,
-        "paletteMatch": 0.9554,
-        "detail": 0.5621,
-        "detailRaw": 0.5934,
-        "detailAdded": 0.0625,
-        "bands": 0.25
+        "overall": 0.7628,
+        "structure": 0.6888,
+        "color": 0.9173,
+        "colorIntersection": 0.8396,
+        "paletteMatch": 0.9592,
+        "detail": 0.6938,
+        "detailRaw": 0.7043,
+        "detailAdded": 0.0208,
+        "bands": 0.85
       },
       "verdict": "drift",
       "inkBox": {
@@ -639,7 +639,7 @@
         },
         "build": {
           "x": 2,
-          "y": 20,
+          "y": 15,
           "w": 131,
           "h": 16
         }
@@ -653,17 +653,17 @@
       "h": 0.023,
       "kind": "text",
       "score": {
-        "overall": 0.8029,
-        "structure": 0.8207,
-        "color": 0.8296,
+        "overall": 0.5471,
+        "structure": 0.5694,
+        "color": 0.8236,
         "colorIntersection": 0.6852,
-        "paletteMatch": 0.9073,
-        "detail": 0.6568,
-        "detailRaw": 0.688,
-        "detailAdded": 0.0625,
-        "bands": 0.8667
+        "paletteMatch": 0.8981,
+        "detail": 0.3763,
+        "detailRaw": 0.4597,
+        "detailAdded": 0.1667,
+        "bands": 0
       },
-      "verdict": "match",
+      "verdict": "drift",
       "inkBox": {
         "comp": {
           "x": 4,
@@ -673,7 +673,7 @@
         },
         "build": {
           "x": 3,
-          "y": 4,
+          "y": 0,
           "w": 64,
           "h": 35
         }
@@ -687,20 +687,25 @@
       "h": 0.0027,
       "kind": "chrome",
       "score": {
-        "overall": 0.7563,
-        "structure": 0.9954,
-        "color": 0.9741,
-        "colorIntersection": 0.9582,
+        "overall": 0.8747,
+        "structure": 0.9944,
+        "color": 0.9589,
+        "colorIntersection": 0.9149,
         "paletteMatch": 0.9826,
-        "detail": 0.3578,
-        "detailRaw": 0.3578,
-        "detailAdded": 0,
-        "bands": 0.5
+        "detail": 0.9079,
+        "detailRaw": 0.9339,
+        "detailAdded": 0.0521,
+        "bands": 0.4
       },
-      "verdict": "drift",
+      "verdict": "match",
       "inkBox": {
         "comp": null,
-        "build": null
+        "build": {
+          "x": 6,
+          "y": 45,
+          "w": 401,
+          "h": 3
+        }
       }
     },
     {
@@ -711,14 +716,14 @@
       "h": 0.0171,
       "kind": "text",
       "score": {
-        "overall": 0.7561,
-        "structure": 0.7042,
-        "color": 0.9275,
-        "colorIntersection": 0.878,
-        "paletteMatch": 0.9542,
-        "detail": 0.6141,
-        "detailRaw": 0.6818,
-        "detailAdded": 0.1354,
+        "overall": 0.7798,
+        "structure": 0.7247,
+        "color": 0.9321,
+        "colorIntersection": 0.8821,
+        "paletteMatch": 0.959,
+        "detail": 0.6961,
+        "detailRaw": 0.7898,
+        "detailAdded": 0.1875,
         "bands": 0.8
       },
       "verdict": "drift",
@@ -731,7 +736,7 @@
         },
         "build": {
           "x": 2,
-          "y": 12,
+          "y": 8,
           "w": 386,
           "h": 29
         }
@@ -745,17 +750,17 @@
       "h": 0.0021,
       "kind": "chrome",
       "score": {
-        "overall": 0.9188,
-        "structure": 0.9984,
-        "color": 0.9403,
-        "colorIntersection": 0.9583,
-        "paletteMatch": 0.9306,
-        "detail": 0.9172,
-        "detailRaw": 0.9172,
-        "detailAdded": 0,
-        "bands": 0.7
+        "overall": 0.6579,
+        "structure": 0.9988,
+        "color": 0.9337,
+        "colorIntersection": 0.9167,
+        "paletteMatch": 0.9429,
+        "detail": 0.2993,
+        "detailRaw": 0.3618,
+        "detailAdded": 0.125,
+        "bands": 0
       },
-      "verdict": "match",
+      "verdict": "drift",
       "inkBox": {
         "comp": null,
         "build": null
@@ -769,15 +774,15 @@
       "h": 0.0385,
       "kind": "text",
       "score": {
-        "overall": 0.74,
-        "structure": 0.7146,
-        "color": 0.8099,
-        "colorIntersection": 0.6375,
-        "paletteMatch": 0.9027,
-        "detail": 0.6552,
-        "detailRaw": 0.6708,
-        "detailAdded": 0.0313,
-        "bands": 0.82
+        "overall": 0.636,
+        "structure": 0.6667,
+        "color": 0.8052,
+        "colorIntersection": 0.6224,
+        "paletteMatch": 0.9036,
+        "detail": 0.4354,
+        "detailRaw": 0.5239,
+        "detailAdded": 0.1771,
+        "bands": 0.36
       },
       "verdict": "drift",
       "inkBox": {
@@ -789,9 +794,9 @@
         },
         "build": {
           "x": 2,
-          "y": 1,
+          "y": 0,
           "w": 148,
-          "h": 65
+          "h": 61
         }
       }
     },
@@ -803,17 +808,17 @@
       "h": 0.0166,
       "kind": "text",
       "score": {
-        "overall": 0.8636,
-        "structure": 0.8522,
-        "color": 0.8848,
-        "colorIntersection": 0.7908,
-        "paletteMatch": 0.9354,
-        "detail": 0.8326,
-        "detailRaw": 0.8326,
-        "detailAdded": 0,
-        "bands": 0.9143
+        "overall": 0.721,
+        "structure": 0.7303,
+        "color": 0.8836,
+        "colorIntersection": 0.7849,
+        "paletteMatch": 0.9368,
+        "detail": 0.5188,
+        "detailRaw": 0.5917,
+        "detailAdded": 0.1458,
+        "bands": 0.5714
       },
-      "verdict": "match",
+      "verdict": "drift",
       "inkBox": {
         "comp": {
           "x": 4,
@@ -823,7 +828,7 @@
         },
         "build": {
           "x": 0,
-          "y": 13,
+          "y": 8,
           "w": 180,
           "h": 22
         }
@@ -837,15 +842,15 @@
       "h": 0.063,
       "kind": "control",
       "score": {
-        "overall": 0.8079,
-        "structure": 0.7345,
-        "color": 0.9271,
-        "colorIntersection": 0.8577,
-        "paletteMatch": 0.9645,
-        "detail": 0.7646,
-        "detailRaw": 0.7802,
-        "detailAdded": 0.0313,
-        "bands": 0.6857
+        "overall": 0.8251,
+        "structure": 0.7811,
+        "color": 0.9332,
+        "colorIntersection": 0.888,
+        "paletteMatch": 0.9576,
+        "detail": 0.7347,
+        "detailRaw": 0.7607,
+        "detailAdded": 0.0521,
+        "bands": 0.8167
       },
       "verdict": "match",
       "inkBox": {
@@ -857,7 +862,7 @@
         },
         "build": {
           "x": 32,
-          "y": 35,
+          "y": 28,
           "w": 178,
           "h": 51
         }
@@ -871,15 +876,15 @@
       "h": 0.016,
       "kind": "text",
       "score": {
-        "overall": 0.7926,
-        "structure": 0.7819,
-        "color": 0.8518,
-        "colorIntersection": 0.7594,
-        "paletteMatch": 0.9015,
-        "detail": 0.7248,
-        "detailRaw": 0.7404,
-        "detailAdded": 0.0313,
-        "bands": 0.8
+        "overall": 0.6544,
+        "structure": 0.7404,
+        "color": 0.8582,
+        "colorIntersection": 0.7609,
+        "paletteMatch": 0.9106,
+        "detail": 0.4644,
+        "detailRaw": 0.5425,
+        "detailAdded": 0.1563,
+        "bands": 0
       },
       "verdict": "drift",
       "inkBox": {
@@ -891,7 +896,7 @@
         },
         "build": {
           "x": 0,
-          "y": 12,
+          "y": 7,
           "w": 153,
           "h": 22
         }
@@ -905,15 +910,15 @@
       "h": 0.063,
       "kind": "control",
       "score": {
-        "overall": 0.844,
-        "structure": 0.7877,
-        "color": 0.945,
-        "colorIntersection": 0.882,
-        "paletteMatch": 0.9789,
-        "detail": 0.7938,
-        "detailRaw": 0.8094,
-        "detailAdded": 0.0313,
-        "bands": 0.54
+        "overall": 0.8687,
+        "structure": 0.8426,
+        "color": 0.9498,
+        "colorIntersection": 0.9071,
+        "paletteMatch": 0.9727,
+        "detail": 0.7857,
+        "detailRaw": 0.8117,
+        "detailAdded": 0.0521,
+        "bands": 0.6607
       },
       "verdict": "match",
       "inkBox": {
@@ -925,7 +930,7 @@
         },
         "build": {
           "x": 30,
-          "y": 33,
+          "y": 26,
           "w": 137,
           "h": 53
         }
@@ -939,15 +944,15 @@
       "h": 0.016,
       "kind": "text",
       "score": {
-        "overall": 0.7626,
-        "structure": 0.6838,
-        "color": 0.8859,
-        "colorIntersection": 0.7904,
-        "paletteMatch": 0.9374,
-        "detail": 0.8326,
-        "detailRaw": 0.8378,
-        "detailAdded": 0.0104,
-        "bands": 0.7429
+        "overall": 0.6262,
+        "structure": 0.5345,
+        "color": 0.8903,
+        "colorIntersection": 0.802,
+        "paletteMatch": 0.9378,
+        "detail": 0.5284,
+        "detailRaw": 0.5909,
+        "detailAdded": 0.125,
+        "bands": 0.5714
       },
       "verdict": "drift",
       "inkBox": {
@@ -959,7 +964,7 @@
         },
         "build": {
           "x": 0,
-          "y": 14,
+          "y": 7,
           "w": 387,
           "h": 22
         }
@@ -973,15 +978,15 @@
       "h": 0.063,
       "kind": "control",
       "score": {
-        "overall": 0.9261,
-        "structure": 0.9365,
-        "color": 0.9572,
-        "colorIntersection": 0.9094,
-        "paletteMatch": 0.983,
-        "detail": 0.8479,
-        "detailRaw": 0.8479,
-        "detailAdded": 0,
-        "bands": 0.9
+        "overall": 0.9002,
+        "structure": 0.8926,
+        "color": 0.9559,
+        "colorIntersection": 0.9175,
+        "paletteMatch": 0.9765,
+        "detail": 0.8196,
+        "detailRaw": 0.83,
+        "detailAdded": 0.0208,
+        "bands": 0.7667
       },
       "verdict": "match",
       "inkBox": {
@@ -993,7 +998,7 @@
         },
         "build": {
           "x": 32,
-          "y": 32,
+          "y": 28,
           "w": 76,
           "h": 51
         }
@@ -1007,15 +1012,15 @@
       "h": 0.0358,
       "kind": "text",
       "score": {
-        "overall": 0.609,
-        "structure": 0.5187,
-        "color": 0.8383,
-        "colorIntersection": 0.7379,
-        "paletteMatch": 0.8924,
-        "detail": 0.5735,
-        "detailRaw": 0.6621,
-        "detailAdded": 0.1771,
-        "bands": 0.54
+        "overall": 0.6559,
+        "structure": 0.4869,
+        "color": 0.8477,
+        "colorIntersection": 0.7509,
+        "paletteMatch": 0.8998,
+        "detail": 0.7199,
+        "detailRaw": 0.7876,
+        "detailAdded": 0.1354,
+        "bands": 0.925
       },
       "verdict": "drift",
       "inkBox": {
@@ -1027,9 +1032,9 @@
         },
         "build": {
           "x": 0,
-          "y": 7,
+          "y": 0,
           "w": 298,
-          "h": 60
+          "h": 67
         }
       }
     },
@@ -1041,14 +1046,14 @@
       "h": 0.0027,
       "kind": "chrome",
       "score": {
-        "overall": 0.7881,
-        "structure": 0.8921,
-        "color": 0.9175,
-        "colorIntersection": 0.8755,
-        "paletteMatch": 0.9401,
-        "detail": 0.4759,
+        "overall": 0.7899,
+        "structure": 0.8934,
+        "color": 0.918,
+        "colorIntersection": 0.8765,
+        "paletteMatch": 0.9403,
+        "detail": 0.4811,
         "detailRaw": 0.4915,
-        "detailAdded": 0.0313,
+        "detailAdded": 0.0208,
         "bands": 0.85
       },
       "verdict": "drift",

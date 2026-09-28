@@ -27,6 +27,7 @@ export interface ChapterOneWeekContent {
   leadershipMission?: string;
   hearthMission?: string;
   reading?: string;
+  readingBookTitle?: string;
   fieldcraft?: string;
 }
 
@@ -89,6 +90,7 @@ export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
     hearthMission:
       'Ask spouse what one thing would genuinely make this week easier; take ownership of it.',
     reading: 'Begin Habits of the Household; three 10-minute sessions.',
+    readingBookTitle: 'Habits of the Household',
   },
   {
     name: 'Keep Your Word',

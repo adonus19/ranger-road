@@ -1,0 +1,101 @@
+<section class="recovery-scene" aria-labelledby="recovery-title">
+  <picture class="recovery-scene__image">
+    <source srcset="images/forest-band.webp" type="image/webp" />
+    <img src="images/forest-band.png" alt="" width="1728" height="960" decoding="async" />
+  </picture>
+  <div class="recovery-scene__content">
+    <h1 id="recovery-title">Recovery check</h1>
+    <p>The Gate Trial · Chapter I</p>
+  </div>
+</section>
+
+<div class="recovery entry-form">
+  <a class="back-link" [routerLink]="backPath">
+    <app-icon name="arrow-left" />
+    {{ backLabel }}
+  </a>
+
+  @if (loading()) {
+    <p class="recovery__notice" role="status">Opening the recovery check…</p>
+  } @else if (loadError(); as message) {
+    <p class="recovery__notice" role="alert">{{ message }}</p>
+  } @else if (saved(); as entry) {
+    <section class="recovery-saved" aria-labelledby="recovery-saved-title">
+      <h2 id="recovery-saved-title" tabindex="-1">Recovery check saved</h2>
+      <p class="recovery-saved__when">{{ minutes(entry.minutesAfter) }} after the Gate Trial</p>
+      <dl>
+        @for (area of areas; track area.key) {
+          <div>
+            <dt>{{ area.label }}</dt>
+            <dd>{{ word(area.key, entry[area.key]) }}</dd>
+          </div>
+        }
+      </dl>
+      @if (entry.note) {
+        <p class="recovery-saved__note">{{ entry.note }}</p>
+      }
+      <a class="primary-button" [routerLink]="backPath">{{ backLabel }}</a>
+    </section>
+  } @else if (!open()) {
+    <p class="recovery__lead">
+      You finished the physical trial at {{ clock(completedAt()!) }}. The program checks how you function 60 to
+      120 minutes after a major effort.
+    </p>
+    <p class="recovery__opens">Opens at <strong>{{ clock(opensAt()!) }}</strong></p>
+  } @else {
+    <p class="recovery__lead">
+      {{ minutes(minutesAfter()) }} since the physical trial ended. Tap the word that fits each.
+    </p>
+    @if (late()) {
+      <p class="help">
+        That’s past the 60 to 120 minutes the program suggests. Record how you are now; the time is saved
+        with it.
+      </p>
+    }
+    <form class="recovery__form" (submit)="save($event)" novalidate>
+      @for (area of areas; track area.key) {
+        <fieldset class="segments" [attr.aria-describedby]="showError(field(area)) ? area.key + '-error' : null">
+          <legend class="label">{{ area.label }}</legend>
+          <div class="segments__options">
+            @for (choice of area.choices; track choice.value) {
+              <label class="segment">
+                <input
+                  type="radio"
+                  [value]="choice.value"
+                  [formField]="field(area)"
+                  [attr.aria-invalid]="showError(field(area))"
+                />
+                <span>{{ choice.label }}</span>
+              </label>
+            }
+          </div>
+          @if (showError(field(area))) {
+            <span class="field-error" [id]="area.key + '-error'">{{ field(area)().errors()[0]?.message }}</span>
+          }
+        </fieldset>
+      }
+
+      <div class="field recovery__note">
+        <label class="label" for="recovery-note">Note (optional)</label>
+        <textarea
+          id="recovery-note" rows="3" [formField]="recoveryForm.note"
+          [attr.aria-invalid]="showError(recoveryForm.note)"
+          [attr.aria-describedby]="showError(recoveryForm.note) ? 'recovery-note-error' : null"
+        ></textarea>
+        @if (showError(recoveryForm.note)) {
+          <span class="field-error" id="recovery-note-error">{{ recoveryForm.note().errors()[0]?.message }}</span>
+        }
+      </div>
+
+      @if (saveError(); as message) {
+        <p class="save-error" role="alert">{{ message }}</p>
+      }
+
+      <div class="dock dock--bleed">
+        <button class="save-button" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Saving…' : 'Save recovery check' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

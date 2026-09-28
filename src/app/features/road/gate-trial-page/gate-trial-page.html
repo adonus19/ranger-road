@@ -124,9 +124,20 @@
             @for (pain of painByAttempt()[result.id] ?? []; track pain.id) {
               <p>Pain: {{ pain.bodyArea }} · {{ pain.severity }}/10 · {{ pain.actionTaken }}</p>
             }
-            @if (result.postMissionFunction) {
+            @if (recoveries()[result.id]; as recovery) {
+              <h3>After the effort</h3>
+              <p>Checked {{ minutes(recovery.minutesAfter) }} after physical work.</p>
+              <dl class="station-history__recovery">
+                @for (area of recoveryAreas; track area.key) {
+                  <div><dt>{{ area.label }}</dt><dd>{{ recoveryWord(area.key, recovery[area.key]) }}</dd></div>
+                }
+              </dl>
+              @if (recovery.note) { <p>{{ recovery.note }}</p> }
+            } @else if (result.postMissionFunction) {
               <h3>After the effort</h3>
               <p>{{ result.postMissionFunction }}</p>
+            } @else if (recoveryOpensAt(result)) {
+              <a class="station-history__recovery-link" [routerLink]="['/road/gate-trial/recovery', result.id]">Open recovery check</a>
             }
           </div>
         </details>

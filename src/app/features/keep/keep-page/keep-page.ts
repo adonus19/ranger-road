@@ -12,6 +12,7 @@ import { loadChapterSeed } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { Icon, type IconName } from '../../../shared/icon/icon';
 import { CheckInReminder } from '../check-in-reminder/check-in-reminder';
+import { GateTrialRecoveryReminder } from '../gate-trial-recovery-reminder/gate-trial-recovery-reminder';
 import { KeepBand } from '../keep-band/keep-band';
 import { StartDay } from '../start-day/start-day';
 
@@ -56,7 +57,7 @@ const READINESS_COPY: Readonly<Record<ReadinessStatus | 'pending', ReadinessCopy
 };
 
 @Component({
-  imports: [CheckInReminder, Icon, KeepBand, RouterLink, StartDay],
+  imports: [CheckInReminder, GateTrialRecoveryReminder, Icon, KeepBand, RouterLink, StartDay],
   selector: 'app-keep-page',
   styleUrl: './keep-page.css',
   templateUrl: './keep-page.html',

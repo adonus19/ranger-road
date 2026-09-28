@@ -42,11 +42,7 @@ function readiness(status: 'green' | 'yellow' | 'red', checkDate = date): Readin
   };
 }
 
-function setup(
-  check: ReadinessCheck | null,
-  today = date,
-  initialRecords: MissionInstance[] = [],
-) {
+function setup(check: ReadinessCheck | null, today = date, initialRecords: MissionInstance[] = []) {
   const state = {
     campaign: signal(campaign),
     readiness: signal(check),
@@ -67,7 +63,9 @@ function setup(
         useValue: {
           ...state,
           needsStartDate: computed(() => !state.campaign()),
-          beforeDayOne: computed(() => getCampaignDay(state.campaign().startDate, state.today()) < 1),
+          beforeDayOne: computed(
+            () => getCampaignDay(state.campaign().startDate, state.today()) < 1,
+          ),
         },
       },
       { provide: MissionHistory, useValue: { forDate, add } },
@@ -97,12 +95,28 @@ function choose(root: HTMLElement, title: string): void {
   input.click();
 }
 
-async function saveMission(root: HTMLElement, fixture: ReturnType<typeof setup>['fixture']): Promise<void> {
+async function saveMission(
+  root: HTMLElement,
+  fixture: ReturnType<typeof setup>['fixture'],
+): Promise<void> {
   root.querySelector<HTMLButtonElement>('.save-button')!.click();
   await fixture.whenStable();
 }
 
 describe('MissionPage', () => {
+  it('shows the Week 1 book before a Friday path is chosen', async () => {
+    const { fixture, state } = setup(null, '2026-09-11');
+    state.campaign.set({ ...campaign, startDate: '2026-09-07' });
+    const root = await ready(fixture);
+
+    expect(root.querySelector('.plan-note cite')?.textContent).toBe('Habits of the Household');
+    expect(root.textContent).toContain('for 10 minutes');
+    expect(root.querySelector<HTMLAnchorElement>('.reading-link')?.getAttribute('href')).toBe(
+      '/field-manual',
+    );
+    expect(root.textContent).toContain('Choose a path to record today’s mission.');
+  });
+
   it('allows a reduced Yellow mission and saves an immutable definition snapshot', async () => {
     const { fixture, forDate, add } = setup(readiness('yellow'));
     const root = await ready(fixture);
@@ -111,7 +125,9 @@ describe('MissionPage', () => {
     expect(root.querySelector('#order-title')?.textContent).toBe('Forge A');
     expect(root.textContent).toContain('Yellow · Reduce');
     expect(option(root, 'full')).toBeNull();
-    expect(root.querySelector('.outcome-option--unavailable')?.textContent).toContain('Unavailable on Yellow');
+    expect(root.querySelector('.outcome-option--unavailable')?.textContent).toContain(
+      'Unavailable on Yellow',
+    );
     expect(option(root, 'reduced')).not.toBeNull();
 
     option(root, 'reduced')!.click();
@@ -189,8 +205,9 @@ describe('MissionPage', () => {
     choose(root, 'Knot practice');
     await fixture.whenStable();
 
-    expect(root.querySelector<HTMLLabelElement>('label[for="mission-notes"]')?.textContent)
-      .toBe('What did you practice?');
+    expect(root.querySelector<HTMLLabelElement>('label[for="mission-notes"]')?.textContent).toBe(
+      'What did you practice?',
+    );
     expect(option(root, 'full')).not.toBeNull();
     expect(option(root, 'reduced')).not.toBeNull();
     expect(option(root, 'restoration')).toBeNull();
@@ -311,7 +328,9 @@ describe('MissionPage', () => {
     const root = await ready(fixture);
 
     expect(forDate).toHaveBeenCalledWith(wednesday);
-    expect(root.querySelector('.recorded__activity')?.textContent?.trim()).toBe('Restoration or skill');
+    expect(root.querySelector('.recorded__activity')?.textContent?.trim()).toBe(
+      'Restoration or skill',
+    );
     expect(root.textContent).toContain('Recorded today');
   });
 

@@ -17,8 +17,10 @@ h2 {
   letter-spacing: -0.02em;
 }
 
+/* Sized to the approved comp's title ink at phone widths. */
 h1 {
-  font-size: clamp(2rem, 11vw, 2.4375rem);
+  font-size: clamp(2rem, 10.5vw, 2.3125rem);
+  letter-spacing: -0.03em;
   line-height: 1.05;
 }
 

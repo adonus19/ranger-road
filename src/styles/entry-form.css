@@ -101,6 +101,8 @@
 }
 
 .entry-form .segment span {
+  /* Fills the row, so a one-line choice matches a neighbour that wraps. */
+  height: 100%;
   min-height: var(--segment-height);
   padding-inline: 0.25rem;
   color: var(--text-secondary);

@@ -3,7 +3,14 @@
   <p class="saved__date">{{ date() }}</p>
   <p class="saved__summary">
     @for (line of lines(); track $index) {
-      <span class="line">{{ line }}</span>
+      <span class="line">
+        @for (part of line; track $index) {
+          @if (!$first) {<span class="separator"> · </span>}
+          @if (part.before) {<span class="name">{{ part.before }} </span>}
+          <span class="value">{{ part.value }}</span>
+          @if (part.after) {<span class="name"> {{ part.after }}</span>}
+        }
+      </span>
     }
   </p>
   @if (entry().testsHeld) {

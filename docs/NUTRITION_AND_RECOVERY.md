@@ -48,6 +48,7 @@ After major efforts, assess 60–120 minutes later:
 - ability to participate in normal family life
 
 This is a first-class metric.
+For the Gate Trial, count from the end of the physical circuit. When an older saved trial has no circuit-end timestamp, use its final save time as the available reference.
 
 ## Safety
 

@@ -2,7 +2,8 @@ import { computed, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { describe, expect, it, vi } from 'vitest';
-import type { Campaign, ReadinessCheck, TrialDraft, TrialResult } from '../../../core/domain/models';
+import type { Campaign, PostMissionFunction, ReadinessCheck, TrialDraft, TrialResult } from '../../../core/domain/models';
+import { createPostMissionFunction } from '../../../core/domain/post-mission-function';
 import { createGateTrialResult } from '../../../core/domain/trial';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory } from '../../../core/state/trial-history';
@@ -44,6 +45,7 @@ async function render(
   options: { loading?: boolean; error?: string } = {},
   activeDraft: TrialDraft | null = null,
   completedResults: TrialResult[] = [],
+  recoveries: PostMissionFunction[] = [],
 ) {
   const state = {
     campaign: signal(activeCampaign),
@@ -59,6 +61,7 @@ async function render(
     activeDraft: vi.fn(async () => activeDraft ?? undefined),
     forTrial: vi.fn(async () => completedResults),
     stoppedForTrial: vi.fn(async () => []),
+    recoveries: vi.fn(async () => recoveries),
     painForAttempt: vi.fn(async () => []),
   };
   TestBed.configureTestingModule({
@@ -161,5 +164,22 @@ describe('Station Gate Trial plan', () => {
     expect(entry.textContent).toContain('36 min');
     expect(entry.textContent).toContain('Round 3');
     expect(entry.textContent).toContain('I will show up with care.');
+    expect(entry.querySelector<HTMLAnchorElement>('.station-history__recovery-link')?.getAttribute('href'))
+      .toBe(`/road/gate-trial/recovery/${result.id}`);
+  });
+
+  it('shows the linked recovery words with their completed trial', async () => {
+    const green = readiness('green');
+    const result = createGateTrialResult(completeGateTrialInput(green));
+    const recovery = createPostMissionFunction(result, {
+      id: 'recovery-1', trialResultId: result.id,
+      energy: 'steady', soreness: 'a-little', irritability: 'calm',
+      helpAtHome: 'fully', familyLife: 'partly',
+    }, new Date(Date.parse(result.recordedAt) + 60 * 60_000).toISOString());
+    const { root } = await render(green, campaign, {}, null, [result], [recovery]);
+    const entry = root.querySelector('.station-history__entry') as HTMLDetailsElement;
+    expect(entry.querySelector('.station-history__recovery')?.textContent).toContain('Helping at home');
+    expect(entry.querySelector('.station-history__recovery')?.textContent).toContain('Fully');
+    expect(entry.querySelector('.station-history__recovery-link')).toBeNull();
   });
 });

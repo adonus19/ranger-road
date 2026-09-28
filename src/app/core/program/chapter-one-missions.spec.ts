@@ -29,8 +29,22 @@ describe('Chapter I date-specific missions', () => {
     expect(missions[0].scriptureReference).toBe('James 1:19–25');
     expect(missions[1].contentReferences).toEqual(['chapter-1-restoration']);
     expect(missions[1].readingMinutes).toBe(10);
+    expect(missions[1].readingBookTitle).toBe('Habits of the Household');
     expect(chapterOneWatchContent['morning-watch']).toContain(
       'What does my family need from me today?',
+    );
+  });
+
+  it('names the Week 1 book on each reading day, including the lead-in', () => {
+    const start = '2026-09-08';
+    for (const date of ['2026-09-09', '2026-09-11', '2026-09-12', '2026-09-16']) {
+      expect(getChapterOneMissionsForDate(start, date)[1]).toMatchObject({
+        readingMinutes: 10,
+        readingBookTitle: 'Habits of the Household',
+      });
+    }
+    expect(getChapterOneMissionsForDate(start, '2026-09-23')[1]).not.toHaveProperty(
+      'readingBookTitle',
     );
   });
 

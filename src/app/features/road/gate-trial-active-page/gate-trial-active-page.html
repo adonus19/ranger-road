@@ -25,7 +25,8 @@
         <div><dt>Spirit</dt><dd>Psalm 121 and {{ result.phaseResults[3].metrics?.['prayerMinutes'] }} min prayer</dd></div>
         <div><dt>Oath</dt><dd>Personal Ranger’s Oath recorded</dd></div>
       </dl>
-      <p class="trial-end__followup">Assess how you function 60–120 minutes after the effort. You can add that recovery note later.</p>
+      <p class="trial-end__followup">Check how you feel and function 60–120 minutes after the circuit. Your answers can wait until then.</p>
+      <a class="trial-link" [routerLink]="['/road/gate-trial/recovery', result.id]">Open recovery check</a>
       <a class="trial-link" routerLink="/road">Return to Road</a>
     </section>
   } @else if (stopped(); as attempt) {

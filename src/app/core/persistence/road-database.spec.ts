@@ -46,7 +46,7 @@ describe('RoadDatabase', () => {
   it('opens a versioned schema and explicitly updates campaign state', async () => {
     const name = newName();
     const db = await RoadDatabase.open(name);
-    expect(DATABASE_VERSION).toBe(3);
+    expect(DATABASE_VERSION).toBe(4);
     expect(await db.getCampaign('primary')).toBeUndefined();
 
     await db.putCampaign(campaign);
@@ -512,13 +512,14 @@ describe('RoadDatabase', () => {
     await rawAdd(legacy, 'painEvents', oldPain);
     legacy.close();
 
-    const upgraded = await openRaw(name, 3, (database, transaction) => {
+    const upgraded = await openRaw(name, DATABASE_VERSION, (database, transaction) => {
       migrateRoadDatabase(database, transaction);
     });
     expect(upgraded.objectStoreNames.contains('campaigns')).toBe(true);
     expect(upgraded.objectStoreNames.contains('workoutDrafts')).toBe(true);
     expect(upgraded.objectStoreNames.contains('trialDrafts')).toBe(true);
     expect(upgraded.objectStoreNames.contains('trialAttempts')).toBe(true);
+    expect(upgraded.objectStoreNames.contains('postMissionFunctions')).toBe(true);
     expect(await rawGet(upgraded, 'journalEntries', 'old-entry')).toEqual(oldEntry);
     expect(await rawGet(upgraded, 'missionInstances', 'old-mission')).toEqual(oldMission);
     expect(await rawGet(upgraded, 'roadSessions', 'old-road')).toEqual(oldRoad);
