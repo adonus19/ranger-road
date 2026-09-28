@@ -1,0 +1,105 @@
+<section class="records" aria-labelledby="records-title">
+  <h2 id="records-title">Your records</h2>
+  <p class="records__intro">
+    Your records are kept only on this device. Save a copy now and then, and you can bring everything
+    back if the phone is lost or reset.
+  </p>
+
+  <div class="records__rows">
+    <button
+      type="button"
+      id="records-save"
+      class="records-row"
+      [disabled]="saving() || restoring()"
+      (click)="saveCopy()"
+    >
+      <span class="records-row__icon"><app-icon name="tray-arrow-up" /></span>
+      <span class="records-row__text">
+        <strong>{{ saving() ? 'Preparing a copy…' : 'Save a copy' }}</strong>
+        <span>{{ shares ? 'Keep it in Files, iCloud or email.' : 'Download a file to keep somewhere safe.' }}</span>
+        <small>{{ savedLine() }}</small>
+      </span>
+    </button>
+    <button
+      type="button"
+      id="records-restore"
+      class="records-row"
+      [disabled]="reading() || restoring()"
+      (click)="chooseCopy()"
+    >
+      <span class="records-row__icon records-row__icon--ink"><app-icon name="tray-arrow-down" /></span>
+      <span class="records-row__text">
+        <strong>{{ reading() ? 'Reading the copy…' : 'Restore from a copy' }}</strong>
+        <span>Replace this device’s records with a copy you saved.</span>
+      </span>
+    </button>
+  </div>
+  <input
+    #fileInput
+    class="visually-hidden"
+    type="file"
+    accept=".json,application/json"
+    tabindex="-1"
+    aria-hidden="true"
+    (change)="readCopy($event)"
+  />
+
+  <p class="visually-hidden" role="status">{{ announcement() }}</p>
+  @if (saveError(); as message) {
+    <p class="records__error" role="alert">{{ message }}</p>
+  }
+  @if (readyCopy()) {
+    <div class="records__ready">
+      <p>Your copy is ready.</p>
+      <button type="button" id="records-share-ready" class="records-button" (click)="shareReady()">
+        Share the copy
+      </button>
+    </div>
+  }
+  @if (restoreError(); as message) {
+    <p class="records__error" role="alert">{{ message }}</p>
+  }
+  @if (restoredNote(); as note) {
+    <p class="records__note" id="records-restored" tabindex="-1" role="status">{{ note }}</p>
+  }
+
+  @if (candidate(); as pending) {
+    <section class="records-confirm" aria-labelledby="records-confirm-title">
+      <h3 id="records-confirm-title" tabindex="-1">Replace this device’s records?</h3>
+      <p class="records-confirm__saved">This copy was saved {{ describe(pending.backup.savedAt) }}.</p>
+      <table class="records-compare">
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">Detail</span></th>
+            <th scope="col">This copy</th>
+            <th scope="col">This device</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Day 1</th>
+            <td>{{ day(pending.copy.startDate) }}</td>
+            <td>{{ day(pending.device.startDate) }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Latest entry</th>
+            <td>{{ latest(pending.copy.latestDate) }}</td>
+            <td>{{ latest(pending.device.latestDate) }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Records</th>
+            <td>{{ pending.copy.count }}</td>
+            <td>{{ pending.device.count }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="records-confirm__impact">{{ impact(pending) }}</p>
+      <div class="records-confirm__actions">
+        <button type="button" class="records-button" (click)="cancelRestore()">Cancel</button>
+        <button type="button" class="records-button" [disabled]="restoring()" (click)="restore()">
+          {{ restoring() ? 'Restoring…' : 'Replace records' }}
+        </button>
+      </div>
+    </section>
+  }
+</section>

@@ -69,6 +69,10 @@ export const STORE_NAMES = [
 
 export type StoreName = (typeof STORE_NAMES)[number];
 
+/** Every store is keyed by a string `id`; a saved copy carries rows exactly as stored. */
+export type StoredRecord = { id: string } & Record<string, unknown>;
+export type StoreRecords = Record<StoreName, StoredRecord[]>;
+
 export type HistoricalStoreName =
   | 'missionInstances'
   | 'workoutSessions'
@@ -872,6 +876,49 @@ export class RoadDatabase {
 
   getPostMissionFunctions(): Promise<PostMissionFunction[]> {
     return this.readAll<PostMissionFunction>('postMissionFunctions');
+  }
+
+  /** Every store in one read transaction, so a saved copy is a consistent snapshot. */
+  exportRecords(): Promise<StoreRecords> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction([...STORE_NAMES], 'readonly');
+      const records = {} as StoreRecords;
+      for (const name of STORE_NAMES) {
+        const request = transaction.objectStore(name).getAll();
+        request.onsuccess = () => {
+          records[name] = request.result as StoredRecord[];
+        };
+      }
+      transaction.oncomplete = () => resolve(records);
+      transaction.onabort = () =>
+        reject(transaction.error ?? new Error('Your records could not be read.'));
+    });
+  }
+
+  /**
+   * Restoring a saved copy is the one operation that replaces history. The person
+   * confirms it first, and every store is cleared and refilled in one transaction,
+   * so a failure leaves this device exactly as it was.
+   */
+  replaceRecords(stores: StoreRecords): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction([...STORE_NAMES], 'readwrite');
+      try {
+        for (const name of STORE_NAMES) {
+          const store = transaction.objectStore(name);
+          store.clear();
+          for (const record of stores[name]) store.add(record);
+        }
+      } catch (error) {
+        // A record IndexedDB cannot store throws here; abort so nothing is cleared.
+        transaction.abort();
+        reject(error instanceof Error ? error : new Error('The copy could not be restored.'));
+        return;
+      }
+      transaction.oncomplete = () => resolve();
+      transaction.onabort = () =>
+        reject(transaction.error ?? new Error('The copy could not be restored.'));
+    });
   }
 
   /** Historical writes use add, so an existing record cannot be silently replaced. */

@@ -98,6 +98,11 @@ The check-in screen opens on The last 28 days: average sleep and back, shoulder,
 
 The Tests part links to a same-day readiness check when one has not been saved and keeps the test inputs hidden until then. Saving the body-only check-in finishes that window without tests. Held tests require a fresh same-day non-Red check before saving, including when the tests screen is opened directly.
 
+Journal ends with Your records, because every record lives only on the device:
+- Save a copy puts every record in one dated file. On a phone it opens the share sheet (Files, iCloud, email); elsewhere the file downloads. The row shows when this device last saved a copy. Closing the share sheet saves nothing.
+- Restore from a copy reads a chosen file and asks before replacing anything. The confirmation compares the copy with this device (Day 1, latest entry, record count) and says how many records on this device the copy lacks. Replace records swaps in the copy; Cancel changes nothing.
+- A file that isn't a copy, is damaged, or came from a newer version of the app is refused, and nothing changes.
+
 Entries:
 - daily watch
 - trial reflections

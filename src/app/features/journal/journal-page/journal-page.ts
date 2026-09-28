@@ -9,10 +9,11 @@ import { Icon } from '../../../shared/icon/icon';
 import { describeCheckIn } from '../check-in-overview';
 import { JournalStore, formatJournalDate, watchTitle } from '../journal-store';
 import { weightAndWaist } from '../measurement-summary';
+import { RecordsSection } from '../records-section/records-section';
 
 @Component({
   selector: 'app-journal-page',
-  imports: [Icon, RouterLink],
+  imports: [Icon, RecordsSection, RouterLink],
   templateUrl: './journal-page.html',
   styleUrl: './journal-page.css',
 })
@@ -57,6 +58,12 @@ export class JournalPage implements OnInit {
   });
 
   ngOnInit(): void {
+    void this.load();
+    void this.loadMeasurements();
+  }
+
+  /** A restore replaced every record, so both lists read again. */
+  protected refresh(): void {
     void this.load();
     void this.loadMeasurements();
   }

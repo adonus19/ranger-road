@@ -26,6 +26,7 @@ Build:
 - measurements
 - Gate Trial
 - offline support
+- save a backup copy and restore it (Journal)
 
 ## Phase 2 — Exercise Guidance
 - exercise library
@@ -67,7 +68,7 @@ Seed all remaining program content.
 - accessibility
 - performance
 - install UX
-- export/import
+- export/import beyond the Phase 1 backup copy
 - optional voice notes
 - richer campaign visuals
 - asset generation pipeline

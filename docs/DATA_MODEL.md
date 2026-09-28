@@ -336,17 +336,18 @@ MVP:
 - schema version 2 adds `workoutDrafts` without changing existing version 1 history stores or rows
 - schema version 3 adds `trialDrafts` and `trialAttempts` without changing version 1 or 2 history and workout draft rows
 - schema version 4 adds `postMissionFunctions` without changing version 1–3 historical rows or drafts
+- a saved copy (Journal, Your records): one JSON file, `rangers-road-records-YYYY-MM-DD.json`, holding `format` (`rangers-road-records`), `version` (1), `databaseVersion`, `savedAt`, and `stores`, with every store's rows exactly as saved, read in one transaction
+- restore: refuses an unrelated, damaged, or newer-version file before touching anything. A copy from an older schema restores with the later stores empty. After the person confirms, every store is cleared and refilled from the copy in one transaction
 
 Later:
 
-- export/import JSON (Phase 7 in `ROADMAP.md`)
 - optional authenticated cloud sync
 - conflict-aware merge
-- backup/restore
 
 ## Critical Requirement
 
 Historical records are immutable except explicit user edits.
+Restoring a saved copy is the one operation that replaces history. It runs only after the person confirms, and it replaces every store in a single transaction, so a failure leaves the device unchanged.
 Program definition updates must not rewrite prior completed sessions.
 When Chapter I scheduling changes, reconcile only the campaign's generated planning date. Preserve any separately chosen target date and every historical row. Dated mission attempts retain their definition snapshots and remain readable even when their old week-based ID differs from the newly scheduled order.
 Chapter I completion is derived from the campaign start date, the current day being after the fourth full week's Sunday, and the presence of a completed Gate Trial result. It does not mutate the Campaign or TrialResult, and it does not start Chapter II.

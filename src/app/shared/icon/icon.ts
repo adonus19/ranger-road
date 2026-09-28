@@ -61,6 +61,16 @@ const ICONS = {
     { d: 'M8 10.4a4 4 0 0 1 8 0Z', paint: 'stroke' },
     { d: 'm12 10.4 1.5-2.3', paint: 'stroke' },
   ],
+  /** An open tray with an arrow leaving it: records going out to a saved copy. */
+  'tray-arrow-up': [
+    { d: 'M4.2 13.8v4.1a2.3 2.3 0 0 0 2.3 2.3h11a2.3 2.3 0 0 0 2.3-2.3v-4.1', paint: 'stroke' },
+    { d: 'M12 15.2V3.9M7.7 8.2 12 3.9l4.3 4.3', paint: 'stroke' },
+  ],
+  /** The same tray with the arrow coming in: a saved copy brought back. */
+  'tray-arrow-down': [
+    { d: 'M4.2 13.8v4.1a2.3 2.3 0 0 0 2.3 2.3h11a2.3 2.3 0 0 0 2.3-2.3v-4.1', paint: 'stroke' },
+    { d: 'M12 3.9v11.3M7.7 10.9l4.3 4.3 4.3-4.3', paint: 'stroke' },
+  ],
   'chevron-right': [{ d: 'M9 5.5 15.5 12 9 18.5', paint: 'stroke' }],
   plus: [{ d: 'M12 5v14M5 12h14', paint: 'stroke' }],
   minus: [{ d: 'M5 12h14', paint: 'stroke' }],

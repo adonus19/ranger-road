@@ -1,0 +1,247 @@
+/* The rows repeat Journal's watch-link rows; they are buttons because they act instead of navigating. */
+:host {
+  display: block;
+  margin-top: 2rem;
+}
+
+h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.records__intro {
+  max-width: 43ch;
+  margin: 0.375rem 0 0.875rem;
+  color: var(--text-secondary);
+}
+
+.records__rows {
+  border-block: 1px solid var(--line);
+}
+
+.records-row {
+  display: flex;
+  width: 100%;
+  min-height: 6rem;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 0.125rem;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.records-row + .records-row {
+  border-top: 1px solid var(--line-soft);
+}
+
+.records-row:hover:not(:disabled) .records-row__text strong {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.records-row:disabled {
+  cursor: progress;
+}
+
+.records-row:disabled .records-row__icon {
+  opacity: 0.6;
+}
+
+.records-row__icon {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-medallion);
+  color: var(--icon-gold);
+}
+
+.records-row__icon--ink {
+  color: var(--icon-ink);
+}
+
+.records-row__icon app-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.records-row__text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.records-row__text strong {
+  font-family: var(--font-display);
+  font-size: 1.140625rem;
+  line-height: 1.2;
+}
+
+.records-row__text span {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.records-row__text small {
+  color: var(--text-label);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.records__error,
+.records__note {
+  max-width: 46ch;
+  margin: 0.875rem 0 0;
+  font-weight: 600;
+}
+
+.records__error {
+  color: var(--status-red-text);
+}
+
+.records__note:focus {
+  outline: none;
+}
+
+.records__note:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.records__ready {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.75rem;
+  margin-top: 0.875rem;
+}
+
+.records__ready p {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* The confirmation reads like the check-in's look-back: a tinted panel, sage labels, serif values. */
+.records-confirm {
+  margin-top: 1rem;
+  padding: 0.875rem 0.875rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-tint);
+}
+
+.records-confirm h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.3125rem;
+  font-weight: 700;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.records-confirm h3:focus {
+  outline: none;
+}
+
+.records-confirm h3:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.records-confirm__saved {
+  margin: 0.25rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.records-compare {
+  width: 100%;
+  max-width: 32rem;
+  margin-top: 0.75rem;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.records-compare th,
+.records-compare td {
+  padding: 0.5rem 0.5rem 0.5rem 0;
+  border-top: 1px solid var(--line);
+  text-align: left;
+  vertical-align: baseline;
+}
+
+.records-compare thead th {
+  padding-block: 0 0.375rem;
+  border-top: 0;
+  color: var(--text-label);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.records-compare thead th:first-child {
+  width: 28%;
+}
+
+.records-compare tbody th {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+/* A date stays on one line; the size eases from 17px at 390px wide to 15px at 320px. */
+.records-compare td {
+  font-family: var(--font-display);
+  font-size: clamp(0.9375rem, 0.366rem + 2.857vw, 1.0625rem);
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.records-confirm__impact {
+  max-width: 46ch;
+  margin: 0.75rem 0 0;
+  font-weight: 600;
+}
+
+.records-confirm__actions {
+  display: grid;
+  max-width: 32rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.875rem;
+}
+
+.records-button {
+  min-height: var(--touch-target);
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-page);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.records-button:hover:not(:disabled) {
+  border-color: var(--color-stone);
+}
+
+.records-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

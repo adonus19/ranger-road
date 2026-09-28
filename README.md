@@ -47,4 +47,4 @@ Recommended implementation order:
 8. Trial flow
 9. Faith/leadership/fieldcraft content
 10. Remaining chapters
-11. Sync/backups later
+11. Cloud sync later (Journal already saves and restores a backup copy)

@@ -89,6 +89,16 @@ export class CampaignState {
     await this.initialize();
   }
 
+  /** Rereads the campaign and today's readiness after a restore replaced the local records. */
+  async reload(): Promise<void> {
+    this.database?.close();
+    this.database = null;
+    this.readinessRequest += 1;
+    this.readiness.set(null);
+    this.pendingLoad = null;
+    await this.initialize();
+  }
+
   /** Set Day 1. Allowed for a new campaign, or to move a start date that has not arrived yet. */
   async startCampaign(startDate: LocalDate): Promise<Campaign> {
     await this.initialize();
