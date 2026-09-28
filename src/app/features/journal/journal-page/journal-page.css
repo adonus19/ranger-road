@@ -1,0 +1,237 @@
+:host {
+  display: block;
+}
+
+.journal-page {
+  max-width: 46rem;
+  padding-bottom: 2rem;
+}
+
+.journal-heading h1,
+.today-watches h2,
+.measures h2,
+.history h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.journal-heading h1 {
+  font-size: 2rem;
+  line-height: 1.08;
+}
+
+.journal-heading p {
+  max-width: 43ch;
+  margin: 0.5rem 0 0;
+  color: var(--text-secondary);
+}
+
+.today-watches,
+.measures,
+.history {
+  margin-top: 2rem;
+}
+
+.today-watches h2,
+.measures h2,
+.history h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.75rem;
+  line-height: 1.15;
+}
+
+.watch-links {
+  border-block: 1px solid var(--line);
+}
+
+.watch-link {
+  display: flex;
+  min-height: 6rem;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 0.125rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.measures__note {
+  margin: 0;
+  padding: 1rem 0.125rem;
+  color: var(--text-secondary);
+}
+
+.watch-link + .watch-link,
+.measures__note + .watch-link {
+  border-top: 1px solid var(--line-soft);
+}
+
+.watch-link:hover .watch-link__text strong {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.watch-link__icon {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-medallion);
+  color: var(--icon-gold);
+}
+
+.watch-link__icon--evening {
+  color: var(--icon-ink);
+}
+
+.watch-link__icon app-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.watch-link__text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.watch-link__text strong {
+  font-family: var(--font-display);
+  font-size: 1.140625rem;
+  line-height: 1.2;
+}
+
+.watch-link__text span {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.watch-link__text small {
+  color: var(--text-label);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.watch-link__arrow {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--text-secondary);
+}
+
+.history__state,
+.history__error {
+  margin: 0;
+  padding: 1rem 0;
+  color: var(--text-secondary);
+}
+
+.history__error p {
+  margin: 0 0 0.75rem;
+}
+
+.history__error button,
+.show-all {
+  min-height: var(--touch-target);
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-page);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.history__list {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.history__list li {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.history-entry summary {
+  display: flex;
+  min-height: 4.75rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.125rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.history-entry summary::-webkit-details-marker {
+  display: none;
+}
+
+.history-entry summary > span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.history-entry strong {
+  font-family: var(--font-display);
+  font-size: 1.140625rem;
+}
+
+.history-entry small {
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+}
+
+.history-entry summary app-icon {
+  color: var(--text-secondary);
+  transition: transform 160ms var(--ease-out);
+}
+
+.history-entry[open] summary app-icon {
+  transform: rotate(90deg);
+}
+
+.history-entry__body {
+  padding: 0 0.125rem 1rem;
+}
+
+.history-entry__prompt,
+.history-entry__response {
+  max-width: 65ch;
+  margin: 0;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.history-entry__prompt {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.history-entry__response {
+  margin-top: 0.5rem;
+  line-height: 1.55;
+}
+
+.show-all {
+  margin-top: 1rem;
+}
+
+@media (min-width: 700px) {
+  .journal-heading h1 {
+    font-size: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .history-entry summary app-icon {
+    transition: none;
+  }
+}

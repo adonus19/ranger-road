@@ -1,0 +1,558 @@
+{
+  "regions": [
+    {
+      "id": "forest-band",
+      "kind": "plate",
+      "note": "painted misty dawn forest: dark sky, layered ridgelines, pine silhouettes at both edges, pale low sun right of centre, fading to flat deep-forest green behind the chapter text",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 0.2575
+      },
+      "snap": false,
+      "bleed": true,
+      "plate": "public/images/forest-band.png"
+    },
+    {
+      "id": "brand-mark",
+      "kind": "chrome",
+      "note": "small gold three-pine mark",
+      "box": {
+        "x": 0.0498,
+        "y": 0.0171,
+        "w": 0.0914,
+        "h": 0.0459
+      },
+      "snap": false
+    },
+    {
+      "id": "app-title",
+      "kind": "text",
+      "note": "serif app title The Ranger's Road in cream",
+      "box": {
+        "x": 0.1539,
+        "y": 0.0278,
+        "w": 0.4653,
+        "h": 0.0304
+      },
+      "snap": false
+    },
+    {
+      "id": "chapter-kicker",
+      "kind": "text",
+      "note": "spaced caps CHAPTER I · WEEKS 1–4 in mist",
+      "box": {
+        "x": 0.0521,
+        "y": 0.1389,
+        "w": 0.3241,
+        "h": 0.0112
+      },
+      "snap": false
+    },
+    {
+      "id": "chapter-title",
+      "kind": "text",
+      "note": "large serif The Muster in cream",
+      "box": {
+        "x": 0.0509,
+        "y": 0.1565,
+        "w": 0.4097,
+        "h": 0.0326
+      },
+      "snap": false
+    },
+    {
+      "id": "chapter-theme",
+      "kind": "text",
+      "note": "serif Answer the call. in soft gold",
+      "box": {
+        "x": 0.0521,
+        "y": 0.195,
+        "w": 0.2789,
+        "h": 0.0182
+      },
+      "snap": false
+    },
+    {
+      "id": "count-rule-1",
+      "kind": "chrome",
+      "note": "thin vertical hairline between title and counts",
+      "box": {
+        "x": 0.5417,
+        "y": 0.156,
+        "w": 0.0127,
+        "h": 0.0694
+      },
+      "snap": false
+    },
+    {
+      "id": "day-number",
+      "kind": "text",
+      "note": "serif numeral 1 in cream",
+      "box": {
+        "x": 0.5845,
+        "y": 0.1592,
+        "w": 0.0394,
+        "h": 0.0288
+      },
+      "snap": false
+    },
+    {
+      "id": "day-label",
+      "kind": "text",
+      "note": "label Campaign day in cream sans",
+      "box": {
+        "x": 0.5822,
+        "y": 0.1939,
+        "w": 0.1713,
+        "h": 0.016
+      },
+      "snap": false
+    },
+    {
+      "id": "count-rule-2",
+      "kind": "chrome",
+      "note": "thin vertical hairline between the two counts",
+      "box": {
+        "x": 0.7755,
+        "y": 0.156,
+        "w": 0.0127,
+        "h": 0.071
+      },
+      "snap": false
+    },
+    {
+      "id": "trial-number",
+      "kind": "text",
+      "note": "serif numeral 27 in cream",
+      "box": {
+        "x": 0.8171,
+        "y": 0.1587,
+        "w": 0.0845,
+        "h": 0.0294
+      },
+      "snap": false
+    },
+    {
+      "id": "trial-label",
+      "kind": "text",
+      "note": "label Days until Gate Trial on two lines in cream sans",
+      "box": {
+        "x": 0.8183,
+        "y": 0.1939,
+        "w": 0.1238,
+        "h": 0.0299
+      },
+      "snap": false
+    },
+    {
+      "id": "target-note",
+      "kind": "text",
+      "note": "small mist line Gate Trial target: end of Week 4. You can take it when ready.",
+      "box": {
+        "x": 0.0521,
+        "y": 0.2345,
+        "w": 0.6678,
+        "h": 0.0155
+      },
+      "snap": false
+    },
+    {
+      "id": "readiness-strip",
+      "kind": "control",
+      "note": "full-width rounded strip on pale parchment tint that opens the readiness check",
+      "box": {
+        "x": 0.0336,
+        "y": 0.2687,
+        "w": 0.934,
+        "h": 0.0929
+      },
+      "snap": false
+    },
+    {
+      "id": "readiness-icon",
+      "kind": "chrome",
+      "note": "round parchment medallion with gold heart-pulse line icon",
+      "box": {
+        "x": 0.0637,
+        "y": 0.281,
+        "w": 0.147,
+        "h": 0.0689
+      },
+      "snap": false
+    },
+    {
+      "id": "readiness-status",
+      "kind": "text",
+      "note": "bold serif Not checked today",
+      "box": {
+        "x": 0.2396,
+        "y": 0.2906,
+        "w": 0.4259,
+        "h": 0.0283
+      },
+      "snap": false
+    },
+    {
+      "id": "readiness-help",
+      "kind": "text",
+      "note": "sans Check sleep, energy, and pain before training.",
+      "box": {
+        "x": 0.2396,
+        "y": 0.3216,
+        "w": 0.6285,
+        "h": 0.0182
+      },
+      "snap": false
+    },
+    {
+      "id": "readiness-chevron",
+      "kind": "control",
+      "note": "chevron at right edge of the strip",
+      "box": {
+        "x": 0.9144,
+        "y": 0.3056,
+        "w": 0.0301,
+        "h": 0.0219
+      },
+      "snap": false
+    },
+    {
+      "id": "orders-heading",
+      "kind": "text",
+      "note": "large serif section heading Today's Orders",
+      "box": {
+        "x": 0.0417,
+        "y": 0.3809,
+        "w": 0.4907,
+        "h": 0.0379
+      },
+      "snap": false
+    },
+    {
+      "id": "main-card",
+      "kind": "chrome",
+      "note": "featured main-order card on lighter paper, fine border, thin gold top edge",
+      "box": {
+        "x": 0.037,
+        "y": 0.4268,
+        "w": 0.9259,
+        "h": 0.1528
+      },
+      "snap": false
+    },
+    {
+      "id": "main-icon",
+      "kind": "chrome",
+      "note": "round parchment medallion with dark walking-footprints icon",
+      "box": {
+        "x": 0.0741,
+        "y": 0.4519,
+        "w": 0.1748,
+        "h": 0.0817
+      },
+      "snap": false
+    },
+    {
+      "id": "main-kicker",
+      "kind": "text",
+      "note": "spaced caps MAIN ORDER in stone",
+      "box": {
+        "x": 0.2847,
+        "y": 0.4562,
+        "w": 0.2049,
+        "h": 0.0123
+      },
+      "snap": false
+    },
+    {
+      "id": "main-title",
+      "kind": "text",
+      "note": "serif Short conditioning or restoration on two lines",
+      "box": {
+        "x": 0.2824,
+        "y": 0.477,
+        "w": 0.5,
+        "h": 0.0491
+      },
+      "snap": false
+    },
+    {
+      "id": "main-guidance",
+      "kind": "text",
+      "note": "sans Check readiness before training. in stone",
+      "box": {
+        "x": 0.2836,
+        "y": 0.5374,
+        "w": 0.4896,
+        "h": 0.0187
+      },
+      "snap": false
+    },
+    {
+      "id": "morning-tile",
+      "kind": "chrome",
+      "note": "half-width tile with fine border",
+      "box": {
+        "x": 0.037,
+        "y": 0.5865,
+        "w": 0.4572,
+        "h": 0.1501
+      },
+      "snap": false
+    },
+    {
+      "id": "morning-icon",
+      "kind": "chrome",
+      "note": "round parchment medallion with gold rising-sun icon",
+      "box": {
+        "x": 0.0833,
+        "y": 0.5999,
+        "w": 0.1435,
+        "h": 0.0662
+      },
+      "snap": false
+    },
+    {
+      "id": "morning-kicker",
+      "kind": "text",
+      "note": "spaced caps DAILY WATCH in stone",
+      "box": {
+        "x": 0.088,
+        "y": 0.6741,
+        "w": 0.1898,
+        "h": 0.0112
+      },
+      "snap": false
+    },
+    {
+      "id": "morning-title",
+      "kind": "text",
+      "note": "serif Morning Watch",
+      "box": {
+        "x": 0.0868,
+        "y": 0.6918,
+        "w": 0.3021,
+        "h": 0.0246
+      },
+      "snap": false
+    },
+    {
+      "id": "evening-tile",
+      "kind": "chrome",
+      "note": "half-width tile with fine border",
+      "box": {
+        "x": 0.5058,
+        "y": 0.5865,
+        "w": 0.4572,
+        "h": 0.1501
+      },
+      "snap": false
+    },
+    {
+      "id": "evening-icon",
+      "kind": "chrome",
+      "note": "round parchment medallion with dark crescent-moon icon",
+      "box": {
+        "x": 0.5382,
+        "y": 0.5999,
+        "w": 0.1389,
+        "h": 0.0657
+      },
+      "snap": false
+    },
+    {
+      "id": "evening-kicker",
+      "kind": "text",
+      "note": "spaced caps DAILY WATCH in stone",
+      "box": {
+        "x": 0.5486,
+        "y": 0.6741,
+        "w": 0.1898,
+        "h": 0.0112
+      },
+      "snap": false
+    },
+    {
+      "id": "evening-title",
+      "kind": "text",
+      "note": "serif Evening Watch",
+      "box": {
+        "x": 0.5475,
+        "y": 0.6918,
+        "w": 0.3032,
+        "h": 0.0246
+      },
+      "snap": false
+    },
+    {
+      "id": "hearth-rule-top",
+      "kind": "chrome",
+      "note": "hairline rule above the Hearth row",
+      "box": {
+        "x": 0.0382,
+        "y": 0.7495,
+        "w": 0.9236,
+        "h": 0.0053
+      },
+      "snap": false
+    },
+    {
+      "id": "hearth-icon",
+      "kind": "chrome",
+      "note": "small gold fireplace icon with flame",
+      "box": {
+        "x": 0.0764,
+        "y": 0.7724,
+        "w": 0.0914,
+        "h": 0.039
+      },
+      "snap": false
+    },
+    {
+      "id": "hearth-divider",
+      "kind": "chrome",
+      "note": "short vertical hairline between icon and text",
+      "box": {
+        "x": 0.2141,
+        "y": 0.7644,
+        "w": 0.0116,
+        "h": 0.0609
+      },
+      "snap": false
+    },
+    {
+      "id": "hearth-kicker",
+      "kind": "text",
+      "note": "spaced caps HEARTH MISSION in stone",
+      "box": {
+        "x": 0.2616,
+        "y": 0.7708,
+        "w": 0.2465,
+        "h": 0.0118
+      },
+      "snap": false
+    },
+    {
+      "id": "hearth-text",
+      "kind": "text",
+      "note": "sans Ask your spouse what would genuinely help this week. on two lines in stone-ink",
+      "box": {
+        "x": 0.2604,
+        "y": 0.7874,
+        "w": 0.5567,
+        "h": 0.0379
+      },
+      "snap": false
+    },
+    {
+      "id": "hearth-rule-bottom",
+      "kind": "chrome",
+      "note": "hairline rule below the Hearth row",
+      "box": {
+        "x": 0.0382,
+        "y": 0.8339,
+        "w": 0.9236,
+        "h": 0.0053
+      },
+      "snap": false
+    },
+    {
+      "id": "mission-cta",
+      "kind": "control",
+      "note": "full-width pine rounded button Begin Today's Mission with right arrow",
+      "box": {
+        "x": 0.0382,
+        "y": 0.8478,
+        "w": 0.9236,
+        "h": 0.0534
+      },
+      "snap": false
+    },
+    {
+      "id": "cta-label",
+      "kind": "text",
+      "note": "Begin Today's Mission and arrow in cream sans",
+      "box": {
+        "x": 0.2859,
+        "y": 0.8638,
+        "w": 0.4387,
+        "h": 0.0235
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-bar",
+      "kind": "chrome",
+      "note": "bottom navigation bar on paper with hairline top rule",
+      "box": {
+        "x": 0,
+        "y": 0.9108,
+        "w": 1,
+        "h": 0.0892
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-keep",
+      "kind": "control",
+      "note": "selected Keep tab: filled pine house icon, label, short gold underline",
+      "box": {
+        "x": 0.0451,
+        "y": 0.9247,
+        "w": 0.1146,
+        "h": 0.0572
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-road",
+      "kind": "control",
+      "note": "Road tab: gray winding-road icon and label",
+      "box": {
+        "x": 0.2685,
+        "y": 0.9257,
+        "w": 0.066,
+        "h": 0.0449
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-forge",
+      "kind": "control",
+      "note": "Forge tab: gray anvil icon and label",
+      "box": {
+        "x": 0.4618,
+        "y": 0.9295,
+        "w": 0.0764,
+        "h": 0.0438
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-journal",
+      "kind": "control",
+      "note": "Journal tab: open-book line icon and label",
+      "box": {
+        "x": 0.6505,
+        "y": 0.9263,
+        "w": 0.0914,
+        "h": 0.0443
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-field-manual",
+      "kind": "control",
+      "note": "Field Manual tab: folded-map line icon and label",
+      "box": {
+        "x": 0.8194,
+        "y": 0.9257,
+        "w": 0.1493,
+        "h": 0.0449
+      },
+      "snap": false
+    }
+  ]
+}

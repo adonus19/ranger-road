@@ -1,0 +1,40 @@
+{
+  "title": "Choose the Road log layout",
+  "question": "All three use the Forest Light look and the same fields. Lock the layout to build, or add a note to borrow from another.",
+  "options": [
+    {
+      "id": "steps",
+      "label": "One question at a time",
+      "kicker": "THE ROLL",
+      "thesis": "Each part of the log gets the whole screen, so you answer with one thumb and never scroll.",
+      "palette": ["#172b21", "#24362b", "#f6f3ea", "#e9e5d8", "#a9804a"],
+      "materials": ["warm paper", "hairline rules", "serif numerals"],
+      "viewport": "Back to Road, a thin step rule, one large question such as How long did you walk? with a big minutes field, then Next.",
+      "risk": "Six short screens for one entry, which is slower when you already know the numbers.",
+      "comp": ".impeccable/mocks/decision/road-log-steps.png"
+    },
+    {
+      "id": "halves",
+      "label": "Two halves, docked save",
+      "thesis": "One form in two titled parts, The walk and How it felt, with Save docked above the tabs.",
+      "palette": ["#172b21", "#24362b", "#f6f3ea", "#e9e5d8", "#a9804a"],
+      "materials": ["warm paper", "hairline rules", "serif numerals"],
+      "viewport": "Title, date choices, miles and minutes side by side in large numerals, terrain, then the effort scale; pain before and after below.",
+      "risk": "The most familiar of the three, and the pain scales push the form past one screen.",
+      "comp": ".impeccable/mocks/decision/road-log-halves.png"
+    },
+    {
+      "id": "logbook",
+      "label": "Logbook line",
+      "thesis": "The entry you are writing sits at the top as one ruled logbook line that fills in as you answer.",
+      "palette": ["#172b21", "#24362b", "#f6f3ea", "#e9e5d8", "#a9804a"],
+      "materials": ["warm paper", "hairline rules", "serif numerals"],
+      "viewport": "A ruled line reading Sat, Sep 26 · 2.1 mi · 41 min, the fields under it, Save, then earlier walks on the same rules.",
+      "risk": "Form and history share one page, so it grows long once there are many walks.",
+      "comp": ".impeccable/mocks/decision/road-log-logbook.png"
+    }
+  ],
+  "reroll": true,
+  "steer": true,
+  "buildPath": { "value": "comp", "toggle": true }
+}

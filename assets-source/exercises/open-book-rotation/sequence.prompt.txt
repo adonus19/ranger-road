@@ -1,0 +1,4 @@
+Reference: public/images/exercises/box-squat/sequence.png. Use only its visual style: warm ivory background; four evenly sized vertical panels in one wide horizontal strip; consistent athletic adult man wearing dark forest-green shirt and charcoal shorts; lightly textured realistic editorial anatomy illustration; clean floor line; no borders, labels, arrows, watermarks, extra limbs, or cropped anatomy. Same camera view/model across panels. Accurate beginner instruction, not advertising.
+
+Exercise source: docs/rangers-road-full-program-content/EXERCISE_CATALOG.md > open-book-rotation.
+Movement prompt: Open-Book Rotation. Lie on LEFT side with BOTH knees bent and stacked; lower left arm forward. Panel 1 upper right arm also forward in closed position; panel 2 upper right arm and chest rotate open; panel 3 chest and right arm open toward ceiling/back while knees stay stacked; panel 4 close again. Motion in mid/upper back, not pelvis.

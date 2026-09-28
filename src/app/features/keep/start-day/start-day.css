@@ -1,0 +1,108 @@
+:host {
+  display: block;
+}
+
+.start-panel {
+  max-width: 34rem;
+  padding: 1.5rem 1rem 2rem;
+}
+
+.start-panel h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.start-panel p {
+  max-width: 40ch;
+  margin: 0.625rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.start-panel__label {
+  display: block;
+  margin-top: 1.5rem;
+  color: var(--text-label);
+  font-size: 0.6875rem;
+  font-stretch: 100%;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.start-panel input {
+  display: block;
+  width: 100%;
+  max-width: 16rem;
+  min-height: var(--touch-target);
+  margin-top: 0.375rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-page);
+  font-size: 1rem;
+}
+
+.start-panel input:hover {
+  border-color: var(--color-stone);
+}
+
+.start-panel p.start-panel__error {
+  color: var(--status-red-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.start-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.start-panel__submit,
+.start-panel__secondary {
+  min-height: var(--touch-target);
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+}
+
+.start-panel__submit {
+  border: 0;
+  background: var(--action);
+  color: var(--on-action);
+}
+
+.start-panel__submit:hover {
+  background: var(--action-hover);
+}
+
+.start-panel__submit:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.start-panel__secondary {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+}
+
+.start-panel__secondary:hover {
+  border-color: var(--color-stone);
+}
+
+.start-panel p.start-panel__note {
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
+}
+

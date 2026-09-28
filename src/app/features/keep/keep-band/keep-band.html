@@ -1,0 +1,46 @@
+<section class="keep-band" aria-labelledby="chapter-title">
+  <picture class="keep-band__scene">
+    <source srcset="images/forest-band.webp" type="image/webp" />
+    <img src="images/forest-band.png" alt="" width="1728" height="960" decoding="async" fetchpriority="high" />
+  </picture>
+
+  @if (!state.loading() && !state.error() && seed(); as seed) {
+    <div class="keep-band__body">
+      <div class="keep-band__chapter">
+        <p class="keep-band__chapter-line">{{ chapterLine() }}</p>
+        <h1 id="chapter-title">{{ seed.chapter.name }}</h1>
+        <p class="keep-band__theme">{{ seed.chapter.theme }}</p>
+      </div>
+
+      @if (state.campaign()) {
+        <dl class="keep-band__counts">
+          @if (state.beforeDayOne()) {
+            <div>
+              <dt>Days until Day 1</dt>
+              <dd>{{ daysUntilStart() }}</dd>
+            </div>
+          } @else {
+            <div>
+              <dt>Campaign day</dt>
+              <dd>{{ campaignDay() }}</dd>
+            </div>
+          }
+          <div>
+            <dt>Days until Gate Trial</dt>
+            <dd>{{ daysUntilTrial() }}</dd>
+          </div>
+        </dl>
+
+        <p class="keep-band__note">
+          @if (isLeadIn()) {
+            Lead-in through Sunday. Week 1 begins Monday.
+          } @else {
+            Gate Trial target: end of Week 4. You can take it when ready.
+          }
+        </p>
+      }
+    </div>
+  } @else {
+    <h1 id="chapter-title" class="visually-hidden">Keep</h1>
+  }
+</section>

@@ -1,0 +1,389 @@
+{
+  "regions": [
+    {
+      "id": "header-bar",
+      "kind": "chrome",
+      "note": "flat night-forest header bar across the top",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 0.0791
+      },
+      "snap": false
+    },
+    {
+      "id": "brand-mark",
+      "kind": "chrome",
+      "note": "small gold three-pine mark",
+      "box": {
+        "x": 0.0509,
+        "y": 0.0171,
+        "w": 0.0891,
+        "h": 0.0459
+      },
+      "snap": false
+    },
+    {
+      "id": "app-title",
+      "kind": "text",
+      "note": "serif app title The Ranger's Road in cream",
+      "box": {
+        "x": 0.1586,
+        "y": 0.0246,
+        "w": 0.4722,
+        "h": 0.031
+      },
+      "snap": false
+    },
+    {
+      "id": "back-link",
+      "kind": "control",
+      "note": "left arrow and sans Back to Road in secondary ink",
+      "box": {
+        "x": 0.0463,
+        "y": 0.1047,
+        "w": 0.2894,
+        "h": 0.0187
+      },
+      "snap": false
+    },
+    {
+      "id": "page-title",
+      "kind": "text",
+      "note": "large serif page title Log a walk",
+      "box": {
+        "x": 0.0394,
+        "y": 0.1448,
+        "w": 0.4826,
+        "h": 0.0502
+      },
+      "snap": false
+    },
+    {
+      "id": "walk-heading",
+      "kind": "text",
+      "note": "serif section heading The walk",
+      "box": {
+        "x": 0.0394,
+        "y": 0.2163,
+        "w": 0.2905,
+        "h": 0.0288
+      },
+      "snap": false
+    },
+    {
+      "id": "date-label",
+      "kind": "text",
+      "note": "spaced caps DATE in sage",
+      "box": {
+        "x": 0.0417,
+        "y": 0.2639,
+        "w": 0.0891,
+        "h": 0.0134
+      },
+      "snap": false
+    },
+    {
+      "id": "date-today",
+      "kind": "control",
+      "note": "selected segmented button Today: pine fill, cream sans label",
+      "box": {
+        "x": 0.0382,
+        "y": 0.2831,
+        "w": 0.3113,
+        "h": 0.0475
+      },
+      "snap": false
+    },
+    {
+      "id": "date-yesterday",
+      "kind": "control",
+      "note": "segmented button Yesterday: 1px border, ink sans label",
+      "box": {
+        "x": 0.3484,
+        "y": 0.2831,
+        "w": 0.3079,
+        "h": 0.0475
+      },
+      "snap": false
+    },
+    {
+      "id": "date-pick",
+      "kind": "control",
+      "note": "segmented button Pick a date: 1px border, ink sans label",
+      "box": {
+        "x": 0.6551,
+        "y": 0.2831,
+        "w": 0.3067,
+        "h": 0.0475
+      },
+      "snap": false
+    },
+    {
+      "id": "miles-label",
+      "kind": "text",
+      "note": "spaced caps MILES in sage",
+      "box": {
+        "x": 0.0417,
+        "y": 0.351,
+        "w": 0.1007,
+        "h": 0.0134
+      },
+      "snap": false
+    },
+    {
+      "id": "miles-field",
+      "kind": "control",
+      "note": "bordered number field holding the large serif numeral 2.1",
+      "box": {
+        "x": 0.0382,
+        "y": 0.3686,
+        "w": 0.4468,
+        "h": 0.0609
+      },
+      "snap": false
+    },
+    {
+      "id": "minutes-label",
+      "kind": "text",
+      "note": "spaced caps MINUTES in sage",
+      "box": {
+        "x": 0.5174,
+        "y": 0.351,
+        "w": 0.1493,
+        "h": 0.0134
+      },
+      "snap": false
+    },
+    {
+      "id": "minutes-field",
+      "kind": "control",
+      "note": "bordered number field holding the large serif numeral 41",
+      "box": {
+        "x": 0.515,
+        "y": 0.3686,
+        "w": 0.4468,
+        "h": 0.0609
+      },
+      "snap": false
+    },
+    {
+      "id": "terrain-label",
+      "kind": "text",
+      "note": "spaced caps TERRAIN in sage",
+      "box": {
+        "x": 0.0405,
+        "y": 0.4487,
+        "w": 0.147,
+        "h": 0.0134
+      },
+      "snap": false
+    },
+    {
+      "id": "terrain-field",
+      "kind": "control",
+      "note": "full-width bordered text field holding Gravel trail in sans",
+      "box": {
+        "x": 0.0382,
+        "y": 0.4663,
+        "w": 0.9236,
+        "h": 0.0502
+      },
+      "snap": false
+    },
+    {
+      "id": "section-rule",
+      "kind": "chrome",
+      "note": "hairline rule between the two halves",
+      "box": {
+        "x": 0.0428,
+        "y": 0.5374,
+        "w": 0.9144,
+        "h": 0.0016
+      },
+      "snap": false
+    },
+    {
+      "id": "felt-heading",
+      "kind": "text",
+      "note": "serif section heading How it felt",
+      "box": {
+        "x": 0.0394,
+        "y": 0.5609,
+        "w": 0.3241,
+        "h": 0.0283
+      },
+      "snap": false
+    },
+    {
+      "id": "effort-label",
+      "kind": "text",
+      "note": "spaced caps EFFORT (RPE) in sage",
+      "box": {
+        "x": 0.0417,
+        "y": 0.6106,
+        "w": 0.2269,
+        "h": 0.016
+      },
+      "snap": false
+    },
+    {
+      "id": "effort-scale",
+      "kind": "control",
+      "note": "ten bordered tap buttons with serif numerals 1 to 10 in two rows of five",
+      "box": {
+        "x": 0.0382,
+        "y": 0.6298,
+        "w": 0.9236,
+        "h": 0.1218
+      },
+      "snap": false
+    },
+    {
+      "id": "effort-selected",
+      "kind": "control",
+      "note": "selected effort 6: pine fill with cream serif numeral",
+      "box": {
+        "x": 0.0382,
+        "y": 0.6918,
+        "w": 0.1817,
+        "h": 0.0593
+      },
+      "snap": false
+    },
+    {
+      "id": "effort-help",
+      "kind": "text",
+      "note": "sans help line 1 is very easy. 10 is as hard as you can go.",
+      "box": {
+        "x": 0.0417,
+        "y": 0.7596,
+        "w": 0.5845,
+        "h": 0.0182
+      },
+      "snap": false
+    },
+    {
+      "id": "pain-toggle",
+      "kind": "control",
+      "note": "plus sign and sans Add pain before and after (optional) in secondary ink",
+      "box": {
+        "x": 0.0509,
+        "y": 0.8024,
+        "w": 0.6377,
+        "h": 0.0224
+      },
+      "snap": false
+    },
+    {
+      "id": "dock-rule",
+      "kind": "chrome",
+      "note": "hairline rule above the docked save button",
+      "box": {
+        "x": 0.0428,
+        "y": 0.8371,
+        "w": 0.9144,
+        "h": 0.0016
+      },
+      "snap": false
+    },
+    {
+      "id": "save-button",
+      "kind": "control",
+      "note": "full-width pine button docked above the tabs",
+      "box": {
+        "x": 0.0382,
+        "y": 0.8536,
+        "w": 0.9248,
+        "h": 0.0502
+      },
+      "snap": false
+    },
+    {
+      "id": "save-label",
+      "kind": "text",
+      "note": "Save walk label in cream",
+      "box": {
+        "x": 0.4005,
+        "y": 0.8675,
+        "w": 0.2037,
+        "h": 0.0203
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-bar",
+      "kind": "chrome",
+      "note": "bottom navigation bar on paper with hairline top rule",
+      "box": {
+        "x": 0,
+        "y": 0.9145,
+        "w": 1,
+        "h": 0.0855
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-keep",
+      "kind": "control",
+      "note": "Keep tab: gray house line icon and label",
+      "box": {
+        "x": 0.0671,
+        "y": 0.9257,
+        "w": 0.0683,
+        "h": 0.0507
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-road",
+      "kind": "control",
+      "note": "selected Road tab: pine road icon, pine label, short gold underline",
+      "box": {
+        "x": 0.265,
+        "y": 0.9247,
+        "w": 0.0706,
+        "h": 0.0491
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-forge",
+      "kind": "control",
+      "note": "Forge tab: gray anvil icon and label",
+      "box": {
+        "x": 0.4618,
+        "y": 0.9306,
+        "w": 0.0787,
+        "h": 0.0459
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-journal",
+      "kind": "control",
+      "note": "Journal tab: open-book line icon and label",
+      "box": {
+        "x": 0.6481,
+        "y": 0.9274,
+        "w": 0.0995,
+        "h": 0.0491
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-field-manual",
+      "kind": "control",
+      "note": "Field Manual tab: folded-map line icon and label",
+      "box": {
+        "x": 0.816,
+        "y": 0.9263,
+        "w": 0.1678,
+        "h": 0.0475
+      },
+      "snap": false
+    }
+  ],
+  "allowUncovered": true
+}

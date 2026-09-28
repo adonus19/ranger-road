@@ -1,0 +1,2194 @@
+{
+  "tool": "comp-spec",
+  "version": 1,
+  "createdAt": "2026-09-26T18:57:57.848Z",
+  "comp": ".impeccable/mocks/decision/check-in-lookback.png",
+  "warnings": [],
+  "uncoveredInkCells": [
+    "A6",
+    "B6",
+    "C6",
+    "E6",
+    "F6",
+    "G6",
+    "F7",
+    "G7",
+    "H7"
+  ],
+  "compSize": {
+    "width": 864,
+    "height": 1872
+  },
+  "aspect": 0.4615,
+  "orientation": "portrait",
+  "palette": [
+    {
+      "hex": "#f5f4e5",
+      "coverage": 0.8318
+    },
+    {
+      "hex": "#1e2e26",
+      "coverage": 0.1241
+    },
+    {
+      "hex": "#080808",
+      "coverage": 0.0209
+    },
+    {
+      "hex": "#cdc8bf",
+      "coverage": 0.0129
+    },
+    {
+      "hex": "#5c625f",
+      "coverage": 0.0103
+    }
+  ],
+  "bands": [
+    {
+      "y": 0.0505,
+      "strength": 0.3572
+    },
+    {
+      "y": 0.0794,
+      "strength": 1
+    },
+    {
+      "y": 0.1191,
+      "strength": 0.2091
+    },
+    {
+      "y": 0.1552,
+      "strength": 0.5854
+    },
+    {
+      "y": 0.1805,
+      "strength": 1
+    },
+    {
+      "y": 0.213,
+      "strength": 0.2018
+    },
+    {
+      "y": 0.2744,
+      "strength": 0.4781
+    },
+    {
+      "y": 0.3105,
+      "strength": 0.2091
+    },
+    {
+      "y": 0.3574,
+      "strength": 0.2567
+    },
+    {
+      "y": 0.3827,
+      "strength": 0.286
+    },
+    {
+      "y": 0.5668,
+      "strength": 0.2316
+    },
+    {
+      "y": 0.6029,
+      "strength": 0.3447
+    },
+    {
+      "y": 0.6282,
+      "strength": 0.4068
+    },
+    {
+      "y": 0.6715,
+      "strength": 0.2453
+    },
+    {
+      "y": 0.7329,
+      "strength": 0.2726
+    },
+    {
+      "y": 0.8484,
+      "strength": 1
+    },
+    {
+      "y": 0.9061,
+      "strength": 1
+    },
+    {
+      "y": 0.9278,
+      "strength": 0.207
+    },
+    {
+      "y": 0.9639,
+      "strength": 0.3012
+    }
+  ],
+  "regions": [
+    {
+      "id": "header-bar",
+      "kind": "chrome",
+      "note": "flat night-forest header bar across the top",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 0.0801
+      },
+      "px": {
+        "x": 0,
+        "y": 0,
+        "w": 864,
+        "h": 150
+      },
+      "aspect": 5.76,
+      "palette": [
+        {
+          "hex": "#182825",
+          "coverage": 0.9398
+        },
+        {
+          "hex": "#f6f5eb",
+          "coverage": 0.0323
+        },
+        {
+          "hex": "#d7b579",
+          "coverage": 0.0157
+        },
+        {
+          "hex": "#354535",
+          "coverage": 0.0065
+        },
+        {
+          "hex": "#778072",
+          "coverage": 0.0058
+        }
+      ],
+      "detail": {
+        "energy": 22.9806
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "brand-mark",
+      "kind": "chrome",
+      "note": "small gold three-pine mark",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0509,
+        "y": 0.0171,
+        "w": 0.0903,
+        "h": 0.0459
+      },
+      "px": {
+        "x": 44,
+        "y": 32,
+        "w": 78,
+        "h": 86
+      },
+      "aspect": 0.907,
+      "palette": [
+        {
+          "hex": "#182920",
+          "coverage": 0.6189
+        },
+        {
+          "hex": "#d7b479",
+          "coverage": 0.3161
+        },
+        {
+          "hex": "#474933",
+          "coverage": 0.0319
+        },
+        {
+          "hex": "#7e7350",
+          "coverage": 0.0226
+        },
+        {
+          "hex": "#aa9666",
+          "coverage": 0.0106
+        }
+      ],
+      "detail": {
+        "energy": 8.3847
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "app-title",
+      "kind": "text",
+      "note": "serif app title The Ranger's Road in cream",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.1574,
+        "y": 0.0246,
+        "w": 0.4757,
+        "h": 0.031
+      },
+      "px": {
+        "x": 136,
+        "y": 46,
+        "w": 411,
+        "h": 58
+      },
+      "aspect": 7.0862,
+      "palette": [
+        {
+          "hex": "#182a22",
+          "coverage": 0.7404
+        },
+        {
+          "hex": "#f5f5ec",
+          "coverage": 0.198
+        },
+        {
+          "hex": "#b7baae",
+          "coverage": 0.0268
+        },
+        {
+          "hex": "#526053",
+          "coverage": 0.0224
+        },
+        {
+          "hex": "#8b9787",
+          "coverage": 0.0125
+        }
+      ],
+      "detail": {
+        "energy": 72.5729
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 13,
+          "capHeightPx": 38.5,
+          "inkIsDark": false,
+          "allCaps": false,
+          "advance": 0.597,
+          "advTall": 0.7268,
+          "advX": 0.597,
+          "gap": 0.0519,
+          "xRatio": 0.6749,
+          "stemW": 0.1756,
+          "contrast": 2.234,
+          "serif": 1.5596,
+          "densTall": 0.4483,
+          "densX": 0.5243,
+          "weight": 0.4483
+        },
+        "widthClass": "normal",
+        "weightClass": "regular"
+      }
+    },
+    {
+      "id": "back-link",
+      "kind": "control",
+      "note": "left arrow and sans Back to Journal in secondary ink",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0451,
+        "y": 0.1042,
+        "w": 0.3229,
+        "h": 0.0208
+      },
+      "px": {
+        "x": 39,
+        "y": 195,
+        "w": 279,
+        "h": 39
+      },
+      "aspect": 7.1538,
+      "palette": [
+        {
+          "hex": "#f7f5e8",
+          "coverage": 0.7767
+        },
+        {
+          "hex": "#4f504e",
+          "coverage": 0.1406
+        },
+        {
+          "hex": "#ababa2",
+          "coverage": 0.0496
+        },
+        {
+          "hex": "#767672",
+          "coverage": 0.0331
+        }
+      ],
+      "detail": {
+        "energy": 47.6083
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "page-title",
+      "kind": "text",
+      "note": "large serif page title Monthly check-in",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0394,
+        "y": 0.1426,
+        "w": 0.7431,
+        "h": 0.0481
+      },
+      "px": {
+        "x": 34,
+        "y": 267,
+        "w": 642,
+        "h": 90
+      },
+      "aspect": 7.1333,
+      "palette": [
+        {
+          "hex": "#f7f6e9",
+          "coverage": 0.7341
+        },
+        {
+          "hex": "#090909",
+          "coverage": 0.2403
+        },
+        {
+          "hex": "#babaad",
+          "coverage": 0.011
+        },
+        {
+          "hex": "#979591",
+          "coverage": 0.0079
+        },
+        {
+          "hex": "#454543",
+          "coverage": 0.0068
+        }
+      ],
+      "detail": {
+        "energy": 81.6497
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 8,
+          "capHeightPx": 62.2,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.7874,
+          "advTall": 1.1651,
+          "advX": 0.5946,
+          "gap": 0.0482,
+          "xRatio": 0.6772,
+          "stemW": 0.1981,
+          "contrast": 2.7242,
+          "serif": 1.7911,
+          "densTall": 0.4394,
+          "densX": 0.4997,
+          "weight": 0.4394
+        },
+        "widthClass": "normal",
+        "weightClass": "regular",
+        "chosen": {
+          "family": "Playfair Display",
+          "weight": 700,
+          "fontSizePx": 89,
+          "source": "catalog",
+          "estimatedSize": true,
+          "stamp": "c77f3a144407"
+        }
+      }
+    },
+    {
+      "id": "date-line",
+      "kind": "text",
+      "note": "quiet sans line Day 29 · Monday, October 12 in secondary ink",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.044,
+        "y": 0.1955,
+        "w": 0.485,
+        "h": 0.0214
+      },
+      "px": {
+        "x": 38,
+        "y": 366,
+        "w": 419,
+        "h": 40
+      },
+      "aspect": 10.475,
+      "palette": [
+        {
+          "hex": "#f7f6e8",
+          "coverage": 0.799
+        },
+        {
+          "hex": "#576860",
+          "coverage": 0.1153
+        },
+        {
+          "hex": "#c5cac0",
+          "coverage": 0.0495
+        },
+        {
+          "hex": "#8b978c",
+          "coverage": 0.0362
+        }
+      ],
+      "detail": {
+        "energy": 55.369
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 23,
+          "capHeightPx": 24.8,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.5645,
+          "advTall": 0.5645,
+          "advX": 0.5242,
+          "gap": 0.1613,
+          "xRatio": 0.6755,
+          "stemW": 0.1268,
+          "contrast": 1.0774,
+          "serif": 0.9434,
+          "densTall": 0.4554,
+          "densX": 0.496,
+          "weight": 0.4554
+        },
+        "widthClass": "condensed",
+        "weightClass": "regular"
+      }
+    },
+    {
+      "id": "lookback-heading",
+      "kind": "text",
+      "note": "serif section heading The last 28 days",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0382,
+        "y": 0.2431,
+        "w": 0.5359,
+        "h": 0.039
+      },
+      "px": {
+        "x": 33,
+        "y": 455,
+        "w": 463,
+        "h": 73
+      },
+      "aspect": 6.3425,
+      "palette": [
+        {
+          "hex": "#f7f6e8",
+          "coverage": 0.7502
+        },
+        {
+          "hex": "#0a0a09",
+          "coverage": 0.192
+        },
+        {
+          "hex": "#908f88",
+          "coverage": 0.026
+        },
+        {
+          "hex": "#5c5d59",
+          "coverage": 0.018
+        },
+        {
+          "hex": "#cbc8c2",
+          "coverage": 0.0138
+        }
+      ],
+      "detail": {
+        "energy": 74.5695
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 11,
+          "capHeightPx": 48.7,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.5958,
+          "advTall": 0.6164,
+          "advX": 0.5958,
+          "gap": 0.0616,
+          "xRatio": 0.6844,
+          "stemW": 0.1921,
+          "contrast": 2.1104,
+          "serif": 1.4456,
+          "densTall": 0.4983,
+          "densX": 0.52,
+          "weight": 0.4983
+        },
+        "widthClass": "normal",
+        "weightClass": "medium"
+      }
+    },
+    {
+      "id": "lookback-panel",
+      "kind": "chrome",
+      "note": "read-only parchment-tint panel with 6px corners holding the readiness averages",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0417,
+        "y": 0.2869,
+        "w": 0.9178,
+        "h": 0.187
+      },
+      "px": {
+        "x": 36,
+        "y": 537,
+        "w": 793,
+        "h": 350
+      },
+      "aspect": 2.2657,
+      "palette": [
+        {
+          "hex": "#e8e8d8",
+          "coverage": 0.9595
+        },
+        {
+          "hex": "#090909",
+          "coverage": 0.0187
+        },
+        {
+          "hex": "#555c5c",
+          "coverage": 0.009
+        },
+        {
+          "hex": "#898c82",
+          "coverage": 0.007
+        },
+        {
+          "hex": "#566c5c",
+          "coverage": 0.0058
+        }
+      ],
+      "detail": {
+        "energy": 17.8786
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "sleep-label",
+      "kind": "text",
+      "note": "spaced caps AVERAGE SLEEP in sage",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0694,
+        "y": 0.3088,
+        "w": 0.2627,
+        "h": 0.0134
+      },
+      "px": {
+        "x": 60,
+        "y": 578,
+        "w": 227,
+        "h": 25
+      },
+      "aspect": 9.08,
+      "palette": [
+        {
+          "hex": "#e7e5d6",
+          "coverage": 0.7529
+        },
+        {
+          "hex": "#566860",
+          "coverage": 0.1272
+        },
+        {
+          "hex": "#9fa89a",
+          "coverage": 0.1126
+        },
+        {
+          "hex": "#8e9292",
+          "coverage": 0.0073
+        }
+      ],
+      "detail": {
+        "energy": 46.211
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 12,
+          "capHeightPx": 17.6,
+          "inkIsDark": true,
+          "allCaps": true,
+          "advance": 0.638,
+          "advTall": 0.638,
+          "advX": null,
+          "gap": 0.3403,
+          "xRatio": null,
+          "stemW": 0.1892,
+          "contrast": 1.2451,
+          "serif": 2.389,
+          "densTall": 0.5248,
+          "densX": null,
+          "weight": 0.5248
+        },
+        "widthClass": "normal",
+        "weightClass": "medium"
+      }
+    },
+    {
+      "id": "sleep-value",
+      "kind": "text",
+      "note": "large serif numeral 6.6",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0741,
+        "y": 0.3387,
+        "w": 0.1794,
+        "h": 0.0465
+      },
+      "px": {
+        "x": 64,
+        "y": 634,
+        "w": 155,
+        "h": 87
+      },
+      "aspect": 1.7816,
+      "palette": [
+        {
+          "hex": "#e9e8d8",
+          "coverage": 0.6853
+        },
+        {
+          "hex": "#090808",
+          "coverage": 0.2729
+        },
+        {
+          "hex": "#383835",
+          "coverage": 0.0146
+        },
+        {
+          "hex": "#a09f92",
+          "coverage": 0.0139
+        },
+        {
+          "hex": "#67665e",
+          "coverage": 0.0133
+        }
+      ],
+      "detail": {
+        "energy": 21.9996
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": null,
+        "measuredAt": "2026-09-26T18:58:03.712Z",
+        "note": "no separable lettering in the crop; size by the region box"
+      }
+    },
+    {
+      "id": "sleep-unit",
+      "kind": "text",
+      "note": "sans hours after the numeral",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2789,
+        "y": 0.3654,
+        "w": 0.1053,
+        "h": 0.0182
+      },
+      "px": {
+        "x": 241,
+        "y": 684,
+        "w": 91,
+        "h": 34
+      },
+      "aspect": 2.6765,
+      "palette": [
+        {
+          "hex": "#e7e6d6",
+          "coverage": 0.7661
+        },
+        {
+          "hex": "#515150",
+          "coverage": 0.129
+        },
+        {
+          "hex": "#85837c",
+          "coverage": 0.0511
+        },
+        {
+          "hex": "#acac9e",
+          "coverage": 0.0484
+        },
+        {
+          "hex": "#606858",
+          "coverage": 0.0054
+        }
+      ],
+      "detail": {
+        "energy": 18.3244
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 5,
+          "capHeightPx": 26.3,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.5333,
+          "advTall": 0.5714,
+          "advX": 0.4952,
+          "gap": 0.1524,
+          "xRatio": 0.6783,
+          "stemW": 0.1367,
+          "contrast": 1.1491,
+          "serif": 1.0078,
+          "densTall": 0.4403,
+          "densX": 0.5241,
+          "weight": 0.4403
+        },
+        "widthClass": "condensed",
+        "weightClass": "regular"
+      }
+    },
+    {
+      "id": "panel-divider",
+      "kind": "chrome",
+      "note": "vertical hairline dividing sleep from the pain rows",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.4641,
+        "y": 0.3018,
+        "w": 0.0058,
+        "h": 0.1181
+      },
+      "px": {
+        "x": 401,
+        "y": 565,
+        "w": 5,
+        "h": 221
+      },
+      "aspect": 0.0226,
+      "palette": [
+        {
+          "hex": "#e0dfd0",
+          "coverage": 1
+        }
+      ],
+      "detail": {
+        "energy": 0.4879
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "back-label",
+      "kind": "text",
+      "note": "spaced caps BACK PAIN in sage",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5104,
+        "y": 0.3114,
+        "w": 0.1505,
+        "h": 0.0128
+      },
+      "px": {
+        "x": 441,
+        "y": 583,
+        "w": 130,
+        "h": 24
+      },
+      "aspect": 5.4167,
+      "palette": [
+        {
+          "hex": "#e8e6d6",
+          "coverage": 0.7301
+        },
+        {
+          "hex": "#5f7466",
+          "coverage": 0.1136
+        },
+        {
+          "hex": "#4b5d5b",
+          "coverage": 0.0682
+        },
+        {
+          "hex": "#a5afa1",
+          "coverage": 0.0653
+        },
+        {
+          "hex": "#888a88",
+          "coverage": 0.0227
+        }
+      ],
+      "detail": {
+        "energy": 29.214
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 9,
+          "capHeightPx": 15.9,
+          "inkIsDark": true,
+          "allCaps": true,
+          "advance": 0.6899,
+          "advTall": 0.6899,
+          "advX": null,
+          "gap": 0.2195,
+          "xRatio": null,
+          "stemW": 0.1911,
+          "contrast": 1.0962,
+          "serif": null,
+          "densTall": 0.5534,
+          "densX": null,
+          "weight": 0.5534
+        },
+        "widthClass": "normal",
+        "weightClass": "medium"
+      }
+    },
+    {
+      "id": "back-value",
+      "kind": "text",
+      "note": "serif numeral 2.4",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.8484,
+        "y": 0.3077,
+        "w": 0.0833,
+        "h": 0.023
+      },
+      "px": {
+        "x": 733,
+        "y": 576,
+        "w": 72,
+        "h": 43
+      },
+      "aspect": 1.6744,
+      "palette": [
+        {
+          "hex": "#e8e7d7",
+          "coverage": 0.7778
+        },
+        {
+          "hex": "#0c0c0c",
+          "coverage": 0.1667
+        },
+        {
+          "hex": "#b2b1a8",
+          "coverage": 0.0306
+        },
+        {
+          "hex": "#454540",
+          "coverage": 0.0167
+        },
+        {
+          "hex": "#232d1d",
+          "coverage": 0.0083
+        }
+      ],
+      "detail": {
+        "energy": 17.6923
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": null,
+        "measuredAt": "2026-09-26T18:58:03.770Z",
+        "note": "no separable lettering in the crop; size by the region box"
+      }
+    },
+    {
+      "id": "shoulder-label",
+      "kind": "text",
+      "note": "spaced caps SHOULDER PAIN in sage",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5104,
+        "y": 0.3542,
+        "w": 0.2326,
+        "h": 0.0123
+      },
+      "px": {
+        "x": 441,
+        "y": 663,
+        "w": 201,
+        "h": 23
+      },
+      "aspect": 8.7391,
+      "palette": [
+        {
+          "hex": "#e8e5d6",
+          "coverage": 0.7556
+        },
+        {
+          "hex": "#55675e",
+          "coverage": 0.1716
+        },
+        {
+          "hex": "#8c978c",
+          "coverage": 0.0504
+        },
+        {
+          "hex": "#b3b8a9",
+          "coverage": 0.0224
+        }
+      ],
+      "detail": {
+        "energy": 45.0132
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 13,
+          "capHeightPx": 15.6,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.6736,
+          "advTall": 0.6736,
+          "advX": null,
+          "gap": 0.3208,
+          "xRatio": 0.6027,
+          "stemW": 0.1943,
+          "contrast": 1.1504,
+          "serif": 0.6909,
+          "densTall": 0.5444,
+          "densX": null,
+          "weight": 0.5444
+        },
+        "widthClass": "normal",
+        "weightClass": "medium"
+      }
+    },
+    {
+      "id": "shoulder-value",
+      "kind": "text",
+      "note": "serif numeral 1.1",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.8495,
+        "y": 0.3504,
+        "w": 0.0764,
+        "h": 0.0235
+      },
+      "px": {
+        "x": 734,
+        "y": 656,
+        "w": 66,
+        "h": 44
+      },
+      "aspect": 1.5,
+      "palette": [
+        {
+          "hex": "#e9e8d8",
+          "coverage": 0.7909
+        },
+        {
+          "hex": "#080808",
+          "coverage": 0.1606
+        },
+        {
+          "hex": "#b6b5a8",
+          "coverage": 0.0424
+        },
+        {
+          "hex": "#585858",
+          "coverage": 0.0061
+        }
+      ],
+      "detail": {
+        "energy": 12.5995
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": null,
+        "measuredAt": "2026-09-26T18:58:17.224Z",
+        "note": "no separable lettering in the crop; size by the region box"
+      }
+    },
+    {
+      "id": "neck-label",
+      "kind": "text",
+      "note": "spaced caps NECK PAIN in sage",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5104,
+        "y": 0.3974,
+        "w": 0.1539,
+        "h": 0.0123
+      },
+      "px": {
+        "x": 441,
+        "y": 744,
+        "w": 133,
+        "h": 23
+      },
+      "aspect": 5.7826,
+      "palette": [
+        {
+          "hex": "#e8e6d7",
+          "coverage": 0.6861
+        },
+        {
+          "hex": "#586c61",
+          "coverage": 0.1444
+        },
+        {
+          "hex": "#bfc0b3",
+          "coverage": 0.1
+        },
+        {
+          "hex": "#8c968c",
+          "coverage": 0.0694
+        }
+      ],
+      "detail": {
+        "energy": 30.2361
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 10,
+          "capHeightPx": 15.6,
+          "inkIsDark": true,
+          "allCaps": true,
+          "advance": 0.5784,
+          "advTall": 0.5784,
+          "advX": null,
+          "gap": 0.241,
+          "xRatio": null,
+          "stemW": 0.1957,
+          "contrast": 1.1637,
+          "serif": 0.7291,
+          "densTall": 0.5476,
+          "densX": null,
+          "weight": 0.5476
+        },
+        "widthClass": "condensed",
+        "weightClass": "medium"
+      }
+    },
+    {
+      "id": "neck-value",
+      "kind": "text",
+      "note": "serif numeral 0.8",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.8472,
+        "y": 0.3937,
+        "w": 0.0833,
+        "h": 0.023
+      },
+      "px": {
+        "x": 732,
+        "y": 737,
+        "w": 72,
+        "h": 43
+      },
+      "aspect": 1.6744,
+      "palette": [
+        {
+          "hex": "#e9e8d8",
+          "coverage": 0.6994
+        },
+        {
+          "hex": "#090909",
+          "coverage": 0.2135
+        },
+        {
+          "hex": "#c1beb2",
+          "coverage": 0.0393
+        },
+        {
+          "hex": "#98988a",
+          "coverage": 0.0253
+        },
+        {
+          "hex": "#64605c",
+          "coverage": 0.0225
+        }
+      ],
+      "detail": {
+        "energy": 20.6818
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": null,
+        "measuredAt": "2026-09-26T18:58:17.282Z",
+        "note": "no separable lettering in the crop; size by the region box"
+      }
+    },
+    {
+      "id": "panel-rule",
+      "kind": "chrome",
+      "note": "hairline rule across the panel above its note",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0718,
+        "y": 0.4316,
+        "w": 0.8588,
+        "h": 0.0027
+      },
+      "px": {
+        "x": 62,
+        "y": 808,
+        "w": 742,
+        "h": 5
+      },
+      "aspect": 148.4,
+      "palette": [
+        {
+          "hex": "#ddd8c9",
+          "coverage": 1
+        }
+      ],
+      "detail": {
+        "energy": 9.7286
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "panel-note",
+      "kind": "text",
+      "note": "sans note Averages from 22 readiness checks.",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0694,
+        "y": 0.4439,
+        "w": 0.4491,
+        "h": 0.0171
+      },
+      "px": {
+        "x": 60,
+        "y": 831,
+        "w": 388,
+        "h": 32
+      },
+      "aspect": 12.125,
+      "palette": [
+        {
+          "hex": "#e8e6d7",
+          "coverage": 0.8133
+        },
+        {
+          "hex": "#a19f96",
+          "coverage": 0.0958
+        },
+        {
+          "hex": "#626360",
+          "coverage": 0.0909
+        }
+      ],
+      "detail": {
+        "energy": 54.4483
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 29,
+          "capHeightPx": 18.1,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.5794,
+          "advTall": 0.607,
+          "advX": 0.5518,
+          "gap": 0.1379,
+          "xRatio": 0.7298,
+          "stemW": 0.1426,
+          "contrast": 1.1137,
+          "serif": 0.3889,
+          "densTall": 0.4245,
+          "densX": 0.5181,
+          "weight": 0.4245
+        },
+        "widthClass": "condensed",
+        "weightClass": "regular"
+      }
+    },
+    {
+      "id": "section-rule",
+      "kind": "chrome",
+      "note": "hairline rule between the look-back and Body",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0428,
+        "y": 0.4941,
+        "w": 0.9144,
+        "h": 0.0021
+      },
+      "px": {
+        "x": 37,
+        "y": 925,
+        "w": 790,
+        "h": 4
+      },
+      "aspect": 197.5,
+      "palette": [
+        {
+          "hex": "#f0eae0",
+          "coverage": 1
+        }
+      ],
+      "detail": {
+        "energy": 10.8347
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "body-heading",
+      "kind": "text",
+      "note": "serif section heading Body",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0382,
+        "y": 0.5144,
+        "w": 0.1863,
+        "h": 0.0385
+      },
+      "px": {
+        "x": 33,
+        "y": 963,
+        "w": 161,
+        "h": 72
+      },
+      "aspect": 2.2361,
+      "palette": [
+        {
+          "hex": "#f8f6e8",
+          "coverage": 0.728
+        },
+        {
+          "hex": "#090909",
+          "coverage": 0.2303
+        },
+        {
+          "hex": "#b7b4ac",
+          "coverage": 0.0209
+        },
+        {
+          "hex": "#454342",
+          "coverage": 0.0116
+        },
+        {
+          "hex": "#81817d",
+          "coverage": 0.0093
+        }
+      ],
+      "detail": {
+        "energy": 28.92
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 3,
+          "capHeightPx": 48.2,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.7671,
+          "advTall": 0.85,
+          "advX": 0.6842,
+          "gap": 0.0726,
+          "xRatio": 0.6721,
+          "stemW": 0.2055,
+          "contrast": 2.6423,
+          "serif": 1.3473,
+          "densTall": 0.535,
+          "densX": 0.5172,
+          "weight": 0.535
+        },
+        "widthClass": "normal",
+        "weightClass": "medium"
+      }
+    },
+    {
+      "id": "weight-label",
+      "kind": "text",
+      "note": "spaced caps WEIGHT (LB) in sage",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0417,
+        "y": 0.5646,
+        "w": 0.213,
+        "h": 0.0166
+      },
+      "px": {
+        "x": 36,
+        "y": 1057,
+        "w": 184,
+        "h": 31
+      },
+      "aspect": 5.9355,
+      "palette": [
+        {
+          "hex": "#f7f5e8",
+          "coverage": 0.7962
+        },
+        {
+          "hex": "#53665c",
+          "coverage": 0.154
+        },
+        {
+          "hex": "#899689",
+          "coverage": 0.0264
+        },
+        {
+          "hex": "#c3c8bc",
+          "coverage": 0.0235
+        }
+      ],
+      "detail": {
+        "energy": 32.1499
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 11,
+          "capHeightPx": 17.6,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.5963,
+          "advTall": 0.5963,
+          "advX": null,
+          "gap": 0.3691,
+          "xRatio": 0.6051,
+          "stemW": 0.1921,
+          "contrast": 1.2154,
+          "serif": 1.0595,
+          "densTall": 0.5961,
+          "densX": null,
+          "weight": 0.5961
+        },
+        "widthClass": "condensed",
+        "weightClass": "bold"
+      }
+    },
+    {
+      "id": "weight-field",
+      "kind": "control",
+      "note": "bordered number field holding the large serif numeral 221.6",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0405,
+        "y": 0.5844,
+        "w": 0.4514,
+        "h": 0.063
+      },
+      "px": {
+        "x": 35,
+        "y": 1094,
+        "w": 390,
+        "h": 118
+      },
+      "aspect": 3.3051,
+      "palette": [
+        {
+          "hex": "#f7f6e7",
+          "coverage": 0.9289
+        },
+        {
+          "hex": "#0a0909",
+          "coverage": 0.0499
+        },
+        {
+          "hex": "#c1c0b9",
+          "coverage": 0.0135
+        },
+        {
+          "hex": "#52554f",
+          "coverage": 0.0066
+        },
+        {
+          "hex": "#888888",
+          "coverage": 0.0012
+        }
+      ],
+      "detail": {
+        "energy": 21.7854
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "waist-label",
+      "kind": "text",
+      "note": "spaced caps WAIST (IN) in sage",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5116,
+        "y": 0.5652,
+        "w": 0.184,
+        "h": 0.016
+      },
+      "px": {
+        "x": 442,
+        "y": 1058,
+        "w": 159,
+        "h": 30
+      },
+      "aspect": 5.3,
+      "palette": [
+        {
+          "hex": "#f6f3e7",
+          "coverage": 0.7698
+        },
+        {
+          "hex": "#52635f",
+          "coverage": 0.1057
+        },
+        {
+          "hex": "#a9b2a7",
+          "coverage": 0.083
+        },
+        {
+          "hex": "#78877b",
+          "coverage": 0.0415
+        }
+      ],
+      "detail": {
+        "energy": 29.9167
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 11,
+          "capHeightPx": 17.6,
+          "inkIsDark": true,
+          "allCaps": true,
+          "advance": 0.4837,
+          "advTall": 0.4837,
+          "advX": null,
+          "gap": 0.313,
+          "xRatio": null,
+          "stemW": 0.1859,
+          "contrast": 1.1286,
+          "serif": 0.9934,
+          "densTall": 0.5757,
+          "densX": null,
+          "weight": 0.5757
+        },
+        "widthClass": "condensed",
+        "weightClass": "bold"
+      }
+    },
+    {
+      "id": "waist-field",
+      "kind": "control",
+      "note": "bordered number field holding the large serif numeral 41.5",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5093,
+        "y": 0.5844,
+        "w": 0.4537,
+        "h": 0.063
+      },
+      "px": {
+        "x": 440,
+        "y": 1094,
+        "w": 392,
+        "h": 118
+      },
+      "aspect": 3.322,
+      "palette": [
+        {
+          "hex": "#f7f6e7",
+          "coverage": 0.9592
+        },
+        {
+          "hex": "#090909",
+          "coverage": 0.0391
+        },
+        {
+          "hex": "#c8c0b8",
+          "coverage": 0.0012
+        },
+        {
+          "hex": "#585858",
+          "coverage": 0.0006
+        }
+      ],
+      "detail": {
+        "energy": 16.1385
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "rhr-label",
+      "kind": "text",
+      "note": "spaced caps RESTING HEART RATE (BPM) in sage",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.044,
+        "y": 0.6683,
+        "w": 0.4479,
+        "h": 0.016
+      },
+      "px": {
+        "x": 38,
+        "y": 1251,
+        "w": 387,
+        "h": 30
+      },
+      "aspect": 12.9,
+      "palette": [
+        {
+          "hex": "#f7f4e7",
+          "coverage": 0.7566
+        },
+        {
+          "hex": "#556860",
+          "coverage": 0.1651
+        },
+        {
+          "hex": "#8d998e",
+          "coverage": 0.0426
+        },
+        {
+          "hex": "#c1c7bd",
+          "coverage": 0.0357
+        }
+      ],
+      "detail": {
+        "energy": 65.1711
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 24,
+          "capHeightPx": 17.5,
+          "inkIsDark": true,
+          "allCaps": true,
+          "advance": 0.6269,
+          "advTall": 0.6269,
+          "advX": null,
+          "gap": 0.3419,
+          "xRatio": null,
+          "stemW": 0.1865,
+          "contrast": 1.2035,
+          "serif": null,
+          "densTall": 0.6117,
+          "densX": null,
+          "weight": 0.6117
+        },
+        "widthClass": "normal",
+        "weightClass": "bold"
+      }
+    },
+    {
+      "id": "rhr-field",
+      "kind": "control",
+      "note": "half-width bordered number field holding the large serif numeral 68",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0405,
+        "y": 0.6886,
+        "w": 0.4537,
+        "h": 0.063
+      },
+      "px": {
+        "x": 35,
+        "y": 1289,
+        "w": 392,
+        "h": 118
+      },
+      "aspect": 3.322,
+      "palette": [
+        {
+          "hex": "#f7f6e7",
+          "coverage": 0.9655
+        },
+        {
+          "hex": "#0a0a09",
+          "coverage": 0.0299
+        },
+        {
+          "hex": "#bdbdba",
+          "coverage": 0.0029
+        },
+        {
+          "hex": "#737368",
+          "coverage": 0.0017
+        }
+      ],
+      "detail": {
+        "energy": 14.4074
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "rhr-help",
+      "kind": "text",
+      "note": "two-line sans help Sit quietly for 5 minutes, then count for 60 seconds.",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5208,
+        "y": 0.6993,
+        "w": 0.3449,
+        "h": 0.0358
+      },
+      "px": {
+        "x": 450,
+        "y": 1309,
+        "w": 298,
+        "h": 67
+      },
+      "aspect": 4.4478,
+      "palette": [
+        {
+          "hex": "#f7f4e7",
+          "coverage": 0.8288
+        },
+        {
+          "hex": "#60605e",
+          "coverage": 0.088
+        },
+        {
+          "hex": "#babab1",
+          "coverage": 0.0505
+        },
+        {
+          "hex": "#8c8b83",
+          "coverage": 0.0327
+        }
+      ],
+      "detail": {
+        "energy": 49.3088
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 2,
+          "glyphs": 42,
+          "capHeightPx": 18.7,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.5499,
+          "advTall": 0.4795,
+          "advX": 0.5499,
+          "gap": 0.1364,
+          "xRatio": 0.7102,
+          "stemW": 0.1408,
+          "contrast": 1.1237,
+          "serif": 0.4706,
+          "densTall": 0.4661,
+          "densX": 0.509,
+          "weight": 0.4661
+        },
+        "widthClass": "condensed",
+        "weightClass": "regular"
+      }
+    },
+    {
+      "id": "dock-rule",
+      "kind": "chrome",
+      "note": "full-width hairline rule above the docked save button",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0,
+        "y": 0.8419,
+        "w": 1,
+        "h": 0.0027
+      },
+      "px": {
+        "x": 0,
+        "y": 1576,
+        "w": 864,
+        "h": 5
+      },
+      "aspect": 172.8,
+      "palette": [
+        {
+          "hex": "#ede8e0",
+          "coverage": 1
+        }
+      ],
+      "detail": {
+        "energy": 14.1248
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "save-button",
+      "kind": "control",
+      "note": "full-width pine button docked above the tabs",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0359,
+        "y": 0.8472,
+        "w": 0.9271,
+        "h": 0.0604
+      },
+      "px": {
+        "x": 31,
+        "y": 1586,
+        "w": 801,
+        "h": 113
+      },
+      "aspect": 7.0885,
+      "palette": [
+        {
+          "hex": "#283828",
+          "coverage": 0.8655
+        },
+        {
+          "hex": "#f7f7ec",
+          "coverage": 0.1065
+        },
+        {
+          "hex": "#92998c",
+          "coverage": 0.0272
+        },
+        {
+          "hex": "#687868",
+          "coverage": 0.0008
+        }
+      ],
+      "detail": {
+        "energy": 27.958
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "save-label",
+      "kind": "text",
+      "note": "Save check-in label in cream",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.3762,
+        "y": 0.8675,
+        "w": 0.2523,
+        "h": 0.0187
+      },
+      "px": {
+        "x": 325,
+        "y": 1624,
+        "w": 218,
+        "h": 35
+      },
+      "aspect": 6.2286,
+      "palette": [
+        {
+          "hex": "#28392b",
+          "coverage": 0.7066
+        },
+        {
+          "hex": "#f1f0e5",
+          "coverage": 0.1899
+        },
+        {
+          "hex": "#899687",
+          "coverage": 0.0403
+        },
+        {
+          "hex": "#6f756e",
+          "coverage": 0.0334
+        },
+        {
+          "hex": "#bbbeaf",
+          "coverage": 0.0299
+        }
+      ],
+      "detail": {
+        "energy": 55.2435
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 12,
+          "capHeightPx": 26.6,
+          "inkIsDark": false,
+          "allCaps": false,
+          "advance": 0.5649,
+          "advTall": 0.5837,
+          "advX": 0.5649,
+          "gap": 0.113,
+          "xRatio": 0.7155,
+          "stemW": 0.1619,
+          "contrast": 1.1569,
+          "serif": 0.3282,
+          "densTall": 0.4941,
+          "densX": 0.5657,
+          "weight": 0.4941
+        },
+        "widthClass": "condensed",
+        "weightClass": "medium"
+      }
+    },
+    {
+      "id": "nav-bar",
+      "kind": "chrome",
+      "note": "bottom navigation bar on paper with hairline top rule",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0,
+        "y": 0.9092,
+        "w": 1,
+        "h": 0.0908
+      },
+      "px": {
+        "x": 0,
+        "y": 1702,
+        "w": 864,
+        "h": 170
+      },
+      "aspect": 5.0824,
+      "palette": [
+        {
+          "hex": "#f8f7e8",
+          "coverage": 0.9529
+        },
+        {
+          "hex": "#676863",
+          "coverage": 0.0266
+        },
+        {
+          "hex": "#9e9e94",
+          "coverage": 0.0094
+        },
+        {
+          "hex": "#192e23",
+          "coverage": 0.0074
+        },
+        {
+          "hex": "#a87844",
+          "coverage": 0.0037
+        }
+      ],
+      "detail": {
+        "energy": 16.6688
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "nav-keep",
+      "kind": "control",
+      "note": "Keep tab: gray house line icon and label",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.066,
+        "y": 0.9252,
+        "w": 0.0706,
+        "h": 0.0513
+      },
+      "px": {
+        "x": 57,
+        "y": 1732,
+        "w": 61,
+        "h": 96
+      },
+      "aspect": 0.6354,
+      "palette": [
+        {
+          "hex": "#f7f5e7",
+          "coverage": 0.7812
+        },
+        {
+          "hex": "#686763",
+          "coverage": 0.1429
+        },
+        {
+          "hex": "#97978c",
+          "coverage": 0.0491
+        },
+        {
+          "hex": "#c4c2bb",
+          "coverage": 0.0268
+        }
+      ],
+      "detail": {
+        "energy": 9.639
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "nav-road",
+      "kind": "control",
+      "note": "Road tab: gray road icon and label",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2639,
+        "y": 0.9252,
+        "w": 0.0729,
+        "h": 0.0481
+      },
+      "px": {
+        "x": 228,
+        "y": 1732,
+        "w": 63,
+        "h": 90
+      },
+      "aspect": 0.7,
+      "palette": [
+        {
+          "hex": "#f7f6e7",
+          "coverage": 0.8111
+        },
+        {
+          "hex": "#676661",
+          "coverage": 0.1016
+        },
+        {
+          "hex": "#a8a5a1",
+          "coverage": 0.0349
+        },
+        {
+          "hex": "#838380",
+          "coverage": 0.0333
+        },
+        {
+          "hex": "#cfcbc1",
+          "coverage": 0.019
+        }
+      ],
+      "detail": {
+        "energy": 9.6297
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "nav-forge",
+      "kind": "control",
+      "note": "Forge tab: gray anvil icon and label",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.4618,
+        "y": 0.9306,
+        "w": 0.0775,
+        "h": 0.0459
+      },
+      "px": {
+        "x": 399,
+        "y": 1742,
+        "w": 67,
+        "h": 86
+      },
+      "aspect": 0.7791,
+      "palette": [
+        {
+          "hex": "#f8f6e8",
+          "coverage": 0.7631
+        },
+        {
+          "hex": "#686863",
+          "coverage": 0.1604
+        },
+        {
+          "hex": "#939289",
+          "coverage": 0.042
+        },
+        {
+          "hex": "#cccbc4",
+          "coverage": 0.0345
+        }
+      ],
+      "detail": {
+        "energy": 8.0762
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "nav-journal",
+      "kind": "control",
+      "note": "selected Journal tab: pine open-book icon, pine label, short gold underline",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.6354,
+        "y": 0.9263,
+        "w": 0.1262,
+        "h": 0.0566
+      },
+      "px": {
+        "x": 549,
+        "y": 1734,
+        "w": 109,
+        "h": 106
+      },
+      "aspect": 1.0283,
+      "palette": [
+        {
+          "hex": "#f8f6e8",
+          "coverage": 0.8198
+        },
+        {
+          "hex": "#1c3525",
+          "coverage": 0.064
+        },
+        {
+          "hex": "#a7783f",
+          "coverage": 0.053
+        },
+        {
+          "hex": "#152525",
+          "coverage": 0.0364
+        },
+        {
+          "hex": "#c8b78d",
+          "coverage": 0.0269
+        }
+      ],
+      "detail": {
+        "energy": 15.898
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "nav-field-manual",
+      "kind": "control",
+      "note": "Field Manual tab: folded-map line icon and label",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.8148,
+        "y": 0.9252,
+        "w": 0.169,
+        "h": 0.0481
+      },
+      "px": {
+        "x": 704,
+        "y": 1732,
+        "w": 146,
+        "h": 90
+      },
+      "aspect": 1.6222,
+      "palette": [
+        {
+          "hex": "#f7f6e8",
+          "coverage": 0.8327
+        },
+        {
+          "hex": "#6e6d68",
+          "coverage": 0.1265
+        },
+        {
+          "hex": "#c8c5c0",
+          "coverage": 0.0252
+        },
+        {
+          "hex": "#a09e98",
+          "coverage": 0.0156
+        }
+      ],
+      "detail": {
+        "energy": 16.8241
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    }
+  ]
+}

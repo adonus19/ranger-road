@@ -1,0 +1,40 @@
+{
+  "title": "Choose the check-in layout",
+  "question": "All three use the Forest Light look and the same measures. Lock the layout to build, or add a note to borrow from another.",
+  "options": [
+    {
+      "id": "lookback",
+      "label": "Last 28 days first",
+      "kicker": "THE ROLL",
+      "thesis": "The check-in opens on what your readiness checks already say about the month, then asks for today's numbers below.",
+      "palette": ["#172b21", "#24362b", "#f6f3ea", "#e9e5d8", "#a9804a"],
+      "materials": ["warm paper", "hairline rules", "serif numerals"],
+      "viewport": "Monthly check-in and the date, a panel with average sleep and back, shoulder and neck pain from 22 readiness checks, then weight and waist side by side and resting heart rate.",
+      "risk": "Today's fields start halfway down the first screen, under numbers you can't change.",
+      "comp": ".impeccable/mocks/decision/check-in-lookback.png"
+    },
+    {
+      "id": "then-now",
+      "label": "Then and now",
+      "thesis": "Every measure sits on one row with its Day 1 value beside today's field, so the change is plain as you type.",
+      "palette": ["#172b21", "#24362b", "#f6f3ea", "#e9e5d8", "#a9804a"],
+      "materials": ["warm paper", "hairline rules", "serif numerals"],
+      "viewport": "Column heads Day 1 · Sep 14 and Today, then rows for weight, waist, resting heart rate, blood pressure and push-ups, Day 1 in gray and today in large numerals.",
+      "risk": "On Day 1 there is nothing to compare yet, and the fields are narrower.",
+      "comp": ".impeccable/mocks/decision/check-in-then-now.png"
+    },
+    {
+      "id": "checklist",
+      "label": "Checklist",
+      "thesis": "Each measure is one row that opens to its how-to and field, with a check once it's recorded; skipped rows stay quiet.",
+      "palette": ["#172b21", "#24362b", "#f6f3ea", "#e9e5d8", "#a9804a"],
+      "materials": ["warm paper", "hairline rules", "serif numerals"],
+      "viewport": "A line reading 3 needed, 7 optional, then weight and waist checked with their values, resting heart rate open with its how-to and field, and closed rows for the rest.",
+      "risk": "Every measure takes a tap to open, and values stay out of sight until you look.",
+      "comp": ".impeccable/mocks/decision/check-in-checklist.png"
+    }
+  ],
+  "reroll": true,
+  "steer": true,
+  "buildPath": { "value": "comp", "toggle": true }
+}

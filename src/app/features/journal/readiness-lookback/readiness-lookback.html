@@ -1,0 +1,30 @@
+<div class="lookback">
+  @if (error()) {
+    <p class="lookback__empty" role="alert">Your readiness checks could not be read. Try again before saving.</p>
+  } @else if (summary(); as summary) {
+    @if (summary.checks) {
+      <div class="lookback__grid">
+        <dl class="lookback__sleep">
+          <dt class="label">Average sleep</dt>
+          <dd>
+            <span class="lookback__hours">{{ sleep() }}</span>
+            <span class="lookback__unit">hours</span>
+          </dd>
+        </dl>
+        <dl class="lookback__pains">
+          @for (pain of pains(); track pain.label) {
+            <div class="lookback__row">
+              <dt class="label">{{ pain.label }}</dt>
+              <dd class="lookback__pain">{{ pain.value }}</dd>
+            </div>
+          }
+        </dl>
+      </div>
+      <p class="lookback__note">{{ note() }}</p>
+    } @else {
+      <p class="lookback__empty">No readiness checks in the last 28 days yet. Once you check readiness, average sleep and pain will show here.</p>
+    }
+  } @else {
+    <p class="lookback__empty" role="status">Reading your readiness checks…</p>
+  }
+</div>

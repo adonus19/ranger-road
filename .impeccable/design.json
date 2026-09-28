@@ -1,0 +1,600 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-26T18:07:50.425851Z",
+  "title": "Design System: The Ranger's Road",
+  "extensions": {
+    "colorMeta": {
+      "forest-band": {
+        "role": "primary",
+        "displayName": "Forest Band",
+        "canonical": "oklch(26.8% 0.032 161)",
+        "tonalRamp": [
+          "#000f07",
+          "#162a20",
+          "#33483d",
+          "#51675b",
+          "#72897c",
+          "#94ac9f",
+          "#b8d0c3",
+          "#ddf6e8"
+        ]
+      },
+      "deep-forest": {
+        "role": "neutral",
+        "displayName": "Deep Forest",
+        "canonical": "oklch(24.6% 0.021 158)",
+        "tonalRamp": [
+          "#040e08",
+          "#1c2821",
+          "#39463e",
+          "#57655d",
+          "#78867e",
+          "#9aa9a0",
+          "#becec4",
+          "#e3f3e9"
+        ]
+      },
+      "pine": {
+        "role": "primary",
+        "displayName": "Pine",
+        "canonical": "oklch(31.3% 0.031 157)",
+        "tonalRamp": [
+          "#010f06",
+          "#182a1f",
+          "#35473c",
+          "#53675a",
+          "#74887b",
+          "#96ab9e",
+          "#bad0c1",
+          "#dff5e6"
+        ]
+      },
+      "hearth-gold": {
+        "role": "secondary",
+        "displayName": "Hearth Gold",
+        "canonical": "oklch(66.3% 0.098 74)",
+        "tonalRamp": [
+          "#200000",
+          "#3f1a00",
+          "#5f3800",
+          "#815810",
+          "#a47939",
+          "#c99c5c",
+          "#efc080",
+          "#ffe6a4"
+        ]
+      },
+      "gold-line": {
+        "role": "secondary",
+        "displayName": "Gold Line",
+        "canonical": "oklch(62.8% 0.087 72)",
+        "tonalRamp": [
+          "#1f0100",
+          "#3d1b00",
+          "#5e3900",
+          "#7f5821",
+          "#a27a44",
+          "#c79d66",
+          "#ecc189",
+          "#ffe6ad"
+        ]
+      },
+      "gold-on-band": {
+        "role": "secondary",
+        "displayName": "Gold On Band",
+        "canonical": "oklch(78.5% 0.084 79)",
+        "tonalRamp": [
+          "#1c0300",
+          "#3a1e00",
+          "#5a3b00",
+          "#7b5b22",
+          "#9d7c44",
+          "#c29f67",
+          "#e7c38a",
+          "#ffe9ae"
+        ]
+      },
+      "gold-ink": {
+        "role": "secondary",
+        "displayName": "Gold Ink",
+        "canonical": "oklch(58.8% 0.084 71)",
+        "tonalRamp": [
+          "#1f0100",
+          "#3d1b00",
+          "#5d3900",
+          "#7f5826",
+          "#a27a48",
+          "#c69c6a",
+          "#ecc18d",
+          "#ffe6b1"
+        ]
+      },
+      "cream-on-band": {
+        "role": "neutral",
+        "displayName": "Cream On Band",
+        "canonical": "oklch(95.8% 0.012 91)",
+        "tonalRamp": [
+          "#0d0b06",
+          "#27251e",
+          "#44423b",
+          "#646159",
+          "#85827a",
+          "#a8a59c",
+          "#ccc9c0",
+          "#f1eee5"
+        ]
+      },
+      "mist-on-band": {
+        "role": "neutral",
+        "displayName": "Mist On Band",
+        "canonical": "oklch(82.9% 0.013 137)",
+        "tonalRamp": [
+          "#090c07",
+          "#222721",
+          "#3f443d",
+          "#5e635c",
+          "#7f847d",
+          "#a1a79f",
+          "#c5cbc3",
+          "#eaf1e8"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "oklch(96.4% 0.012 91)",
+        "tonalRamp": [
+          "#0d0b06",
+          "#27251e",
+          "#44423b",
+          "#646159",
+          "#85827a",
+          "#a8a59c",
+          "#ccc9c0",
+          "#f1eee5"
+        ]
+      },
+      "parchment-tint": {
+        "role": "neutral",
+        "displayName": "Parchment Tint",
+        "canonical": "oklch(92.1% 0.018 92)",
+        "tonalRamp": [
+          "#0e0b04",
+          "#28251b",
+          "#454237",
+          "#656156",
+          "#868276",
+          "#a9a599",
+          "#cdc9bc",
+          "#f2eee1"
+        ]
+      },
+      "medallion": {
+        "role": "neutral",
+        "displayName": "Medallion",
+        "canonical": "oklch(89.3% 0.023 87)",
+        "tonalRamp": [
+          "#0f0a02",
+          "#2a2418",
+          "#474134",
+          "#676153",
+          "#888273",
+          "#aba495",
+          "#cfc9b9",
+          "#f5eede"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "oklch(86.0% 0.014 93)",
+        "tonalRamp": [
+          "#0d0b05",
+          "#27251d",
+          "#44423a",
+          "#646158",
+          "#858279",
+          "#a8a59b",
+          "#ccc9bf",
+          "#f2eee4"
+        ]
+      },
+      "rule-soft": {
+        "role": "neutral",
+        "displayName": "Rule Soft",
+        "canonical": "oklch(88.3% 0.014 88)",
+        "tonalRamp": [
+          "#0e0b05",
+          "#28251d",
+          "#45423a",
+          "#646158",
+          "#868279",
+          "#a9a59b",
+          "#cdc9bf",
+          "#f2eee4"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(21.3% 0.007 145)",
+        "tonalRamp": [
+          "#090c09",
+          "#232623",
+          "#404340",
+          "#5f625f",
+          "#808380",
+          "#a2a6a2",
+          "#c6cac6",
+          "#ebf0eb"
+        ]
+      },
+      "ink-secondary": {
+        "role": "neutral",
+        "displayName": "Ink Secondary",
+        "canonical": "oklch(43.2% 0.007 128)",
+        "tonalRamp": [
+          "#0a0c09",
+          "#242622",
+          "#41433f",
+          "#60625e",
+          "#81837f",
+          "#a4a6a1",
+          "#c8cac5",
+          "#edefea"
+        ]
+      },
+      "ink-tertiary": {
+        "role": "neutral",
+        "displayName": "Ink Tertiary",
+        "canonical": "oklch(51.4% 0.007 128)",
+        "tonalRamp": [
+          "#0a0c09",
+          "#242622",
+          "#41433f",
+          "#60625e",
+          "#81837f",
+          "#a4a6a1",
+          "#c8cac5",
+          "#edefeb"
+        ]
+      },
+      "sage-label": {
+        "role": "neutral",
+        "displayName": "Sage Label",
+        "canonical": "oklch(48.9% 0.026 163)",
+        "tonalRamp": [
+          "#020f08",
+          "#192922",
+          "#35473e",
+          "#54665d",
+          "#75887e",
+          "#97aaa1",
+          "#bbcfc4",
+          "#e0f4ea"
+        ]
+      },
+      "nav-gray": {
+        "role": "neutral",
+        "displayName": "Nav Gray",
+        "canonical": "oklch(51.7% 0.008 124)",
+        "tonalRamp": [
+          "#0a0c08",
+          "#242622",
+          "#41433e",
+          "#60625d",
+          "#81837e",
+          "#a4a6a0",
+          "#c8cac4",
+          "#edefea"
+        ]
+      },
+      "ember": {
+        "role": "tertiary",
+        "displayName": "Ember",
+        "canonical": "oklch(49.8% 0.088 44)",
+        "tonalRamp": [
+          "#250000",
+          "#451100",
+          "#673016",
+          "#8a5036",
+          "#af7156",
+          "#d49377",
+          "#fbb79a",
+          "#ffdcbf"
+        ]
+      },
+      "status-green-surface": {
+        "role": "tertiary",
+        "displayName": "Status Green Surface",
+        "canonical": "oklch(92.0% 0.019 127)",
+        "tonalRamp": [
+          "#090d05",
+          "#23271d",
+          "#3f4439",
+          "#5e6358",
+          "#7f8579",
+          "#a2a79b",
+          "#c6ccbf",
+          "#ebf1e4"
+        ]
+      },
+      "status-green-text": {
+        "role": "tertiary",
+        "displayName": "Status Green Text",
+        "canonical": "oklch(36.7% 0.046 152)",
+        "tonalRamp": [
+          "#001003",
+          "#122b1a",
+          "#2f4936",
+          "#4e6955",
+          "#6e8b75",
+          "#90ae97",
+          "#b4d2bb",
+          "#d9f8e0"
+        ]
+      },
+      "status-yellow-surface": {
+        "role": "tertiary",
+        "displayName": "Status Yellow Surface",
+        "canonical": "oklch(92.4% 0.035 87)",
+        "tonalRamp": [
+          "#110a00",
+          "#2c2410",
+          "#4a412c",
+          "#6a604a",
+          "#8b816b",
+          "#afa48c",
+          "#d3c8b0",
+          "#f9eed4"
+        ]
+      },
+      "status-yellow-text": {
+        "role": "tertiary",
+        "displayName": "Status Yellow Text",
+        "canonical": "oklch(39.1% 0.067 72)",
+        "tonalRamp": [
+          "#1b0400",
+          "#381e00",
+          "#583c13",
+          "#795b34",
+          "#9b7c54",
+          "#bf9f76",
+          "#e4c399",
+          "#ffe8bd"
+        ]
+      },
+      "status-red-surface": {
+        "role": "tertiary",
+        "displayName": "Status Red Surface",
+        "canonical": "oklch(91.2% 0.025 43)",
+        "tonalRamp": [
+          "#140804",
+          "#30211b",
+          "#4e3e38",
+          "#6e5d56",
+          "#907e77",
+          "#b3a099",
+          "#d8c4bd",
+          "#feeae2"
+        ]
+      },
+      "status-red-text": {
+        "role": "tertiary",
+        "displayName": "Status Red Text",
+        "canonical": "oklch(37.8% 0.089 32)",
+        "tonalRamp": [
+          "#260000",
+          "#470d04",
+          "#692d21",
+          "#8d4d40",
+          "#b16e5f",
+          "#d79081",
+          "#feb4a4",
+          "#ffd9c8"
+        ]
+      }
+    },
+    "darkTheme": {
+      "trigger": "prefers-color-scheme: dark",
+      "source": "Night Atlas palette",
+      "values": {
+        "page": "#111b15",
+        "tint": "#1a2820",
+        "medallion": "#223128",
+        "rule": "#2f3e35",
+        "rule-soft": "#29372f",
+        "text": "#e8e2d3",
+        "text-secondary": "#c3c9c1",
+        "text-tertiary": "#aeb5ac",
+        "label": "#9fb0a5",
+        "gold-ink": "#cfa566",
+        "icon-ink": "#d8cfb8",
+        "action": "#b68a4a",
+        "action-hover": "#c69a58",
+        "on-action": "#171a17",
+        "focus": "#d6b37a"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Chapter name",
+        "purpose": "The chapter name on the forest band; 3rem from 700px."
+      },
+      "page-title": {
+        "displayName": "Page title",
+        "purpose": "The title of a screen opened from a tab, such as Log a walk; 3rem from 700px."
+      },
+      "headline": {
+        "displayName": "Section heading",
+        "purpose": "Today's Orders, The Gate Trial, When is Day 1?"
+      },
+      "title": {
+        "displayName": "Order title",
+        "purpose": "The main order; watch titles run slightly smaller."
+      },
+      "numeral": {
+        "displayName": "Count",
+        "purpose": "Campaign day and trial countdown."
+      },
+      "numeral-entry": {
+        "displayName": "Entered numeral",
+        "purpose": "Numbers typed into a field, such as miles and minutes."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Everything read or tapped, at 87.5% width."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field and scale names, route labels; uppercase with 0.14em tracking."
+      }
+    },
+    "shadows": [
+      {
+        "name": "today-mark-halo",
+        "value": "0 0 0 3px var(--band), 0 0 0 5px rgb(214 179 122 / 28%)",
+        "purpose": "Separates the Today dot from the trail on the Road chart. The only shadow in the system."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "All state transitions and the route draw-in."
+      },
+      {
+        "name": "route-reveal",
+        "value": "clip-path inset 100% to 0, 1100ms ease-out",
+        "purpose": "The walked trail draws in once on Road. Disabled under reduced motion."
+      },
+      {
+        "name": "state-change",
+        "value": "140 to 160ms ease-out",
+        "purpose": "Hover color and border changes."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "column",
+        "value": "700px"
+      },
+      {
+        "name": "two-column",
+        "value": "900px"
+      },
+      {
+        "name": "top-nav",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The day's main action: Begin Today's Mission, Set Day 1, Save readiness check.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Begin Today’s Mission <svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 12h15m-5.5-5.5L19 12l-5.5 5.5\"/></svg></a>",
+      "css": ".ds-btn-primary { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 10px; padding: 8px 16px; border-radius: 6px; background: var(--action, #24362b); color: var(--on-action, #f4f1e8); font: 600 16px/1.2 'Noto Sans', sans-serif; font-stretch: 87.5%; text-decoration: none; transition: background-color 160ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-primary:hover { background: var(--action-hover, #18241d); } .ds-btn-primary:focus-visible { outline: 3px solid var(--focus, #8c5137); outline-offset: 3px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "A quieter choice beside a primary action, such as Change the date.",
+      "html": "<button class=\"ds-btn-secondary\" type=\"button\">Change the date</button>",
+      "css": ".ds-btn-secondary { min-height: 48px; padding: 10px 20px; border: 1px solid var(--line, #d4d1c7); border-radius: 6px; background: transparent; color: var(--text, #171a17); font: 600 16px/1.2 'Noto Sans', sans-serif; font-stretch: 87.5%; cursor: pointer; transition: border-color 160ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-secondary:hover { border-color: #8a8d84; } .ds-btn-secondary:focus-visible { outline: 3px solid var(--focus, #8c5137); outline-offset: 3px; }"
+    },
+    {
+      "name": "Readiness Strip",
+      "kind": "custom",
+      "refersTo": "readiness-strip",
+      "description": "The first thing under the band: readiness in words, linking to the check.",
+      "html": "<a class=\"ds-readiness\" href=\"#\"><span class=\"ds-readiness__medallion\"><svg viewBox=\"0 0 24 24\" width=\"34\" height=\"34\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 20.2s-7.6-4.5-7.6-10a4.3 4.3 0 0 1 7.6-2.8 4.3 4.3 0 0 1 7.6 2.8c0 5.5-7.6 10-7.6 10Z\"/><path d=\"M6.6 12.6h2.3l1.4-2.4 2.3 4.6 1.5-3 1.1 1.7h2.3\"/></svg></span><span class=\"ds-readiness__text\"><strong>Not checked today</strong><span>Check sleep, energy, and pain before training.</span></span></a>",
+      "css": ".ds-readiness { display: flex; min-height: 75px; align-items: center; gap: 15px; padding: 10px 12px; border-radius: 6px; background: var(--surface-tint, #e9e5d8); color: var(--text, #171a17); text-decoration: none; } .ds-readiness:hover { background: color-mix(in srgb, var(--surface-tint, #e9e5d8) 88%, #171a17); } .ds-readiness:focus-visible { outline: 3px solid var(--focus, #8c5137); outline-offset: 3px; } .ds-readiness__medallion { display: grid; width: 54px; height: 54px; flex: none; place-items: center; border-radius: 50%; background: #d9d1c0; color: var(--icon-gold, #9c7442); } .ds-readiness__text { display: flex; flex-direction: column; gap: 3px; } .ds-readiness__text strong { font: 700 22px/1.1 Wittgenstein, Georgia, serif; } .ds-readiness__text span { color: var(--text-secondary, #4f514d); font: 400 12.8px/1.35 'Noto Sans', sans-serif; font-stretch: 87.5%; }"
+    },
+    {
+      "name": "Main Order Card",
+      "kind": "card",
+      "refersTo": "order-card",
+      "description": "Today's main order: medallion, label, serif title, guidance, gold top edge.",
+      "html": "<article class=\"ds-order\"><span class=\"ds-order__medallion\"></span><div><p class=\"ds-order__label\">Main order</p><h3>Short conditioning or restoration</h3><p class=\"ds-order__guidance\">Check readiness before training.</p></div></article>",
+      "css": ".ds-order { display: flex; gap: 16px; padding: 19px 20px 16px 14px; border: 1px solid var(--line, #d4d1c7); border-top: 2px solid var(--accent-line, #a9804a); border-radius: 6px; background: var(--surface-page, #f6f3ea); color: var(--text, #171a17); } .ds-order__medallion { width: 64px; height: 64px; flex: none; border-radius: 50%; background: var(--surface-medallion, #e2dbcb); } .ds-order__label { margin: 0; color: var(--text-label, #53655c); font: 600 10.5px/1.2 'Noto Sans', sans-serif; letter-spacing: 0.14em; text-transform: uppercase; } .ds-order h3 { margin: 4px 0 0; font: 700 21px/1.15 Wittgenstein, Georgia, serif; } .ds-order__guidance { margin: 2px 0 0; color: var(--text-tertiary, #666864); font: 400 13.75px/1.4 'Noto Sans', sans-serif; font-stretch: 87.5%; }"
+    },
+    {
+      "name": "Tap Scale",
+      "kind": "input",
+      "refersTo": "scale-option",
+      "description": "One tap per value for energy and pain; each option is a real radio button.",
+      "html": "<fieldset class=\"ds-scale\"><legend>Energy</legend><div class=\"ds-scale__row\"><label><input type=\"radio\" name=\"ds-e\" value=\"1\"><span>1</span></label><label><input type=\"radio\" name=\"ds-e\" value=\"2\"><span>2</span></label><label><input type=\"radio\" name=\"ds-e\" value=\"3\" checked><span>3</span></label><label><input type=\"radio\" name=\"ds-e\" value=\"4\"><span>4</span></label><label><input type=\"radio\" name=\"ds-e\" value=\"5\"><span>5</span></label></div></fieldset>",
+      "css": ".ds-scale { margin: 0; padding: 0; border: 0; } .ds-scale legend { margin-bottom: 8px; color: var(--text-label, #53655c); font: 600 11px/1.2 'Noto Sans', sans-serif; letter-spacing: 0.14em; text-transform: uppercase; } .ds-scale__row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; } .ds-scale label { position: relative; cursor: pointer; } .ds-scale input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; } .ds-scale span { display: grid; min-height: 48px; place-items: center; border: 1px solid var(--line, #d4d1c7); border-radius: 6px; font: 600 20px/1 Wittgenstein, Georgia, serif; transition: background-color 140ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-scale label:hover span { border-color: #8a8d84; } .ds-scale input:checked + span { border-color: var(--action, #24362b); background: var(--action, #24362b); color: var(--on-action, #f4f1e8); } .ds-scale input:focus-visible + span { outline: 3px solid var(--focus, #8c5137); outline-offset: 2px; }"
+    },
+    {
+      "name": "Segmented Choice",
+      "kind": "input",
+      "refersTo": "segmented-option",
+      "description": "One short choice among equal options, such as the walk's date. Drawn 37px tall; each radio's tap area reaches 48px.",
+      "html": "<fieldset class=\"ds-segments\"><legend>Date</legend><div class=\"ds-segments__row\"><label><input type=\"radio\" name=\"ds-date\" checked><span>Today</span></label><label><input type=\"radio\" name=\"ds-date\"><span>Yesterday</span></label><label><input type=\"radio\" name=\"ds-date\"><span>Pick a date</span></label></div></fieldset>",
+      "css": ".ds-segments { margin: 0; padding: 0; border: 0; } .ds-segments legend { margin-bottom: 6px; padding: 0; color: var(--text-label, #53655c); font: 600 11px/1.2 'Noto Sans', sans-serif; letter-spacing: 0.14em; text-transform: uppercase; } .ds-segments__row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; } .ds-segments label { position: relative; display: block; cursor: pointer; } .ds-segments input { position: absolute; inset: -5.5px 0; margin: 0; opacity: 0; cursor: pointer; } .ds-segments span { display: grid; min-height: 37px; place-items: center; border: 1px solid var(--line, #d4d1c7); border-radius: 6px; color: var(--text-secondary, #4f514d); font: 500 15px/1.2 'Noto Sans', sans-serif; font-stretch: 87.5%; } .ds-segments input:checked + span { border-color: var(--action, #24362b); background: var(--action, #24362b); color: var(--on-action, #f4f1e8); } .ds-segments input:focus-visible + span { outline: 3px solid var(--focus, #8c5137); outline-offset: 2px; }"
+    },
+    {
+      "name": "Tab Bar",
+      "kind": "nav",
+      "refersTo": "nav-tab",
+      "description": "Five destinations at the bottom on phones; the selected tab turns Pine with a gold underline.",
+      "html": "<nav class=\"ds-tabs\"><a class=\"is-active\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3.6 10.4 12 3.8l8.4 6.6v10.2h-5.6v-6.1H9.2v6.1H3.6Z\"/></svg><span>Keep</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M3 21c3-3.2 6.2-4.6 6.3-8 .1-3.4 1.8-6.3 3-9.5M21 21c-3.5-2.6-6.6-4.4-6.7-8-.1-3.4-.7-6.3-.6-9.5\"/><path d=\"M12 20.4v-1.9M11.9 15.6v-1.5M12.1 11.2l.1-1.3M12.6 7.2l.1-1\"/></svg><span>Road</span></a></nav>",
+      "css": ".ds-tabs { display: grid; grid-template-columns: repeat(2, 78px); border-top: 1px solid var(--line-soft, #dcd8ce); background: var(--nav-surface, #f6f3ea); } .ds-tabs a { position: relative; display: flex; min-height: 76px; flex-direction: column; align-items: center; gap: 3px; padding: 12px 2px 14px; color: var(--nav-inactive, #676964); font: 500 11.5px/1.15 'Noto Sans', sans-serif; font-stretch: 87.5%; text-decoration: none; } .ds-tabs a:hover, .ds-tabs a.is-active { color: var(--nav-active, #24362b); } .ds-tabs a.is-active { font-weight: 650; } .ds-tabs a.is-active::after { position: absolute; bottom: 18px; left: 50%; width: 42px; height: 3px; border-radius: 2px; background: var(--accent-line, #a9804a); content: ''; transform: translateX(-50%); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Dawn Mission Board",
+    "overview": "Every day starts under a forest at first light. A dark band painted with mist, ridgelines, pines and a low sun holds everything about the chapter: its name, its theme, the campaign day and the days left to the trial. Below it the page turns to warm paper, and the day's work is set out as a plain board of orders. Readiness comes first, because it decides what the day can hold. Then come the main order, the two watches and the Hearth mission.\n\nThe system is quiet and legible. The painting is the only picture, and gold is the only accent, used sparingly. Type does the rest: a sturdy book serif names chapters, headings and numbers, and a narrow humanist sans carries everything a person reads or taps. Surfaces are flat. Hierarchy comes from the dark-to-paper step, hairline borders and type weight, never from shadows. The app is used on a phone before training and in low light at the watches, so touch targets stay large and the dark variant follows the phone.\n\nThe world was chosen as \"Forest Light\". The Road page borrows the \"Night Atlas\" route line: a winding trail with a gold Today mark and a ring for the trial.",
+    "keyCharacteristics": [
+      "One painted forest band per screen that has one, with its text set directly on it.",
+      "Warm paper ground with 1px borders and small radii.",
+      "Gold as a single accent: the pine mark, the theme line, the main order's top edge, the selected tab.",
+      "Wittgenstein for names and numbers; Noto Sans at a semi-condensed width for UI.",
+      "Readiness named in words, with color only repeating it."
+    ],
+    "rules": [
+      {
+        "name": "The One Gold Rule",
+        "body": "Gold marks identity and progress only: the pine mark, the chapter theme, the main order's top edge, the selected tab, and the route's Today mark and trial ring. It never fills a card or a paragraph.",
+        "section": "colors"
+      },
+      {
+        "name": "The Words First Rule",
+        "body": "A readiness state is always named in words. The tint only repeats what the words say, so the state reads correctly without color.",
+        "section": "colors"
+      },
+      {
+        "name": "The Serif Names, Sans Works Rule",
+        "body": "Wittgenstein is for names, headings and numbers. Anything a person reads as instructions or taps is set in Noto Sans.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Paper Rule",
+        "body": "Surfaces on paper use a border or a tint to separate, never a shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** give every control a tap area at least 48px tall (the `--touch-target` token). A control may draw smaller only when its tap area still reaches 48px.",
+      "**Do** name each readiness state in words and let its tint repeat it.",
+      "**Do** keep gold to the places listed in The One Gold Rule.",
+      "**Do** separate surfaces on paper with 1px rules or tints, not shadows.",
+      "**Do** use the self-hosted Wittgenstein and Noto Sans, and set UI text at the 87.5% width.",
+      "**Do** let a page's brand row float over its scene when the page opens on a painted band.",
+      "**Do** write labels, errors and buttons in the product's plain voice, naming the action or the fix."
+    ],
+    "donts": [
+      "**Don't** add small uppercase label lines above headings on new surfaces. Keep's four (\"Chapter I · Weeks 1–4\", \"Main order\", \"Daily watch\", \"Hearth mission\") are an exception the user approved for that screen, not a pattern to repeat.",
+      "**Don't** put drop shadows on paper surfaces, and don't use glows, gradient text, neon or game-style HUD details.",
+      "**Don't** add fake parchment texture or medieval ornament. The only picture is the painted forest.",
+      "**Don't** show points, scores, streaks or XP for faith, family or training.",
+      "**Don't** use red for anything but pain and safety states.",
+      "**Don't** add chevrons to rows that don't open anything yet."
+    ]
+  }
+}

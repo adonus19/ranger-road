@@ -1,0 +1,6 @@
+Forest Light mobile mockup for Chapter I Wednesday's main mission.
+Keep the approved warm paper, deep pine, gold, serif headings, sans controls, flat borders, and fixed five-tab navigation.
+Show the documented main order, “Restoration or skill,” followed by two large choices: Restoration (readiness required before movement) and Skill practice (nonexertional tool inspection or basic knots; no training readiness check required).
+Show Skill practice selected and a simple outcome form. Use no new progression, exercise prescription, or faith scoring.
+
+The mockup is a composition reference. The implemented screen and source docs govern wording, states, and accessibility.

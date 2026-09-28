@@ -1,0 +1,122 @@
+:host {
+  display: block;
+}
+
+.lookback {
+  padding: 0.5625rem 0.75rem 0.375rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-tint);
+}
+
+.lookback__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr);
+  column-gap: 2.0625rem;
+}
+
+dl,
+dd {
+  margin: 0;
+}
+
+.lookback__sleep {
+  margin-top: 0.375rem;
+}
+
+.lookback__sleep dd {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8125rem;
+  margin-top: 0.5rem;
+}
+
+.lookback__hours,
+.lookback__pain {
+  font-family: var(--font-display);
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 1;
+}
+
+.lookback__hours {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.lookback__unit {
+  color: var(--text-secondary);
+  font-size: 1.0625rem;
+}
+
+/* A hairline divides the sleep reading from the pain rows. */
+.lookback__pains {
+  position: relative;
+}
+
+.lookback__pains::before {
+  position: absolute;
+  top: 0.3125rem;
+  bottom: 0.3125rem;
+  left: -1.0625rem;
+  border-left: 1px solid var(--line);
+  content: '';
+}
+
+.lookback__row {
+  display: flex;
+  min-height: 2.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.lookback__row dt {
+  font-size: 0.625rem;
+}
+
+.lookback__pain {
+  font-size: 1.3125rem;
+  font-weight: 600;
+}
+
+.lookback__note {
+  margin: 0.375rem 0 0;
+  padding-top: 0.3125rem;
+  border-top: 1px solid var(--line);
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
+}
+
+.lookback__empty {
+  margin: 0;
+  padding-block: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+/* Narrow phones: the sleep reading shrinks and may wrap rather than run into the divider. */
+@media (max-width: 374px) {
+  .lookback__hours {
+    font-size: 2.5rem;
+  }
+
+  .lookback__sleep dd {
+    flex-wrap: wrap;
+    gap: 0 0.375rem;
+  }
+}
+
+/* When the month's averages arrive they settle in once, from already visible. */
+@media (prefers-reduced-motion: no-preference) {
+  .lookback__grid,
+  .lookback__note {
+    animation: lookback-in 240ms var(--ease-out);
+  }
+}
+
+@keyframes lookback-in {
+  from {
+    opacity: 0.35;
+    transform: translateY(0.25rem);
+  }
+}

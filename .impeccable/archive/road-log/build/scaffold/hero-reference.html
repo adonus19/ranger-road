@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Scaffold reference: road-log-halves.png</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unna:wght@700&display=swap">
+  <link rel="stylesheet" href="layout.css">
+  <style>html,body{margin:0}body{background:#f8f8e8}.region{box-sizing:border-box}.region.text p{white-space:pre-wrap}</style>
+</head>
+<body>
+<!-- Reference only. Every region sits at its measured box inside a comp-aspect frame. Take the boxes (layout.css), keep your own semantic structure. -->
+<main class="comp-frame" style="max-width:864px">
+  <div class="r-header-bar region chrome" data-region="header-bar"><!-- flat night-forest header bar across the top --></div>
+  <div class="r-brand-mark region chrome" data-region="brand-mark"><!-- small gold three-pine mark --></div>
+  <div class="r-app-title region text" data-region="app-title"><!-- serif app title The Ranger's Road in cream --><p style="font-size:var(--r-app-title-font);line-height:1.05;margin:0">app-title</p></div>
+  <div class="r-back-link region control" data-region="back-link"><!-- left arrow and sans Back to Road in secondary ink: rebuild the control's chrome from the crop (comp-spec.mjs --crop back-link); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-page-title region text" data-region="page-title"><!-- large serif page title Log a walk --><p style="font-size:var(--r-page-title-font);font-family:var(--r-page-title-family),sans-serif;font-weight:var(--r-page-title-weight);line-height:1.05;margin:0">page-title</p></div>
+  <div class="r-walk-heading region text" data-region="walk-heading"><!-- serif section heading The walk --><p style="font-size:var(--r-walk-heading-font);line-height:1.05;margin:0">walk-heading</p></div>
+  <div class="r-date-label region text" data-region="date-label"><!-- spaced caps DATE in sage --><p style="font-size:var(--r-date-label-font);line-height:1.05;margin:0">date-label</p></div>
+  <div class="r-date-today region control" data-region="date-today"><!-- selected segmented button Today: pine fill, cream sans label: rebuild the control's chrome from the crop (comp-spec.mjs --crop date-today); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-date-yesterday region control" data-region="date-yesterday"><!-- segmented button Yesterday: 1px border, ink sans label: rebuild the control's chrome from the crop (comp-spec.mjs --crop date-yesterday); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-date-pick region control" data-region="date-pick"><!-- segmented button Pick a date: 1px border, ink sans label: rebuild the control's chrome from the crop (comp-spec.mjs --crop date-pick); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-miles-label region text" data-region="miles-label"><!-- spaced caps MILES in sage --><p style="font-size:var(--r-miles-label-font);line-height:1.05;margin:0">miles-label</p></div>
+  <div class="r-miles-field region control" data-region="miles-field"><!-- bordered number field holding the large serif numeral 2.1: rebuild the control's chrome from the crop (comp-spec.mjs --crop miles-field); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-minutes-label region text" data-region="minutes-label"><!-- spaced caps MINUTES in sage --><p style="font-size:var(--r-minutes-label-font);line-height:1.05;margin:0">minutes-label</p></div>
+  <div class="r-minutes-field region control" data-region="minutes-field"><!-- bordered number field holding the large serif numeral 41: rebuild the control's chrome from the crop (comp-spec.mjs --crop minutes-field); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-terrain-label region text" data-region="terrain-label"><!-- spaced caps TERRAIN in sage --><p style="font-size:var(--r-terrain-label-font);line-height:1.05;margin:0">terrain-label</p></div>
+  <div class="r-terrain-field region control" data-region="terrain-field"><!-- full-width bordered text field holding Gravel trail in sans: rebuild the control's chrome from the crop (comp-spec.mjs --crop terrain-field); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-section-rule region chrome" data-region="section-rule"><!-- hairline rule between the two halves --></div>
+  <div class="r-felt-heading region text" data-region="felt-heading"><!-- serif section heading How it felt --><p style="font-size:var(--r-felt-heading-font);line-height:1.05;margin:0">felt-heading</p></div>
+  <div class="r-effort-label region text" data-region="effort-label"><!-- spaced caps EFFORT (RPE) in sage --><p style="font-size:var(--r-effort-label-font);line-height:1.05;margin:0">effort-label</p></div>
+  <div class="r-effort-scale region control" data-region="effort-scale"><!-- ten bordered tap buttons with serif numerals 1 to 10 in two rows of five: rebuild the control's chrome from the crop (comp-spec.mjs --crop effort-scale); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-effort-selected region control" data-region="effort-selected"><!-- selected effort 6: pine fill with cream serif numeral: rebuild the control's chrome from the crop (comp-spec.mjs --crop effort-selected); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-effort-help region text" data-region="effort-help"><!-- sans help line 1 is very easy. 10 is as hard as you can go. --><p style="font-size:var(--r-effort-help-font);line-height:1.05;margin:0">effort-help</p></div>
+  <div class="r-pain-toggle region control" data-region="pain-toggle"><!-- plus sign and sans Add pain before and after (optional) in secondary ink: rebuild the control's chrome from the crop (comp-spec.mjs --crop pain-toggle); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-dock-rule region chrome" data-region="dock-rule"><!-- hairline rule above the docked save button --></div>
+  <div class="r-save-button region control" data-region="save-button"><!-- full-width pine button docked above the tabs: rebuild the control's chrome from the crop (comp-spec.mjs --crop save-button); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-save-label region text" data-region="save-label"><!-- Save walk label in cream --><p style="font-size:var(--r-save-label-font);line-height:1.05;margin:0">save-label</p></div>
+  <div class="r-nav-bar region chrome" data-region="nav-bar"><!-- bottom navigation bar on paper with hairline top rule --></div>
+  <div class="r-nav-keep region control" data-region="nav-keep"><!-- Keep tab: gray house line icon and label: rebuild the control's chrome from the crop (comp-spec.mjs --crop nav-keep); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-nav-road region control" data-region="nav-road"><!-- selected Road tab: pine road icon, pine label, short gold underline: rebuild the control's chrome from the crop (comp-spec.mjs --crop nav-road); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-nav-forge region control" data-region="nav-forge"><!-- Forge tab: gray anvil icon and label: rebuild the control's chrome from the crop (comp-spec.mjs --crop nav-forge); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-nav-journal region control" data-region="nav-journal"><!-- Journal tab: open-book line icon and label: rebuild the control's chrome from the crop (comp-spec.mjs --crop nav-journal); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-nav-field-manual region control" data-region="nav-field-manual"><!-- Field Manual tab: folded-map line icon and label: rebuild the control's chrome from the crop (comp-spec.mjs --crop nav-field-manual); its ink box, border, fill, radius, and label size are the comp's --></div>
+</main>
+</body>
+</html>

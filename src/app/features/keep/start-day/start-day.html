@@ -1,0 +1,35 @@
+@if (state.needsStartDate() || editing()) {
+  <form class="start-panel" (submit)="save($event)" novalidate aria-labelledby="start-title">
+    <h2 id="start-title">{{ state.campaign() ? 'Change Day 1' : 'When is Day 1?' }}</h2>
+    <p>Pick the day your campaign begins. Orders follow the days of the week, and Monday is a strength day.</p>
+
+    <label class="start-panel__label" for="start-date">Day 1</label>
+    <input id="start-date" type="date" [formField]="startForm.startDate" />
+    @if (startForm.startDate().touched() && startForm.startDate().errors().length) {
+      <p class="start-panel__error">Choose the date of Day 1.</p>
+    }
+    @if (saveError(); as message) {
+      <p class="start-panel__error" role="alert">{{ message }}</p>
+    }
+
+    <div class="start-panel__actions">
+      <button class="start-panel__submit" type="submit" [disabled]="saving()">
+        {{ saving() ? 'Saving…' : 'Set Day 1' }}
+      </button>
+      @if (state.campaign()) {
+        <button class="start-panel__secondary" type="button" (click)="editing.set(false)">
+          Keep {{ startDateLabel() }}
+        </button>
+      }
+    </div>
+    <p class="start-panel__note">You can change the date until Day 1 arrives.</p>
+  </form>
+} @else {
+  <section class="start-panel" aria-labelledby="before-title">
+    <h2 id="before-title">Day 1 is {{ startDateLabel() }}</h2>
+    <p>Your first orders arrive that morning. Until then you can move the date.</p>
+    <div class="start-panel__actions">
+      <button class="start-panel__secondary" type="button" (click)="editing.set(true)">Change the date</button>
+    </div>
+  </section>
+}

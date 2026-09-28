@@ -1,0 +1,40 @@
+{
+  "title": "Choose the Forge player",
+  "question": "These first-screen mockups use the documented Forge A Box Squat prescription. Which arrangement should guide the active workout player?",
+  "options": [
+    {
+      "id": "session-stack",
+      "label": "Session stack",
+      "kicker": "THE ROLL",
+      "thesis": "Warm-up, work, and finish remain in one ordered list, with the current movement opened in place.",
+      "palette": ["#172b21", "#f6f3ea", "#24362b", "#b68a4a"],
+      "materials": ["warm paper", "fine rules", "book serif", "pine controls"],
+      "viewport": "Forge A and readiness lead into a compact warm-up list. Box Squat opens with 3 × 6, RPE about 6, set rows, previous and planned load, while Help, Pain, and Substitute stay near the docked set action.",
+      "risk": "A long session can require scrolling to review upcoming movements.",
+      "comp": ".impeccable/mocks/decision/forge-session-stack.png"
+    },
+    {
+      "id": "set-table",
+      "label": "Set table",
+      "thesis": "The whole Box Squat prescription and each set's record sit together like a working field log.",
+      "palette": ["#172b21", "#f6f3ea", "#24362b", "#b68a4a"],
+      "materials": ["warm paper", "fine rules", "book serif", "pine controls"],
+      "viewport": "Forge A opens on Box Squat, with 3 × 6 and RPE about 6 above three generous set rows for load and reps. Previous load is shown as a dash when unknown; Help, Pain, and Substitute remain available beside a docked Complete set action.",
+      "risk": "The extra columns may feel dense on a narrow phone, especially while the keyboard is open.",
+      "comp": ".impeccable/mocks/decision/forge-set-table.png"
+    },
+    {
+      "id": "current-set",
+      "label": "Current set",
+      "thesis": "One set fills the screen so the next action is unmistakable during training.",
+      "palette": ["#172b21", "#f6f3ea", "#24362b", "#b68a4a"],
+      "materials": ["warm paper", "fine rules", "book serif", "pine controls"],
+      "viewport": "A large Set 1 of 3 and 6 reps sit under Box Squat. An editable load and previous-load dash follow, with next-set markers, Quick Help, Pain, Substitute, and a docked Complete set action. Rest becomes an elapsed timer after completion.",
+      "risk": "It hides the full session until the person opens the exercise list.",
+      "comp": ".impeccable/mocks/decision/forge-current-set.png"
+    }
+  ],
+  "reroll": true,
+  "steer": true,
+  "buildPath": { "value": "comp", "toggle": true }
+}

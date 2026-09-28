@@ -1,0 +1,204 @@
+/* Shared form parts (fields, segments, scales, errors, docked Save) live in src/styles/entry-form.css. */
+:host {
+  display: block;
+}
+
+.check-in {
+  max-width: 47rem;
+  margin-inline: auto;
+  padding: 0.25rem var(--page-gutter) 5.5rem;
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(2rem, 11vw, 2.4375rem);
+  line-height: 1.05;
+}
+
+.word {
+  white-space: nowrap;
+}
+
+h2 {
+  margin-bottom: 0.4375rem;
+  font-size: 1.75rem;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.date-line {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.page-state {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface-tint);
+  color: var(--text-secondary);
+}
+
+.page-state p {
+  margin: 0 0 0.75rem;
+}
+
+.retry-button {
+  min-height: var(--touch-target);
+  padding-inline: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-page);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.test-readiness {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-tint);
+  color: var(--text);
+}
+
+.test-readiness p {
+  margin: 0;
+}
+
+.readiness-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-target);
+  color: var(--action);
+  font-weight: 600;
+  text-underline-offset: 0.2em;
+}
+
+.lookback-part {
+  margin-top: 1.3125rem;
+}
+
+/* Each later part opens under a hairline rule. */
+.part {
+  margin-top: 1.25rem;
+  padding-top: 0.9375rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.part h2 {
+  margin-bottom: 0.625rem;
+}
+
+.check-in .pair {
+  margin-top: 0;
+  gap: 0.4375rem;
+}
+
+.check-in .field {
+  gap: 0.375rem;
+}
+
+/* Help lines avoid a lone last word; a how-to beside a field balances instead (below). */
+.check-in .help {
+  text-wrap: pretty;
+}
+
+/* A field with its how-to beside it, level with the input. */
+.pair + .field--beside,
+.field--beside {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.375rem 0.4375rem;
+  margin-top: 1.0625rem;
+}
+
+.field--beside .label,
+.field--beside .field-error {
+  grid-column: 1 / -1;
+}
+
+.field--beside .help {
+  align-self: center;
+  margin: 0;
+  padding-left: 0.25rem;
+  text-wrap: balance;
+}
+
+/* A longer how-to runs under the field at full width. */
+.field--help-below .help {
+  grid-column: 1 / -1;
+  padding-left: 0;
+  text-wrap: pretty;
+}
+
+
+/* Every answer after a part's heading sits at the same distance from the one before. */
+.part > h2 ~ * {
+  margin-top: 1.0625rem;
+}
+
+.part > h2 + * {
+  margin-top: 0;
+}
+
+.part__note {
+  margin-bottom: 0;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+.field .help {
+  margin-top: 0;
+}
+
+/* Blood pressure reads as two numbers over a slash, as a cuff shows it. */
+.pressure__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pressure__slash {
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+}
+
+.scale__options--five {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+/* A Red day holds the tests: a plain notice, named in words, never color alone. */
+.held {
+  margin-bottom: 0;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--status-red-surface);
+  color: var(--status-red-text);
+}
+
+.check-in__saved {
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 700px) {
+  .check-in {
+    max-width: 40rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+}

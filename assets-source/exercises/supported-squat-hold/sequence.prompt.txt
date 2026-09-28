@@ -1,0 +1,4 @@
+Reference: public/images/exercises/box-squat/sequence.png. Use only its visual style: warm ivory background; four evenly sized vertical panels in one wide horizontal strip; consistent athletic adult man wearing dark forest-green shirt and charcoal shorts; lightly textured realistic editorial anatomy illustration; clean floor line; no borders, labels, arrows, watermarks, extra limbs, or cropped anatomy. Same camera view/model across panels. Accurate beginner instruction, not advertising.
+
+Exercise source: docs/rangers-road-full-program-content/EXERCISE_CATALOG.md > supported-squat-hold.
+Movement prompt: Supported Squat Hold. Hold a stable vertical rack post with both hands, feet shoulder-width and fully flat. Panel 1 tall setup; panel 2 descend to shallow controlled squat; panel 3 comfortable moderate squat depth; panel 4 remain in comfortable hold and breathe. No forced deep squat.

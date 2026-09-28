@@ -1,0 +1,567 @@
+<div class="session-page">
+  <a class="back-link" routerLink="/forge"><app-icon name="arrow-left" />Back to Forge</a>
+
+  @if (loading() || state.loading()) {
+    <p class="notice" role="status">Opening your session…</p>
+  } @else if (savedSession(); as saved) {
+    <section class="end-state" role="status">
+      <p class="eyebrow">Saved on this device</p>
+      <h1>{{ saved.outcome === 'stopped' ? 'Session stopped' : 'Session complete' }}</h1>
+      <p>
+        {{
+          saved.outcome === 'stopped'
+            ? 'Your partial work and pain notes are kept in your history.'
+            : 'Your sets and notes are kept in your history.'
+        }}
+      </p>
+      <a routerLink="/keep/mission">Record today’s mission outcome</a>
+      <a class="secondary-link" routerLink="/forge">Return to Forge</a>
+    </section>
+  } @else if (otherDraft(); as active) {
+    <section class="notice">
+      <h1>Another session is in progress</h1>
+      <p>
+        Finish or stop {{ active.definitionSnapshot.title }} before starting a different session.
+      </p>
+      <a [routerLink]="['/forge/session', active.workoutDefinitionId]"
+        >Resume {{ active.definitionSnapshot.title }}</a
+      >
+    </section>
+  } @else if ((!definition() || !allowed()) && !draft()) {
+    <section class="notice">
+      <h1>Session unavailable</h1>
+      <p>This workout is not part of today’s Chapter I plan.</p>
+      <a routerLink="/forge">View today in the Forge</a>
+    </section>
+  } @else if (draft(); as session) {
+    @if (blocked(); as reason) {
+      <section class="blocked" role="alert">
+        <p class="eyebrow">Session paused</p>
+        <h1>{{ session.definitionSnapshot.title }}</h1>
+        <p>{{ reason }}</p>
+        @if (!readiness()) {
+          <a routerLink="/readiness">Check readiness</a>
+        }
+        <button type="button" (click)="stop()" [disabled]="saving()">
+          End and save partial work
+        </button>
+      </section>
+    } @else if (!session.warmupComplete && session.definitionSnapshot.warmup?.length) {
+      <section class="warmup" aria-labelledby="warmup-title">
+        <p class="eyebrow">{{ session.definitionSnapshot.title }} · Prepare</p>
+        <h1 id="warmup-title">Warm-up</h1>
+        <p class="section-intro">Move through this sequence before the first working set.</p>
+        <ol class="step-list">
+          @for (step of session.definitionSnapshot.warmup; track $index) {
+            <li>
+              <span>{{ stepLabel(step) }}</span>
+              @if (step.kind === 'exercise') {
+                <button type="button" (click)="openHelp(step.prescription.exerciseId)">
+                  Help<span class="visually-hidden"> for {{ stepLabel(step) }}</span>
+                </button>
+              }
+            </li>
+          }
+        </ol>
+        @if (session.sessionInstructions?.length) {
+          <div class="instruction-note">
+            @for (instruction of session.sessionInstructions; track instruction) {
+              <p>{{ instruction }}</p>
+            }
+          </div>
+        }
+        <div class="action-dock">
+          <button
+            type="button"
+            class="primary-action"
+            (click)="finishWarmup()"
+            [disabled]="saving()"
+          >
+            Warm-up complete
+          </button>
+        </div>
+      </section>
+    } @else if (currentPrescription(); as prescription) {
+      <section class="current-set" aria-labelledby="exercise-title">
+        <p class="eyebrow">
+          {{ session.definitionSnapshot.title }} · Work {{ session.currentExerciseIndex + 1 }} of
+          {{ session.definitionSnapshot.exercises.length }}
+        </p>
+        <h1 id="exercise-title">{{ currentName() }}</h1>
+        <p class="prescription">{{ prescriptionLine(prescription) }}</p>
+        @if (session.reduced) {
+          <p class="reduced-note">
+            Reduced session. Keep volume and load within today’s readiness.
+          </p>
+        }
+        @if (session.sessionInstructions?.length) {
+          <div class="instruction-note">
+            @for (instruction of session.sessionInstructions; track instruction) {
+              <p>{{ instruction }}</p>
+            }
+          </div>
+        }
+
+        <div class="set-heading">
+          <h2>Set {{ session.currentSetIndex + 1 }} of {{ prescription.sets ?? 1 }}</h2>
+          <div class="set-chips" aria-label="Sets for {{ currentName() }}">
+            @for (set of currentResult()?.sets; track $index) {
+              <button
+                type="button"
+                [class.is-current]="session.currentSetIndex === $index"
+                [class.is-done]="set.completed === true"
+                [class.is-skipped]="set.completed === false"
+                [attr.aria-label]="
+                  'Set ' +
+                  ($index + 1) +
+                  (set.completed === true
+                    ? ', done'
+                    : set.completed === false
+                      ? ', skipped'
+                      : ', pending')
+                "
+                [attr.aria-current]="session.currentSetIndex === $index ? 'step' : null"
+                (click)="selectSet(session.currentExerciseIndex, $index)"
+              >
+                {{ $index + 1 }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="target-dose">
+          <strong>{{
+            prescription.reps ?? prescription.durationSeconds ?? prescription.duration
+          }}</strong>
+          <span
+            >{{ prescription.reps !== undefined ? 'reps' : 'seconds'
+            }}{{ prescription.perSide ? ' per side' : '' }}</span
+          >
+        </div>
+
+        @if (session.restStartedAt) {
+          <div class="rest-clock" role="timer">
+            <span>Rest elapsed</span><strong>{{ restLabel() }}</strong
+            ><small>Resume when ready. No fixed rest interval is prescribed.</small>
+          </div>
+        }
+
+        <div class="set-fields">
+          <label for="set-load"
+            >Planned load (lb) <span>optional · confirm before completing set</span></label
+          >
+          <div class="unit-field">
+            <input
+              id="set-load"
+              type="number"
+              inputmode="decimal"
+              step="any"
+              placeholder="—"
+              [formField]="setForm.load"
+            /><span>lb</span>
+          </div>
+          <p class="previous-load">
+            Previous load:
+            @if (previousLoad(); as previous) {
+              {{ previous.load }} lb · {{ shortDate(previous.date)
+              }}{{
+                previous.reduced || previous.painTriggered
+                  ? ' · Reduced or pain noted; do not increase automatically.'
+                  : ''
+              }}
+            } @else {
+              —
+            }
+          </p>
+        </div>
+
+        <div class="utility-actions">
+          <button type="button" (click)="openHelp()">
+            <app-icon name="book-open" />Quick Help
+          </button>
+          <button type="button" (click)="openPanel('pain')">
+            <app-icon name="heart-pulse" />Pain
+          </button>
+          <button type="button" (click)="openPanel('substitute')">
+            <app-icon name="renew" />Substitute
+          </button>
+        </div>
+        @if (recordingSet()) {
+          <div id="actual-set" class="actual-set">
+            <h3>Confirm this set</h3>
+            <p>Check what you completed, then save it.</p>
+            @if (prescription.reps !== undefined) {
+              <label for="set-reps"
+                >Reps completed{{ prescription.perSide ? ' per side' : '' }}</label
+              >
+              <input
+                id="set-reps"
+                type="number"
+                inputmode="numeric"
+                step="1"
+                [attr.placeholder]="prescription.reps"
+                [formField]="setForm.reps"
+              />
+            } @else {
+              <label for="set-duration"
+                >Seconds completed{{ prescription.perSide ? ' per side' : '' }}</label
+              >
+              <input
+                id="set-duration"
+                type="number"
+                inputmode="numeric"
+                step="1"
+                [attr.placeholder]="prescription.durationSeconds ?? prescription.duration"
+                [formField]="setForm.duration"
+              />
+            }
+            <label for="set-rpe">Set effort (RPE 1–10) <span>optional</span></label>
+            <input
+              id="set-rpe"
+              type="number"
+              inputmode="numeric"
+              step="1"
+              [formField]="setForm.rpe"
+            />
+          </div>
+        }
+        @if (currentResult()?.modificationNotes) {
+          <p class="modification-note">Modification: {{ currentResult()?.modificationNotes }}</p>
+        }
+        <details class="exercise-list">
+          <summary>All exercises</summary>
+          <ol>
+            @for (
+              exercise of session.definitionSnapshot.exercises;
+              track exercise.exerciseId;
+              let index = $index
+            ) {
+              <li>
+                <button type="button" (click)="selectSet(index, 0)">
+                  {{ getExerciseName(exercise.exerciseId)
+                  }}<span
+                    >{{ countMarked(session, index) }} of {{ exercise.sets ?? 1 }} sets marked</span
+                  >
+                </button>
+              </li>
+            }
+          </ol>
+        </details>
+        <div class="action-dock">
+          <button type="button" class="primary-action" (click)="prepareSet()" [disabled]="saving()">
+            {{
+              currentSet()?.completed === true
+                ? 'Update set'
+                : recordingSet()
+                  ? 'Save set'
+                  : 'Complete set'
+            }}
+          </button>
+          <button type="button" class="skip-action" (click)="markSet(false)" [disabled]="saving()">
+            {{ currentSet()?.completed === false ? 'Set skipped' : 'Skip this set' }}
+          </button>
+        </div>
+      </section>
+    } @else {
+      <section class="finish" aria-labelledby="finish-title">
+        <p class="eyebrow">{{ session.definitionSnapshot.title }} · Finish</p>
+        <h1 id="finish-title">Work sets marked</h1>
+        <p class="section-intro">
+          {{
+            session.reduced
+              ? 'This was a reduced session. Your changes stay with the record.'
+              : 'Review the finish before saving this session.'
+          }}
+        </p>
+        @if (session.definitionSnapshot.finish?.length) {
+          <div class="finish-step">
+            <h2>Prescribed finish</h2>
+            @for (step of session.definitionSnapshot.finish; track $index) {
+              <p>{{ stepLabel(step) }}</p>
+            }
+            <button
+              type="button"
+              (click)="markFinish(false)"
+              [disabled]="session.finishComplete || saving()"
+            >
+              {{ session.finishComplete ? 'Finish done' : 'Mark finish done' }}
+            </button>
+          </div>
+        }
+        @if (session.definitionSnapshot.optionalFinish?.length) {
+          <div class="finish-step">
+            <h2>Optional finish</h2>
+            @for (step of session.definitionSnapshot.optionalFinish; track $index) {
+              <p>{{ stepLabel(step) }}</p>
+            }
+            <button
+              type="button"
+              (click)="markFinish(true)"
+              [disabled]="session.optionalFinishComplete || saving()"
+            >
+              {{
+                session.optionalFinishComplete
+                  ? 'Optional finish done'
+                  : 'Mark optional finish done'
+              }}
+            </button>
+          </div>
+        }
+        <div class="finish-fields">
+          <label for="session-rpe">Session effort (RPE 1–10) <span>optional</span></label>
+          <input
+            id="session-rpe"
+            type="number"
+            step="1"
+            inputmode="numeric"
+            [formField]="finishForm.sessionRpe"
+          />
+          <label for="session-notes">Session notes <span>optional</span></label>
+          <textarea
+            id="session-notes"
+            rows="3"
+            placeholder="What changed, or what should you remember?"
+            [formField]="finishForm.notes"
+          ></textarea>
+        </div>
+        <details class="exercise-list">
+          <summary>Review or edit sets</summary>
+          <ol>
+            @for (
+              exercise of session.definitionSnapshot.exercises;
+              track exercise.exerciseId;
+              let index = $index
+            ) {
+              <li>
+                <button type="button" (click)="selectSet(index, 0)">
+                  {{ getExerciseName(exercise.exerciseId)
+                  }}<span
+                    >{{ countMarked(session, index) }} of {{ exercise.sets ?? 1 }} sets marked</span
+                  >
+                </button>
+              </li>
+            }
+          </ol>
+        </details>
+        <div class="action-dock">
+          <button
+            type="button"
+            class="primary-action"
+            (click)="complete()"
+            [disabled]="saving() || !session.finishComplete || !allSetsMarked()"
+          >
+            Save completed session
+          </button>
+        </div>
+      </section>
+    }
+
+    @if (panel() === 'help' && helpGuide(); as guide) {
+      <section id="session-panel" class="help-panel" aria-labelledby="help-title" tabindex="-1">
+        <div class="panel-top">
+          <h2 id="help-title">{{ guide.name }} · Quick Help</h2>
+          <button type="button" (click)="closePanel()">Close</button>
+        </div>
+        <p>{{ guide.purpose }}</p>
+        <div
+          class="sequence"
+          [style.background-image]="'url(' + helpMediaBase() + '/sequence.webp)'"
+          role="img"
+          [attr.aria-label]="'Four illustrated stages of ' + guide.name"
+        ></div>
+        <ol>
+          @for (step of helpSteps(); track step) {
+            <li>{{ step }}</li>
+          }
+        </ol>
+        @if (guide.feel) {
+          <p><strong>Feel:</strong> {{ guide.feel }}</p>
+        }
+        @if (guide.avoid) {
+          <p><strong>Avoid:</strong> {{ guide.avoid }}</p>
+        }
+        <details class="full-guide">
+          <summary>Full guide</summary>
+          <p><strong>How:</strong> {{ guide.how }}</p>
+          @if (guide.targets) {
+            <p><strong>Targets:</strong> {{ guide.targets }}</p>
+          }
+          @if (guide.painAwareOptions) {
+            <p><strong>For pain:</strong> {{ guide.painAwareOptions }}</p>
+          }
+          @if (guide.progression) {
+            <p><strong>Progression:</strong> {{ guide.progression }}</p>
+          }
+          @if (guide.rule) {
+            <p><strong>Rule:</strong> {{ guide.rule }}</p>
+          }
+          <img
+            src="/images/exercises/box-squat/muscle-map.webp"
+            [src]="helpMediaBase() + '/muscle-map.webp'"
+            [alt]="'Neck-down front and back muscle map for ' + guide.name"
+            loading="lazy"
+          />
+        </details>
+      </section>
+    }
+    @if (panel() === 'pain') {
+      <section
+        id="session-panel"
+        class="help-panel pain-panel"
+        aria-labelledby="pain-title"
+        tabindex="-1"
+      >
+        <div class="panel-top">
+          <h2 id="pain-title">Record pain now</h2>
+          <button type="button" (click)="closePanel()">Close</button>
+        </div>
+        <p>
+          This note is saved immediately. If pain reaches 5 or more during strength work, end the
+          session.
+        </p>
+        <form (submit)="recordPain($event)">
+          <label for="pain-area">Where did you feel it?</label>
+          <div class="pain-choices" aria-label="Common pain areas">
+            @for (area of painAreas; track area) {
+              <button
+                type="button"
+                [class.is-selected]="painModel().bodyArea === area"
+                [attr.aria-pressed]="painModel().bodyArea === area"
+                (click)="choosePainArea(area)"
+              >
+                {{ area }}
+              </button>
+            }
+          </div>
+          <input
+            id="pain-area"
+            type="text"
+            placeholder="e.g. back, shoulder, knee"
+            [formField]="painForm.bodyArea"
+          />
+          <fieldset class="pain-fieldset">
+            <legend>Pain level (0–10)</legend>
+            <div class="pain-scale">
+              @for (level of painLevels; track level) {
+                <button
+                  type="button"
+                  [class.is-selected]="painModel().severity === level.toString()"
+                  [attr.aria-pressed]="painModel().severity === level.toString()"
+                  [attr.aria-label]="'Pain level ' + level"
+                  (click)="choosePainLevel(level)"
+                >
+                  {{ level }}
+                </button>
+              }
+            </div>
+          </fieldset>
+          <label for="pain-action">What did you do?</label>
+          <div class="pain-choices" aria-label="Pain response">
+            @for (action of painActions; track action) {
+              <button
+                type="button"
+                [class.is-selected]="painModel().actionTaken === action"
+                [attr.aria-pressed]="painModel().actionTaken === action"
+                (click)="choosePainAction(action)"
+              >
+                {{ action }}
+              </button>
+            }
+          </div>
+          <textarea
+            id="pain-action"
+            rows="2"
+            placeholder="Reduced range, stopped the movement…"
+            [formField]="painForm.actionTaken"
+          ></textarea>
+          <button type="submit" class="panel-save" [disabled]="saving()">Save pain note</button>
+        </form>
+      </section>
+    }
+    @if (panel() === 'substitute') {
+      <section
+        id="session-panel"
+        class="help-panel"
+        aria-labelledby="substitute-title"
+        tabindex="-1"
+      >
+        <div class="panel-top">
+          <h2 id="substitute-title">Substitute or modify</h2>
+          <button type="button" (click)="closePanel()">Close</button>
+        </div>
+        <p>
+          Record the change you actually made. The app will keep this session reduced and will not
+          set your next load.
+        </p>
+        @if (helpGuide()?.painAwareOptions; as options) {
+          <p><strong>Catalog options:</strong> {{ options }}</p>
+        }
+        <form (submit)="saveModification($event)">
+          <label for="modification-note">What did you change?</label>
+          <textarea
+            id="modification-note"
+            rows="3"
+            placeholder="Movement, range, support, or load"
+            [formField]="modificationForm.note"
+          ></textarea>
+          <button type="submit" class="panel-save" [disabled]="saving()">Save modification</button>
+        </form>
+      </section>
+    }
+    @if (error(); as message) {
+      <p class="inline-error" role="alert">{{ message }}</p>
+    }
+    <button type="button" class="end-session" (click)="stop()" [disabled]="saving()">
+      End session and save partial work
+    </button>
+  } @else {
+    <section class="preflight" aria-labelledby="preflight-title">
+      <p class="eyebrow">Chapter I · {{ planned() ? 'Today’s order' : 'As needed' }}</p>
+      <h1 id="preflight-title">{{ definition()?.title }}</h1>
+      <p class="section-intro">
+        {{
+          isRestoration
+            ? 'A gentle restoration sequence with an easy one-minute finish.'
+            : 'Warm up, work through the planned sets, and record what you actually do.'
+        }}
+      </p>
+      @if (weekNote(); as note) {
+        <p class="instruction-note">{{ note }}</p>
+      }
+      @if (readiness(); as check) {
+        <p class="readiness-note" [class.readiness-note--red]="check.status === 'red'">
+          {{
+            check.status === 'green'
+              ? 'Green · Ready'
+              : check.status === 'yellow'
+                ? 'Yellow · Reduce'
+                : 'Red · Restore'
+          }}
+          ·
+          {{
+            check.status === 'yellow'
+              ? 'Reduce volume about 25%. Do not increase load.'
+              : check.status === 'red'
+                ? 'No strength. Restoration only if appropriate.'
+                : 'Use sound technique and steady symptoms.'
+          }}
+        </p>
+      } @else {
+        <p class="readiness-note">A same-day readiness check is required before starting.</p>
+      }
+      @if (error(); as message) {
+        <p class="inline-error" role="alert">{{ message }}</p>
+      }
+      @if (!readiness()) {
+        <a class="primary-link" routerLink="/readiness">Check readiness</a>
+      } @else if (readiness()?.status === 'red' && !isRestoration) {
+        <a class="primary-link" routerLink="/forge">Choose restoration if appropriate</a>
+      } @else {
+        <button type="button" class="primary-link" (click)="start()" [disabled]="saving()">
+          Start {{ definition()?.title }}
+        </button>
+      }
+      <p class="privacy-note">Your training record stays on this device.</p>
+    </section>
+  }
+</div>

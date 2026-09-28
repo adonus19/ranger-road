@@ -1,0 +1,2187 @@
+{
+  "tool": "comp-spec",
+  "version": 1,
+  "createdAt": "2026-09-25T20:17:43.269Z",
+  "comp": ".impeccable/mocks/keep-comp-c.png",
+  "warnings": [
+    "region forest-band: \"bleed\": true set in the regions file (the clipped-artwork refusal is overridden: the page crops it there)"
+  ],
+  "uncoveredInkCells": [],
+  "compSize": {
+    "width": 864,
+    "height": 1872
+  },
+  "aspect": 0.4615,
+  "orientation": "portrait",
+  "palette": [
+    {
+      "hex": "#f5f5e6",
+      "coverage": 0.6812
+    },
+    {
+      "hex": "#1c2e25",
+      "coverage": 0.2383
+    },
+    {
+      "hex": "#435447",
+      "coverage": 0.0447
+    },
+    {
+      "hex": "#6f736b",
+      "coverage": 0.0198
+    },
+    {
+      "hex": "#090d0d",
+      "coverage": 0.016
+    }
+  ],
+  "bands": [
+    {
+      "y": 0.0505,
+      "strength": 0.6762
+    },
+    {
+      "y": 0.1877,
+      "strength": 0.6111
+    },
+    {
+      "y": 0.2563,
+      "strength": 1
+    },
+    {
+      "y": 0.2996,
+      "strength": 0.4752
+    },
+    {
+      "y": 0.3357,
+      "strength": 0.3283
+    },
+    {
+      "y": 0.4079,
+      "strength": 0.3452
+    },
+    {
+      "y": 0.4296,
+      "strength": 1
+    },
+    {
+      "y": 0.4982,
+      "strength": 0.7317
+    },
+    {
+      "y": 0.5235,
+      "strength": 0.3336
+    },
+    {
+      "y": 0.5523,
+      "strength": 0.2707
+    },
+    {
+      "y": 0.7112,
+      "strength": 0.6439
+    },
+    {
+      "y": 0.7942,
+      "strength": 0.3205
+    },
+    {
+      "y": 0.852,
+      "strength": 1
+    },
+    {
+      "y": 0.8989,
+      "strength": 1
+    },
+    {
+      "y": 0.9495,
+      "strength": 0.2644
+    }
+  ],
+  "regions": [
+    {
+      "id": "forest-band",
+      "kind": "plate",
+      "note": "painted misty dawn forest: dark sky, layered ridgelines, pine silhouettes at both edges, pale low sun right of centre, fading to flat deep-forest green behind the chapter text",
+      "grid": null,
+      "bleed": true,
+      "snap": false,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 0.2575
+      },
+      "px": {
+        "x": 0,
+        "y": 0,
+        "w": 864,
+        "h": 482
+      },
+      "aspect": 1.7925,
+      "palette": [
+        {
+          "hex": "#1b2d25",
+          "coverage": 0.7864
+        },
+        {
+          "hex": "#4c5b50",
+          "coverage": 0.1459
+        },
+        {
+          "hex": "#f5f5f3",
+          "coverage": 0.0307
+        },
+        {
+          "hex": "#878877",
+          "coverage": 0.0305
+        },
+        {
+          "hex": "#bcc3c0",
+          "coverage": 0.0064
+        }
+      ],
+      "detail": {
+        "energy": 27.6419
+      },
+      "medium": "raster",
+      "plate": "public/images/forest-band.png",
+      "text": null
+    },
+    {
+      "id": "brand-mark",
+      "kind": "chrome",
+      "note": "small gold three-pine mark",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0498,
+        "y": 0.0171,
+        "w": 0.0914,
+        "h": 0.0459
+      },
+      "px": {
+        "x": 43,
+        "y": 32,
+        "w": 79,
+        "h": 86
+      },
+      "aspect": 0.9186,
+      "palette": [
+        {
+          "hex": "#182a25",
+          "coverage": 0.7481
+        },
+        {
+          "hex": "#cfac77",
+          "coverage": 0.1542
+        },
+        {
+          "hex": "#ecddc1",
+          "coverage": 0.0566
+        },
+        {
+          "hex": "#51533c",
+          "coverage": 0.0231
+        },
+        {
+          "hex": "#898063",
+          "coverage": 0.018
+        }
+      ],
+      "detail": {
+        "energy": 10.7667
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "app-title",
+      "kind": "text",
+      "note": "serif app title The Ranger's Road in cream",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.1539,
+        "y": 0.0278,
+        "w": 0.4653,
+        "h": 0.0304
+      },
+      "px": {
+        "x": 133,
+        "y": 52,
+        "w": 402,
+        "h": 57
+      },
+      "aspect": 7.0526,
+      "palette": [
+        {
+          "hex": "#182827",
+          "coverage": 0.3951
+        },
+        {
+          "hex": "#1d3626",
+          "coverage": 0.3681
+        },
+        {
+          "hex": "#f7f7f3",
+          "coverage": 0.1941
+        },
+        {
+          "hex": "#5d6c61",
+          "coverage": 0.0222
+        },
+        {
+          "hex": "#c5cac3",
+          "coverage": 0.0205
+        }
+      ],
+      "detail": {
+        "energy": 73.6244
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "chapter-kicker",
+      "kind": "text",
+      "note": "spaced caps CHAPTER I · WEEKS 1–4 in mist",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0521,
+        "y": 0.1389,
+        "w": 0.3241,
+        "h": 0.0112
+      },
+      "px": {
+        "x": 45,
+        "y": 260,
+        "w": 280,
+        "h": 21
+      },
+      "aspect": 13.3333,
+      "palette": [
+        {
+          "hex": "#13251c",
+          "coverage": 0.7481
+        },
+        {
+          "hex": "#b2c8c7",
+          "coverage": 0.0958
+        },
+        {
+          "hex": "#819895",
+          "coverage": 0.0665
+        },
+        {
+          "hex": "#5c6e6d",
+          "coverage": 0.0526
+        },
+        {
+          "hex": "#3b534b",
+          "coverage": 0.0371
+        }
+      ],
+      "detail": {
+        "energy": 73.3735
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "chapter-title",
+      "kind": "text",
+      "note": "large serif The Muster in cream",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0509,
+        "y": 0.1565,
+        "w": 0.4097,
+        "h": 0.0326
+      },
+      "px": {
+        "x": 44,
+        "y": 293,
+        "w": 354,
+        "h": 61
+      },
+      "aspect": 5.8033,
+      "palette": [
+        {
+          "hex": "#17271d",
+          "coverage": 0.6893
+        },
+        {
+          "hex": "#f8f8f6",
+          "coverage": 0.2512
+        },
+        {
+          "hex": "#3d4b41",
+          "coverage": 0.0342
+        },
+        {
+          "hex": "#a7aea6",
+          "coverage": 0.0147
+        },
+        {
+          "hex": "#d2d9ce",
+          "coverage": 0.0106
+        }
+      ],
+      "detail": {
+        "energy": 65.2096
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "chapter-theme",
+      "kind": "text",
+      "note": "serif Answer the call. in soft gold",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0521,
+        "y": 0.195,
+        "w": 0.2789,
+        "h": 0.0182
+      },
+      "px": {
+        "x": 45,
+        "y": 365,
+        "w": 241,
+        "h": 34
+      },
+      "aspect": 7.0882,
+      "palette": [
+        {
+          "hex": "#162820",
+          "coverage": 0.7567
+        },
+        {
+          "hex": "#d6b37e",
+          "coverage": 0.1491
+        },
+        {
+          "hex": "#7d7353",
+          "coverage": 0.0404
+        },
+        {
+          "hex": "#4c4c39",
+          "coverage": 0.0362
+        },
+        {
+          "hex": "#a48f61",
+          "coverage": 0.0176
+        }
+      ],
+      "detail": {
+        "energy": 48.277
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "count-rule-1",
+      "kind": "chrome",
+      "note": "thin vertical hairline between title and counts",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5417,
+        "y": 0.156,
+        "w": 0.0127,
+        "h": 0.0694
+      },
+      "px": {
+        "x": 468,
+        "y": 292,
+        "w": 11,
+        "h": 130
+      },
+      "aspect": 0.0846,
+      "palette": [
+        {
+          "hex": "#162a1f",
+          "coverage": 1
+        }
+      ],
+      "detail": {
+        "energy": 2.2103
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "day-number",
+      "kind": "text",
+      "note": "serif numeral 1 in cream",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5845,
+        "y": 0.1592,
+        "w": 0.0394,
+        "h": 0.0288
+      },
+      "px": {
+        "x": 505,
+        "y": 298,
+        "w": 34,
+        "h": 54
+      },
+      "aspect": 0.6296,
+      "palette": [
+        {
+          "hex": "#18281f",
+          "coverage": 0.6944
+        },
+        {
+          "hex": "#f8f8f8",
+          "coverage": 0.2407
+        },
+        {
+          "hex": "#c7c8c7",
+          "coverage": 0.0509
+        },
+        {
+          "hex": "#506058",
+          "coverage": 0.0093
+        },
+        {
+          "hex": "#889888",
+          "coverage": 0.0046
+        }
+      ],
+      "detail": {
+        "energy": 5.756
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "day-label",
+      "kind": "text",
+      "note": "label Campaign day in cream sans",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5822,
+        "y": 0.1939,
+        "w": 0.1713,
+        "h": 0.016
+      },
+      "px": {
+        "x": 503,
+        "y": 363,
+        "w": 148,
+        "h": 30
+      },
+      "aspect": 4.9333,
+      "palette": [
+        {
+          "hex": "#172922",
+          "coverage": 0.782
+        },
+        {
+          "hex": "#eef0ee",
+          "coverage": 0.09
+        },
+        {
+          "hex": "#4a5750",
+          "coverage": 0.066
+        },
+        {
+          "hex": "#899590",
+          "coverage": 0.046
+        },
+        {
+          "hex": "#bec0be",
+          "coverage": 0.016
+        }
+      ],
+      "detail": {
+        "energy": 46.5586
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "count-rule-2",
+      "kind": "chrome",
+      "note": "thin vertical hairline between the two counts",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.7755,
+        "y": 0.156,
+        "w": 0.0127,
+        "h": 0.071
+      },
+      "px": {
+        "x": 670,
+        "y": 292,
+        "w": 11,
+        "h": 133
+      },
+      "aspect": 0.0827,
+      "palette": [
+        {
+          "hex": "#18281c",
+          "coverage": 0.7722
+        },
+        {
+          "hex": "#435448",
+          "coverage": 0.2278
+        }
+      ],
+      "detail": {
+        "energy": 2.2955
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "trial-number",
+      "kind": "text",
+      "note": "serif numeral 27 in cream",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.8171,
+        "y": 0.1587,
+        "w": 0.0845,
+        "h": 0.0294
+      },
+      "px": {
+        "x": 706,
+        "y": 297,
+        "w": 73,
+        "h": 55
+      },
+      "aspect": 1.3273,
+      "palette": [
+        {
+          "hex": "#17281f",
+          "coverage": 0.7043
+        },
+        {
+          "hex": "#f6f7f5",
+          "coverage": 0.2468
+        },
+        {
+          "hex": "#cacfc8",
+          "coverage": 0.0191
+        },
+        {
+          "hex": "#747a76",
+          "coverage": 0.017
+        },
+        {
+          "hex": "#9ba59b",
+          "coverage": 0.0128
+        }
+      ],
+      "detail": {
+        "energy": 15.1181
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "trial-label",
+      "kind": "text",
+      "note": "label Days until Gate Trial on two lines in cream sans",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.8183,
+        "y": 0.1939,
+        "w": 0.1238,
+        "h": 0.0299
+      },
+      "px": {
+        "x": 707,
+        "y": 363,
+        "w": 107,
+        "h": 56
+      },
+      "aspect": 1.9107,
+      "palette": [
+        {
+          "hex": "#172920",
+          "coverage": 0.7833
+        },
+        {
+          "hex": "#f1f3f1",
+          "coverage": 0.0761
+        },
+        {
+          "hex": "#48574e",
+          "coverage": 0.0644
+        },
+        {
+          "hex": "#b3bdb9",
+          "coverage": 0.0439
+        },
+        {
+          "hex": "#7c8782",
+          "coverage": 0.0322
+        }
+      ],
+      "detail": {
+        "energy": 34.746
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "target-note",
+      "kind": "text",
+      "note": "small mist line Gate Trial target: end of Week 4. You can take it when ready.",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0521,
+        "y": 0.2345,
+        "w": 0.6678,
+        "h": 0.0155
+      },
+      "px": {
+        "x": 45,
+        "y": 439,
+        "w": 577,
+        "h": 29
+      },
+      "aspect": 19.8966,
+      "palette": [
+        {
+          "hex": "#172922",
+          "coverage": 0.8114
+        },
+        {
+          "hex": "#3c4940",
+          "coverage": 0.0642
+        },
+        {
+          "hex": "#c0c4c0",
+          "coverage": 0.0601
+        },
+        {
+          "hex": "#95a297",
+          "coverage": 0.0487
+        },
+        {
+          "hex": "#747c78",
+          "coverage": 0.0155
+        }
+      ],
+      "detail": {
+        "energy": 56.3927
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "readiness-strip",
+      "kind": "control",
+      "note": "full-width rounded strip on pale parchment tint that opens the readiness check",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0336,
+        "y": 0.2687,
+        "w": 0.934,
+        "h": 0.0929
+      },
+      "px": {
+        "x": 29,
+        "y": 503,
+        "w": 807,
+        "h": 174
+      },
+      "aspect": 4.6379,
+      "palette": [
+        {
+          "hex": "#e8e8d8",
+          "coverage": 0.9406
+        },
+        {
+          "hex": "#0b0c0d",
+          "coverage": 0.0285
+        },
+        {
+          "hex": "#525251",
+          "coverage": 0.0124
+        },
+        {
+          "hex": "#888882",
+          "coverage": 0.0098
+        },
+        {
+          "hex": "#bbb8b2",
+          "coverage": 0.0087
+        }
+      ],
+      "detail": {
+        "energy": 26.1417
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "readiness-icon",
+      "kind": "chrome",
+      "note": "round parchment medallion with gold heart-pulse line icon",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0637,
+        "y": 0.281,
+        "w": 0.147,
+        "h": 0.0689
+      },
+      "px": {
+        "x": 55,
+        "y": 526,
+        "w": 127,
+        "h": 129
+      },
+      "aspect": 0.9845,
+      "palette": [
+        {
+          "hex": "#deddcb",
+          "coverage": 0.9091
+        },
+        {
+          "hex": "#967140",
+          "coverage": 0.079
+        },
+        {
+          "hex": "#bca488",
+          "coverage": 0.0119
+        }
+      ],
+      "detail": {
+        "energy": 6.291
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "readiness-status",
+      "kind": "text",
+      "note": "bold serif Not checked today",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2396,
+        "y": 0.2906,
+        "w": 0.4259,
+        "h": 0.0283
+      },
+      "px": {
+        "x": 207,
+        "y": 544,
+        "w": 368,
+        "h": 53
+      },
+      "aspect": 6.9434,
+      "palette": [
+        {
+          "hex": "#e9e8d9",
+          "coverage": 0.757
+        },
+        {
+          "hex": "#090a0b",
+          "coverage": 0.1741
+        },
+        {
+          "hex": "#b7b6af",
+          "coverage": 0.0302
+        },
+        {
+          "hex": "#757773",
+          "coverage": 0.0242
+        },
+        {
+          "hex": "#232d2c",
+          "coverage": 0.0146
+        }
+      ],
+      "detail": {
+        "energy": 75.681
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "readiness-help",
+      "kind": "text",
+      "note": "sans Check sleep, energy, and pain before training.",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2396,
+        "y": 0.3216,
+        "w": 0.6285,
+        "h": 0.0182
+      },
+      "px": {
+        "x": 207,
+        "y": 602,
+        "w": 543,
+        "h": 34
+      },
+      "aspect": 15.9706,
+      "palette": [
+        {
+          "hex": "#e9e8d9",
+          "coverage": 0.8128
+        },
+        {
+          "hex": "#535350",
+          "coverage": 0.097
+        },
+        {
+          "hex": "#8f8e86",
+          "coverage": 0.0679
+        },
+        {
+          "hex": "#bbb8b3",
+          "coverage": 0.0222
+        }
+      ],
+      "detail": {
+        "energy": 61.605
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "readiness-chevron",
+      "kind": "control",
+      "note": "chevron at right edge of the strip",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.9144,
+        "y": 0.3056,
+        "w": 0.0301,
+        "h": 0.0219
+      },
+      "px": {
+        "x": 790,
+        "y": 572,
+        "w": 26,
+        "h": 41
+      },
+      "aspect": 0.6341,
+      "palette": [
+        {
+          "hex": "#e9e8d9",
+          "coverage": 0.8413
+        },
+        {
+          "hex": "#323533",
+          "coverage": 0.0794
+        },
+        {
+          "hex": "#a6a39f",
+          "coverage": 0.0556
+        },
+        {
+          "hex": "#78786d",
+          "coverage": 0.0238
+        }
+      ],
+      "detail": {
+        "energy": 4.8673
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "orders-heading",
+      "kind": "text",
+      "note": "large serif section heading Today's Orders",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0417,
+        "y": 0.3809,
+        "w": 0.4907,
+        "h": 0.0379
+      },
+      "px": {
+        "x": 36,
+        "y": 713,
+        "w": 424,
+        "h": 71
+      },
+      "aspect": 5.9718,
+      "palette": [
+        {
+          "hex": "#f7f7ea",
+          "coverage": 0.7522
+        },
+        {
+          "hex": "#0a0b0c",
+          "coverage": 0.2154
+        },
+        {
+          "hex": "#b3b3af",
+          "coverage": 0.0165
+        },
+        {
+          "hex": "#4c504e",
+          "coverage": 0.0121
+        },
+        {
+          "hex": "#888883",
+          "coverage": 0.0038
+        }
+      ],
+      "detail": {
+        "energy": 69.523
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "main-card",
+      "kind": "chrome",
+      "note": "featured main-order card on lighter paper, fine border, thin gold top edge",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.037,
+        "y": 0.4268,
+        "w": 0.9259,
+        "h": 0.1528
+      },
+      "px": {
+        "x": 32,
+        "y": 799,
+        "w": 800,
+        "h": 286
+      },
+      "aspect": 2.7972,
+      "palette": [
+        {
+          "hex": "#f7f5e7",
+          "coverage": 0.9243
+        },
+        {
+          "hex": "#090a0b",
+          "coverage": 0.0275
+        },
+        {
+          "hex": "#a88648",
+          "coverage": 0.0204
+        },
+        {
+          "hex": "#6a6d6b",
+          "coverage": 0.0143
+        },
+        {
+          "hex": "#bbb9b4",
+          "coverage": 0.0135
+        }
+      ],
+      "detail": {
+        "energy": 29.0522
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "main-icon",
+      "kind": "chrome",
+      "note": "round parchment medallion with dark walking-footprints icon",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0741,
+        "y": 0.4519,
+        "w": 0.1748,
+        "h": 0.0817
+      },
+      "px": {
+        "x": 64,
+        "y": 846,
+        "w": 151,
+        "h": 153
+      },
+      "aspect": 0.9869,
+      "palette": [
+        {
+          "hex": "#ece3d3",
+          "coverage": 0.898
+        },
+        {
+          "hex": "#19271f",
+          "coverage": 0.092
+        },
+        {
+          "hex": "#bdbbab",
+          "coverage": 0.0046
+        },
+        {
+          "hex": "#818179",
+          "coverage": 0.0043
+        },
+        {
+          "hex": "#585858",
+          "coverage": 0.0012
+        }
+      ],
+      "detail": {
+        "energy": 5.6477
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "main-kicker",
+      "kind": "text",
+      "note": "spaced caps MAIN ORDER in stone",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2847,
+        "y": 0.4562,
+        "w": 0.2049,
+        "h": 0.0123
+      },
+      "px": {
+        "x": 246,
+        "y": 854,
+        "w": 177,
+        "h": 23
+      },
+      "aspect": 7.6957,
+      "palette": [
+        {
+          "hex": "#f6f5ea",
+          "coverage": 0.7288
+        },
+        {
+          "hex": "#5c6f66",
+          "coverage": 0.1441
+        },
+        {
+          "hex": "#c1c9be",
+          "coverage": 0.0975
+        },
+        {
+          "hex": "#8b978f",
+          "coverage": 0.0297
+        }
+      ],
+      "detail": {
+        "energy": 40.6386
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "main-title",
+      "kind": "text",
+      "note": "serif Short conditioning or restoration on two lines",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2824,
+        "y": 0.477,
+        "w": 0.5,
+        "h": 0.0491
+      },
+      "px": {
+        "x": 244,
+        "y": 893,
+        "w": 432,
+        "h": 92
+      },
+      "aspect": 4.6957,
+      "palette": [
+        {
+          "hex": "#f7f6ea",
+          "coverage": 0.8014
+        },
+        {
+          "hex": "#090a0b",
+          "coverage": 0.1455
+        },
+        {
+          "hex": "#323737",
+          "coverage": 0.021
+        },
+        {
+          "hex": "#646767",
+          "coverage": 0.0162
+        },
+        {
+          "hex": "#9a9b99",
+          "coverage": 0.016
+        }
+      ],
+      "detail": {
+        "energy": 77.6239
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "main-guidance",
+      "kind": "text",
+      "note": "sans Check readiness before training. in stone",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2836,
+        "y": 0.5374,
+        "w": 0.4896,
+        "h": 0.0187
+      },
+      "px": {
+        "x": 245,
+        "y": 1006,
+        "w": 423,
+        "h": 35
+      },
+      "aspect": 12.0857,
+      "palette": [
+        {
+          "hex": "#f7f6ea",
+          "coverage": 0.789
+        },
+        {
+          "hex": "#696a6b",
+          "coverage": 0.1483
+        },
+        {
+          "hex": "#b3b2ae",
+          "coverage": 0.0567
+        },
+        {
+          "hex": "#858d83",
+          "coverage": 0.0035
+        },
+        {
+          "hex": "#4c4854",
+          "coverage": 0.0024
+        }
+      ],
+      "detail": {
+        "energy": 62.8582
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "morning-tile",
+      "kind": "chrome",
+      "note": "half-width tile with fine border",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.037,
+        "y": 0.5865,
+        "w": 0.4572,
+        "h": 0.1501
+      },
+      "px": {
+        "x": 32,
+        "y": 1098,
+        "w": 395,
+        "h": 281
+      },
+      "aspect": 1.4057,
+      "palette": [
+        {
+          "hex": "#f7f5e6",
+          "coverage": 0.9362
+        },
+        {
+          "hex": "#d3cdc9",
+          "coverage": 0.0291
+        },
+        {
+          "hex": "#090b0b",
+          "coverage": 0.0202
+        },
+        {
+          "hex": "#a07645",
+          "coverage": 0.0087
+        },
+        {
+          "hex": "#5c6962",
+          "coverage": 0.0059
+        }
+      ],
+      "detail": {
+        "energy": 16.0187
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "morning-icon",
+      "kind": "chrome",
+      "note": "round parchment medallion with gold rising-sun icon",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0833,
+        "y": 0.5999,
+        "w": 0.1435,
+        "h": 0.0662
+      },
+      "px": {
+        "x": 72,
+        "y": 1123,
+        "w": 124,
+        "h": 124
+      },
+      "aspect": 1,
+      "palette": [
+        {
+          "hex": "#eee4d5",
+          "coverage": 0.9076
+        },
+        {
+          "hex": "#9e7642",
+          "coverage": 0.0669
+        },
+        {
+          "hex": "#c2ae8e",
+          "coverage": 0.0255
+        }
+      ],
+      "detail": {
+        "energy": 4.3185
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "morning-kicker",
+      "kind": "text",
+      "note": "spaced caps DAILY WATCH in stone",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.088,
+        "y": 0.6741,
+        "w": 0.1898,
+        "h": 0.0112
+      },
+      "px": {
+        "x": 76,
+        "y": 1262,
+        "w": 164,
+        "h": 21
+      },
+      "aspect": 7.8095,
+      "palette": [
+        {
+          "hex": "#f6f4ea",
+          "coverage": 0.8
+        },
+        {
+          "hex": "#667870",
+          "coverage": 0.0727
+        },
+        {
+          "hex": "#496154",
+          "coverage": 0.0571
+        },
+        {
+          "hex": "#c4c9c0",
+          "coverage": 0.0442
+        },
+        {
+          "hex": "#98a59b",
+          "coverage": 0.026
+        }
+      ],
+      "detail": {
+        "energy": 36.799
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "morning-title",
+      "kind": "text",
+      "note": "serif Morning Watch",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0868,
+        "y": 0.6918,
+        "w": 0.3021,
+        "h": 0.0246
+      },
+      "px": {
+        "x": 75,
+        "y": 1295,
+        "w": 261,
+        "h": 46
+      },
+      "aspect": 5.6739,
+      "palette": [
+        {
+          "hex": "#f7f7eb",
+          "coverage": 0.7404
+        },
+        {
+          "hex": "#0b0d0d",
+          "coverage": 0.1709
+        },
+        {
+          "hex": "#c0c0be",
+          "coverage": 0.0332
+        },
+        {
+          "hex": "#454b4b",
+          "coverage": 0.031
+        },
+        {
+          "hex": "#808282",
+          "coverage": 0.0245
+        }
+      ],
+      "detail": {
+        "energy": 74.8848
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "evening-tile",
+      "kind": "chrome",
+      "note": "half-width tile with fine border",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5058,
+        "y": 0.5865,
+        "w": 0.4572,
+        "h": 0.1501
+      },
+      "px": {
+        "x": 437,
+        "y": 1098,
+        "w": 395,
+        "h": 281
+      },
+      "aspect": 1.4057,
+      "palette": [
+        {
+          "hex": "#f6f5e5",
+          "coverage": 0.9549
+        },
+        {
+          "hex": "#0a0b0c",
+          "coverage": 0.0215
+        },
+        {
+          "hex": "#19281e",
+          "coverage": 0.0114
+        },
+        {
+          "hex": "#d3caca",
+          "coverage": 0.0073
+        },
+        {
+          "hex": "#637167",
+          "coverage": 0.0049
+        }
+      ],
+      "detail": {
+        "energy": 16.2299
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "evening-icon",
+      "kind": "chrome",
+      "note": "round parchment medallion with dark crescent-moon icon",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5382,
+        "y": 0.5999,
+        "w": 0.1389,
+        "h": 0.0657
+      },
+      "px": {
+        "x": 465,
+        "y": 1123,
+        "w": 120,
+        "h": 123
+      },
+      "aspect": 0.9756,
+      "palette": [
+        {
+          "hex": "#ede3d4",
+          "coverage": 0.8999
+        },
+        {
+          "hex": "#18261c",
+          "coverage": 0.0897
+        },
+        {
+          "hex": "#7b7d73",
+          "coverage": 0.0073
+        },
+        {
+          "hex": "#3d483d",
+          "coverage": 0.0018
+        },
+        {
+          "hex": "#080808",
+          "coverage": 0.0012
+        }
+      ],
+      "detail": {
+        "energy": 4.5166
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "evening-kicker",
+      "kind": "text",
+      "note": "spaced caps DAILY WATCH in stone",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5486,
+        "y": 0.6741,
+        "w": 0.1898,
+        "h": 0.0112
+      },
+      "px": {
+        "x": 474,
+        "y": 1262,
+        "w": 164,
+        "h": 21
+      },
+      "aspect": 7.8095,
+      "palette": [
+        {
+          "hex": "#f4f4e8",
+          "coverage": 0.8156
+        },
+        {
+          "hex": "#50665d",
+          "coverage": 0.0883
+        },
+        {
+          "hex": "#7d9184",
+          "coverage": 0.0571
+        },
+        {
+          "hex": "#babfba",
+          "coverage": 0.039
+        }
+      ],
+      "detail": {
+        "energy": 36.5414
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "evening-title",
+      "kind": "text",
+      "note": "serif Evening Watch",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.5475,
+        "y": 0.6918,
+        "w": 0.3032,
+        "h": 0.0246
+      },
+      "px": {
+        "x": 473,
+        "y": 1295,
+        "w": 262,
+        "h": 46
+      },
+      "aspect": 5.6957,
+      "palette": [
+        {
+          "hex": "#f7f7eb",
+          "coverage": 0.7321
+        },
+        {
+          "hex": "#0a0b0c",
+          "coverage": 0.1776
+        },
+        {
+          "hex": "#595b5c",
+          "coverage": 0.0505
+        },
+        {
+          "hex": "#a0a4a0",
+          "coverage": 0.0303
+        },
+        {
+          "hex": "#343838",
+          "coverage": 0.0094
+        }
+      ],
+      "detail": {
+        "energy": 73.7007
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "hearth-rule-top",
+      "kind": "chrome",
+      "note": "hairline rule above the Hearth row",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0382,
+        "y": 0.7495,
+        "w": 0.9236,
+        "h": 0.0053
+      },
+      "px": {
+        "x": 33,
+        "y": 1403,
+        "w": 798,
+        "h": 10
+      },
+      "aspect": 79.8,
+      "palette": [
+        {
+          "hex": "#f4f4e4",
+          "coverage": 0.9088
+        },
+        {
+          "hex": "#d7cece",
+          "coverage": 0.0912
+        }
+      ],
+      "detail": {
+        "energy": 7.1173
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "hearth-icon",
+      "kind": "chrome",
+      "note": "small gold fireplace icon with flame",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0764,
+        "y": 0.7724,
+        "w": 0.0914,
+        "h": 0.039
+      },
+      "px": {
+        "x": 66,
+        "y": 1446,
+        "w": 79,
+        "h": 73
+      },
+      "aspect": 1.0822,
+      "palette": [
+        {
+          "hex": "#f7f6e9",
+          "coverage": 0.477
+        },
+        {
+          "hex": "#b08750",
+          "coverage": 0.4385
+        },
+        {
+          "hex": "#c8b08c",
+          "coverage": 0.0637
+        },
+        {
+          "hex": "#ddd3b5",
+          "coverage": 0.0207
+        }
+      ],
+      "detail": {
+        "energy": 8.5834
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "hearth-divider",
+      "kind": "chrome",
+      "note": "short vertical hairline between icon and text",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2141,
+        "y": 0.7644,
+        "w": 0.0116,
+        "h": 0.0609
+      },
+      "px": {
+        "x": 185,
+        "y": 1431,
+        "w": 10,
+        "h": 114
+      },
+      "aspect": 0.0877,
+      "palette": [
+        {
+          "hex": "#f8f7e8",
+          "coverage": 1
+        }
+      ],
+      "detail": {
+        "energy": 0.7565
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "hearth-kicker",
+      "kind": "text",
+      "note": "spaced caps HEARTH MISSION in stone",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2616,
+        "y": 0.7708,
+        "w": 0.2465,
+        "h": 0.0118
+      },
+      "px": {
+        "x": 226,
+        "y": 1443,
+        "w": 213,
+        "h": 22
+      },
+      "aspect": 9.6818,
+      "palette": [
+        {
+          "hex": "#f7f5ea",
+          "coverage": 0.8046
+        },
+        {
+          "hex": "#596d65",
+          "coverage": 0.132
+        },
+        {
+          "hex": "#9daa9d",
+          "coverage": 0.037
+        },
+        {
+          "hex": "#c9cdc8",
+          "coverage": 0.0246
+        },
+        {
+          "hex": "#384838",
+          "coverage": 0.0018
+        }
+      ],
+      "detail": {
+        "energy": 47.129
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "hearth-text",
+      "kind": "text",
+      "note": "sans Ask your spouse what would genuinely help this week. on two lines in stone-ink",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2604,
+        "y": 0.7874,
+        "w": 0.5567,
+        "h": 0.0379
+      },
+      "px": {
+        "x": 225,
+        "y": 1474,
+        "w": 481,
+        "h": 71
+      },
+      "aspect": 6.7746,
+      "palette": [
+        {
+          "hex": "#f8f7e9",
+          "coverage": 0.8569
+        },
+        {
+          "hex": "#69696a",
+          "coverage": 0.086
+        },
+        {
+          "hex": "#c9c7c4",
+          "coverage": 0.0278
+        },
+        {
+          "hex": "#9fa09e",
+          "coverage": 0.02
+        },
+        {
+          "hex": "#484c4f",
+          "coverage": 0.0094
+        }
+      ],
+      "detail": {
+        "energy": 41.6693
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "hearth-rule-bottom",
+      "kind": "chrome",
+      "note": "hairline rule below the Hearth row",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0382,
+        "y": 0.8339,
+        "w": 0.9236,
+        "h": 0.0053
+      },
+      "px": {
+        "x": 33,
+        "y": 1561,
+        "w": 798,
+        "h": 10
+      },
+      "aspect": 79.8,
+      "palette": [
+        {
+          "hex": "#f4f4e6",
+          "coverage": 1
+        }
+      ],
+      "detail": {
+        "energy": 8.7272
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "mission-cta",
+      "kind": "control",
+      "note": "full-width pine rounded button Begin Today's Mission with right arrow",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0382,
+        "y": 0.8478,
+        "w": 0.9236,
+        "h": 0.0534
+      },
+      "px": {
+        "x": 33,
+        "y": 1587,
+        "w": 798,
+        "h": 100
+      },
+      "aspect": 7.98,
+      "palette": [
+        {
+          "hex": "#24382a",
+          "coverage": 0.8229
+        },
+        {
+          "hex": "#f7f7ef",
+          "coverage": 0.1636
+        },
+        {
+          "hex": "#4d6157",
+          "coverage": 0.0078
+        },
+        {
+          "hex": "#bbc8c1",
+          "coverage": 0.0031
+        },
+        {
+          "hex": "#83938d",
+          "coverage": 0.0027
+        }
+      ],
+      "detail": {
+        "energy": 41.5203
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "cta-label",
+      "kind": "text",
+      "note": "Begin Today's Mission and arrow in cream sans",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2859,
+        "y": 0.8638,
+        "w": 0.4387,
+        "h": 0.0235
+      },
+      "px": {
+        "x": 247,
+        "y": 1617,
+        "w": 379,
+        "h": 44
+      },
+      "aspect": 8.6136,
+      "palette": [
+        {
+          "hex": "#223a2c",
+          "coverage": 0.7708
+        },
+        {
+          "hex": "#f5f6f6",
+          "coverage": 0.1598
+        },
+        {
+          "hex": "#60736a",
+          "coverage": 0.03
+        },
+        {
+          "hex": "#9ba5a2",
+          "coverage": 0.0268
+        },
+        {
+          "hex": "#c6d5ca",
+          "coverage": 0.0126
+        }
+      ],
+      "detail": {
+        "energy": 76.6026
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "nav-bar",
+      "kind": "chrome",
+      "note": "bottom navigation bar on paper with hairline top rule",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0,
+        "y": 0.9108,
+        "w": 1,
+        "h": 0.0892
+      },
+      "px": {
+        "x": 0,
+        "y": 1705,
+        "w": 864,
+        "h": 167
+      },
+      "aspect": 5.1737,
+      "palette": [
+        {
+          "hex": "#f7f7e8",
+          "coverage": 0.9504
+        },
+        {
+          "hex": "#777878",
+          "coverage": 0.0255
+        },
+        {
+          "hex": "#193526",
+          "coverage": 0.0105
+        },
+        {
+          "hex": "#aeaeac",
+          "coverage": 0.0104
+        },
+        {
+          "hex": "#a88248",
+          "coverage": 0.0033
+        }
+      ],
+      "detail": {
+        "energy": 14.133
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "nav-keep",
+      "kind": "control",
+      "note": "selected Keep tab: filled pine house icon, label, short gold underline",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.0451,
+        "y": 0.9247,
+        "w": 0.1146,
+        "h": 0.0572
+      },
+      "px": {
+        "x": 39,
+        "y": 1731,
+        "w": 99,
+        "h": 107
+      },
+      "aspect": 0.9252,
+      "palette": [
+        {
+          "hex": "#f8f8e9",
+          "coverage": 0.7539
+        },
+        {
+          "hex": "#193626",
+          "coverage": 0.1421
+        },
+        {
+          "hex": "#a87f41",
+          "coverage": 0.052
+        },
+        {
+          "hex": "#172625",
+          "coverage": 0.026
+        },
+        {
+          "hex": "#dad2b7",
+          "coverage": 0.026
+        }
+      ],
+      "detail": {
+        "energy": 11.3943
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "nav-road",
+      "kind": "control",
+      "note": "Road tab: gray winding-road icon and label",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.2685,
+        "y": 0.9257,
+        "w": 0.066,
+        "h": 0.0449
+      },
+      "px": {
+        "x": 232,
+        "y": 1733,
+        "w": 57,
+        "h": 84
+      },
+      "aspect": 0.6786,
+      "palette": [
+        {
+          "hex": "#f7f6ea",
+          "coverage": 0.75
+        },
+        {
+          "hex": "#787878",
+          "coverage": 0.1936
+        },
+        {
+          "hex": "#aeadac",
+          "coverage": 0.0526
+        },
+        {
+          "hex": "#586858",
+          "coverage": 0.0019
+        },
+        {
+          "hex": "#889888",
+          "coverage": 0.0019
+        }
+      ],
+      "detail": {
+        "energy": 7.6475
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "nav-forge",
+      "kind": "control",
+      "note": "Forge tab: gray anvil icon and label",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.4618,
+        "y": 0.9295,
+        "w": 0.0764,
+        "h": 0.0438
+      },
+      "px": {
+        "x": 399,
+        "y": 1740,
+        "w": 66,
+        "h": 82
+      },
+      "aspect": 0.8049,
+      "palette": [
+        {
+          "hex": "#f7f7ea",
+          "coverage": 0.7192
+        },
+        {
+          "hex": "#79797a",
+          "coverage": 0.237
+        },
+        {
+          "hex": "#c1c0bf",
+          "coverage": 0.0373
+        },
+        {
+          "hex": "#989888",
+          "coverage": 0.0065
+        }
+      ],
+      "detail": {
+        "energy": 8.4152
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "nav-journal",
+      "kind": "control",
+      "note": "Journal tab: open-book line icon and label",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.6505,
+        "y": 0.9263,
+        "w": 0.0914,
+        "h": 0.0443
+      },
+      "px": {
+        "x": 562,
+        "y": 1734,
+        "w": 79,
+        "h": 83
+      },
+      "aspect": 0.9518,
+      "palette": [
+        {
+          "hex": "#f7f6e9",
+          "coverage": 0.8201
+        },
+        {
+          "hex": "#767878",
+          "coverage": 0.119
+        },
+        {
+          "hex": "#b3b3b1",
+          "coverage": 0.0608
+        }
+      ],
+      "detail": {
+        "energy": 10.9636
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "nav-field-manual",
+      "kind": "control",
+      "note": "Field Manual tab: folded-map line icon and label",
+      "grid": null,
+      "snap": false,
+      "box": {
+        "x": 0.8194,
+        "y": 0.9257,
+        "w": 0.1493,
+        "h": 0.0449
+      },
+      "px": {
+        "x": 708,
+        "y": 1733,
+        "w": 129,
+        "h": 84
+      },
+      "aspect": 1.5357,
+      "palette": [
+        {
+          "hex": "#f7f7ea",
+          "coverage": 0.8414
+        },
+        {
+          "hex": "#757778",
+          "coverage": 0.0855
+        },
+        {
+          "hex": "#acaca8",
+          "coverage": 0.0723
+        },
+        {
+          "hex": "#585868",
+          "coverage": 0.0008
+        }
+      ],
+      "detail": {
+        "energy": 16.1044
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    }
+  ]
+}

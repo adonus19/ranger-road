@@ -1,0 +1,118 @@
+:host {
+  display: block;
+  margin-top: 1.5rem;
+}
+
+.activity-choices {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.activity-choices legend {
+  margin-bottom: 0.75rem;
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.activity-choices__list {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.activity-choice {
+  display: flex;
+  min-height: 5.5rem;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.activity-choice + .activity-choice {
+  border-top: 1px solid var(--line);
+}
+
+.activity-choice--selected {
+  background: var(--surface-tint);
+}
+
+.activity-choice:has(input:focus-visible) {
+  outline: 3px solid var(--focus);
+  outline-offset: -3px;
+}
+
+.activity-choice input {
+  width: 1.375rem;
+  height: 1.375rem;
+  flex: none;
+  margin: 0;
+  appearance: none;
+  border: 2px solid var(--text-secondary);
+  border-radius: 50%;
+  background: transparent;
+}
+
+.activity-choice input:checked {
+  border-color: var(--action);
+  background: radial-gradient(circle, var(--action) 0 35%, transparent 42%);
+}
+
+.activity-choice__icon {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-medallion);
+  color: var(--icon-ink);
+}
+
+.activity-choice__copy {
+  display: grid;
+  min-width: 0;
+  gap: 0.125rem;
+}
+
+.activity-choice__copy strong {
+  font-family: var(--font-display);
+  font-size: 1.3125rem;
+  line-height: 1.15;
+}
+
+.activity-choice__copy span,
+.activity-choice__copy small {
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.activity-choice__copy small {
+  color: var(--action);
+  font-weight: 600;
+}
+
+@media (max-width: 359px) {
+  .activity-choice {
+    gap: 0.5rem;
+    padding-inline: 0.625rem;
+  }
+
+  .activity-choice__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .activity-choice input {
+    appearance: auto;
+  }
+}

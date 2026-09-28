@@ -1,0 +1,77 @@
+<app-keep-band />
+
+@if (state.loading()) {
+  <p class="keep-state" role="status">Opening your campaign…</p>
+} @else if (state.error(); as message) {
+  <div class="keep-state" role="alert">
+    <h2>Local storage is unavailable</h2>
+    <p>{{ message }}</p>
+    <button type="button" (click)="retry()">Try again</button>
+  </div>
+} @else if (state.needsStartDate() || state.beforeDayOne()) {
+  <app-start-day />
+} @else if (seed()) {
+  <div class="keep-body">
+    <a class="readiness-strip readiness-strip--{{ readinessStatus() }}" routerLink="/readiness">
+      <span class="medallion medallion--strip">
+        <app-icon name="heart-pulse" />
+      </span>
+      <span class="readiness-strip__text">
+        <strong class="readiness-strip__status">{{ readinessCopy().status }}</strong>
+        <span class="readiness-strip__help">{{ readinessCopy().help }}</span>
+        <span class="visually-hidden">{{ state.readiness() ? 'Check readiness again.' : 'Open the readiness check.' }}</span>
+      </span>
+      <app-icon class="readiness-strip__chevron" name="chevron-right" />
+    </a>
+
+    <section class="orders" aria-labelledby="orders-title">
+      <h2 id="orders-title">Today’s Orders</h2>
+
+      @if (mainOrder(); as order) {
+        <article class="main-order">
+          <span class="medallion medallion--main">
+            <app-icon [name]="mainOrderIcon()" />
+          </span>
+          <div class="main-order__text">
+            <p class="order-label">Main order</p>
+            <h3>{{ order.title }}</h3>
+            @if (order.guidance) {
+              <p class="main-order__guidance">{{ order.guidance }}</p>
+            }
+          </div>
+        </article>
+      }
+
+      <ul class="watches" role="list">
+        @for (watch of watches(); track watch.id) {
+          <li class="watch watch--{{ watch.id }}">
+            <a [routerLink]="watch.id === 'morning-watch' ? '/journal/morning' : '/journal/evening'">
+              <span class="medallion medallion--watch">
+                <app-icon [name]="watchIcon(watch)" />
+              </span>
+              <p class="order-label">Daily watch</p>
+              <h3>{{ watch.title }}</h3>
+            </a>
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section class="hearth" aria-labelledby="hearth-title">
+      <app-icon class="hearth__icon" name="hearth" />
+      <div class="hearth__text">
+        <h2 class="order-label" id="hearth-title">Hearth mission</h2>
+        <p>{{ hearthMission() }}</p>
+      </div>
+    </section>
+
+    <app-check-in-reminder class="check-in-reminder" />
+
+    <div class="mission-dock">
+      <a class="mission-cta" routerLink="/keep/mission">
+        <span>Begin Today’s Mission</span>
+        <app-icon name="arrow-right" />
+      </a>
+    </div>
+  </div>
+}

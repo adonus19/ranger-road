@@ -1,0 +1,461 @@
+{
+  "regions": [
+    {
+      "id": "header-bar",
+      "kind": "chrome",
+      "note": "flat night-forest header bar across the top",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 0.0801
+      },
+      "snap": false
+    },
+    {
+      "id": "brand-mark",
+      "kind": "chrome",
+      "note": "small gold three-pine mark",
+      "box": {
+        "x": 0.0509,
+        "y": 0.0171,
+        "w": 0.0903,
+        "h": 0.0459
+      },
+      "snap": false
+    },
+    {
+      "id": "app-title",
+      "kind": "text",
+      "note": "serif app title The Ranger's Road in cream",
+      "box": {
+        "x": 0.1574,
+        "y": 0.0246,
+        "w": 0.4757,
+        "h": 0.031
+      },
+      "snap": false
+    },
+    {
+      "id": "back-link",
+      "kind": "control",
+      "note": "left arrow and sans Back to Journal in secondary ink",
+      "box": {
+        "x": 0.0451,
+        "y": 0.1042,
+        "w": 0.3229,
+        "h": 0.0208
+      },
+      "snap": false
+    },
+    {
+      "id": "page-title",
+      "kind": "text",
+      "note": "large serif page title Monthly check-in",
+      "box": {
+        "x": 0.0394,
+        "y": 0.1426,
+        "w": 0.7431,
+        "h": 0.0481
+      },
+      "snap": false
+    },
+    {
+      "id": "date-line",
+      "kind": "text",
+      "note": "quiet sans line Day 29 · Monday, October 12 in secondary ink",
+      "box": {
+        "x": 0.044,
+        "y": 0.1955,
+        "w": 0.485,
+        "h": 0.0214
+      },
+      "snap": false
+    },
+    {
+      "id": "lookback-heading",
+      "kind": "text",
+      "note": "serif section heading The last 28 days",
+      "box": {
+        "x": 0.0382,
+        "y": 0.2431,
+        "w": 0.5359,
+        "h": 0.039
+      },
+      "snap": false
+    },
+    {
+      "id": "lookback-panel",
+      "kind": "chrome",
+      "note": "read-only parchment-tint panel with 6px corners holding the readiness averages",
+      "box": {
+        "x": 0.0417,
+        "y": 0.2869,
+        "w": 0.9178,
+        "h": 0.187
+      },
+      "snap": false
+    },
+    {
+      "id": "sleep-label",
+      "kind": "text",
+      "note": "spaced caps AVERAGE SLEEP in sage",
+      "box": {
+        "x": 0.0694,
+        "y": 0.3088,
+        "w": 0.2627,
+        "h": 0.0134
+      },
+      "snap": false
+    },
+    {
+      "id": "sleep-value",
+      "kind": "text",
+      "note": "large serif numeral 6.6",
+      "box": {
+        "x": 0.0741,
+        "y": 0.3387,
+        "w": 0.1794,
+        "h": 0.0465
+      },
+      "snap": false
+    },
+    {
+      "id": "sleep-unit",
+      "kind": "text",
+      "note": "sans hours after the numeral",
+      "box": {
+        "x": 0.2789,
+        "y": 0.3654,
+        "w": 0.1053,
+        "h": 0.0182
+      },
+      "snap": false
+    },
+    {
+      "id": "panel-divider",
+      "kind": "chrome",
+      "note": "vertical hairline dividing sleep from the pain rows",
+      "box": {
+        "x": 0.4641,
+        "y": 0.3018,
+        "w": 0.0058,
+        "h": 0.1181
+      },
+      "snap": false
+    },
+    {
+      "id": "back-label",
+      "kind": "text",
+      "note": "spaced caps BACK PAIN in sage",
+      "box": {
+        "x": 0.5104,
+        "y": 0.3114,
+        "w": 0.1505,
+        "h": 0.0128
+      },
+      "snap": false
+    },
+    {
+      "id": "back-value",
+      "kind": "text",
+      "note": "serif numeral 2.4",
+      "box": {
+        "x": 0.8484,
+        "y": 0.3077,
+        "w": 0.0833,
+        "h": 0.023
+      },
+      "snap": false
+    },
+    {
+      "id": "shoulder-label",
+      "kind": "text",
+      "note": "spaced caps SHOULDER PAIN in sage",
+      "box": {
+        "x": 0.5104,
+        "y": 0.3542,
+        "w": 0.2326,
+        "h": 0.0123
+      },
+      "snap": false
+    },
+    {
+      "id": "shoulder-value",
+      "kind": "text",
+      "note": "serif numeral 1.1",
+      "box": {
+        "x": 0.8495,
+        "y": 0.3504,
+        "w": 0.0764,
+        "h": 0.0235
+      },
+      "snap": false
+    },
+    {
+      "id": "neck-label",
+      "kind": "text",
+      "note": "spaced caps NECK PAIN in sage",
+      "box": {
+        "x": 0.5104,
+        "y": 0.3974,
+        "w": 0.1539,
+        "h": 0.0123
+      },
+      "snap": false
+    },
+    {
+      "id": "neck-value",
+      "kind": "text",
+      "note": "serif numeral 0.8",
+      "box": {
+        "x": 0.8472,
+        "y": 0.3937,
+        "w": 0.0833,
+        "h": 0.023
+      },
+      "snap": false
+    },
+    {
+      "id": "panel-rule",
+      "kind": "chrome",
+      "note": "hairline rule across the panel above its note",
+      "box": {
+        "x": 0.0718,
+        "y": 0.4316,
+        "w": 0.8588,
+        "h": 0.0027
+      },
+      "snap": false
+    },
+    {
+      "id": "panel-note",
+      "kind": "text",
+      "note": "sans note Averages from 22 readiness checks.",
+      "box": {
+        "x": 0.0694,
+        "y": 0.4439,
+        "w": 0.4491,
+        "h": 0.0171
+      },
+      "snap": false
+    },
+    {
+      "id": "section-rule",
+      "kind": "chrome",
+      "note": "hairline rule between the look-back and Body",
+      "box": {
+        "x": 0.0428,
+        "y": 0.4941,
+        "w": 0.9144,
+        "h": 0.0021
+      },
+      "snap": false
+    },
+    {
+      "id": "body-heading",
+      "kind": "text",
+      "note": "serif section heading Body",
+      "box": {
+        "x": 0.0382,
+        "y": 0.5144,
+        "w": 0.1863,
+        "h": 0.0385
+      },
+      "snap": false
+    },
+    {
+      "id": "weight-label",
+      "kind": "text",
+      "note": "spaced caps WEIGHT (LB) in sage",
+      "box": {
+        "x": 0.0417,
+        "y": 0.5646,
+        "w": 0.213,
+        "h": 0.0166
+      },
+      "snap": false
+    },
+    {
+      "id": "weight-field",
+      "kind": "control",
+      "note": "bordered number field holding the large serif numeral 221.6",
+      "box": {
+        "x": 0.0405,
+        "y": 0.5844,
+        "w": 0.4514,
+        "h": 0.063
+      },
+      "snap": false
+    },
+    {
+      "id": "waist-label",
+      "kind": "text",
+      "note": "spaced caps WAIST (IN) in sage",
+      "box": {
+        "x": 0.5116,
+        "y": 0.5652,
+        "w": 0.184,
+        "h": 0.016
+      },
+      "snap": false
+    },
+    {
+      "id": "waist-field",
+      "kind": "control",
+      "note": "bordered number field holding the large serif numeral 41.5",
+      "box": {
+        "x": 0.5093,
+        "y": 0.5844,
+        "w": 0.4537,
+        "h": 0.063
+      },
+      "snap": false
+    },
+    {
+      "id": "rhr-label",
+      "kind": "text",
+      "note": "spaced caps RESTING HEART RATE (BPM) in sage",
+      "box": {
+        "x": 0.044,
+        "y": 0.6683,
+        "w": 0.4479,
+        "h": 0.016
+      },
+      "snap": false
+    },
+    {
+      "id": "rhr-field",
+      "kind": "control",
+      "note": "half-width bordered number field holding the large serif numeral 68",
+      "box": {
+        "x": 0.0405,
+        "y": 0.6886,
+        "w": 0.4537,
+        "h": 0.063
+      },
+      "snap": false
+    },
+    {
+      "id": "rhr-help",
+      "kind": "text",
+      "note": "two-line sans help Sit quietly for 5 minutes, then count for 60 seconds.",
+      "box": {
+        "x": 0.5208,
+        "y": 0.6993,
+        "w": 0.3449,
+        "h": 0.0358
+      },
+      "snap": false
+    },
+    {
+      "id": "dock-rule",
+      "kind": "chrome",
+      "note": "full-width hairline rule above the docked save button",
+      "box": {
+        "x": 0,
+        "y": 0.8419,
+        "w": 1,
+        "h": 0.0027
+      },
+      "snap": false
+    },
+    {
+      "id": "save-button",
+      "kind": "control",
+      "note": "full-width pine button docked above the tabs",
+      "box": {
+        "x": 0.0359,
+        "y": 0.8472,
+        "w": 0.9271,
+        "h": 0.0604
+      },
+      "snap": false
+    },
+    {
+      "id": "save-label",
+      "kind": "text",
+      "note": "Save check-in label in cream",
+      "box": {
+        "x": 0.3762,
+        "y": 0.8675,
+        "w": 0.2523,
+        "h": 0.0187
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-bar",
+      "kind": "chrome",
+      "note": "bottom navigation bar on paper with hairline top rule",
+      "box": {
+        "x": 0,
+        "y": 0.9092,
+        "w": 1,
+        "h": 0.0908
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-keep",
+      "kind": "control",
+      "note": "Keep tab: gray house line icon and label",
+      "box": {
+        "x": 0.066,
+        "y": 0.9252,
+        "w": 0.0706,
+        "h": 0.0513
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-road",
+      "kind": "control",
+      "note": "Road tab: gray road icon and label",
+      "box": {
+        "x": 0.2639,
+        "y": 0.9252,
+        "w": 0.0729,
+        "h": 0.0481
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-forge",
+      "kind": "control",
+      "note": "Forge tab: gray anvil icon and label",
+      "box": {
+        "x": 0.4618,
+        "y": 0.9306,
+        "w": 0.0775,
+        "h": 0.0459
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-journal",
+      "kind": "control",
+      "note": "selected Journal tab: pine open-book icon, pine label, short gold underline",
+      "box": {
+        "x": 0.6354,
+        "y": 0.9263,
+        "w": 0.1262,
+        "h": 0.0566
+      },
+      "snap": false
+    },
+    {
+      "id": "nav-field-manual",
+      "kind": "control",
+      "note": "Field Manual tab: folded-map line icon and label",
+      "box": {
+        "x": 0.8148,
+        "y": 0.9252,
+        "w": 0.169,
+        "h": 0.0481
+      },
+      "snap": false
+    }
+  ],
+  "allowUncovered": true
+}

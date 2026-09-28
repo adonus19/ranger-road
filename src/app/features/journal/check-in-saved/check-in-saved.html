@@ -1,0 +1,13 @@
+<section class="saved" role="status" aria-labelledby="saved-title">
+  <h2 id="saved-title" tabindex="-1">{{ title() }}</h2>
+  <p class="saved__date">{{ date() }}</p>
+  <p class="saved__summary">
+    @for (line of lines(); track $index) {
+      <span class="line">{{ line }}</span>
+    }
+  </p>
+  @if (entry().testsHeld) {
+    <p class="saved__held">The tests were held for a Red day. Add them from the Journal on a better day.</p>
+  }
+  <a class="primary-button" [routerLink]="backPath()">{{ backLabel() }}</a>
+</section>

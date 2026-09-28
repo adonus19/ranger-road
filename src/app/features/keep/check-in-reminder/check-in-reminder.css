@@ -1,0 +1,53 @@
+:host {
+  display: block;
+}
+
+.reminder {
+  display: flex;
+  min-height: 3.75rem;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.25rem 0.5rem 0.9375rem;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.reminder__icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--icon-gold);
+}
+
+.reminder__text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.0625rem;
+  padding-left: 1.125rem;
+  border-left: 1px solid var(--line-soft);
+}
+
+.reminder__text strong {
+  font-family: var(--font-display);
+  font-size: 1.140625rem;
+  line-height: 1.15;
+}
+
+.reminder__text span {
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.reminder:hover strong {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.reminder__arrow {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--text-secondary);
+}

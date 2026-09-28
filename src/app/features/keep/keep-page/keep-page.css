@@ -1,0 +1,378 @@
+:host {
+  display: block;
+}
+
+/* Page body below the band. */
+.keep-body {
+  padding: 0.75rem 1rem 4.5rem;
+}
+
+.keep-state {
+  margin: 0;
+  padding: 1.5rem var(--page-gutter);
+  color: var(--text-secondary);
+}
+
+.keep-state h2 {
+  margin: 0 0 0.5rem;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+}
+
+.keep-state button {
+  min-height: var(--touch-target);
+  padding: 0.65rem 1.25rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--action);
+  color: var(--on-action);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.medallion {
+  display: grid;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-medallion);
+}
+
+.medallion--strip {
+  width: 3.375rem;
+  height: 3.375rem;
+  margin-right: 0.4375rem;
+  background: var(--surface-medallion-on-tint);
+  color: var(--icon-gold);
+}
+
+.medallion--strip app-icon {
+  width: 3.25rem;
+  height: 3.25rem;
+  --icon-stroke: 1;
+}
+
+.readiness-strip {
+  display: flex;
+  min-height: 4.6875rem;
+  align-items: center;
+  gap: 0.5rem;
+  margin-inline: -0.0625rem;
+  padding: 0.625rem 0.5625rem 0.625rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-tint);
+  color: var(--text);
+  text-decoration: none;
+  transition: background-color 160ms var(--ease-out);
+}
+
+.readiness-strip:hover {
+  background: color-mix(in srgb, var(--surface-tint) 88%, var(--text));
+}
+
+.readiness-strip__text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.1875rem;
+}
+
+.readiness-strip__status {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.readiness-strip__help {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+
+.readiness-strip__chevron {
+  width: 1.625rem;
+  height: 1.625rem;
+  margin-inline: -0.5rem -0.5rem;
+  color: var(--text);
+  --icon-stroke: 1.5;
+}
+
+/* Readiness is named in words; the tint only repeats it. */
+.readiness-strip--green {
+  background: var(--status-green-surface);
+}
+
+.readiness-strip--green .readiness-strip__status {
+  color: var(--status-green-text);
+}
+
+.readiness-strip--yellow {
+  background: var(--status-yellow-surface);
+}
+
+.readiness-strip--yellow .readiness-strip__status {
+  color: var(--status-yellow-text);
+}
+
+.readiness-strip--red {
+  background: var(--status-red-surface);
+}
+
+.readiness-strip--red .readiness-strip__status {
+  color: var(--status-red-text);
+}
+
+.orders h2 {
+  margin: 0.875rem 0 0.8125rem;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.order-label {
+  margin: 0;
+  color: var(--text-label);
+  font-family: var(--font-body);
+  font-size: 0.65625rem;
+  font-stretch: 100%;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.main-order {
+  display: flex;
+  min-height: 7.84375rem;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.1875rem 1.25rem 1rem 0.875rem;
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--accent-line);
+  border-radius: var(--radius-sm);
+}
+
+.medallion--main {
+  width: 4rem;
+  height: 4rem;
+  color: var(--icon-ink);
+}
+
+.medallion--main app-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.main-order__text {
+  min-width: 0;
+  padding-top: 0.125rem;
+}
+
+.main-order h3 {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.3125rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.main-order__guidance {
+  margin: 0.125rem 0 0;
+  color: var(--text-tertiary);
+  font-size: 0.859375rem;
+  line-height: 1.4;
+}
+
+.watches {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0.5625rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.watch {
+  min-height: 7.6875rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.watch a {
+  display: block;
+  min-height: 7.6875rem;
+  padding: 0.6875rem 0.75rem 0.875rem 1.125rem;
+  border-radius: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+.watch a:hover {
+  background: var(--surface-tint);
+}
+
+.medallion--watch {
+  width: 3.25rem;
+  height: 3.25rem;
+  margin-bottom: 0.4375rem;
+}
+
+.medallion--watch app-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.watch--morning-watch .medallion {
+  color: var(--icon-gold);
+}
+
+.watch--evening-watch .medallion {
+  color: var(--icon-ink);
+}
+
+.watch h3 {
+  margin: 0.0625rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.140625rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.hearth {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 0.875rem;
+  padding: 0.6875rem 0 0.5rem 0.9375rem;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.hearth__icon {
+  width: 2.625rem;
+  height: 2.625rem;
+  margin-right: 0.6875rem;
+  color: var(--icon-gold);
+}
+
+.hearth__text {
+  min-width: 0;
+  padding: 0 0 0.125rem 1.125rem;
+  border-left: 1px solid var(--line-soft);
+}
+
+.hearth__text p {
+  max-width: 15rem;
+  margin: 0.0625rem 0 0;
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.mission-dock {
+  margin-top: 1rem;
+}
+
+.mission-cta {
+  display: flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--action);
+  color: var(--on-action);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 160ms var(--ease-out);
+}
+
+.mission-cta:hover {
+  background: var(--action-hover);
+}
+
+.mission-cta app-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  --icon-stroke: 2;
+}
+
+/* On phones the mission button stays within reach, docked above the tabs. */
+@media (max-width: 699px) {
+  .mission-dock {
+    position: fixed;
+    z-index: 18;
+    right: 0;
+    bottom: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
+    left: 0;
+    margin: 0;
+    padding: 0 1rem 0.625rem;
+    background: linear-gradient(to bottom, transparent, var(--surface-page) 0.5rem);
+  }
+}
+
+/* Wider screens: the body joins a centered column, then two columns from 900px. */
+@media (min-width: 700px) {
+  .main-order {
+    min-height: 0;
+  }
+
+  .keep-body {
+    max-width: 40rem;
+    margin-inline: auto;
+    padding: 1.5rem var(--page-gutter) 3rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .keep-body {
+    display: grid;
+    max-width: var(--content-max);
+    grid-template-areas:
+      'orders readiness'
+      'orders cta'
+      'orders hearth'
+      'orders reminder'
+      'orders .';
+    grid-template-columns: minmax(0, 1.45fr) minmax(19rem, 1fr);
+    grid-template-rows: auto auto auto auto 1fr;
+    align-items: start;
+    column-gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .readiness-strip {
+    grid-area: readiness;
+    margin: 3.625rem 0 0;
+  }
+
+  .orders {
+    grid-area: orders;
+  }
+
+  .mission-dock {
+    grid-area: cta;
+  }
+
+  .hearth {
+    grid-area: hearth;
+    margin-top: 1.5rem;
+  }
+
+  .check-in-reminder {
+    grid-area: reminder;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .readiness-strip,
+  .mission-cta {
+    transition: none;
+  }
+}

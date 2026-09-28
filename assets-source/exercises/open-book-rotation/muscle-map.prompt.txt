@@ -1,0 +1,4 @@
+Reference: public/images/exercises/box-squat/muscle-map.png. Preserve two-panel front/back quiet anatomical ink style on cream #F6F3EA, anatomically correct shoulder-to-toe crop with NO head, face, hair, or skull; no text or legend. Primary targets dark pine #24362B, secondary targets muted moss #66735A, all other muscles neutral pale gray-beige.
+
+Exercise source: docs/rangers-road-full-program-content/EXERCISE_CATALOG.md > open-book-rotation.
+Highlight prompt: Precise edit of the reference map: remove ALL colored highlights. Every muscle remains neutral pale warm gray-beige with gentle ink shading. This shared neutral map is used where the catalog names no target muscles, so it does not imply an unsupported primary or secondary target.

@@ -1,0 +1,25 @@
+Use case: ui-mockup. High-fidelity mobile app UI design comp. Flat frontal screenshot of one phone screen at 390x844 viewport proportion. No device frame, no phone status bar, no hands, no scene around the screen.
+
+Surface: The Ranger's Road, Keep dashboard: the home screen of a private, offline training-campaign app. The visitor's job on this screen: see today's orders, check readiness, and begin today's mission. It must read instantly as a working app screen.
+
+Reference image: it carries the Forest Light visual world to keep exactly: palette, serif plus sans type pairing, matte pine header, warm paper page, soft misty tree silhouettes, small gold accents, round line-icon style, bottom navigation style. Do NOT copy the reference's stack of separate order cards; this comp uses a different structure, described below.
+
+Layout, top to bottom:
+1. Compact dark forest (#18241D) header bar: a small gold three-pine mark and the serif title "The Ranger's Road" in cream.
+2. Dawn forest scene band, taller than the reference, about 36% of the screen height: layered misty ridgelines, pine silhouettes at both edges, a pale low sun. The chapter identity sits over the lower-left of the scene in cream: small spaced caps "CHAPTER I · WEEKS 1–4", large serif "The Muster", then the serif line "Answer the call." in soft gold. No numbers inside the scene.
+3. On the warm paper page directly below the scene: one ruled row split into two equal columns by a hairline: large serif numeral "1" above the label "Campaign day"; large serif numeral "27" above the label "Days until Gate Trial". Beneath the row, one small stone-gray line: "Gate Trial target: end of Week 4. You can take it when ready."
+4. Serif section heading "Today's Orders". Then ONE continuous ruled list with hairline rules between rows; no separate boxed cards and no chevrons on these rows. Each row has a small line icon in the left margin, a small spaced-caps label, and a title:
+   - rising-sun icon, label "DAILY WATCH", title "Morning Watch"
+   - walking-footprints icon, label "MAIN ORDER", title "Short conditioning or restoration", second line "Check readiness before training.", and a thin gold rule along its left edge marking it as the main order
+   - crescent-moon icon, label "DAILY WATCH", title "Evening Watch"
+5. Readiness panel with a pale parchment tint and rounded corners: heart-pulse line icon on the left, serif heading "Readiness", status "Not checked today", text "Check sleep, energy, and pain before training.", one chevron on the right because this panel opens the check.
+6. A quiet ruled row: small spaced caps "HEARTH MISSION" and the text "Ask your spouse what would genuinely help this week."
+7. Full-width pine (#24362B) rounded-rectangle button "Begin Today's Mission" with a right arrow, sitting just above the navigation.
+8. Bottom navigation, five equal items with line icons and labels: "Keep" (selected: pine, filled house icon, short gold underline), "Road", "Forge" (anvil icon), "Journal", "Field Manual".
+
+Palette only: Deep Forest #18241D, Pine #24362B, warm paper #F8F5ED, Parchment #D8CFB8, Hearth Gold #B68A4A, Stone #8A8D84, Ink #171A17. High text contrast.
+Type: a sturdy old-style book serif for the app title, chapter name, section headings and numerals; a highly readable humanist sans for labels, rows and the button. No decorative fantasy fonts.
+
+Text, verbatim and correctly spelled: "The Ranger's Road"; "CHAPTER I · WEEKS 1–4"; "The Muster"; "Answer the call."; "1"; "Campaign day"; "27"; "Days until Gate Trial"; "Gate Trial target: end of Week 4. You can take it when ready."; "Today's Orders"; "DAILY WATCH"; "Morning Watch"; "MAIN ORDER"; "Short conditioning or restoration"; "Check readiness before training."; "Evening Watch"; "Readiness"; "Not checked today"; "Check sleep, energy, and pain before training."; "HEARTH MISSION"; "Ask your spouse what would genuinely help this week."; "Begin Today's Mission"; "Keep"; "Road"; "Forge"; "Journal"; "Field Manual".
+
+Avoid: running figures, invented exercises, Scripture, XP, points, scores, streaks, badges, extra dates, coordinates, maps, extra sections, extra copy, watermark, fake aged-parchment texture, glow, neon, 3D.

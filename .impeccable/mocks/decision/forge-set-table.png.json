@@ -1,0 +1,9 @@
+{
+  "origin": "Generated mobile UI mockup",
+  "tool": "image_gen.imagegen",
+  "promptSource": ".impeccable/mocks/decision/forge-set-table.prompt.txt",
+  "styleReference": ".impeccable/mocks/decision/check-in-lookback.png",
+  "programReference": "docs/rangers-road-full-program-content/01_THE_MUSTER.md",
+  "viewport": "390x844 at 2x",
+  "purpose": "Forge active workout Set table design choice"
+}

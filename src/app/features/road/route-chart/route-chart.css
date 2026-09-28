@@ -1,0 +1,153 @@
+:host {
+  display: block;
+}
+
+.route {
+  --line-top: 2.75rem;
+  --line-height: 3rem;
+  position: relative;
+  height: 7.625rem;
+  color: var(--on-band);
+}
+
+.route__line {
+  position: absolute;
+  top: var(--line-top);
+  left: 0;
+  width: 100%;
+  height: var(--line-height);
+  overflow: visible;
+}
+
+.route__line path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.route__ahead {
+  stroke: var(--on-band-muted);
+  stroke-dasharray: 2 6;
+  stroke-opacity: 0.7;
+  stroke-width: 1.5;
+}
+
+.route__traveled {
+  stroke: var(--on-band);
+  stroke-width: 2;
+}
+
+/* Every mark sits on the trail at its own point. */
+.route__tick,
+.route__today,
+.route__ring {
+  position: absolute;
+  top: calc(var(--line-top) + var(--line-height) * var(--y) / 100);
+  left: calc(var(--x) * 1%);
+  transform: translate(-50%, -50%);
+}
+
+.route__tick {
+  width: 1px;
+  height: 0.75rem;
+  background: var(--on-band-muted);
+  opacity: 0.8;
+}
+
+.route__today {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background: var(--on-band-gold);
+  box-shadow:
+    0 0 0 3px var(--band),
+    0 0 0 5px rgb(214 179 122 / 28%);
+}
+
+.route__ring {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--on-band-gold);
+  border-radius: 50%;
+  background: var(--band);
+}
+
+.route__ring--reached {
+  background: var(--on-band-gold);
+  box-shadow: 0 0 0 3px var(--band);
+}
+
+.route__target-label,
+.route__today-label,
+.route__week {
+  position: absolute;
+  font-size: 0.625rem;
+  font-stretch: 100%;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Labels sit a short step above their own mark on the trail. */
+.route__target-label,
+.route__today-label {
+  top: calc(var(--line-top) + var(--line-height) * var(--y) / 100 - 1.5rem);
+  left: calc(var(--x) * 1%);
+  color: var(--on-band-gold);
+}
+
+.route__target-label {
+  transform: translateX(calc(-100% + 0.5rem));
+}
+
+/* Today's label slides from left-aligned at the start of the route to right-aligned at its end. */
+.route__today-label {
+  transform: translateX(calc(var(--t) * -100%));
+}
+
+.route__target-label--raised {
+  top: calc(var(--line-top) + var(--line-height) * var(--y) / 100 - 2.75rem);
+}
+
+.route__week {
+  bottom: 0;
+  left: calc(var(--x) * 1%);
+  color: var(--on-band-muted);
+  transform: translateX(-50%);
+}
+
+/* The road already walked draws itself in once, then today's mark settles on it. */
+@media (prefers-reduced-motion: no-preference) {
+  .route__line--traveled {
+    animation: route-reveal 1100ms var(--ease-out) both;
+  }
+
+  .route__today {
+    animation: route-mark 420ms var(--ease-out) 900ms both;
+  }
+}
+
+@keyframes route-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes route-mark {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

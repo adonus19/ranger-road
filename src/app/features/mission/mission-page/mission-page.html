@@ -1,0 +1,237 @@
+<div class="mission-page">
+  <a class="back-link" routerLink="/keep">
+    <app-icon name="arrow-left" />
+    Back to Keep
+  </a>
+
+  <h1>Today’s Mission</h1>
+
+  @if (state.loading() || historyLoading()) {
+    <p class="page-state" role="status">Opening today’s mission…</p>
+  } @else if (state.error(); as message) {
+    <div class="page-state page-state--error" role="alert">
+      <p>{{ message }}</p>
+      <button type="button" (click)="retry()">Try again</button>
+    </div>
+  } @else if (historyError(); as message) {
+    <div class="page-state page-state--error" role="alert">
+      <p>{{ message }}</p>
+      <button type="button" (click)="retry()">Try again</button>
+    </div>
+  } @else if (state.needsStartDate()) {
+    <div class="page-state">
+      <p>Choose Day 1 before opening a mission.</p>
+      <a routerLink="/keep">Set Day 1</a>
+    </div>
+  } @else if (state.beforeDayOne()) {
+    <div class="page-state">
+      <p>Your campaign has not reached Day 1 yet.</p>
+      <a routerLink="/keep">View your start date</a>
+    </div>
+  } @else if (activityChoices().length) {
+    <app-readiness-strip
+      [status]="readiness()?.status ?? 'pending'"
+      [label]="readinessLabel()"
+      [help]="readinessHelp()"
+    />
+
+    <section class="order" aria-labelledby="order-title">
+      <span class="order__icon"><app-icon [name]="mainOrderIcon()" /></span>
+      <div>
+        <h2 id="order-title">{{ mainOrder()?.title ?? 'Today’s order' }}</h2>
+      </div>
+    </section>
+
+    @if (activityChoices().length > 1) {
+      <app-activity-choice
+        [choices]="activityChoices()"
+        [selectedId]="selectedActivityId()"
+        [recordedIds]="recordedActivityIds()"
+        (selected)="chooseActivity($event)"
+      />
+    }
+
+    @if (definition(); as mission) {
+      @if (mission.activityDetails?.length) {
+        <ul class="plan-note">
+          @for (detail of mission.activityDetails; track detail) {
+            <li>{{ detail }}</li>
+          }
+        </ul>
+      }
+      @if (mission.readingMinutes) {
+        <p class="plan-note">Read for {{ mission.readingMinutes }} minutes.</p>
+      }
+      @if (mission.optionalFamilyQuest) {
+        <p class="plan-note">Optional family quest: {{ mission.optionalFamilyQuest }}</p>
+      }
+
+      @if (workoutId(); as workout) {
+        @if (
+          readiness() && (readiness()?.status !== 'red' || workout === 'chapter-1-restoration')
+        ) {
+          <a class="workout-link" [routerLink]="['/forge/session', workout]">
+            <app-icon name="anvil" />
+            Open {{ mission.title }} in the Forge
+          </a>
+        } @else if (readiness()?.status === 'red') {
+          <a class="workout-link" routerLink="/forge">
+            <app-icon name="renew" />
+            View restoration in the Forge
+          </a>
+        }
+      }
+
+      @if (mission.plannedTrialId) {
+        <section class="recorded" role="status">
+          <h2>Gate Trial planned</h2>
+          <p>The full trial needs a Green readiness day. Review its five parts on the Road.</p>
+          <a routerLink="/road/gate-trial">Review the Gate Trial</a>
+        </section>
+      }
+
+      @if (needsReadiness() && !mission.plannedTrialId) {
+        <p class="plan-note">Record what you did, including any changes for pain or energy.</p>
+      }
+
+      @if (!mission.plannedTrialId && latestRecord(); as record) {
+        @if (!recordAnother()) {
+          <section class="recorded" aria-labelledby="recorded-title" role="status">
+            <h2 id="recorded-title">Recorded today</h2>
+            <p class="recorded__activity">
+              {{ record.definitionSnapshot?.title ?? originalOrderTitle() ?? mission.title }}
+            </p>
+            <p>
+              <strong>{{ outcomeLabel(record) }}</strong>
+            </p>
+            @if (record.notes) {
+              <p class="recorded__notes">{{ record.notes }}</p>
+            }
+            @if (walkDetailsFor(record)) {
+              <a
+                class="walk-link"
+                routerLink="/road/log"
+                [queryParams]="{ date: record.date, from: 'mission' }"
+              >
+                <app-icon name="footprints" />
+                Log walk details
+              </a>
+            }
+            <button type="button" class="secondary-button" (click)="recordAnother.set(true)">
+              Record another attempt
+            </button>
+            @if (earlierRecords().length) {
+              <details class="earlier-records">
+                <summary>Earlier attempts today ({{ earlierRecords().length }})</summary>
+                <ul>
+                  @for (earlier of earlierRecords(); track earlier.id) {
+                    <li>
+                      <strong
+                        >{{
+                          earlier.definitionSnapshot?.title ?? originalOrderTitle() ?? mission.title
+                        }}
+                        · {{ outcomeLabel(earlier) }}</strong
+                      >
+                      @if (earlier.notes) {
+                        <span>{{ earlier.notes }}</span>
+                      }
+                    </li>
+                  }
+                </ul>
+              </details>
+            }
+          </section>
+        }
+      }
+
+      @if (!mission.plannedTrialId && (!latestRecord() || recordAnother())) {
+        <form class="outcome-form" (submit)="save($event)" novalidate>
+          <fieldset class="outcomes">
+            <legend>Record your outcome</legend>
+            <div class="outcome-list">
+              @for (option of outcomeOptions; track option.value) {
+                @if (option.value !== 'restoration' || needsReadiness()) {
+                  @if (allowedOutcomes().includes(option.value)) {
+                    <label class="outcome-option">
+                      <input
+                        type="radio"
+                        [value]="option.value"
+                        [formField]="missionForm.outcome"
+                      />
+                      <span>{{ option.label }}</span>
+                    </label>
+                  } @else {
+                    <div class="outcome-option outcome-option--unavailable" aria-disabled="true">
+                      <span class="outcome-option__empty" aria-hidden="true"></span>
+                      <span>{{ option.label }}</span>
+                      <small>{{ unavailableReason(option.value) }}</small>
+                    </div>
+                  }
+                }
+              }
+            </div>
+            @if (missionForm.outcome().touched() && missionForm.outcome().errors().length) {
+              <p class="field-error">Choose how the mission went.</p>
+            }
+          </fieldset>
+
+          <div class="notes-field">
+            <label for="mission-notes">{{ noteLabel() }}</label>
+            <textarea
+              id="mission-notes"
+              rows="3"
+              [formField]="missionForm.notes"
+              [attr.placeholder]="
+                formModel().outcome === 'rest'
+                  ? 'What made rest the right choice today?'
+                  : 'A brief note is enough.'
+              "
+            ></textarea>
+            @if (missionForm.notes().touched() && missionForm.notes().errors().length) {
+              <p class="field-error">Record a reason for rest.</p>
+            }
+          </div>
+
+          @if (saveError(); as message) {
+            <p class="save-error" role="alert">{{ message }}</p>
+          }
+          <button class="save-button" type="submit" [disabled]="saving()">
+            {{ saving() ? 'Saving mission…' : 'Save mission' }}
+          </button>
+        </form>
+      }
+    } @else {
+      <p role="status">Choose a path to record today’s mission.</p>
+    }
+
+    @if (earlierPlanRecords().length) {
+      <section class="recorded earlier-plan" aria-labelledby="earlier-plan-title">
+        <h2 id="earlier-plan-title">Saved under an earlier plan</h2>
+        <p>These attempts keep the order that was in place when you recorded them.</p>
+        <ul>
+          @for (record of earlierPlanRecords(); track record.id) {
+            <li>
+              <strong
+                >{{ record.definitionSnapshot?.title ?? 'Saved mission' }} ·
+                {{ outcomeLabel(record) }}</strong
+              >
+              @if (record.notes) {
+                <span>{{ record.notes }}</span>
+              }
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    <nav class="watch-links" aria-label="Daily watches">
+      <a routerLink="/journal/morning">Morning Watch</a>
+      <a routerLink="/journal/evening">Evening Watch</a>
+    </nav>
+  } @else {
+    <div class="page-state">
+      <p>No daily order is available for this date yet.</p>
+      <a routerLink="/road">View the Road</a>
+    </div>
+  }
+</div>

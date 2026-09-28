@@ -1,0 +1,24 @@
+<fieldset class="activity-choices">
+  <legend>Choose today’s path</legend>
+  <div class="activity-choices__list">
+    @for (choice of choices(); track choice.id) {
+      <label class="activity-choice" [class.activity-choice--selected]="selectedId() === choice.id">
+        <input
+          type="radio"
+          name="mission-activity"
+          [value]="choice.id"
+          [checked]="selectedId() === choice.id"
+          (change)="selected.emit(choice.id)"
+        />
+        <span class="activity-choice__icon"><app-icon [name]="icon(choice)" /></span>
+        <span class="activity-choice__copy">
+          <strong>{{ choice.title }}</strong>
+          <span>{{ detail(choice) }}</span>
+          @if (recordedIds().includes(choice.id)) {
+            <small>Recorded today</small>
+          }
+        </span>
+      </label>
+    }
+  </div>
+</fieldset>

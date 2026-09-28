@@ -1,0 +1,297 @@
+:host {
+  display: block;
+}
+
+/* The route runs over the same painted forest as Keep, darkened so the trail reads like a chart after dark. */
+.road-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--band);
+  color: var(--on-band);
+}
+
+.road-band__scene img {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.road-band::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgb(23 43 33 / 90%),
+    rgb(23 43 33 / 55%) 60%,
+    rgb(23 43 33 / 62%)
+  );
+  content: '';
+  pointer-events: none;
+}
+
+/* On phones the scene sits low, so the trail crosses the tree line instead of an empty field. */
+@media (max-width: 699px) {
+  /* Larger and anchored left, so the painted sun falls outside the frame instead of onto the trail. */
+  .road-band__scene img {
+    top: calc(100% - 13.75rem);
+    height: 22rem;
+    object-position: left top;
+  }
+}
+
+.road-band__inner {
+  max-width: 44rem;
+  margin-inline: auto;
+  padding: calc(var(--header-height) + env(safe-area-inset-top) + 0.75rem) var(--page-gutter) 1.5rem;
+}
+
+.road-band h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.road-band__theme {
+  margin: 0.25rem 0 0;
+  color: var(--on-band-gold);
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.road-band__meta {
+  margin: 0.375rem 0 0;
+  color: var(--on-band-muted);
+  font-size: 0.875rem;
+}
+
+.road-band__route {
+  margin-top: 1.25rem;
+}
+
+.road-band__message {
+  margin: 1.5rem 0 0;
+  color: var(--on-band-muted);
+}
+
+.road-band__message a {
+  color: var(--on-band);
+}
+
+.road-body {
+  max-width: 44rem;
+  padding-top: 1.75rem;
+}
+
+.trial h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.trial__target {
+  max-width: 44ch;
+  margin: 0.5rem 0 0.75rem;
+  color: var(--text-secondary);
+}
+
+.trial__open {
+  display: inline-flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  margin-bottom: 1.25rem;
+  color: var(--action);
+  font-weight: 700;
+  text-underline-offset: 0.2em;
+}
+
+.trial__open:hover {
+  color: var(--action-hover);
+}
+
+.trial__phases {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: trial-phase;
+}
+
+.trial__phases > li {
+  border-top: 1px solid var(--line-soft);
+  counter-increment: trial-phase;
+}
+
+.trial__phases > li:last-child {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.trial__phases summary {
+  display: flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.trial__phases summary::-webkit-details-marker {
+  display: none;
+}
+
+.trial__phases summary::before {
+  min-width: 1.25rem;
+  color: var(--text-secondary);
+  content: counter(trial-phase) '.';
+  font-variant-numeric: tabular-nums;
+}
+
+.trial__phases summary::after {
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-left: auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  content: '';
+  transform: rotate(45deg);
+  transition: transform 160ms var(--ease-out);
+}
+
+.trial__phases details[open] summary::after {
+  transform: rotate(225deg);
+}
+
+.trial__phases summary:focus-visible {
+  outline: 2px solid var(--action);
+  outline-offset: 2px;
+}
+
+.trial__phase-content {
+  padding: 0 0 1rem 2rem;
+  color: var(--text-secondary);
+}
+
+.trial__phase-content p {
+  margin: 0.5rem 0 0;
+}
+
+.trial__phase-content ul {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.trial__phase-content li + li {
+  margin-top: 0.25rem;
+}
+
+.walks {
+  margin-top: 2.5rem;
+}
+
+.walks h2 {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.walks__log {
+  display: flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--action);
+  color: var(--on-action);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 160ms var(--ease-out);
+}
+
+.walks__log:hover {
+  background: var(--action-hover);
+}
+
+.walks__log app-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.walks__state {
+  margin: 1rem 0 0;
+  color: var(--text-secondary);
+}
+
+.walks__state--error {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--status-red-surface);
+  color: var(--status-red-text);
+}
+
+.walks__state--error p {
+  margin: 0 0 0.5rem;
+}
+
+.walks__state--error button {
+  min-height: var(--touch-target);
+  padding: 0 1rem;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.walks__list {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.walks__list li {
+  display: grid;
+  gap: 0.125rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.walks__list li:last-child {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.walks__list strong {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.walks__list span {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+/* Each part keeps its separator, so a line never breaks on a dangling dot. */
+.walks__list .part {
+  white-space: nowrap;
+}

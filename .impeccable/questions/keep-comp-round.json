@@ -1,0 +1,38 @@
+{
+  "title": "Choose the Keep layout",
+  "question": "All three use the Forest Light look. Pick the layout to build, or pick one and use the note box to borrow from another.",
+  "options": [
+    {
+      "id": "comp-a",
+      "label": "A. Forest Light as chosen",
+      "kicker": "YOUR DECISION COMP",
+      "thesis": "The comp you picked: a dawn band with the counts beside the title, and orders as separate cards.",
+      "palette": ["#18241D", "#24362B", "#F8F5ED", "#D8CFB8", "#B68A4A"],
+      "materials": ["matte pine", "warm paper", "soft tree silhouettes"],
+      "viewport": "Short dawn band holding chapter and counts, three order cards with round icons, parchment readiness card, pine button.",
+      "risk": "It leaves out the theme line, the Gate Trial target note, and the Hearth mission, so the build would have to fit those in.",
+      "comp": ".impeccable/mocks/decision/assigned.png"
+    },
+    {
+      "id": "comp-b",
+      "label": "B. Tall dawn, ruled orders",
+      "thesis": "The dawn scene carries the chapter title, and today's orders read as one ruled list below the counts.",
+      "palette": ["#18241D", "#24362B", "#F8F5ED", "#D8CFB8", "#B68A4A"],
+      "materials": ["matte pine", "warm paper", "soft tree silhouettes"],
+      "viewport": "A taller scene with The Muster and Answer the call., then day and Gate Trial counts on paper, a ruled orders list with a gold mark on the main order, readiness panel, Hearth row, pine button.",
+      "risk": "The scene and counts take nearly half the screen, so readiness and the Hearth mission sit lower.",
+      "comp": ".impeccable/mocks/keep-comp-b.png"
+    },
+    {
+      "id": "comp-c",
+      "label": "C. Compact band, readiness first",
+      "thesis": "A short band holds everything about the chapter, so readiness and the main order own the screen.",
+      "palette": ["#18241D", "#24362B", "#F8F5ED", "#D8CFB8", "#B68A4A"],
+      "materials": ["matte pine", "warm paper", "soft tree silhouettes"],
+      "viewport": "Header, scene, chapter and counts in one band; readiness strip first; a featured main-order card with the two watches as tiles; Hearth row; pine button.",
+      "risk": "The forest scene is small, and the watch tiles look tappable before they lead anywhere.",
+      "comp": ".impeccable/mocks/keep-comp-c.png"
+    }
+  ],
+  "steer": true
+}

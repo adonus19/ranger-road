@@ -1,0 +1,286 @@
+<div class="check-in entry-form">
+  <a class="back-link" [routerLink]="backPath">
+    <app-icon name="arrow-left" />
+    {{ backLabel }}
+  </a>
+
+  <!-- Words never split, so check-in cannot break at its hyphen. -->
+  <h1>
+    @for (word of titleWords(); track $index) {
+      <span class="word">{{ word }}</span>{{ $last ? '' : ' ' }}
+    }
+  </h1>
+  <p class="date-line">{{ dateLine() }}</p>
+
+  @if (saved(); as entry) {
+    <app-check-in-saved
+      class="check-in__saved"
+      [entry]="entry"
+      [backPath]="backPath"
+      [backLabel]="backLabel"
+    />
+  } @else if (loading()) {
+    <p class="page-state" role="status">Opening your check-in…</p>
+  } @else if (loadError(); as message) {
+    <div class="page-state" role="alert">
+      <p>{{ message }}</p>
+      <button class="retry-button" type="button" (click)="load()">Try again</button>
+    </div>
+  } @else if (unavailable(); as message) {
+    <div class="page-state" role="status">
+      <p>{{ message }}</p>
+      @if (needsTestReadiness()) {
+        <a class="readiness-link" routerLink="/readiness">Check readiness</a>
+      }
+    </div>
+  } @else {
+    <form class="check-in-form" (submit)="save($event)" novalidate>
+      @if (!testsOnly) {
+        <section class="lookback-part" aria-labelledby="lookback-title">
+          <h2 id="lookback-title">The last 28 days</h2>
+          <app-readiness-lookback [summary]="summary()" [error]="false" />
+        </section>
+
+        <section class="part" aria-labelledby="body-title">
+          <h2 id="body-title">Body</h2>
+          <div class="pair">
+            <div class="field">
+              <label class="label" for="weight">Weight (lb)</label>
+              <input
+                id="weight"
+                class="numeral"
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                [formField]="checkInForm.weight"
+                [attr.aria-invalid]="showError(checkInForm.weight)"
+                [attr.aria-describedby]="showError(checkInForm.weight) ? 'weight-error' : null"
+              />
+              @if (showError(checkInForm.weight)) {
+                <span class="field-error" id="weight-error">{{
+                  checkInForm.weight().errors()[0]?.message
+                }}</span>
+              }
+            </div>
+            <div class="field">
+              <label class="label" for="waist">Waist (in)</label>
+              <input
+                id="waist"
+                class="numeral"
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                [formField]="checkInForm.waist"
+                [attr.aria-invalid]="showError(checkInForm.waist)"
+                [attr.aria-describedby]="showError(checkInForm.waist) ? 'waist-error' : null"
+              />
+              @if (showError(checkInForm.waist)) {
+                <span class="field-error" id="waist-error">{{
+                  checkInForm.waist().errors()[0]?.message
+                }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="field field--beside">
+            <label class="label" for="resting-heart-rate">Resting heart rate (bpm)</label>
+            <input
+              id="resting-heart-rate"
+              class="numeral"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              [formField]="checkInForm.restingHeartRate"
+              [attr.aria-invalid]="showError(checkInForm.restingHeartRate)"
+              [attr.aria-describedby]="
+                showError(checkInForm.restingHeartRate) ? 'rhr-help rhr-error' : 'rhr-help'
+              "
+            />
+            <p class="help" id="rhr-help">{{ help.restingHeartRate }}</p>
+            @if (showError(checkInForm.restingHeartRate)) {
+              <span class="field-error" id="rhr-error">{{
+                checkInForm.restingHeartRate().errors()[0]?.message
+              }}</span>
+            }
+          </div>
+
+          <fieldset
+            class="pressure"
+            [attr.aria-describedby]="
+              showError(checkInForm.systolic) ? 'pressure-help pressure-error' : 'pressure-help'
+            "
+          >
+            <legend class="label">Blood pressure (optional)</legend>
+            <div class="pressure__row field">
+              <label class="visually-hidden" for="systolic">Systolic, the top number</label>
+              <input
+                id="systolic"
+                class="numeral"
+                type="text"
+                inputmode="numeric"
+                autocomplete="off"
+                [formField]="checkInForm.systolic"
+                [attr.aria-invalid]="showError(checkInForm.systolic)"
+              />
+              <span class="pressure__slash" aria-hidden="true">/</span>
+              <label class="visually-hidden" for="diastolic">Diastolic, the bottom number</label>
+              <input
+                id="diastolic"
+                class="numeral"
+                type="text"
+                inputmode="numeric"
+                autocomplete="off"
+                [formField]="checkInForm.diastolic"
+                [attr.aria-invalid]="showError(checkInForm.systolic)"
+              />
+            </div>
+            <small class="help" id="pressure-help">{{ help.bloodPressure }}</small>
+            @if (showError(checkInForm.systolic)) {
+              <span class="field-error" id="pressure-error">{{
+                checkInForm.systolic().errors()[0]?.message
+              }}</span>
+            }
+          </fieldset>
+        </section>
+      }
+
+      <section class="part" aria-labelledby="tests-title">
+        <h2 id="tests-title">Tests</h2>
+        @if (testsHeld()) {
+          <p class="held">
+            {{ help.testsHeld }}
+            @if (!testsOnly) {
+              Save the rest now, and add the tests from the Journal when you’re ready.
+            }
+          </p>
+        } @else if (needsReadiness()) {
+          <div class="test-readiness">
+            <p>Check readiness first to take tests in this check-in. Saving the body values now finishes this check-in without tests.</p>
+            <a class="readiness-link" routerLink="/readiness">Check readiness</a>
+          </div>
+        } @else {
+          <p class="part__note">{{ help.tests }}</p>
+          <div class="field field--beside">
+            <label class="label" for="pushups">Push-ups</label>
+            <input
+              id="pushups"
+              class="numeral"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              [formField]="checkInForm.pushups"
+              [attr.aria-invalid]="showError(checkInForm.pushups)"
+              [attr.aria-describedby]="
+                showError(checkInForm.pushups) ? 'pushups-help pushups-error' : 'pushups-help'
+              "
+            />
+            <p class="help" id="pushups-help">{{ help.pushups }}</p>
+            @if (showError(checkInForm.pushups)) {
+              <span class="field-error" id="pushups-error">{{
+                checkInForm.pushups().errors()[0]?.message
+              }}</span>
+            }
+          </div>
+
+          <div class="field">
+            <label class="label" for="pullup">Pull-up assistance</label>
+            <input
+              id="pullup"
+              type="text"
+              autocomplete="off"
+              placeholder="Purple band, or none"
+              [formField]="checkInForm.pullupAssistance"
+              [attr.aria-invalid]="showError(checkInForm.pullupAssistance)"
+              [attr.aria-describedby]="
+                showError(checkInForm.pullupAssistance) ? 'pullup-help pullup-error' : 'pullup-help'
+              "
+            />
+            <small class="help" id="pullup-help">{{ help.pullupAssistance }}</small>
+            @if (showError(checkInForm.pullupAssistance)) {
+              <span class="field-error" id="pullup-error">{{
+                checkInForm.pullupAssistance().errors()[0]?.message
+              }}</span>
+            }
+          </div>
+
+          <fieldset class="segments" aria-describedby="squat-help">
+            <legend class="label">Squat depth</legend>
+            <div class="segments__options">
+              @for (depth of squatDepths; track depth.value) {
+                <label class="segment">
+                  <input type="radio" [value]="depth.value" [formField]="checkInForm.squatDepth" />
+                  <span>{{ depth.label }}</span>
+                </label>
+              }
+            </div>
+            <small class="help" id="squat-help">{{ help.squatDepth }}</small>
+          </fieldset>
+
+          <div class="field field--beside field--help-below">
+            <label class="label" for="toe-reach">Toe reach (in)</label>
+            <input
+              id="toe-reach"
+              class="numeral"
+              type="text"
+              inputmode="decimal"
+              autocomplete="off"
+              [formField]="checkInForm.toeReach"
+              [attr.aria-invalid]="showError(checkInForm.toeReach)"
+              [attr.aria-describedby]="
+                showError(checkInForm.toeReach) ? 'toe-help toe-error' : 'toe-help'
+              "
+            />
+            <p class="help" id="toe-help">{{ help.toeReach }}</p>
+            @if (showError(checkInForm.toeReach)) {
+              <span class="field-error" id="toe-error">{{
+                checkInForm.toeReach().errors()[0]?.message
+              }}</span>
+            }
+          </div>
+        }
+      </section>
+
+      @if (!testsOnly) {
+        <section class="part" aria-labelledby="feel-title">
+          <h2 id="feel-title">How you feel</h2>
+          <fieldset class="scale" aria-describedby="energy-help">
+            <legend class="label">Energy</legend>
+            <div class="scale__options scale__options--five">
+              @for (level of ratingLevels; track level) {
+                <label class="scale__option">
+                  <input type="radio" [value]="level" [formField]="checkInForm.energy" />
+                  <span>{{ level }}</span>
+                </label>
+              }
+            </div>
+            <small class="help" id="energy-help">{{ help.energy }}</small>
+          </fieldset>
+          <fieldset class="scale" aria-describedby="capability-help">
+            <legend class="label">Capability</legend>
+            <div class="scale__options scale__options--five">
+              @for (level of ratingLevels; track level) {
+                <label class="scale__option">
+                  <input type="radio" [value]="level" [formField]="checkInForm.capability" />
+                  <span>{{ level }}</span>
+                </label>
+              }
+            </div>
+            <small class="help" id="capability-help">{{ help.capability }}</small>
+          </fieldset>
+        </section>
+      }
+
+      @if (saveError(); as message) {
+        <p class="save-error" role="alert">{{ message }}</p>
+      }
+
+      @if (!(testsOnly && testsHeld())) {
+        <div class="dock dock--bleed">
+          <button class="save-button" type="submit" [disabled]="saving()">
+            {{ saving() ? 'Saving…' : testsOnly ? 'Save tests' : 'Save check-in' }}
+          </button>
+        </div>
+      }
+    </form>
+  }
+</div>

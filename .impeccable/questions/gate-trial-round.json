@@ -1,0 +1,40 @@
+{
+  "title": "Choose the Gate Trial screen",
+  "question": "The trial keeps the Forest Light design. Which arrangement should guide its preparation and phase screens?",
+  "options": [
+    {
+      "id": "threshold",
+      "label": "The threshold",
+      "kicker": "THE ROLL",
+      "thesis": "A quiet arrival screen gives the Gate Trial room, then brings readiness and the five phases into view.",
+      "palette": ["#172b21", "#f6f3ea", "#d6b37a"],
+      "materials": ["painted forest", "warm paper", "fine rules"],
+      "viewport": "The forest fills the upper half with the trial name; readiness and the first phase sit on paper below.",
+      "risk": "The large arrival band gives less room to the checklist on a small phone.",
+      "comp": ".impeccable/mocks/decision/gate-trial-threshold.png"
+    },
+    {
+      "id": "daybook",
+      "label": "The daybook",
+      "thesis": "A single working page keeps the whole trial visible like a dated field record.",
+      "palette": ["#172b21", "#f6f3ea", "#24362b"],
+      "materials": ["warm paper", "book serif", "fine rules"],
+      "viewport": "A compact header gives way to a readiness strip and all five phases in a continuous ledger.",
+      "risk": "Its steady density feels less ceremonial when the trial begins.",
+      "comp": ".impeccable/mocks/decision/gate-trial-daybook.png"
+    },
+    {
+      "id": "station",
+      "label": "One station at a time",
+      "thesis": "The active phase takes the screen, with a small route showing the work around it.",
+      "palette": ["#172b21", "#f6f3ea", "#b68a4a"],
+      "materials": ["route line", "warm paper", "painted forest"],
+      "viewport": "The walk phase opens first with a clear place for its result; the remaining phases stay visible as route stops.",
+      "risk": "The person must move between phases to see the full trial at once.",
+      "comp": ".impeccable/mocks/decision/gate-trial-station.png"
+    }
+  ],
+  "reroll": true,
+  "steer": true,
+  "buildPath": {"value": "comp", "toggle": false}
+}

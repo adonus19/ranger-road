@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gate Trial composition studies</title>
+  <style>
+    @font-face { font-family: Wittgenstein; src: url('../../../public/fonts/wittgenstein-latin-variable.woff2'); font-weight: 400 900; }
+    @font-face { font-family: 'Noto Sans'; src: url('../../../public/fonts/noto-sans-latin-variable.woff2'); font-weight: 400 700; }
+    :root { --paper:#f6f3ea; --tint:#e9e5d8; --line:#d4d1c7; --soft:#dcd8ce; --ink:#171a17; --muted:#4f514d; --pine:#24362b; --band:#172b21; --cream:#f4f1e8; --gold:#d6b37a; --sage:#53655c; }
+    * { box-sizing:border-box; }
+    html, body { margin:0; width:390px; min-height:844px; background:var(--paper); color:var(--ink); }
+    body { font:16px/1.5 'Noto Sans',sans-serif; font-stretch:87.5%; }
+    h1,h2,h3,p { margin:0; }
+    .serif { font-family:Wittgenstein,Georgia,serif; }
+    .screen { display:none; min-height:844px; padding-bottom:170px; }
+    body[data-variant="threshold"] .threshold,
+    body[data-variant="daybook"] .daybook,
+    body[data-variant="station"] .station { display:block; }
+    .brand { height:69px; display:flex; gap:10px; align-items:center; padding:0 16px; background:var(--band); color:var(--cream); font:700 24px/1 Wittgenstein,Georgia,serif; }
+    .brand svg { width:32px; height:36px; flex:none; fill:var(--gold); }
+    .back { display:flex; align-items:center; gap:9px; color:var(--muted); font-size:15px; font-weight:600; min-height:48px; }
+    .back svg { width:20px; height:20px; stroke:currentColor; stroke-width:1.8; fill:none; }
+    .bottom-nav { position:fixed; z-index:4; left:0; bottom:0; width:390px; height:78px; display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid var(--line); background:var(--paper); }
+    .bottom-nav div { display:flex; flex-direction:column; gap:5px; justify-content:center; align-items:center; color:#676964; font-size:11px; text-align:center; white-space:nowrap; }
+    .bottom-nav div.active { color:var(--pine); font-weight:700; }
+    .bottom-nav svg { width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+    .bottom-nav .active span { border-bottom:3px solid #a9804a; padding-bottom:2px; }
+    .dock { position:fixed; z-index:5; left:0; bottom:78px; width:390px; padding:10px 16px; border-top:1px solid var(--line); background:var(--paper); }
+    .dock button { display:block; width:100%; min-height:50px; border:0; border-radius:6px; background:var(--pine); color:var(--cream); font:600 16px 'Noto Sans',sans-serif; }
+    .tag { color:var(--sage); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .rule { border-top:1px solid var(--line); }
+    .phase-title { display:block; font-family:Wittgenstein,Georgia,serif; font-size:20px; font-weight:700; line-height:1.2; }
+    .icon-arrow { font-size:23px; line-height:1; color:var(--pine); }
+
+    /* Arrival: a large forest scene makes the trial feel like a threshold. */
+    .arrival { position:relative; min-height:386px; overflow:hidden; background:var(--band); color:var(--cream); }
+    .arrival::before { content:''; position:absolute; inset:0; background:url('../../../public/images/forest-band.webp') center 55%/cover no-repeat; opacity:.83; }
+    .arrival::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,rgba(23,43,33,.92),rgba(23,43,33,.60) 42%,rgba(23,43,33,.32)); }
+    .arrival > * { position:relative; z-index:1; }
+    .arrival .brand { background:transparent; }
+    .arrival-content { padding:8px 22px 28px; }
+    .arrival .back { color:var(--cream); font-size:14px; }
+    .arrival h1 { margin-top:52px; max-width:300px; font:700 47px/.98 Wittgenstein,Georgia,serif; letter-spacing:-.025em; }
+    .arrival-theme { margin-top:14px; color:var(--gold); font:600 17px/1.25 Wittgenstein,Georgia,serif; }
+    .arrival-note { max-width:300px; margin-top:29px; padding-top:12px; border-top:1px solid rgba(244,241,232,.5); color:#dce1d8; font-size:14px; }
+    .threshold-body { padding:19px 20px 0; }
+    .readiness { display:flex; gap:13px; align-items:center; padding:13px 14px; border-radius:6px; background:var(--tint); }
+    .readiness-mark { display:grid; place-items:center; width:41px; height:41px; flex:none; border-radius:50%; background:#d9d1c0; color:#9c7442; font:700 24px Wittgenstein,Georgia,serif; }
+    .readiness strong { display:block; font:700 19px/1.1 Wittgenstein,Georgia,serif; }
+    .readiness small { color:var(--muted); font-size:12px; }
+    .threshold-body h2 { margin:25px 0 7px; font:700 27px/1.12 Wittgenstein,Georgia,serif; }
+    .threshold-body .intro { color:var(--muted); font-size:14px; line-height:1.45; }
+    .threshold-body .first-phase { display:flex; gap:14px; align-items:center; margin-top:17px; padding:15px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .first-phase .medal { width:44px; height:44px; display:grid; place-items:center; flex:none; border:1px solid #a9804a; border-radius:50%; color:#9c7442; }
+    .first-phase .medal::before { content:''; width:9px; height:9px; border-radius:50%; background:#a9804a; }
+    .first-phase .details { flex:1; }
+    .first-phase small { color:var(--muted); font-size:12px; }
+
+    /* Daybook: all phases visible in a continuous record. */
+    .daybook .body { padding:14px 20px 0; }
+    .daybook h1 { margin-top:8px; font:700 39px/1.04 Wittgenstein,Georgia,serif; letter-spacing:-.02em; }
+    .daybook .sub { margin-top:8px; color:var(--muted); font-size:14px; }
+    .daybook .readiness { margin-top:23px; }
+    .daybook h2 { margin:25px 0 11px; font:700 26px/1.1 Wittgenstein,Georgia,serif; }
+    .daybook .phase { display:grid; grid-template-columns:26px 1fr 24px; gap:11px; min-height:69px; align-items:center; border-top:1px solid var(--line); }
+    .daybook .phase:last-child { border-bottom:1px solid var(--line); }
+    .daybook .phase-dot { width:18px; height:18px; border:1.5px solid #a9804a; border-radius:50%; }
+    .daybook .phase-name { font:700 17px/1.2 Wittgenstein,Georgia,serif; }
+    .daybook .phase small { display:block; color:var(--muted); font-size:12px; }
+    .daybook .after { margin-top:20px; color:var(--muted); font-size:13px; line-height:1.45; }
+
+    /* Station: one active task and a small route keep focus on the current phase. */
+    .station .scene { position:relative; height:206px; overflow:hidden; background:var(--band); color:var(--cream); }
+    .station .scene::before { content:''; position:absolute; inset:0; background:url('../../../public/images/forest-band.webp') center 57%/cover no-repeat; opacity:.68; }
+    .station .scene::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,rgba(23,43,33,.84),rgba(23,43,33,.27)); }
+    .station .scene > * { position:relative; z-index:1; }
+    .station .brand { background:transparent; }
+    .station .scene h1 { margin:23px 20px 0; font:700 36px/1.04 Wittgenstein,Georgia,serif; }
+    .station .scene p { margin:4px 20px 0; color:var(--gold); font:600 15px Wittgenstein,Georgia,serif; }
+    .station .body { padding:13px 20px 0; }
+    .station .route { display:flex; align-items:center; justify-content:space-between; padding:20px 4px 21px; }
+    .route-stop { width:19px; height:19px; border:1.5px solid #a9804a; border-radius:50%; background:var(--paper); }
+    .route-stop.active { width:24px; height:24px; border:5px solid #a9804a; box-shadow:0 0 0 4px var(--paper); }
+    .route-line { flex:1; height:1px; border-top:1px dashed #bcb6a7; }
+    .station h2 { margin:8px 0 12px; font:700 31px/1.07 Wittgenstein,Georgia,serif; }
+    .station .walk-summary { padding:14px 0 18px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .station .walk-summary p { max-width:285px; color:var(--muted); font-size:14px; }
+    .station .distance { display:flex; align-items:baseline; gap:9px; margin:9px 0 2px; }
+    .station .distance b { font:600 53px/1 Wittgenstein,Georgia,serif; }
+    .station .distance span { color:var(--muted); font-size:14px; }
+    .station .field { display:flex; justify-content:space-between; align-items:center; min-height:54px; margin-top:17px; padding:0 15px; border:1px solid var(--line); border-radius:6px; color:var(--muted); }
+    .station .field span:last-child { font-family:Wittgenstein,Georgia,serif; font-size:28px; color:var(--ink); }
+    .station .later { margin-top:18px; color:var(--muted); font-size:13px; }
+  </style>
+</head>
+<body>
+  <main class="screen threshold">
+    <section class="arrival">
+      <div class="brand"><svg viewBox="0 0 36 40"><path d="M8 10.5 11 16H9.8l2.7 6H11l3 7H2l3-7H3.5l2.7-6H5ZM28 10.5 31 16h-1.2l2.7 6H31l3 7H22l3-7h-1.5l2.7-6H25ZM18 2l3.6 7.2h-1.7l3.7 7.4h-2l4.4 8.6H10l4.4-8.6h-2l3.7-7.4h-1.7Z M7.3 29h1.4v8H7.3ZM27.3 29h1.4v8h-1.4ZM17.2 25.2h1.6V38h-1.6Z"/></svg><span>The Ranger’s Road</span></div>
+      <div class="arrival-content">
+        <div class="back"><svg viewBox="0 0 24 24"><path d="M20 12H5m5.5-5.5L5 12l5.5 5.5"/></svg>Back to Road</div>
+        <h1>The Gate Trial</h1>
+        <p class="arrival-theme">The Muster · Chapter I</p>
+        <p class="arrival-note">Five parts. Take it when ready; the end of Week 4 is a planning target.</p>
+      </div>
+    </section>
+    <section class="threshold-body">
+      <div class="readiness"><span class="readiness-mark">◇</span><span><strong>Check readiness first</strong><small>Before the physical phases</small></span></div>
+      <h2>On the road</h2>
+      <p class="intro">A brisk walk, a controlled circuit, then space to reflect, pray and write your oath.</p>
+      <div class="first-phase"><span class="medal"></span><span class="details"><strong class="phase-title">2-mile brisk walk</strong><small>First of five parts</small></span><span class="icon-arrow">›</span></div>
+    </section>
+  </main>
+  <main class="screen daybook">
+    <div class="brand"><svg viewBox="0 0 36 40"><path d="M8 10.5 11 16H9.8l2.7 6H11l3 7H2l3-7H3.5l2.7-6H5ZM28 10.5 31 16h-1.2l2.7 6H31l3 7H22l3-7h-1.5l2.7-6H25ZM18 2l3.6 7.2h-1.7l3.7 7.4h-2l4.4 8.6H10l4.4-8.6h-2l3.7-7.4h-1.7Z M7.3 29h1.4v8H7.3ZM27.3 29h1.4v8h-1.4ZM17.2 25.2h1.6V38h-1.6Z"/></svg><span>The Ranger’s Road</span></div>
+    <div class="body">
+      <div class="back"><svg viewBox="0 0 24 24"><path d="M20 12H5m5.5-5.5L5 12l5.5 5.5"/></svg>Back to Road</div>
+      <h1>The Gate Trial</h1>
+      <p class="sub">Chapter I · The Muster. Take it when ready.</p>
+      <div class="readiness"><span class="readiness-mark">◇</span><span><strong>Readiness comes first</strong><small>Check today before the physical work.</small></span></div>
+      <h2>The five parts</h2>
+      <div class="phase"><span class="phase-dot"></span><span><span class="phase-name">2-mile brisk walk</span><small>Distance and time</small></span><span class="icon-arrow">›</span></div>
+      <div class="phase"><span class="phase-dot"></span><span><span class="phase-name">3-round controlled circuit</span><small>Three controlled rounds</small></span><span class="icon-arrow">›</span></div>
+      <div class="phase"><span class="phase-dot"></span><span class="phase-name">Mind reflection</span><span class="icon-arrow">›</span></div>
+      <div class="phase"><span class="phase-dot"></span><span class="phase-name">Psalm 121 + prayer</span><span class="icon-arrow">›</span></div>
+      <div class="phase"><span class="phase-dot"></span><span class="phase-name">Personal Ranger’s Oath</span><span class="icon-arrow">›</span></div>
+      <p class="after">The completed trial stays in your campaign history.</p>
+    </div>
+  </main>
+  <main class="screen station">
+    <section class="scene">
+      <div class="brand"><svg viewBox="0 0 36 40"><path d="M8 10.5 11 16H9.8l2.7 6H11l3 7H2l3-7H3.5l2.7-6H5ZM28 10.5 31 16h-1.2l2.7 6H31l3 7H22l3-7h-1.5l2.7-6H25ZM18 2l3.6 7.2h-1.7l3.7 7.4h-2l4.4 8.6H10l4.4-8.6h-2l3.7-7.4h-1.7Z M7.3 29h1.4v8H7.3ZM27.3 29h1.4v8h-1.4ZM17.2 25.2h1.6V38h-1.6Z"/></svg><span>The Ranger’s Road</span></div>
+      <h1>The Gate Trial</h1><p>The Muster · Chapter I</p>
+    </section>
+    <section class="body">
+      <div class="back"><svg viewBox="0 0 24 24"><path d="M20 12H5m5.5-5.5L5 12l5.5 5.5"/></svg>Back to Road</div>
+      <div class="route"><span class="route-stop active"></span><span class="route-line"></span><span class="route-stop"></span><span class="route-line"></span><span class="route-stop"></span><span class="route-line"></span><span class="route-stop"></span><span class="route-line"></span><span class="route-stop"></span></div>
+      <h2>2-mile brisk walk</h2>
+      <div class="walk-summary"><p>Check readiness before you start the physical phases.</p><div class="distance"><b>2</b><span>miles</span></div><p>The trial can be taken when you are ready.</p></div>
+      <div class="field"><span>Walk time</span><span>— <small>min</small></span></div>
+      <p class="later">Next: 3-round controlled circuit</p>
+    </section>
+  </main>
+  <div class="dock"><button>Check readiness</button></div>
+  <nav class="bottom-nav">
+    <div><svg viewBox="0 0 24 24"><path d="M3.6 10.4 12 3.8l8.4 6.6v10.2h-5.6v-6.1H9.2v6.1H3.6Z"/></svg><span>Keep</span></div>
+    <div class="active"><svg viewBox="0 0 24 24"><path d="M3 21c3-3.2 6.2-4.6 6.3-8 .1-3.4 1.8-6.3 3-9.5M21 21c-3.5-2.6-6.6-4.4-6.7-8-.1-3.4-.7-6.3-.6-9.5M12 20.4v-1.9M11.9 15.6v-1.5M12.1 11.2l.1-1.3"/></svg><span>Road</span></div>
+    <div><svg viewBox="0 0 24 24"><path d="M3 7h13c0 2 2 3 5 3-2 1-4 2-4 4H9c0-2-2-3-4-3V9Z M9 14h6v3h3v3H7v-3h2Z"/></svg><span>Forge</span></div>
+    <div><svg viewBox="0 0 24 24"><path d="M12 6C10 5 7 4.5 3.4 5v13.5c3.6-.3 6.6.2 8.6 1.7 2-1.5 5-2 8.6-1.7V5c-3.6-.5-6.6 0-8.6 1Zm0 0v14"/></svg><span>Journal</span></div>
+    <div><svg viewBox="0 0 24 24"><path d="m3 6 6-2 6 2 6-2v14l-6 2-6-2-6 2ZM9 4v14m6-12v14"/></svg><span>Field Manual</span></div>
+  </nav>
+  <script>
+    document.body.dataset.variant = new URLSearchParams(location.search).get('variant') || 'threshold';
+  </script>
+</body>
+</html>

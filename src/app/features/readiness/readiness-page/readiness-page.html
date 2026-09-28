@@ -1,0 +1,128 @@
+<div class="readiness-page">
+  <a class="back-link" routerLink="/keep"><app-icon name="arrow-left" />Back to Keep</a>
+  <header class="page-heading">
+    <h1>Readiness check</h1>
+    <p>Check in before training. Your answers guide today's mission and stay on this device.</p>
+  </header>
+
+  @if (state.loading()) {
+    <p role="status">Opening local records…</p>
+  } @else if (state.error(); as storageError) {
+    <div class="notice notice--error" role="alert">{{ storageError }}</div>
+  } @else if (saved(); as check) {
+    <section class="saved-result" [class.saved-result--yellow]="check.status === 'yellow'" [class.saved-result--red]="check.status === 'red'" aria-labelledby="saved-title" role="status">
+      <span class="saved-result__label">Saved for {{ check.date }}</span>
+      @switch (check.status) {
+        @case ('green') {
+          <h2 id="saved-title">Green · Ready</h2>
+          <p>Normal mission. Progress only with good technique and stable symptoms.</p>
+        }
+        @case ('yellow') {
+          <h2 id="saved-title">Yellow · Reduce</h2>
+          <p>Reduce volume about 25% and do not increase load.</p>
+        }
+        @case ('red') {
+          <h2 id="saved-title">Red · Restore</h2>
+          <p>No strength mission. Use restoration or easy movement only if appropriate. Seek medical evaluation if symptoms persist or worsen.</p>
+        }
+      }
+      <a class="return-link" routerLink="/keep/mission">Continue Today’s Mission</a>
+    </section>
+  } @else {
+    @if (state.readiness()) {
+      <p class="earlier-check">You have a check saved today. This new check will be kept alongside it.</p>
+    }
+
+    <form class="readiness-form" (submit)="save($event)" novalidate>
+      <section class="form-section" aria-labelledby="recovery-title">
+        <h2 id="recovery-title">Sleep and energy</h2>
+        <div class="field">
+          <label for="sleep-hours">Hours slept</label>
+          <input
+            id="sleep-hours"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            placeholder="e.g. 7.5"
+            [formField]="readinessForm.sleepHours"
+            aria-describedby="sleep-help"
+          />
+          <small id="sleep-help">Enter a number from 0 to 24.</small>
+          @if (readinessForm.sleepHours().touched() && readinessForm.sleepHours().errors().length) {
+            <span class="field-error">Enter your sleep hours from 0 to 24.</span>
+          }
+        </div>
+
+        <fieldset class="scale" aria-describedby="energy-help">
+          <legend class="scale__legend">Energy</legend>
+          <div class="scale__options scale__options--energy">
+            @for (level of energyLevels; track level) {
+              <label class="scale__option">
+                <input type="radio" [value]="level" [formField]="readinessForm.energy" />
+                <span>{{ level }}</span>
+              </label>
+            }
+          </div>
+          <small class="scale__help" id="energy-help">1 is very low; 5 is high.</small>
+          @if (readinessForm.energy().touched() && readinessForm.energy().errors().length) {
+            <span class="field-error">Choose an energy level from 1 to 5.</span>
+          }
+        </fieldset>
+
+        <label class="check-row">
+          <input type="checkbox" [formField]="readinessForm.poorSleep" />
+          <span>My sleep felt poor</span>
+        </label>
+      </section>
+
+      <fieldset class="form-section">
+        <legend>Pain right now</legend>
+        <p class="fieldset-help">Use 0 for none and 10 for the most severe pain.</p>
+        @for (area of painAreas; track area.id) {
+          <fieldset class="scale">
+            <legend class="scale__legend">{{ area.label }}</legend>
+            <div class="scale__options scale__options--pain">
+              @for (level of painLevels; track level) {
+                <label class="scale__option">
+                  <input type="radio" [value]="level" [formField]="area.field" />
+                  <span>{{ level }}</span>
+                </label>
+              }
+            </div>
+            @if (area.field().touched() && area.field().errors().length) {
+              <span class="field-error">Choose {{ area.noun }} pain from 0 to 10.</span>
+            }
+          </fieldset>
+        }
+      </fieldset>
+
+      <fieldset class="form-section concerns">
+        <legend>Concerning symptoms</legend>
+        <p class="fieldset-help">Select any that apply. Leave all clear if none apply.</p>
+        <label class="check-row">
+          <input type="checkbox" [formField]="readinessForm.significantSymptomIncrease" />
+          <span>Significant symptom increase</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" [formField]="readinessForm.newNeurologicalOrRadiatingSymptoms" />
+          <span>New radiating or neurological symptoms</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" [formField]="readinessForm.illness" />
+          <span>Illness</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" [formField]="readinessForm.otherConcerningSymptoms" />
+          <span>Other concerning symptoms</span>
+        </label>
+      </fieldset>
+
+      @if (saveError(); as message) {
+        <p class="notice notice--error" role="alert">{{ message }}</p>
+      }
+      <button class="save-button" type="submit" [disabled]="saving()">
+        {{ saving() ? 'Saving check…' : 'Save readiness check' }}
+      </button>
+    </form>
+  }
+</div>

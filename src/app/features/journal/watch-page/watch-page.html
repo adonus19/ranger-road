@@ -1,0 +1,83 @@
+<div class="watch-page page">
+  <a class="back-link" routerLink="/journal"><app-icon name="arrow-left" />Back to Journal</a>
+
+  @if (kind(); as watch) {
+    <header class="watch-heading">
+      <h1>{{ watch === 'morning' ? 'Morning Watch' : 'Evening Watch' }}</h1>
+      <p>{{ dateLabel() }} · {{ watch === 'morning' ? '5–10 minutes' : '3–5 minutes' }}</p>
+    </header>
+
+    @if (saved()) {
+      <section class="saved-entry" role="status" aria-labelledby="saved-title">
+        <h2 id="saved-title">
+          {{ watch === 'morning' ? 'Morning Watch saved' : 'Evening Watch saved' }}
+        </h2>
+        <p>Your entry for {{ dateLabel() }} is in the Journal.</p>
+        <a routerLink="/journal">View Journal</a>
+      </section>
+    } @else {
+      @if (watch === 'morning') {
+        <ol class="watch-steps" aria-label="Morning Watch steps">
+          <li>Read {{ dailyContent()?.scriptureReference ?? 'Scripture' }}.</li>
+          <li>Pray briefly.</li>
+          <li><a routerLink="/keep">Review Today’s Orders</a>.</li>
+        </ol>
+        <form class="watch-form" (submit)="save($event)" novalidate>
+          <div class="watch-field">
+            <label for="family-need">{{ morningPrompt }}</label>
+            <p id="family-need-help">A short answer is enough.</p>
+            <textarea
+              id="family-need"
+              rows="5"
+              [formField]="morningForm.familyNeed"
+              aria-describedby="family-need-help"
+            ></textarea>
+            @if (morningForm.familyNeed().touched() && morningForm.familyNeed().errors().length) {
+              <span class="field-error">Write a short answer before saving.</span>
+            }
+          </div>
+          @if (saveError(); as message) {
+            <p class="save-error" role="alert">{{ message }}</p>
+          }
+          <button class="save-button" type="submit" [disabled]="saving()">
+            {{ saving() ? 'Saving entry…' : 'Save Morning Watch' }}
+          </button>
+        </form>
+      } @else {
+        @if (dailyContent()?.reflectionPrompt; as prompt) {
+          <p class="evening-intro">This day’s reflection: {{ prompt }}</p>
+        }
+        <p class="evening-intro">
+          Look back on today, then name what matters tomorrow. A few words are enough. Leave any
+          line blank.
+        </p>
+        <form class="watch-form" (submit)="save($event)" novalidate>
+          <div class="evening-fields">
+            @for (prompt of eveningPrompts; track prompt.key) {
+              <div class="watch-field">
+                <label [for]="prompt.key">{{ prompt.label }}</label>
+                <textarea
+                  [id]="prompt.key"
+                  rows="3"
+                  [formField]="eveningForm[prompt.key]"
+                ></textarea>
+              </div>
+            }
+          </div>
+          @if (saveError(); as message) {
+            <p class="save-error" role="alert">{{ message }}</p>
+          }
+          <button class="save-button" type="submit" [disabled]="saving()">
+            {{ saving() ? 'Saving entry…' : 'Save Evening Watch' }}
+          </button>
+        </form>
+      }
+    }
+  } @else {
+    <section class="missing-watch">
+      <h1>Watch not found</h1>
+      <p>Choose Morning Watch or Evening Watch from the Journal.</p>
+      <a routerLink="/journal">Open Journal</a>
+    </section>
+  }
+</div>

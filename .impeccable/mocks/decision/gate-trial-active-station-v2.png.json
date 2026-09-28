@@ -1,0 +1,12 @@
+{
+  "origin": "Built-in imagegen precise edit",
+  "source": ".impeccable/mocks/decision/gate-trial-active-station-v2.prompt.txt",
+  "referenceImages": [
+    ".impeccable/mocks/decision/gate-trial-active-station.png"
+  ],
+  "viewportIntent": "390x844 mobile portrait",
+  "purpose": "Active Gate Trial Station composition",
+  "approvedVisualWorld": "Station preparation direction",
+  "implementationNotes": ".impeccable/mocks/decision/gate-trial-active-station.md",
+  "approved": false
+}

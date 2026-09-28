@@ -1,0 +1,109 @@
+/* Shared form parts (fields, segments, scales, errors, docked Save) live in src/styles/entry-form.css. */
+:host {
+  display: block;
+}
+
+.road-log {
+  max-width: 47rem;
+  margin-inline: auto;
+  padding: 0.25rem var(--page-gutter) 5.5rem;
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  margin-bottom: 1.375rem;
+  font-size: 2.4375rem;
+  line-height: 1.05;
+}
+
+h2 {
+  margin-bottom: 0.3125rem;
+  font-size: 1.75rem;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.field--date {
+  margin-top: 0.5rem;
+}
+
+/* The second half opens under a hairline rule. */
+.half--felt {
+  margin-top: 0.625rem;
+  padding-top: 0.9375rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.half--felt h2 {
+  margin-bottom: 0.625rem;
+}
+
+.scale__options--effort {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.scale__options--pain {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.pain-toggle {
+  display: flex;
+  width: 100%;
+  min-height: var(--touch-target);
+  margin-top: 0.25rem;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pain-toggle app-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.pain-toggle:hover {
+  color: var(--text);
+}
+
+.pain-toggle:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.pain .help {
+  margin: 0 0 0.75rem;
+}
+
+.pain .scale + .scale {
+  margin-top: 1rem;
+}
+
+@media (min-width: 700px) {
+  .road-log {
+    max-width: 40rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  .scale__options--pain {
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+  }
+}

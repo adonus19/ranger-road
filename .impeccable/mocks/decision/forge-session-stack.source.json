@@ -1,0 +1,18 @@
+{
+  "artifact": "forge-session-stack.png",
+  "optionId": "session-stack",
+  "renderMethod": "built-in image_gen, then resized to the requested 2x viewport",
+  "referenceImage": ".impeccable/mocks/decision/check-in-lookback.png",
+  "sourceDocuments": [
+    "DESIGN.md",
+    "docs/UX_SPEC.md",
+    "docs/rangers-road-full-program-content/01_THE_MUSTER.md",
+    ".impeccable/questions/forge-player-round.json"
+  ],
+  "promptSidecar": "forge-session-stack.prompt.txt",
+  "viewportPixels": {
+    "width": 780,
+    "height": 1688,
+    "scale": 2
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "tool": "build-phase",
+  "version": 2,
+  "startedAt": "2026-09-26T17:08:56.805Z",
+  "comp": ".impeccable/mocks/decision/road-log-halves.png",
+  "direction": null,
+  "breakpoint": "864x1872",
+  "artifact": null,
+  "phase": "review",
+  "phases": {
+    "comps": {
+      "status": "skipped",
+      "openedAt": null,
+      "closedAt": null,
+      "attempts": 0,
+      "notes": [
+        {
+          "at": "2026-09-26T17:08:56.805Z",
+          "text": "started with an approved comp; the comp round happened before this state (surface round or manual)"
+        }
+      ],
+      "gate": null,
+      "forced": null
+    },
+    "spec": {
+      "status": "closed",
+      "openedAt": "2026-09-26T17:08:56.805Z",
+      "closedAt": "2026-09-26T17:11:20.300Z",
+      "attempts": 2,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "32 regions, 0 plates, 11 text regions measured",
+        "at": "2026-09-26T17:11:20.300Z"
+      },
+      "forced": null
+    },
+    "plates": {
+      "status": "closed",
+      "openedAt": "2026-09-26T17:11:20.300Z",
+      "closedAt": "2026-09-26T17:11:23.275Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "no plates owed",
+        "at": "2026-09-26T17:11:23.275Z"
+      },
+      "forced": null
+    },
+    "hero": {
+      "status": "closed",
+      "openedAt": "2026-09-26T17:11:23.275Z",
+      "closedAt": "2026-09-26T17:22:05.024Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "hero 92% (match)",
+        "score": 0.9222,
+        "verdict": "match",
+        "report": ".impeccable/review/diff/hero/report.json",
+        "sideBySide": "/Users/apple/Documents/dev/rangers-road/.impeccable/review/diff/hero/side-by-side.png",
+        "worst": [
+          "felt-heading drift 54%",
+          "dock-rule drift 60%",
+          "miles-label drift 62%"
+        ],
+        "worstIds": [
+          "felt-heading",
+          "dock-rule",
+          "miles-label"
+        ],
+        "worstCrops": [
+          {
+            "id": "felt-heading",
+            "verdict": "drift",
+            "score": {
+              "overall": 0.5388,
+              "structure": 0.3746,
+              "color": 0.8381,
+              "colorIntersection": 0.7214,
+              "paletteMatch": 0.9009,
+              "detail": 0.5908,
+              "detailRaw": 0.6689,
+              "detailAdded": 0.1563,
+              "bands": 0.5333
+            },
+            "file": ".impeccable/review/diff/hero/regions/felt-heading.png"
+          },
+          {
+            "id": "dock-rule",
+            "verdict": "drift",
+            "score": {
+              "overall": 0.6003,
+              "structure": 0.9983,
+              "color": 0.936,
+              "colorIntersection": 0.8577,
+              "paletteMatch": 0.9781,
+              "detail": 0.0676,
+              "detailRaw": 0.2551,
+              "detailAdded": 0.375,
+              "bands": 0
+            },
+            "file": ".impeccable/review/diff/hero/regions/dock-rule.png"
+          },
+          {
+            "id": "miles-label",
+            "verdict": "drift",
+            "score": {
+              "overall": 0.6171,
+              "structure": 0.6539,
+              "color": 0.8794,
+              "colorIntersection": 0.7907,
+              "paletteMatch": 0.9271,
+              "detail": 0.469,
+              "detailRaw": 0.5523,
+              "detailAdded": 0.1667,
+              "bands": 0
+            },
+            "file": ".impeccable/review/diff/hero/regions/miles-label.png"
+          }
+        ],
+        "regionVerdicts": {
+          "header-bar": "match",
+          "brand-mark": "match",
+          "app-title": "match",
+          "back-link": "match",
+          "page-title": "drift",
+          "walk-heading": "drift",
+          "date-label": "drift",
+          "date-today": "drift",
+          "date-yesterday": "drift",
+          "date-pick": "drift",
+          "miles-label": "drift",
+          "miles-field": "match",
+          "minutes-label": "drift",
+          "minutes-field": "match",
+          "terrain-label": "match",
+          "terrain-field": "match",
+          "section-rule": "match",
+          "felt-heading": "drift",
+          "effort-label": "drift",
+          "effort-scale": "match",
+          "effort-selected": "drift",
+          "effort-help": "match",
+          "pain-toggle": "match",
+          "dock-rule": "drift",
+          "save-button": "drift",
+          "save-label": "drift",
+          "nav-bar": "match",
+          "nav-keep": "match",
+          "nav-road": "match",
+          "nav-forge": "match",
+          "nav-journal": "match",
+          "nav-field-manual": "match"
+        },
+        "at": "2026-09-26T17:22:05.024Z"
+      },
+      "forced": null,
+      "readingsSeen": {
+        "text effort-label: cap height 5px in the build, 17.6px in the comp (-72%); set font-size so the cap height renders at 17.6px": 1,
+        "text effort-label: ink is #191919 in the build, #56685e in the comp; use the comp's colour": 1,
+        "control date-today: its rule sits 3px into the box in the comp and 11px in the build (+8px), so the strip is taller than the comp's; match the height, not only the position": 1,
+        "control date-yesterday: its rule sits 3px into the box in the comp and 14px in the build (+11px), so the strip is taller than the comp's; match the height, not only the position": 1,
+        "control date-pick: its rule sits 3px into the box in the comp and 14px in the build (+11px), so the strip is taller than the comp's; match the height, not only the position": 1,
+        "control save-button: its rule sits 4px into the box in the comp and 87px in the build (+83px), so the strip is taller than the comp's; match the height, not only the position": 2,
+        "text effort-help: the face renders 32% lighter than the comp's (ink density 0.48 vs 0.71); raise a weight step or use the ranked face": 4,
+        "control effort-scale: its rule sits 5px into the box in the comp and 105px in the build (+100px), so the strip is taller than the comp's; match the height, not only the position": 1,
+        "text effort-help: cap height 14px in the build, 20.3px in the comp (-31%); set font-size so the cap height renders at 20.3px": 1,
+        "text effort-help: its first line starts 17px lower than in the comp (20px vs 3px into the region box); the spacing above it is too large": 1,
+        "text effort-label: cap height 9.5px in the build, 17.6px in the comp (-46%); set font-size so the cap height renders at 17.6px": 1,
+        "text minutes-label: ink is #b8bbb5 in the build, #516459 in the comp; use the comp's colour": 1,
+        "text effort-label: its first line starts 16px lower than in the comp (20px vs 4px into the region box); the spacing above it is too large": 1,
+        "text effort-help: its first line starts 13px lower than in the comp (16px vs 3px into the region box); the spacing above it is too large": 1,
+        "control terrain-field: its rule sits 4px into the box in the comp and 10px in the build (+6px), so the strip is taller than the comp's; match the height, not only the position": 1,
+        "control effort-scale: its rule sits 5px into the box in the comp and 23px in the build (+18px), so the strip is taller than the comp's; match the height, not only the position": 1
+      },
+      "records": 7,
+      "history": [
+        {
+          "at": "2026-09-26T17:22:05.024Z",
+          "score": 0.9222,
+          "worstIds": [
+            "felt-heading",
+            "dock-rule",
+            "miles-label"
+          ],
+          "regionVerdicts": {
+            "header-bar": "match",
+            "brand-mark": "match",
+            "app-title": "match",
+            "back-link": "match",
+            "page-title": "drift",
+            "walk-heading": "drift",
+            "date-label": "drift",
+            "date-today": "drift",
+            "date-yesterday": "drift",
+            "date-pick": "drift",
+            "miles-label": "drift",
+            "miles-field": "match",
+            "minutes-label": "drift",
+            "minutes-field": "match",
+            "terrain-label": "match",
+            "terrain-field": "match",
+            "section-rule": "match",
+            "felt-heading": "drift",
+            "effort-label": "drift",
+            "effort-scale": "match",
+            "effort-selected": "drift",
+            "effort-help": "match",
+            "pain-toggle": "match",
+            "dock-rule": "drift",
+            "save-button": "drift",
+            "save-label": "drift",
+            "nav-bar": "match",
+            "nav-keep": "match",
+            "nav-road": "match",
+            "nav-forge": "match",
+            "nav-journal": "match",
+            "nav-field-manual": "match"
+          },
+          "artifactHash": null
+        }
+      ]
+    },
+    "sections": {
+      "status": "closed",
+      "openedAt": "2026-09-26T17:22:05.024Z",
+      "closedAt": "2026-09-26T17:27:41.955Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "no mechanical gate",
+        "at": "2026-09-26T17:27:41.954Z"
+      },
+      "forced": null
+    },
+    "motion": {
+      "status": "closed",
+      "openedAt": "2026-09-26T17:27:41.955Z",
+      "closedAt": "2026-09-26T17:27:41.996Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "no mechanical gate",
+        "at": "2026-09-26T17:27:41.996Z"
+      },
+      "forced": null
+    },
+    "responsive": {
+      "status": "closed",
+      "openedAt": "2026-09-26T17:27:41.996Z",
+      "closedAt": "2026-09-26T17:50:53.415Z",
+      "attempts": 4,
+      "notes": [],
+      "gate": {
+        "ok": false,
+        "reasons": [
+          "the desktop capture (1440x911; the top 864x1872 rows scaled to the comp's width are compared, a full-page capture is fine) scores 51% against the comp, under 65%: the first viewport does not survive a common desktop width. The hero passed at 864x1872; the layout must hold from ~1280 up, not only at the comp's exact width (grid columns in fr / minmax, not fixed px that overflow and wrap).",
+          "at desktop width, region header-bar is missing",
+          "at desktop width, region brand-mark is missing",
+          "at desktop width, region app-title is missing",
+          "at desktop width, region back-link is missing",
+          "at desktop width, region page-title is missing",
+          "at desktop width, region walk-heading is missing",
+          "at desktop width, region date-label is missing",
+          "at desktop width, region date-today is missing",
+          "at desktop width, region date-yesterday is missing",
+          "at desktop width, region date-pick is missing",
+          "at desktop width, region miles-label is missing",
+          "at desktop width, region miles-field is missing",
+          "at desktop width, region minutes-label is missing",
+          "at desktop width, region minutes-field is missing",
+          "at desktop width, region terrain-label is missing",
+          "at desktop width, region terrain-field is missing",
+          "at desktop width, region section-rule is missing",
+          "at desktop width, region felt-heading is missing",
+          "at desktop width, region effort-label is missing",
+          "at desktop width, region effort-scale is missing",
+          "at desktop width, region effort-selected is missing",
+          "at desktop width, region effort-help is missing",
+          "at desktop width, region pain-toggle is missing",
+          "at desktop width, region dock-rule is missing",
+          "at desktop width, region save-button is missing",
+          "at desktop width, region save-label is missing",
+          "at desktop width, region nav-bar is missing",
+          "at desktop width, region nav-keep is missing",
+          "at desktop width, region nav-road is missing",
+          "at desktop width, region nav-forge is missing",
+          "at desktop width, region nav-journal is missing",
+          "at desktop width, region nav-field-manual is missing"
+        ],
+        "summary": "desktop 51% (missing)",
+        "score": 0.5077,
+        "sideBySide": "/Users/apple/Documents/dev/rangers-road/.impeccable/review/diff/desktop/side-by-side.png",
+        "at": "2026-09-26T17:50:53.408Z"
+      },
+      "forced": {
+        "at": "2026-09-26T17:50:53.414Z",
+        "reason": "The user downgraded the comp for desktop. Asked verbatim: \"The Road log mockup is a phone screen. On desktop the build keeps the app's desktop pattern: tabs in the top bar and the same form in a centered column with Save below it. The design check can only accept that if you say the mockup governs phones only. Which do you want?\", the user answered verbatim: \"Comp is for phones (Recommended)\", choosing the option described as \"Phones stay matched to the mockup; desktop keeps the centered column and top navigation, like every other page.\"",
+        "reasons": [
+          "the desktop capture (1440x911; the top 864x1872 rows scaled to the comp's width are compared, a full-page capture is fine) scores 51% against the comp, under 65%: the first viewport does not survive a common desktop width. The hero passed at 864x1872; the layout must hold from ~1280 up, not only at the comp's exact width (grid columns in fr / minmax, not fixed px that overflow and wrap).",
+          "at desktop width, region header-bar is missing",
+          "at desktop width, region brand-mark is missing",
+          "at desktop width, region app-title is missing",
+          "at desktop width, region back-link is missing",
+          "at desktop width, region page-title is missing",
+          "at desktop width, region walk-heading is missing",
+          "at desktop width, region date-label is missing",
+          "at desktop width, region date-today is missing",
+          "at desktop width, region date-yesterday is missing",
+          "at desktop width, region date-pick is missing",
+          "at desktop width, region miles-label is missing",
+          "at desktop width, region miles-field is missing",
+          "at desktop width, region minutes-label is missing",
+          "at desktop width, region minutes-field is missing",
+          "at desktop width, region terrain-label is missing",
+          "at desktop width, region terrain-field is missing",
+          "at desktop width, region section-rule is missing",
+          "at desktop width, region felt-heading is missing",
+          "at desktop width, region effort-label is missing",
+          "at desktop width, region effort-scale is missing",
+          "at desktop width, region effort-selected is missing",
+          "at desktop width, region effort-help is missing",
+          "at desktop width, region pain-toggle is missing",
+          "at desktop width, region dock-rule is missing",
+          "at desktop width, region save-button is missing",
+          "at desktop width, region save-label is missing",
+          "at desktop width, region nav-bar is missing",
+          "at desktop width, region nav-keep is missing",
+          "at desktop width, region nav-road is missing",
+          "at desktop width, region nav-forge is missing",
+          "at desktop width, region nav-journal is missing",
+          "at desktop width, region nav-field-manual is missing"
+        ]
+      }
+    },
+    "review": {
+      "status": "closed",
+      "openedAt": "2026-09-26T17:50:53.415Z",
+      "closedAt": "2026-09-26T18:12:39.734Z",
+      "attempts": 0,
+      "notes": [],
+      "gate": null,
+      "forced": null
+    }
+  },
+  "finish": {
+    "disposition": "ship",
+    "at": "2026-09-26T18:12:39.734Z",
+    "phaseAtFinish": "review"
+  },
+  "plates": {}
+}

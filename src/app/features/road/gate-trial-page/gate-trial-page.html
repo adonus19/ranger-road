@@ -1,0 +1,204 @@
+<section class="station-scene" aria-labelledby="trial-title">
+  <picture class="station-scene__image">
+    <source srcset="images/forest-band.webp" type="image/webp" />
+    <img src="images/forest-band.png" alt="" width="1728" height="960" decoding="async" />
+  </picture>
+  <div class="station-scene__content">
+    <h1 id="trial-title">The Gate Trial</h1>
+    <p>The Muster · Chapter I</p>
+  </div>
+</section>
+
+<div class="station-page">
+  <a class="station-back" routerLink="/road">
+    <app-icon name="arrow-left" />
+    Back to Road
+  </a>
+
+  <nav class="station-progress" aria-label="Gate Trial parts">
+    <ol>
+      @for (phase of trial.phases; track phase.id; let index = $index) {
+        <li>
+          <a [href]="'#' + phase.id" [attr.aria-label]="'Part ' + (index + 1) + ': ' + phase.title">
+            <span class="visually-hidden">{{ phase.title }}</span>
+          </a>
+        </li>
+      }
+    </ol>
+  </nav>
+
+  <section class="station-walk" [id]="walk.id" aria-labelledby="walk-title">
+    <h2 id="walk-title">{{ walk.title }}</h2>
+    <p class="station-walk__guidance" [attr.role]="state.error() ? 'alert' : 'status'">
+      {{ readinessGuidance() }}
+    </p>
+    <p class="station-walk__distance">
+      <strong>{{ walk.targetDistanceMiles }}</strong>
+      <span>miles</span>
+    </p>
+    <p class="station-walk__pace">Walk briskly.</p>
+
+    <div class="station-walk__record" role="note" aria-label="Walk time to record">
+      <p>
+        <span>Walk time <small>· during the trial</small></span
+        ><strong>— min</strong>
+      </p>
+      <p class="station-walk__record-help">
+        Record your time, RPE, knee and back response, and recovery after 5 minutes. Average heart
+        rate is optional. Your entries save on this device as you move through the trial.
+      </p>
+    </div>
+    <p class="station-walk__next">Next: {{ trial.phases[1].title }}</p>
+  </section>
+
+  <div class="station-parts">
+    <section [id]="trial.phases[1].id" aria-labelledby="circuit-title">
+      <h2 id="circuit-title">{{ trial.phases[1].title }}</h2>
+      @for (instruction of trial.phases[1].instructions ?? []; track instruction) {
+        <p>{{ instruction }}</p>
+      }
+      <p>Each of {{ circuit.rounds }} controlled rounds:</p>
+      <ol class="station-circuit">
+        @for (movement of circuit.movements; track movement.exerciseId) {
+          <li>{{ movementLabel(movement) }}</li>
+        }
+      </ol>
+    </section>
+
+    @for (phase of trial.phases.slice(2); track phase.id) {
+      <section [id]="phase.id" [attr.aria-labelledby]="phase.id + '-title'">
+        <h2 [id]="phase.id + '-title'">{{ phase.title }}</h2>
+        @for (instruction of phase.instructions ?? []; track instruction) {
+          <p>{{ instruction }}</p>
+        }
+        @for (prompt of phase.reflectionPrompts ?? []; track prompt) {
+          <p>{{ prompt }}</p>
+        }
+      </section>
+    }
+  </div>
+
+  @if (historyError()) {
+    <p class="station-history__error" role="alert">
+      Trial history could not open from local storage. <button type="button" (click)="retry()">Try again</button>
+    </p>
+  } @else if (!historyLoading() && (completedResults().length || stoppedAttempts().length)) {
+    <section class="station-history" aria-labelledby="station-history-title">
+      <h2 id="station-history-title">Recorded attempts</h2>
+      @for (result of completedResults(); track result.id) {
+        <details class="station-history__entry">
+          <summary>
+            <span>Completed · {{ shortDate(result.date) }}</span>
+            <span>View record</span>
+          </summary>
+          <div class="station-history__detail">
+            <h3>Road</h3>
+            <p>2 miles · {{ metric(result.phaseResults[0], 'durationMinutes') }} min · RPE {{ metric(result.phaseResults[0], 'rpe') }}</p>
+            <p>Knee: {{ response(result.phaseResults[0], 'knee') }}</p>
+            <p>Back: {{ response(result.phaseResults[0], 'back') }}</p>
+            <p>After 5 minutes: {{ response(result.phaseResults[0], 'recoveryAfterFiveMinutes') }}</p>
+            @if (result.phaseResults[0]?.metrics?.['averageHeartRate']; as heartRate) {
+              <p>Average heart rate: {{ heartRate }}</p>
+            }
+
+            <h3>Gate Circuit</h3>
+            <p>{{ metric(result.phaseResults[1], 'restAfterWalkMinutes') }} min rest · {{ metric(result.phaseResults[1], 'durationMinutes') }} min circuit</p>
+            @for (round of result.phaseResults[1]?.circuitRounds ?? []; track round.round) {
+              <h4>Round {{ round.round }}</h4>
+              <ul>
+                @for (movement of round.movements; track movement.exerciseId) {
+                  <li>{{ recordedMovement(movement) }}</li>
+                }
+              </ul>
+            }
+
+            <h3>Mind</h3>
+            <p>Body: {{ response(result.phaseResults[2], 'body') }}</p>
+            <p>Character: {{ response(result.phaseResults[2], 'character') }}</p>
+            <p>Family: {{ response(result.phaseResults[2], 'family') }}</p>
+            <h3>Spirit</h3>
+            <p>Psalm 121 and {{ metric(result.phaseResults[3], 'prayerMinutes') }} minutes of prayer</p>
+            <p>{{ response(result.phaseResults[3], 'identity') }}</p>
+            <h3>Oath</h3>
+            <p>{{ result.phaseResults[4]?.notes || '—' }}</p>
+            @for (pain of painByAttempt()[result.id] ?? []; track pain.id) {
+              <p>Pain: {{ pain.bodyArea }} · {{ pain.severity }}/10 · {{ pain.actionTaken }}</p>
+            }
+            @if (result.postMissionFunction) {
+              <h3>After the effort</h3>
+              <p>{{ result.postMissionFunction }}</p>
+            }
+          </div>
+        </details>
+      }
+      @for (attempt of stoppedAttempts(); track attempt.id) {
+        <details class="station-history__entry">
+          <summary>
+            <span>Stopped · {{ shortDate(attempt.date) }}</span>
+            <span>View record</span>
+          </summary>
+          <div class="station-history__detail">
+            <p>Reached {{ attemptPhase(attempt) }}. This attempt did not count as a completed Gate Trial.</p>
+            @if (attempt.phaseResults[0]?.metrics?.['durationMinutes']; as minutes) {
+              <p>Walk: {{ minutes }} min · RPE {{ metric(attempt.phaseResults[0], 'rpe') }}</p>
+            }
+            @if (attempt.phaseResults[0]?.responses?.['knee']; as knee) {
+              <p>Knee: {{ knee }}</p>
+            }
+            @if (attempt.phaseResults[0]?.responses?.['back']; as back) {
+              <p>Back: {{ back }}</p>
+            }
+            @if (attempt.phaseResults[0]?.responses?.['recoveryAfterFiveMinutes']; as recovery) {
+              <p>After 5 minutes: {{ recovery }}</p>
+            }
+            @if (attempt.phaseResults[1]?.metrics?.['restAfterWalkMinutes']; as rest) {
+              <p>Rest after walk: {{ rest }} min</p>
+            }
+            @if (attempt.phaseResults[1]?.metrics?.['durationMinutes']; as circuitTime) {
+              <p>Circuit time: {{ circuitTime }} min</p>
+            }
+            @for (round of attempt.phaseResults[1]?.circuitRounds ?? []; track round.round) {
+              <h3>Round {{ round.round }}</h3>
+              <ul>
+                @for (movement of round.movements; track movement.exerciseId) {
+                  <li>{{ recordedMovement(movement) }}</li>
+                }
+              </ul>
+            }
+            @if (attempt.phaseResults[2]?.responses?.['body']; as body) {
+              <p>Body: {{ body }}</p>
+            }
+            @if (attempt.phaseResults[2]?.responses?.['character']; as character) {
+              <p>Character: {{ character }}</p>
+            }
+            @if (attempt.phaseResults[2]?.responses?.['family']; as family) {
+              <p>Family: {{ family }}</p>
+            }
+            @if (attempt.phaseResults[3]?.metrics?.['prayerMinutes']; as prayerMinutes) {
+              <p>Prayer: {{ prayerMinutes }} min</p>
+            }
+            @if (attempt.phaseResults[3]?.responses?.['identity']; as identity) {
+              <p>{{ identity }}</p>
+            }
+            @if (attempt.phaseResults[4]?.notes; as oath) {
+              <p>Oath: {{ oath }}</p>
+            }
+            @for (pain of attempt.painEvents; track pain.id) {
+              <p>Pain: {{ pain.bodyArea }} · {{ pain.severity }}/10 · {{ pain.actionTaken }}</p>
+            }
+          </div>
+        </details>
+      }
+    </section>
+  }
+</div>
+
+<div class="station-dock">
+  @if (state.loading() || historyLoading()) {
+    <span class="station-dock__waiting" role="status">Opening campaign…</span>
+  } @else if (state.error() || historyError()) {
+    <button type="button" (click)="retry()">Try again</button>
+  } @else {
+    <a [routerLink]="readinessLink()">{{ readinessAction() }}</a>
+  }
+</div>

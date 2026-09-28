@@ -1,0 +1,28 @@
+Use case: ui-mockup. High-fidelity mobile app UI design comp. Flat frontal screenshot of one phone screen at 390x844 viewport proportion.
+
+Surface: The Ranger's Road, "Monthly check-in": a private, offline training app screen where the person records body measurements and a few simple physical tests once every 28 days. The visitor's job: work down a checklist of measures, opening each to see how to take it and enter the number, then save. It must read instantly as a working app form.
+
+Reference image: it carries the visual world to keep exactly: header bar, warm paper page, serif plus sans pairing, small spaced-caps field labels, bordered fields with large serif numerals, pine button docked above the tab bar, bottom tab bar. Do NOT copy the reference's content (no walk, miles, terrain or effort scale); this screen's content is described below.
+
+Layout, top to bottom:
+1. Header bar as in the reference.
+2. A text link with a left arrow: "Back to Journal".
+3. Large serif page title "Monthly check-in", and under it a quiet sans line in secondary ink: "Day 29 · Monday, October 12".
+4. A quiet sans line in secondary ink: "3 needed, 7 optional".
+5. A list of full-width rows separated by thin hairline rules, each row about 56px tall with a small round mark on the left, the measure's name in sans, and on the right either the recorded value or a small chevron:
+   - Row "Weight": mark is a filled pine circle with a cream check; right side shows serif "221.6 lb".
+   - Row "Waist": filled pine check mark; right side serif "41.5 in".
+   - Row "Resting heart rate", OPEN: an empty pine-outlined circle mark, a chevron pointing up; below the row title, inside the open row, a help line "Sit quietly for 5 minutes, then count for 60 seconds.", then a half-width bordered field with the large serif numeral "68" and small "bpm" after it, and a small bordered secondary button "Done".
+   - Row "Blood pressure (optional)": empty outlined circle, chevron down.
+   - Row "Push-ups": empty outlined circle, chevron down.
+   - Row "Pull-up assistance": empty outlined circle, chevron down.
+   - Row "Squat depth": empty outlined circle, chevron down (may be cut off by the docked button).
+6. Docked at the bottom, just above the tab bar, a full-width pine button "Save check-in", with a thin paper strip behind it so it reads as docked over the scrolling list.
+7. Tab bar.
+
+Text, verbatim and correctly spelled: "The Ranger's Road"; "Back to Journal"; "Monthly check-in"; "Day 29 · Monday, October 12"; "3 needed, 7 optional"; "Weight"; "221.6 lb"; "Waist"; "41.5 in"; "Resting heart rate"; "Sit quietly for 5 minutes, then count for 60 seconds."; "68"; "bpm"; "Done"; "Blood pressure (optional)"; "Push-ups"; "Pull-up assistance"; "Squat depth"; "Save check-in"; "Keep"; "Road"; "Forge"; "Journal"; "Field Manual".
+
+Palette only: Night Forest #172B21 for the header bar, Pine #24362B for primary buttons and selected options, warm paper #F6F3EA page, Parchment Tint #E9E5D8 for quiet read-only panels, rules #D4D1C7, Gold Line #A9804A only as the selected tab's short underline, Ink #171A17, Secondary Ink #4F514D, Sage label gray #53655C. Flat surfaces with 1px borders and 6px corners, no shadows.
+Type: a sturdy bracketed book serif for the page title, section headings and all numerals; a narrow humanist sans for labels, help lines, inputs and buttons. Field labels are small spaced capitals in sage gray, like the reference. No decorative fonts.
+Top of the screen: the same dark forest header bar as the reference, with the small gold three-pine mark and "The Ranger's Road" in cream serif. Bottom: the same five-tab bar as the reference, "Keep", "Road", "Forge", "Journal", "Field Manual", with "Journal" selected (pine, short gold underline).
+Avoid: charts, graphs, sparklines, gauges, progress rings, body silhouettes, anatomy, scales or tape-measure drawings, photos, forest scenery, maps, route lines, targets or goal weights, good/bad colors on changes, XP, points, streaks, badges, fake parchment texture, glow, 3D, device frame, status bar, hands.

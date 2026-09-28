@@ -1,0 +1,4 @@
+Reference: public/images/exercises/box-squat/sequence.png. Use only its visual style: warm ivory background; four evenly sized vertical panels in one wide horizontal strip; consistent athletic adult man wearing dark forest-green shirt and charcoal shorts; lightly textured realistic editorial anatomy illustration; clean floor line; no borders, labels, arrows, watermarks, extra limbs, or cropped anatomy. Same camera view/model across panels. Accurate beginner instruction, not advertising.
+
+Exercise source: docs/rangers-road-full-program-content/EXERCISE_CATALOG.md > wall-slide.
+Movement prompt: Wall Slide. Back against a plain wall as tolerated, feet slightly forward. Front three-quarter view with both arms visible. Panel 1 elbows bent in broad W; panel 2 slide both arms higher; panel 3 comfortable near-overhead Y without over-arching back or forcing range; panel 4 slide back to W.

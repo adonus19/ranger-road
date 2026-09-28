@@ -1,0 +1,200 @@
+:host {
+  display: block;
+}
+
+.watch-page {
+  max-width: 44rem;
+  padding-bottom: 2.5rem;
+}
+
+.back-link {
+  display: inline-flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.back-link app-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.watch-heading {
+  margin-top: 0.5rem;
+}
+
+.watch-heading h1,
+.saved-entry h2,
+.missing-watch h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.watch-heading h1,
+.missing-watch h1 {
+  font-size: 2rem;
+}
+
+.watch-heading p {
+  margin: 0.5rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.watch-steps {
+  margin: 2rem 0 1.75rem;
+  padding-left: 1.5rem;
+  color: var(--text-secondary);
+}
+
+.watch-steps li {
+  padding: 0.375rem 0 0.375rem 0.25rem;
+}
+
+.watch-steps li::marker {
+  color: var(--text-label);
+  font-family: var(--font-display);
+}
+
+.evening-intro {
+  max-width: 48ch;
+  margin: 1.75rem 0;
+  color: var(--text-secondary);
+}
+
+.watch-form {
+  max-width: 39rem;
+}
+
+.evening-fields {
+  display: grid;
+  gap: 1.375rem;
+}
+
+.watch-field label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-family: var(--font-display);
+  font-size: 1.140625rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.watch-field p {
+  margin: 0 0 0.625rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.watch-field textarea {
+  display: block;
+  width: 100%;
+  min-height: 5.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-page);
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.watch-field textarea:hover {
+  border-color: var(--color-stone);
+}
+
+.watch-field textarea:focus-visible {
+  border-color: var(--focus);
+}
+
+.field-error,
+.save-error {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--status-red-text);
+  font-size: 0.875rem;
+}
+
+.save-error {
+  margin-bottom: 0;
+}
+
+.save-button {
+  width: 100%;
+  min-height: var(--touch-target);
+  margin-top: 1.5rem;
+  padding: 0.625rem 1rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--action);
+  color: var(--on-action);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.save-button:hover:not(:disabled) {
+  background: var(--action-hover);
+}
+
+.save-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.saved-entry,
+.missing-watch {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-tint);
+}
+
+.saved-entry h2 {
+  font-size: 1.75rem;
+}
+
+.saved-entry p,
+.missing-watch p {
+  margin: 0.625rem 0 1.25rem;
+  color: var(--text-secondary);
+}
+
+.saved-entry a,
+.missing-watch a {
+  display: inline-flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--action);
+  color: var(--on-action);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (min-width: 650px) {
+  .evening-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 700px) {
+  .watch-heading h1,
+  .missing-watch h1 {
+    font-size: 3rem;
+  }
+}

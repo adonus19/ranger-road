@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="The Ranger's Road pine mark">
+  <rect width="512" height="512" fill="#18241D"/>
+  <g transform="translate(141 128) scale(6.4)" fill="#D6B37A">
+    <path d="M8 10.5 11 16H9.8l2.7 6H11l3 7H2l3-7H3.5l2.7-6H5ZM28 10.5 31 16h-1.2l2.7 6H31l3 7H22l3-7h-1.5l2.7-6H25ZM18 2l3.6 7.2h-1.7l3.7 7.4h-2l4.4 8.6H10l4.4-8.6h-2l3.7-7.4h-1.7Z"/>
+    <path d="M7.3 29h1.4v8H7.3ZM27.3 29h1.4v8h-1.4ZM17.2 25.2h1.6V38h-1.6Z"/>
+  </g>
+</svg>

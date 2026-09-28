@@ -1,0 +1,13 @@
+{
+  "origin": "Built-in imagegen with two local reference images",
+  "source": ".impeccable/mocks/decision/gate-trial-active-station.prompt.txt",
+  "referenceImages": [
+    ".impeccable/mocks/decision/gate-trial-station.png",
+    "public/images/exercises/box-squat/sequence.webp"
+  ],
+  "viewportIntent": "390x844 mobile portrait",
+  "purpose": "Active Gate Trial Station composition",
+  "approvedVisualWorld": "Station preparation direction",
+  "implementationNotes": ".impeccable/mocks/decision/gate-trial-active-station.md",
+  "approved": false
+}

@@ -1,0 +1,3 @@
+ANSWER: {"optionId":"lookback","steer":"","comp":".impeccable/mocks/decision/check-in-lookback.png","buildPath":"comp","buildPathFlipped":false}
+CHOSEN COMP: the decision comp at that path is compositional option one. On a comp-led build the comp round adds two variations beside it; on a code-led build it returns at the finish review as the critique reference. Never regenerate it from scratch.
+BUILD PATH: comp (the round’s recorded default). Comp-led: the chosen card’s comp is law; generate it before building when it does not exist yet, and the finish review audits the build against it.

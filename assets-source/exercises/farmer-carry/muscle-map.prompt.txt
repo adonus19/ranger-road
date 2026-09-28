@@ -1,0 +1,4 @@
+Reference: public/images/exercises/box-squat/muscle-map.png. Preserve two-panel front/back quiet anatomical ink style on cream #F6F3EA, anatomically correct shoulder-to-toe crop with NO head, face, hair, or skull; no text or legend. Primary targets dark pine #24362B, secondary targets muted moss #66735A, all other muscles neutral pale gray-beige.
+
+Exercise source: docs/rangers-road-full-program-content/EXERCISE_CATALOG.md > farmer-carry.
+Highlight prompt: Primary both forearm grip muscles, upper trapezius at back of shoulders, and side/core trunk stabilizers. Secondary glutes and legs, both quads and hamstrings. No chest emphasis.

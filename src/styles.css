@@ -1,0 +1,223 @@
+@font-face {
+  font-family: 'Wittgenstein';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('/fonts/wittgenstein-latin-variable.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 62.5% 100%;
+  font-display: swap;
+  src: url('/fonts/noto-sans-latin-variable.woff2') format('woff2');
+}
+
+:root {
+  color-scheme: light dark;
+
+  /* Source palette: docs/DESIGN_SYSTEM.md */
+  --color-pine: #24362b;
+  --color-forest: #18241d;
+  --color-moss: #66735a;
+  --color-parchment: #d8cfb8;
+  --color-stone: #8a8d84;
+  --color-iron: #414540;
+  --color-hearth-gold: #b68a4a;
+  --color-ember: #8c5137;
+  --color-mist: #bec5bc;
+  --color-ink: #171a17;
+
+  /* Forest Light roles */
+  --surface-page: #f6f3ea;
+  --surface-tint: #e9e5d8;
+  --surface-medallion: #e2dbcb;
+  --surface-medallion-on-tint: #d9d1c0;
+  --line: #d4d1c7;
+  --line-soft: #dcd8ce;
+  --text: var(--color-ink);
+  --text-secondary: #4f514d;
+  --text-tertiary: #666864;
+  --text-label: #53655c;
+  --icon-gold: #9c7442;
+  --icon-ink: #1c2a22;
+  --accent-line: #a9804a;
+  --action: var(--color-pine);
+  --action-hover: var(--color-forest);
+  --on-action: #f4f1e8;
+  --nav-surface: var(--surface-page);
+  --nav-inactive: #676964;
+  --nav-active: var(--color-pine);
+  --focus: var(--color-ember);
+
+  /* The forest band keeps its night-green ground in both themes. */
+  --band: #172b21;
+  --on-band: #f4f1e8;
+  --on-band-muted: #c3c9c1;
+  --on-band-gold: #d6b37a;
+  --band-rule: rgb(195 201 193 / 42%);
+
+  --status-green-surface: #e1e7da;
+  --status-green-text: #2c4633;
+  --status-yellow-surface: #f0e5cc;
+  --status-yellow-text: #5b3f17;
+  --status-red-surface: #f1ddd5;
+  --status-red-text: #692d21;
+
+  --font-display: 'Wittgenstein', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --touch-target: 3rem;
+  --header-height: 4.25rem;
+  --mobile-nav-height: 4.75rem;
+  --page-gutter: 1rem;
+  --content-max: 70rem;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Night Atlas palette for phones set to dark mode. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-page: #111b15;
+    --surface-tint: #1a2820;
+    --surface-medallion: #223128;
+    --surface-medallion-on-tint: #26372d;
+    --line: #2f3e35;
+    --line-soft: #29372f;
+    --text: #e8e2d3;
+    --text-secondary: #c3c9c1;
+    --text-tertiary: #aeb5ac;
+    --text-label: #9fb0a5;
+    --icon-gold: #cfa566;
+    --icon-ink: #d8cfb8;
+    --accent-line: var(--color-hearth-gold);
+    --action: var(--color-hearth-gold);
+    --action-hover: #c69a58;
+    --on-action: var(--color-ink);
+    --nav-surface: #111b15;
+    --nav-inactive: #9ca59b;
+    --nav-active: #e8e2d3;
+    --focus: #d6b37a;
+
+    --status-green-surface: #1c3124;
+    --status-green-text: #c2d8c6;
+    --status-yellow-surface: #33291a;
+    --status-yellow-text: #ead3a4;
+    --status-red-surface: #38221d;
+    --status-red-text: #f0c6b9;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 280px;
+  background: var(--surface-page);
+  scroll-behavior: smooth;
+  scrollbar-color: var(--line) transparent;
+}
+
+body {
+  min-width: 280px;
+  margin: 0;
+  background: var(--surface-page);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-stretch: 87.5%;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: lining-nums;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+input,
+textarea {
+  caret-color: var(--accent-line);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: var(--action);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--color-parchment);
+  color: var(--color-ink);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Shared page container: pages own their gutters so full-bleed bands can reach the edges. */
+.page {
+  width: min(100%, var(--content-max));
+  margin-inline: auto;
+  padding: 1.5rem var(--page-gutter) 0;
+}
+
+.feature-placeholder {
+  max-width: 42rem;
+  padding-block: clamp(1rem, 5vw, 3rem);
+}
+
+.feature-placeholder h1 {
+  margin: 0 0 1rem;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 8vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.feature-placeholder p {
+  max-width: 55ch;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 1.0625rem;
+}
+
+@media (min-width: 700px) {
+  :root {
+    --page-gutter: clamp(1.5rem, 4vw, 2.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

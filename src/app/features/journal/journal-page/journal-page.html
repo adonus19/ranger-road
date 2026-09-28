@@ -1,0 +1,103 @@
+<div class="journal-page page">
+  <header class="journal-heading">
+    <h1>Journal</h1>
+    <p>Make a little room for the morning and evening watches. Entries stay on this device.</p>
+  </header>
+
+  <section class="today-watches" aria-labelledby="watches-title">
+    <h2 id="watches-title">Today’s watches</h2>
+    <div class="watch-links">
+      <a class="watch-link" routerLink="/journal/morning">
+        <span class="watch-link__icon"><app-icon name="sunrise" /></span>
+        <span class="watch-link__text">
+          <strong>Morning Watch</strong>
+          <span>Scripture, prayer, and a question for your family.</span>
+          @if (hasWatchToday('morning-watch')) {
+            <small>Saved today</small>
+          }
+        </span>
+        <app-icon class="watch-link__arrow" name="arrow-right" />
+      </a>
+      <a class="watch-link" routerLink="/journal/evening">
+        <span class="watch-link__icon watch-link__icon--evening"><app-icon name="moon" /></span>
+        <span class="watch-link__text">
+          <strong>Evening Watch</strong>
+          <span>Look back on the day and toward tomorrow.</span>
+          @if (hasWatchToday('evening-watch')) {
+            <small>Saved today</small>
+          }
+        </span>
+        <app-icon class="watch-link__arrow" name="arrow-right" />
+      </a>
+    </div>
+  </section>
+
+  <section class="measures" aria-labelledby="measures-title">
+    <h2 id="measures-title">Measurements</h2>
+    <div class="watch-links">
+      @if (checkIn(); as checkIn) {
+        <a class="watch-link" routerLink="/journal/check-in" [queryParams]="checkIn.queryParams">
+          <span class="watch-link__icon"><app-icon name="tape" /></span>
+          <span class="watch-link__text">
+            <strong>{{ checkIn.title }}</strong>
+            <span>{{ checkIn.text }}</span>
+            @if (checkIn.reminder) {
+              <small>{{ checkIn.status === 'due' ? 'Due now' : 'Tests to add' }}</small>
+            }
+          </span>
+          <app-icon class="watch-link__arrow" name="arrow-right" />
+        </a>
+      } @else {
+        <p class="measures__note">Your first check-in opens on Day 1.</p>
+      }
+      <a class="watch-link" routerLink="/journal/body">
+        <span class="watch-link__icon watch-link__icon--evening"><app-icon name="scale" /></span>
+        <span class="watch-link__text">
+          <strong>Weight and waist</strong>
+          <span>Log either one, any day.</span>
+          @if (latestBody(); as latest) {
+            <small>{{ latest }}</small>
+          }
+        </span>
+        <app-icon class="watch-link__arrow" name="arrow-right" />
+      </a>
+    </div>
+  </section>
+
+  <section class="history" aria-labelledby="history-title">
+    <h2 id="history-title">Recent entries</h2>
+    @if (loading()) {
+      <p class="history__state" role="status">Opening local entries…</p>
+    } @else if (error(); as message) {
+      <div class="history__error" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" (click)="load()">Try again</button>
+      </div>
+    } @else if (!entries().length) {
+      <p class="history__state">Your watches will appear here after you save one.</p>
+    } @else {
+      <ul class="history__list" role="list">
+        @for (entry of visibleEntries(); track entry.id) {
+          <li>
+            <details class="history-entry">
+              <summary>
+                <span>
+                  <strong>{{ titleFor(entry) }}</strong>
+                  <small>{{ formatDate(entry.date) }}</small>
+                </span>
+                <app-icon name="chevron-right" />
+              </summary>
+              <div class="history-entry__body">
+                <p class="history-entry__prompt">{{ entry.prompt }}</p>
+                <p class="history-entry__response">{{ entry.response }}</p>
+              </div>
+            </details>
+          </li>
+        }
+      </ul>
+      @if (!showAll() && entries().length > 8) {
+        <button class="show-all" type="button" (click)="showAll.set(true)">Show all entries</button>
+      }
+    }
+  </section>
+</div>

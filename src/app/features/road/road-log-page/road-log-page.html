@@ -1,0 +1,197 @@
+<div class="road-log entry-form">
+  <a class="back-link" [routerLink]="backPath">
+    <app-icon name="arrow-left" />
+    {{ backLabel }}
+  </a>
+
+  <h1>Log a walk</h1>
+
+  @if (saved(); as session) {
+    <app-walk-saved
+      [session]="session"
+      [backPath]="backPath"
+      [backLabel]="backLabel"
+      (another)="logAnother()"
+    />
+  } @else {
+    <form class="log-form" (submit)="save($event)" novalidate>
+      <section class="half" aria-labelledby="walk-title">
+        <h2 id="walk-title">The walk</h2>
+
+        <fieldset class="segments">
+          <legend class="label">Date</legend>
+          <div class="segments__options">
+            <label class="segment">
+              <input type="radio" value="today" [formField]="logForm.dateChoice" />
+              <span>Today</span>
+            </label>
+            <label class="segment">
+              <input type="radio" value="yesterday" [formField]="logForm.dateChoice" />
+              <span>Yesterday</span>
+            </label>
+            <label class="segment">
+              <input type="radio" value="other" [formField]="logForm.dateChoice" />
+              <span>Pick a date</span>
+            </label>
+          </div>
+        </fieldset>
+
+        @if (entry().dateChoice === 'other') {
+          <div class="field field--date">
+            <label class="visually-hidden" for="walk-date">Date of the walk</label>
+            <input
+              #walkDate
+              id="walk-date"
+              type="date"
+              [formField]="logForm.otherDate"
+              [attr.aria-invalid]="showError(logForm.otherDate)"
+              [attr.aria-describedby]="showError(logForm.otherDate) ? 'walk-date-error' : null"
+            />
+            @if (showError(logForm.otherDate)) {
+              <span class="field-error" id="walk-date-error">{{
+                logForm.otherDate().errors()[0]?.message
+              }}</span>
+            }
+          </div>
+        }
+
+        <div class="pair">
+          <div class="field">
+            <label class="label" for="walk-miles">Miles</label>
+            <input
+              id="walk-miles"
+              class="numeral"
+              type="text"
+              inputmode="decimal"
+              autocomplete="off"
+              [formField]="logForm.miles"
+              [attr.aria-invalid]="showError(logForm.miles)"
+              [attr.aria-describedby]="showError(logForm.miles) ? 'walk-miles-error' : null"
+            />
+            @if (showError(logForm.miles)) {
+              <span class="field-error" id="walk-miles-error">{{
+                logForm.miles().errors()[0]?.message
+              }}</span>
+            }
+          </div>
+          <div class="field">
+            <label class="label" for="walk-minutes">Minutes</label>
+            <input
+              id="walk-minutes"
+              class="numeral"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              [formField]="logForm.minutes"
+              [attr.aria-invalid]="showError(logForm.minutes)"
+              [attr.aria-describedby]="showError(logForm.minutes) ? 'walk-minutes-error' : null"
+            />
+            @if (showError(logForm.minutes)) {
+              <span class="field-error" id="walk-minutes-error">{{
+                logForm.minutes().errors()[0]?.message
+              }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="walk-terrain">Terrain</label>
+          <input
+            id="walk-terrain"
+            type="text"
+            autocomplete="off"
+            placeholder="Paved path, trail, gravel…"
+            [formField]="logForm.terrain"
+            [attr.aria-invalid]="showError(logForm.terrain)"
+            [attr.aria-describedby]="showError(logForm.terrain) ? 'walk-terrain-error' : null"
+          />
+          @if (showError(logForm.terrain)) {
+            <span class="field-error" id="walk-terrain-error">{{
+              logForm.terrain().errors()[0]?.message
+            }}</span>
+          }
+        </div>
+      </section>
+
+      <section class="half half--felt" aria-labelledby="felt-title">
+        <h2 id="felt-title">How it felt</h2>
+
+        <fieldset
+          class="scale"
+          [attr.aria-describedby]="
+            showError(logForm.rpe) ? 'effort-help effort-error' : 'effort-help'
+          "
+        >
+          <legend class="label">Effort (RPE)</legend>
+          <div class="scale__options scale__options--effort">
+            @for (level of effortLevels; track level) {
+              <label class="scale__option">
+                <input
+                  type="radio"
+                  [value]="level"
+                  [formField]="logForm.rpe"
+                  [attr.aria-invalid]="showError(logForm.rpe)"
+                />
+                <span>{{ level }}</span>
+              </label>
+            }
+          </div>
+          <small class="help" id="effort-help">1 is very easy. 10 is as hard as you can go.</small>
+          @if (showError(logForm.rpe)) {
+            <span class="field-error" id="effort-error">Choose an effort from 1 to 10.</span>
+          }
+        </fieldset>
+
+        <button
+          type="button"
+          class="pain-toggle"
+          aria-controls="pain-fields"
+          [attr.aria-expanded]="painOpen()"
+          (click)="togglePain()"
+        >
+          <app-icon [name]="painOpen() ? 'minus' : 'plus'" />
+          {{ painOpen() ? 'Remove pain before and after' : 'Add pain before and after (optional)' }}
+        </button>
+
+        <!-- Rebuilt on each opening, so answers removed with the section never show as selected. -->
+        <div class="pain" id="pain-fields">
+          @if (painOpen()) {
+            <p class="help">0 is none. 10 is the most severe.</p>
+            <fieldset class="scale">
+              <legend class="label">Pain before</legend>
+              <div class="scale__options scale__options--pain">
+                @for (level of painLevels; track level) {
+                  <label class="scale__option">
+                    <input type="radio" [value]="level" [formField]="logForm.painBefore" />
+                    <span>{{ level }}</span>
+                  </label>
+                }
+              </div>
+            </fieldset>
+            <fieldset class="scale">
+              <legend class="label">Pain after</legend>
+              <div class="scale__options scale__options--pain">
+                @for (level of painLevels; track level) {
+                  <label class="scale__option">
+                    <input type="radio" [value]="level" [formField]="logForm.painAfter" />
+                    <span>{{ level }}</span>
+                  </label>
+                }
+              </div>
+            </fieldset>
+          }
+        </div>
+      </section>
+
+      @if (saveError(); as message) {
+        <p class="save-error" role="alert">{{ message }}</p>
+      }
+
+      <div class="dock">
+        <button class="save-button" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Saving walk…' : 'Save walk' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

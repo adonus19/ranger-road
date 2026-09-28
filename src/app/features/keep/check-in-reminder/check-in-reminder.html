@@ -1,0 +1,10 @@
+@if (overview(); as overview) {
+  <a class="reminder" routerLink="/journal/check-in" [queryParams]="queryParams()">
+    <app-icon class="reminder__icon" name="tape" />
+    <span class="reminder__text">
+      <strong>{{ overview.title }}</strong>
+      <span>{{ overview.reminder }}</span>
+    </span>
+    <app-icon class="reminder__arrow" name="chevron-right" />
+  </a>
+}

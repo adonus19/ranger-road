@@ -1,0 +1,22 @@
+Use case: ui-mockup. High-fidelity mobile app UI design comp. Flat frontal screenshot of one phone screen at 390x844 viewport proportion.
+
+Surface: The Ranger's Road, "Log a walk": a private, offline training app screen for recording a walk the person has just finished. The page is set like a field logbook: the entry being written is shown at the top as one ruled logbook line that fills in as the fields below are answered, and earlier walks continue further down as the same ruled lines. It must read instantly as a working app form plus its history.
+
+Reference image: it carries the visual world to keep exactly: header bar, warm paper page, serif plus sans pairing, small spaced-caps field labels, bordered tap-scale buttons, pine button, bottom tab bar. Do NOT copy the reference's content (no readiness text, no energy or sleep fields); this screen is described below.
+
+Layout, top to bottom:
+1. Header bar as in the reference.
+2. A text link with a left arrow: "Back to Road".
+3. Large serif page title "Log a walk".
+4. The entry line: a full-width band between two fine rules, on parchment tint, set in serif: "Sat, Sep 26 · 2.1 mi · 41 min · Gravel trail · Effort 6". This is the most prominent element after the title.
+5. Compact fields under it, tight spacing: label "DATE" with three bordered segmented choices "Today" (selected, pine fill), "Yesterday", "Pick a date"; then two side-by-side bordered fields "MILES" showing "2.1" and "MINUTES" showing "41"; then label "TERRAIN" and a full-width field with "Gravel trail"; then label "EFFORT (RPE)" and a single row of ten small bordered squares numbered 1 to 10, "6" selected in pine.
+6. A quiet text link row: "+ Pain before and after (optional)".
+7. Full-width pine button "Save walk".
+8. Serif section heading "Earlier walks", then two ruled logbook lines in the same serif style as the entry line but on plain paper and quieter: "Thu, Sep 24 · 1.8 mi · 36 min · Paved path · Effort 5" and "Tue, Sep 22 · 1.5 mi · 30 min · Neighborhood loop · Effort 4". The second line may run under the tab bar edge.
+9. Tab bar.
+
+Text, verbatim and correctly spelled: "The Ranger's Road"; "Back to Road"; "Log a walk"; "Sat, Sep 26 · 2.1 mi · 41 min · Gravel trail · Effort 6"; "DATE"; "Today"; "Yesterday"; "Pick a date"; "MILES"; "2.1"; "MINUTES"; "41"; "TERRAIN"; "Gravel trail"; "EFFORT (RPE)"; "1" through "10"; "+ Pain before and after (optional)"; "Save walk"; "Earlier walks"; "Thu, Sep 24 · 1.8 mi · 36 min · Paved path · Effort 5"; "Tue, Sep 22 · 1.5 mi · 30 min · Neighborhood loop · Effort 4"; "Keep"; "Road"; "Forge"; "Journal"; "Field Manual".
+Palette only: Night Forest #172B21 for the header bar, Pine #24362B for primary buttons and selected scale options, warm paper #F6F3EA page, Parchment Tint #E9E5D8 for quiet notices, rules #D4D1C7, Gold Line #A9804A only as the selected tab's short underline, Ink #171A17, Secondary Ink #4F514D. Flat surfaces with 1px borders and 6px corners, no shadows.
+Type: a sturdy bracketed book serif for the page title, questions, section headings and all numerals; a narrow humanist sans for labels, help lines, inputs and buttons. Field labels are small spaced capitals in sage gray, like the reference. No decorative fonts.
+Top of the screen: the same dark forest header bar as the reference, with the small gold three-pine mark and "The Ranger's Road" in cream serif. Bottom: the same five-tab bar as the reference, "Keep", "Road", "Forge", "Journal", "Field Manual", with "Road" selected (pine, short gold underline).
+Avoid: maps, route lines, running figures, invented goals or targets, pace, XP, points, streaks, badges, charts, photos, forest scenery, fake parchment texture, glow, 3D, device frame, status bar, hands.

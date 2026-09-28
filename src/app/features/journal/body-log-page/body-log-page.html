@@ -1,0 +1,61 @@
+<div class="body-log entry-form">
+  <a class="back-link" routerLink="/journal">
+    <app-icon name="arrow-left" />
+    Back to Journal
+  </a>
+
+  <h1>Weight and waist</h1>
+  <p class="date-line">{{ dateLine() }}</p>
+
+  @if (saved(); as entry) {
+    <app-check-in-saved class="body-log__saved" [entry]="entry" backPath="/journal" backLabel="Back to Journal" />
+  } @else {
+    <form class="body-log__form" (submit)="save($event)" novalidate>
+      <div class="pair">
+        <div class="field">
+          <label class="label" for="weight">Weight (lb)</label>
+          <input
+            id="weight"
+            class="numeral"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            [formField]="bodyForm.weight"
+            [attr.aria-invalid]="showError(bodyForm.weight)"
+            [attr.aria-describedby]="showError(bodyForm.weight) ? 'weight-error' : 'body-help'"
+          />
+        </div>
+        <div class="field">
+          <label class="label" for="waist">Waist (in)</label>
+          <input
+            id="waist"
+            class="numeral"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            [formField]="bodyForm.waist"
+            [attr.aria-invalid]="showError(bodyForm.waist)"
+            [attr.aria-describedby]="showError(bodyForm.waist) ? 'waist-error' : 'body-help'"
+          />
+        </div>
+      </div>
+      <small class="help" id="body-help">Either one is enough.</small>
+      @if (showError(bodyForm.weight)) {
+        <span class="field-error" id="weight-error">{{ bodyForm.weight().errors()[0]?.message }}</span>
+      }
+      @if (showError(bodyForm.waist)) {
+        <span class="field-error" id="waist-error">{{ bodyForm.waist().errors()[0]?.message }}</span>
+      }
+
+      @if (saveError(); as message) {
+        <p class="save-error" role="alert">{{ message }}</p>
+      }
+
+      <div class="dock dock--bleed">
+        <button class="save-button" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Saving…' : 'Save' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

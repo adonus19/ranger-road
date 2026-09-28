@@ -1,0 +1,105 @@
+@if (seed(); as seed) {
+  <section class="road-band" aria-labelledby="road-title">
+    <picture class="road-band__scene">
+      <source srcset="images/forest-band.webp" type="image/webp" />
+      <img src="images/forest-band.png" alt="" width="1728" height="960" decoding="async" />
+    </picture>
+    <div class="road-band__inner">
+      <h1 id="road-title">{{ seed.chapter.name }}</h1>
+      <p class="road-band__theme">{{ seed.chapter.theme }}</p>
+      <p class="road-band__meta">{{ chapterLine() }} · Current chapter</p>
+
+      @if (state.loading()) {
+        <p class="road-band__message" role="status">Opening your campaign…</p>
+      } @else if (state.error(); as message) {
+        <p class="road-band__message" role="alert">{{ message }}</p>
+      } @else if (state.campaign()) {
+        <app-route-chart
+          class="road-band__route"
+          [day]="campaignDay()"
+          [leadInDays]="leadInDays()"
+          [startLabel]="startLabel()"
+          [targetDay]="targetDay()"
+          [targetLabel]="chartTargetLabel()"
+        />
+      } @else {
+        <p class="road-band__message">
+          Choose Day 1 in <a routerLink="/keep">Keep</a> to plot the route.
+        </p>
+      }
+    </div>
+  </section>
+
+  <div class="page road-body">
+    <section class="trial" aria-labelledby="trial-title">
+      <h2 id="trial-title">The Gate Trial</h2>
+      <p class="trial__target">{{ trialTarget() }}</p>
+      <a class="trial__open" routerLink="/road/gate-trial">Review the Gate Trial plan</a>
+      <ol class="trial__phases">
+        @for (phase of seed.trial.phases; track phase.id) {
+          <li>
+            <details>
+              <summary>{{ phase.title }}</summary>
+              <div class="trial__phase-content">
+                @for (instruction of phase.instructions ?? []; track instruction) {
+                  <p>{{ instruction }}</p>
+                }
+                @if (phase.circuit; as circuit) {
+                  <p>Each of {{ circuit.rounds }} controlled rounds:</p>
+                  <ul>
+                    @for (movement of circuit.movements; track movement.exerciseId) {
+                      <li>{{ circuitMovementLabel(movement) }}</li>
+                    }
+                  </ul>
+                }
+                @if (phase.requiredData?.length) {
+                  <p>Record: {{ phase.requiredData.join(', ') }}.</p>
+                }
+                @if (phase.optionalData?.length) {
+                  <p>Optional: {{ phase.optionalData.join(', ') }}.</p>
+                }
+                @for (prompt of phase.reflectionPrompts ?? []; track prompt) {
+                  <p>{{ prompt }}</p>
+                }
+              </div>
+            </details>
+          </li>
+        }
+      </ol>
+    </section>
+
+    <section class="walks" aria-labelledby="walks-title">
+      <h2 id="walks-title">Recent walks</h2>
+      <a class="walks__log" routerLink="/road/log">
+        <app-icon name="footprints" />
+        Log a walk
+      </a>
+      @if (walksLoading()) {
+        <p class="walks__state" role="status">Opening your walks…</p>
+      } @else if (walksError()) {
+        <div class="walks__state walks__state--error" role="alert">
+          <p>Your walks could not be opened. Check browser storage settings, then try again.</p>
+          <button type="button" (click)="loadWalks()">Try again</button>
+        </div>
+      } @else if (!walks().length) {
+        <p class="walks__state">Walks you log will appear here.</p>
+      } @else {
+        <ul class="walks__list" role="list">
+          @for (walk of walks(); track walk.id) {
+            <li>
+              <strong>{{ walkDate(walk.date) }}</strong>
+              <span>
+                @for (part of walkParts(walk); track $index) {
+                  <span class="part">{{ $last ? part : part + ' ·' }}</span>
+                  @if (!$last) {
+                    &ngsp;
+                  }
+                }
+              </span>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  </div>
+}

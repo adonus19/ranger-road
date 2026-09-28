@@ -1,0 +1,4 @@
+Reference: public/images/exercises/box-squat/sequence.png. Use only its visual style: warm ivory background; four evenly sized vertical panels in one wide horizontal strip; consistent athletic adult man wearing dark forest-green shirt and charcoal shorts; lightly textured realistic editorial anatomy illustration; clean floor line; no borders, labels, arrows, watermarks, extra limbs, or cropped anatomy. Same camera view/model across panels. Accurate beginner instruction, not advertising.
+
+Exercise source: docs/rangers-road-full-program-content/EXERCISE_CATALOG.md > half-kneeling-hip-flexor-stretch.
+Movement prompt: Half-Kneeling Hip-Flexor Stretch. LEFT knee and shin on floor behind, RIGHT foot flat ahead, upright trunk throughout. Panel 1 set position; panel 2 lightly tuck pelvis; panel 3 small whole-pelvis shift forward until front of rear hip stretches, without lumbar arch; panel 4 hold gently. Same leg placement, no bounce.

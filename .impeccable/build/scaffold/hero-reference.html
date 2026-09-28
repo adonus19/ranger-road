@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Scaffold reference: check-in-lookback.png</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap">
+  <link rel="stylesheet" href="layout.css">
+  <style>html,body{margin:0}body{background:#f5f4e5}.region{box-sizing:border-box}.region.text p{white-space:pre-wrap}</style>
+</head>
+<body>
+<!-- Reference only. Every region sits at its measured box inside a comp-aspect frame. Take the boxes (layout.css), keep your own semantic structure. -->
+<main class="comp-frame" style="max-width:864px">
+  <div class="r-header-bar region chrome" data-region="header-bar"><!-- flat night-forest header bar across the top --></div>
+  <div class="r-brand-mark region chrome" data-region="brand-mark"><!-- small gold three-pine mark --></div>
+  <div class="r-app-title region text" data-region="app-title"><!-- serif app title The Ranger's Road in cream --><p style="font-size:var(--r-app-title-font);line-height:1.05;margin:0">app-title</p></div>
+  <div class="r-back-link region control" data-region="back-link"><!-- left arrow and sans Back to Journal in secondary ink: rebuild the control's chrome from the crop (comp-spec.mjs --crop back-link); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-page-title region text" data-region="page-title"><!-- large serif page title Monthly check-in --><p style="font-size:var(--r-page-title-font);font-family:var(--r-page-title-family),sans-serif;font-weight:var(--r-page-title-weight);line-height:1.05;margin:0">page-title</p></div>
+  <div class="r-date-line region text" data-region="date-line"><!-- quiet sans line Day 29 · Monday, October 12 in secondary ink --><p style="font-size:var(--r-date-line-font);line-height:1.05;margin:0">date-line</p></div>
+  <div class="r-lookback-heading region text" data-region="lookback-heading"><!-- serif section heading The last 28 days --><p style="font-size:var(--r-lookback-heading-font);line-height:1.05;margin:0">lookback-heading</p></div>
+  <div class="r-lookback-panel region chrome" data-region="lookback-panel"><!-- read-only parchment-tint panel with 6px corners holding the readiness averages --></div>
+  <div class="r-sleep-label region text" data-region="sleep-label"><!-- spaced caps AVERAGE SLEEP in sage --><p style="font-size:var(--r-sleep-label-font);line-height:1.05;margin:0">sleep-label</p></div>
+  <div class="r-sleep-value region text" data-region="sleep-value"><!-- large serif numeral 6.6 --><p style="line-height:1.05;margin:0">sleep-value</p></div>
+  <div class="r-sleep-unit region text" data-region="sleep-unit"><!-- sans hours after the numeral --><p style="font-size:var(--r-sleep-unit-font);line-height:1.05;margin:0">sleep-unit</p></div>
+  <div class="r-panel-divider region chrome" data-region="panel-divider"><!-- vertical hairline dividing sleep from the pain rows --></div>
+  <div class="r-back-label region text" data-region="back-label"><!-- spaced caps BACK PAIN in sage --><p style="font-size:var(--r-back-label-font);line-height:1.05;margin:0">back-label</p></div>
+  <div class="r-back-value region text" data-region="back-value"><!-- serif numeral 2.4 --><p style="line-height:1.05;margin:0">back-value</p></div>
+  <div class="r-shoulder-label region text" data-region="shoulder-label"><!-- spaced caps SHOULDER PAIN in sage --><p style="font-size:var(--r-shoulder-label-font);line-height:1.05;margin:0">shoulder-label</p></div>
+  <div class="r-shoulder-value region text" data-region="shoulder-value"><!-- serif numeral 1.1 --><p style="line-height:1.05;margin:0">shoulder-value</p></div>
+  <div class="r-neck-label region text" data-region="neck-label"><!-- spaced caps NECK PAIN in sage --><p style="font-size:var(--r-neck-label-font);line-height:1.05;margin:0">neck-label</p></div>
+  <div class="r-neck-value region text" data-region="neck-value"><!-- serif numeral 0.8 --><p style="line-height:1.05;margin:0">neck-value</p></div>
+  <div class="r-panel-rule region chrome" data-region="panel-rule"><!-- hairline rule across the panel above its note --></div>
+  <div class="r-panel-note region text" data-region="panel-note"><!-- sans note Averages from 22 readiness checks. --><p style="font-size:var(--r-panel-note-font);line-height:1.05;margin:0">panel-note</p></div>
+  <div class="r-section-rule region chrome" data-region="section-rule"><!-- hairline rule between the look-back and Body --></div>
+  <div class="r-body-heading region text" data-region="body-heading"><!-- serif section heading Body --><p style="font-size:var(--r-body-heading-font);line-height:1.05;margin:0">body-heading</p></div>
+  <div class="r-weight-label region text" data-region="weight-label"><!-- spaced caps WEIGHT (LB) in sage --><p style="font-size:var(--r-weight-label-font);line-height:1.05;margin:0">weight-label</p></div>
+  <div class="r-weight-field region control" data-region="weight-field"><!-- bordered number field holding the large serif numeral 221.6: rebuild the control's chrome from the crop (comp-spec.mjs --crop weight-field); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-waist-label region text" data-region="waist-label"><!-- spaced caps WAIST (IN) in sage --><p style="font-size:var(--r-waist-label-font);line-height:1.05;margin:0">waist-label</p></div>
+  <div class="r-waist-field region control" data-region="waist-field"><!-- bordered number field holding the large serif numeral 41.5: rebuild the control's chrome from the crop (comp-spec.mjs --crop waist-field); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-rhr-label region text" data-region="rhr-label"><!-- spaced caps RESTING HEART RATE (BPM) in sage --><p style="font-size:var(--r-rhr-label-font);line-height:1.05;margin:0">rhr-label</p></div>
+  <div class="r-rhr-field region control" data-region="rhr-field"><!-- half-width bordered number field holding the large serif numeral 68: rebuild the control's chrome from the crop (comp-spec.mjs --crop rhr-field); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-rhr-help region text" data-region="rhr-help"><!-- two-line sans help Sit quietly for 5 minutes, then count for 60 seconds. --><p style="font-size:var(--r-rhr-help-font);line-height:1.05;margin:0">rhr-help</p></div>
+  <div class="r-dock-rule region chrome" data-region="dock-rule"><!-- full-width hairline rule above the docked save button --></div>
+  <div class="r-save-button region control" data-region="save-button"><!-- full-width pine button docked above the tabs: rebuild the control's chrome from the crop (comp-spec.mjs --crop save-button); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-save-label region text" data-region="save-label"><!-- Save check-in label in cream --><p style="font-size:var(--r-save-label-font);line-height:1.05;margin:0">save-label</p></div>
+  <div class="r-nav-bar region chrome" data-region="nav-bar"><!-- bottom navigation bar on paper with hairline top rule --></div>
+  <div class="r-nav-keep region control" data-region="nav-keep"><!-- Keep tab: gray house line icon and label: rebuild the control's chrome from the crop (comp-spec.mjs --crop nav-keep); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-nav-road region control" data-region="nav-road"><!-- Road tab: gray road icon and label: rebuild the control's chrome from the crop (comp-spec.mjs --crop nav-road); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-nav-forge region control" data-region="nav-forge"><!-- Forge tab: gray anvil icon and label: rebuild the control's chrome from the crop (comp-spec.mjs --crop nav-forge); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-nav-journal region control" data-region="nav-journal"><!-- selected Journal tab: pine open-book icon, pine label, short gold underline: rebuild the control's chrome from the crop (comp-spec.mjs --crop nav-journal); its ink box, border, fill, radius, and label size are the comp's --></div>
+  <div class="r-nav-field-manual region control" data-region="nav-field-manual"><!-- Field Manual tab: folded-map line icon and label: rebuild the control's chrome from the crop (comp-spec.mjs --crop nav-field-manual); its ink box, border, fill, radius, and label size are the comp's --></div>
+</main>
+</body>
+</html>

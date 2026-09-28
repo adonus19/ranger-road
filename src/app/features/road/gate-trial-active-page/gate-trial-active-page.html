@@ -1,0 +1,375 @@
+<section class="trial-scene" aria-labelledby="trial-title">
+  <picture class="trial-scene__image">
+    <source srcset="/images/forest-band.webp" type="image/webp" />
+    <img src="/images/forest-band.png" alt="" width="1728" height="960" decoding="async" />
+  </picture>
+  <div class="trial-scene__content">
+    <h1 id="trial-title">The Gate Trial</h1>
+    <p>The Muster · Chapter I</p>
+  </div>
+</section>
+
+<div class="trial-page">
+  <a class="trial-back" routerLink="/road/gate-trial"><app-icon name="arrow-left" />Back to trial</a>
+
+  @if (loading() || state.loading()) {
+    <p class="trial-notice" role="status">Opening the Gate Trial from this device…</p>
+  } @else if (completed(); as result) {
+    <section class="trial-end" aria-labelledby="completed-title">
+      <h2 id="completed-title">Gate Trial recorded</h2>
+      <p>Your five parts are saved in your campaign history on this device.</p>
+      <dl class="trial-summary">
+        <div><dt>Road</dt><dd>2 miles · {{ result.phaseResults[0].metrics?.['durationMinutes'] }} min</dd></div>
+        <div><dt>Gate Circuit</dt><dd>3 rounds · {{ result.phaseResults[1].metrics?.['durationMinutes'] }} min</dd></div>
+        <div><dt>Mind</dt><dd>Three reflections recorded</dd></div>
+        <div><dt>Spirit</dt><dd>Psalm 121 and {{ result.phaseResults[3].metrics?.['prayerMinutes'] }} min prayer</dd></div>
+        <div><dt>Oath</dt><dd>Personal Ranger’s Oath recorded</dd></div>
+      </dl>
+      <p class="trial-end__followup">Assess how you function 60–120 minutes after the effort. You can add that recovery note later.</p>
+      <a class="trial-link" routerLink="/road">Return to Road</a>
+    </section>
+  } @else if (stopped(); as attempt) {
+    <section class="trial-end" aria-labelledby="stopped-title">
+      <h2 id="stopped-title">Trial stopped</h2>
+      <p>Your partial work and pain notes are kept in your campaign history. This attempt was not marked complete.</p>
+      <p class="trial-end__date">{{ shortDate(attempt.date) }}</p>
+      <a class="trial-link" routerLink="/road">Return to Road</a>
+    </section>
+  } @else if (draft(); as active) {
+    <nav class="trial-progress" aria-label="Gate Trial parts">
+      <ol>
+        @for (part of trial.phases; track part.id; let index = $index) {
+          <li>
+            <button
+              type="button"
+              [class.is-current]="phaseIndex() === index"
+              [class.is-complete]="phaseComplete(index)"
+              [disabled]="index > active.currentPhaseIndex || saving()"
+              [attr.aria-current]="phaseIndex() === index ? 'step' : null"
+              [attr.aria-label]="'Part ' + (index + 1) + ': ' + part.title + (phaseComplete(index) ? ', completed' : '')"
+              (click)="selectPhase(index)"
+            ><span class="visually-hidden">{{ part.title }}</span></button>
+          </li>
+        }
+      </ol>
+    </nav>
+
+    @if (error(); as message) {
+      <p class="trial-error" role="alert">{{ message }}</p>
+    }
+    @if (savedMessage(); as message) {
+      <p class="trial-saved" role="status">{{ message }}</p>
+    }
+
+    @if (reviewing()) {
+      <section class="trial-review" aria-labelledby="review-title">
+        <h2 id="review-title">Review the five parts</h2>
+        <p>Check the record before saving the completed Gate Trial.</p>
+        <dl class="trial-summary">
+          <div>
+            <dt>Road</dt>
+            <dd>2 miles · {{ metric(active.phaseResults[0], 'durationMinutes') }} min · RPE {{ metric(active.phaseResults[0], 'rpe') }}</dd>
+            <dd>Knee: {{ response(active.phaseResults[0], 'knee') }}</dd>
+            <dd>Back: {{ response(active.phaseResults[0], 'back') }}</dd>
+            <dd>Recovery after 5 minutes: {{ response(active.phaseResults[0], 'recoveryAfterFiveMinutes') }}</dd>
+          </div>
+          <div><dt>Gate Circuit</dt><dd>3 rounds · {{ active.phaseResults[1].metrics?.['durationMinutes'] }} min; {{ active.phaseResults[1].metrics?.['restAfterWalkMinutes'] }} min rest after walk</dd></div>
+          <div><dt>Mind · Body</dt><dd>{{ active.phaseResults[2].responses?.['body'] }}</dd></div>
+          <div><dt>Mind · Character</dt><dd>{{ active.phaseResults[2].responses?.['character'] }}</dd></div>
+          <div><dt>Mind · Family</dt><dd>{{ active.phaseResults[2].responses?.['family'] }}</dd></div>
+          <div>
+            <dt>Spirit</dt>
+            <dd>Psalm 121 and {{ metric(active.phaseResults[3], 'prayerMinutes') }} min prayer</dd>
+            <dd>{{ response(active.phaseResults[3], 'identity') }}</dd>
+          </div>
+          <div><dt>Oath</dt><dd>{{ active.phaseResults[4].notes }}</dd></div>
+        </dl>
+        <details class="trial-review-rounds">
+          <summary>Review all 18 circuit station results</summary>
+          @for (round of active.phaseResults[1].circuitRounds ?? []; track round.round) {
+            <section>
+              <h3>Round {{ round.round }}</h3>
+              <ul>
+                @for (recorded of round.movements; track recorded.exerciseId) {
+                  <li><strong>{{ recordedMovement(recorded) }}</strong></li>
+                }
+              </ul>
+            </section>
+          }
+        </details>
+        @if (!canStart() || painBlocks() || staleDate()) {
+          <p class="trial-hold" role="alert">The full Gate Trial cannot be marked complete on this attempt. Your entries remain saved; stop and keep the partial record.</p>
+          <button type="button" class="trial-secondary" [disabled]="saving()" (click)="stop()">Stop and keep partial record</button>
+        }
+        <button type="button" class="trial-secondary" (click)="reviewing.set(false)">Edit this record</button>
+        <div class="trial-dock">
+          <button type="button" class="trial-primary" [disabled]="saving() || !canStart() || painBlocks() || staleDate()" (click)="confirmCompletion()">Save completed trial</button>
+        </div>
+      </section>
+    } @else {
+      <section class="trial-phase" [attr.aria-labelledby]="phase().id + '-title'">
+        @switch (phaseIndex()) {
+          @case (0) {
+            <h2 id="brisk-walk-title">2-mile brisk walk</h2>
+            <p class="trial-lead">Walk 2 miles at a brisk pace. Record what happened, without a pace target.</p>
+            @if (physicalBlocked()) {
+              <p class="trial-hold" role="alert">
+                @if (staleDate()) { This attempt began on another day. }
+                @else if (painBlocks()) { Pain or a reduced response changed this attempt. }
+                @else { The full Gate Trial waits for a same-day Green readiness check. }
+                Your partial work stays saved.
+              </p>
+            }
+            <label class="trial-check">
+              <input type="checkbox" [formField]="fields.fullWalk" (change)="queueAutosave()" />
+              <span>I completed the full 2-mile walk</span>
+            </label>
+            <div class="trial-timer">
+              <span>Walk timer</span><strong>{{ elapsed() }}</strong>
+              <button type="button" (click)="startTimer()" [disabled]="saving() || physicalBlocked()">Start timer</button>
+              <button type="button" (click)="useElapsed()" [disabled]="timerStart() === null">Use elapsed</button>
+            </div>
+            <div class="trial-fields trial-fields--two">
+              <label>Walk time <span>minutes</span>
+                <input type="number" step="0.1" inputmode="decimal" [formField]="fields.walkMinutes" (input)="queueAutosave()" />
+              </label>
+              <label>RPE <span>1–10</span>
+                <input type="number" step="1" inputmode="numeric" [formField]="fields.walkRpe" (input)="queueAutosave()" />
+              </label>
+            </div>
+            <label class="trial-field">Average heart rate <span>optional · bpm</span>
+              <input type="number" step="1" inputmode="numeric" [formField]="fields.heartRate" (input)="queueAutosave()" />
+            </label>
+            <label class="trial-field">Knee response
+              <textarea rows="2" [formField]="fields.knee" (input)="queueAutosave()"></textarea>
+            </label>
+            <label class="trial-field">Back response
+              <textarea rows="2" [formField]="fields.back" (input)="queueAutosave()"></textarea>
+            </label>
+            <label class="trial-field">Recovery after 5 minutes
+              <textarea rows="2" [formField]="fields.recovery" (input)="queueAutosave()"></textarea>
+            </label>
+          }
+          @case (1) {
+            <h2 id="controlled-circuit-title">Gate Circuit</h2>
+            <p class="trial-phase__sub">3 controlled rounds · Do not race.</p>
+            @if (physicalBlocked()) {
+              <p class="trial-hold" role="alert">
+                @if (staleDate()) { This attempt began on another day. }
+                @else if (painBlocks()) { Pain or a reduced response changed this attempt. }
+                @else { The full Gate Trial waits for a same-day Green readiness check. }
+                Your partial work stays saved.
+              </p>
+            }
+            <div class="trial-rest">
+              <label>Rest after walk <span>minutes</span>
+                <input type="number" step="0.1" inputmode="decimal" [formField]="fields.restMinutes" (input)="queueAutosave()" />
+              </label>
+              <p>Rest 5–10 minutes after the walk; take longer if needed to recover safely.</p>
+            </div>
+            @if (station(); as cursor) {
+              @if (movement(); as planned) {
+                <div class="trial-station">
+                  <p class="trial-station__count">Round {{ cursor.round }} of 3 · Station {{ cursor.index + 1 }} of 6</p>
+                  <h3>{{ stationName(planned) }}</h3>
+                  <p class="trial-dose"><strong>{{ planned.reps ?? planned.durationSeconds }}</strong><span>{{ planned.reps !== undefined ? 'reps' : 'seconds' }}{{ planned.perSide ? ' per side' : '' }}</span></p>
+                  <img
+                    class="trial-sequence"
+                    src="/images/exercises/box-squat/sequence.webp"
+                    [src]="guideBase() + '/sequence.webp'"
+                    [alt]="'Illustrated movement sequence for ' + stationName(planned)"
+                    width="2020" height="780" loading="lazy"
+                  />
+                  <button type="button" class="trial-secondary trial-help-button" [attr.aria-expanded]="helpOpen()" (click)="toggleHelp()">Quick Help for {{ stationName(planned) }}</button>
+                  <form id="trial-station-form" class="trial-station-form" (submit)="saveStation($event)">
+                    @if (planned.perSide) {
+                      <div class="trial-fields trial-fields--two">
+                        <label>Left side <span>{{ planned.reps !== undefined ? 'reps completed' : 'seconds held' }}</span>
+                          <input type="number" [attr.step]="planned.reps !== undefined ? 1 : 0.1" inputmode="decimal" [formField]="stationFields.left" />
+                        </label>
+                        <label>Right side <span>{{ planned.reps !== undefined ? 'reps completed' : 'seconds held' }}</span>
+                          <input type="number" [attr.step]="planned.reps !== undefined ? 1 : 0.1" inputmode="decimal" [formField]="stationFields.right" />
+                        </label>
+                      </div>
+                    } @else {
+                      <label class="trial-field">Actual {{ planned.reps !== undefined ? 'reps completed' : 'seconds held' }}
+                        <input type="number" [attr.step]="planned.reps !== undefined ? 1 : 0.1" inputmode="decimal" [formField]="stationFields.amount" />
+                      </label>
+                    }
+                    <details class="trial-optional">
+                      <summary>Equipment or setup (optional)</summary>
+                      <label>Setup or assistance
+                        <input type="text" [formField]="stationFields.setup" />
+                      </label>
+                      <label>Load used <span>lb</span>
+                        <input type="number" step="0.5" inputmode="decimal" [formField]="stationFields.load" />
+                      </label>
+                    </details>
+                  </form>
+                </div>
+              }
+            } @else {
+              <p class="trial-all-stations" role="status">All 18 stations have entries. Record the circuit time, then continue.</p>
+            }
+            <details class="trial-station-index">
+              <summary>{{ recordedStations() }} of 18 stations recorded · Review or change a station</summary>
+              @for (round of [1, 2, 3]; track round) {
+                <div class="trial-station-index__round">
+                  <h4>Round {{ round }}</h4>
+                  <div>
+                    @for (planned of circuit.movements; track planned.exerciseId; let index = $index) {
+                      <button
+                        type="button"
+                        [class.is-saved]="stationSaved(round, planned.exerciseId)"
+                        [disabled]="!stationSaved(round, planned.exerciseId) && (round > (station()?.round ?? 0) || (round === station()?.round && index > (station()?.index ?? -1)))"
+                        (click)="chooseStation(round, index)"
+                      >
+                        {{ stationName(planned) }}<span>{{ stationSaved(round, planned.exerciseId) ? 'Recorded' : 'Pending' }}</span>
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </details>
+            <div class="trial-timer">
+              <span>Circuit timer</span><strong>{{ elapsed() }}</strong>
+              <button type="button" (click)="startTimer()" [disabled]="saving() || physicalBlocked()">Start timer</button>
+              <button type="button" (click)="useElapsed()" [disabled]="timerStart() === null">Use elapsed</button>
+            </div>
+            <label class="trial-field">Circuit completion time <span>minutes · no speed target</span>
+              <input type="number" step="0.1" inputmode="decimal" [formField]="fields.circuitMinutes" (input)="queueAutosave()" />
+            </label>
+          }
+          @case (2) {
+            <h2 id="mind-reflection-title">Mind reflection</h2>
+            <p class="trial-lead">Write one thing you learned in each part of the trial.</p>
+            <label class="trial-field">One thing learned about your body
+              <textarea rows="3" [formField]="fields.body" (input)="queueAutosave()"></textarea>
+            </label>
+            <label class="trial-field">One thing learned about your character
+              <textarea rows="3" [formField]="fields.character" (input)="queueAutosave()"></textarea>
+            </label>
+            <label class="trial-field">One thing learned about your family
+              <textarea rows="3" [formField]="fields.family" (input)="queueAutosave()"></textarea>
+            </label>
+          }
+          @case (3) {
+            <h2 id="psalm-and-prayer-title">Psalm 121 + prayer</h2>
+            <p class="trial-lead">Read Psalm 121. Spend 10–15 quiet minutes in prayer; longer is okay.</p>
+            <label class="trial-check">
+              <input type="checkbox" [formField]="fields.psalmAndPrayer" (change)="queueAutosave()" />
+              <span>I read Psalm 121 and spent time in prayer</span>
+            </label>
+            <div class="trial-timer">
+              <span>Quiet prayer timer</span><strong>{{ elapsed() }}</strong>
+              <button type="button" (click)="startTimer()" [disabled]="saving()">Start timer</button>
+              <button type="button" (click)="useElapsed()" [disabled]="timerStart() === null">Use elapsed</button>
+            </div>
+            <label class="trial-field">Quiet prayer time <span>minutes</span>
+              <input type="number" step="0.1" inputmode="decimal" [formField]="fields.prayerMinutes" (input)="queueAutosave()" />
+            </label>
+            <label class="trial-field">What kind of husband and father am I trying to become?
+              <textarea rows="5" [formField]="fields.identity" (input)="queueAutosave()"></textarea>
+            </label>
+          }
+          @case (4) {
+            <h2 id="rangers-oath-title">Your Ranger’s Oath</h2>
+            <p class="trial-lead">Write a short personal oath based on strength for service, keeping your word, stewardship, wisdom, faith, and family leadership.</p>
+            <label class="trial-field">Personal Ranger’s Oath
+              <textarea rows="9" [formField]="fields.oath" (input)="queueAutosave()"></textarea>
+            </label>
+          }
+        }
+
+        @if (phaseIndex() < 2) {
+          <div class="trial-utility">
+            <button type="button" class="trial-secondary" (click)="openPain()">Record pain</button>
+            <button type="button" class="trial-secondary" (click)="stop()" [disabled]="saving()">Stop trial</button>
+          </div>
+        } @else {
+          <button type="button" class="trial-stop" (click)="stop()" [disabled]="saving()">Stop trial and keep partial record</button>
+        }
+        <div class="trial-dock">
+          @if (phaseIndex() === 1 && station()) {
+            <button type="submit" form="trial-station-form" class="trial-primary" [disabled]="saving() || physicalBlocked()">Save station and continue</button>
+          } @else {
+            <button
+              type="button"
+              class="trial-primary"
+              [disabled]="saving() || (phaseIndex() < 2 && physicalBlocked())"
+              (click)="continuePhase($event)"
+            >{{ phaseIndex() === 4 ? 'Review trial record' : 'Save and continue' }}</button>
+          }
+        </div>
+      </section>
+
+      @if (helpOpen() && guide(); as exercise) {
+        <section class="trial-help" aria-labelledby="trial-help-title">
+          <div class="trial-panel-top">
+            <h3 id="trial-help-title" tabindex="-1">{{ exercise.name }} · Quick Help</h3>
+            <button type="button" (click)="toggleHelp()">Close</button>
+          </div>
+          <p>{{ exercise.purpose }}</p>
+          <img src="/images/exercises/box-squat/sequence.webp" [src]="guideBase() + '/sequence.webp'" [alt]="'Movement sequence for ' + exercise.name" width="2020" height="780" loading="lazy" />
+          <ol>
+            @for (step of guideSteps(); track step) { <li>{{ step }}</li> }
+          </ol>
+          @if (exercise.feel) { <p><strong>Feel:</strong> {{ exercise.feel }}</p> }
+          @if (exercise.avoid) { <p><strong>Avoid:</strong> {{ exercise.avoid }}</p> }
+          <details>
+            <summary>Full guide and muscle map</summary>
+            <p>{{ exercise.how }}</p>
+            @if (exercise.targets) { <p><strong>Targets:</strong> {{ exercise.targets }}</p> }
+            @if (exercise.painAwareOptions) { <p><strong>For pain:</strong> {{ exercise.painAwareOptions }}</p> }
+            <img src="/images/exercises/box-squat/muscle-map.webp" [src]="guideBase() + '/muscle-map.webp'" [alt]="'Neck-down front and back muscle map for ' + exercise.name" width="1200" height="1200" loading="lazy" />
+          </details>
+        </section>
+      }
+      @if (painOpen()) {
+        <section class="trial-pain" aria-labelledby="trial-pain-title">
+          <div class="trial-panel-top">
+            <h3 id="trial-pain-title" tabindex="-1">Record pain now</h3>
+            <button type="button" (click)="painOpen.set(false)">Close</button>
+          </div>
+          <p>This note is saved immediately. Pain or a reduced response can defer the full trial.</p>
+          <form (submit)="recordPain($event)">
+            <label>Where did you feel it?
+              <input type="text" list="trial-pain-areas" [formField]="painFields.bodyArea" />
+              <datalist id="trial-pain-areas">
+                @for (area of painAreas; track area) { <option [value]="area"></option> }
+              </datalist>
+            </label>
+            <label>Pain level <span>0–10</span>
+              <input type="number" step="1" inputmode="numeric" [formField]="painFields.severity" />
+            </label>
+            <label>What did you do?
+              <select [formField]="painFields.actionTaken">
+                <option value="">Choose a response</option>
+                @for (action of painActions; track action.id) { <option [value]="action.id">{{ action.label }}</option> }
+              </select>
+            </label>
+            <button type="submit" class="trial-primary" [disabled]="saving()">Save pain note</button>
+          </form>
+        </section>
+      }
+    }
+  } @else {
+    <section class="trial-start" aria-labelledby="start-title">
+      <h2 id="start-title">Begin the Gate Trial</h2>
+      <p>Five parts, in order: Road, Gate Circuit, Mind, Spirit, and Oath. Your progress is saved on this device.</p>
+      @if (state.error() || error()) {
+        <p class="trial-error" role="alert">{{ error() ?? state.error() }}</p>
+        <button type="button" class="trial-secondary" (click)="retry()">Try again</button>
+      } @else if (!state.campaign() || state.beforeDayOne()) {
+        <p class="trial-hold">Choose Day 1 in Keep before recording the trial.</p>
+        <a class="trial-link" routerLink="/keep">Go to Keep</a>
+      } @else if (!canStart()) {
+        <p class="trial-hold">The full Gate Trial waits for a same-day Green · Ready check.</p>
+        <a class="trial-link" routerLink="/readiness">Check readiness</a>
+      } @else {
+        <p class="trial-ready">Green · Ready · {{ shortDate(state.today()) }}</p>
+        <div class="trial-dock"><button type="button" class="trial-primary" [disabled]="saving()" (click)="start()">Begin Gate Trial</button></div>
+      }
+    </section>
+  }
+</div>

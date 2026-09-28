@@ -1,0 +1,126 @@
+<div class="forge-page">
+  <h1>Forge</h1>
+  <p class="intro">Your strength work for Chapter I. Check readiness before you begin.</p>
+
+  @if (loading() || state.loading()) {
+    <p class="notice" role="status">Opening your training plan…</p>
+  } @else if (error() || state.error()) {
+    <div class="notice notice--error" role="alert">
+      <p>{{ error() ?? state.error() }}</p>
+      <button type="button" (click)="load()">Try again</button>
+    </div>
+  } @else if (state.needsStartDate() || state.beforeDayOne()) {
+    <div class="notice">
+      <p>
+        {{
+          state.needsStartDate()
+            ? 'Choose Day 1 before opening the Forge.'
+            : 'Your campaign has not reached Day 1 yet.'
+        }}
+      </p>
+      <a routerLink="/keep">Go to Keep</a>
+    </div>
+  } @else {
+    @if (active(); as draft) {
+      <section class="active-card" aria-labelledby="active-title">
+        <p class="eyebrow">In progress</p>
+        <h2 id="active-title">{{ draft.definitionSnapshot.title }}</h2>
+        <p>Started {{ shortDate(draft.date) }}. Your sets and notes are saved on this device.</p>
+        <a [routerLink]="['/forge/session', draft.workoutDefinitionId]">Resume session</a>
+      </section>
+    }
+
+    <div
+      class="readiness"
+      [class.readiness--yellow]="status() === 'yellow'"
+      [class.readiness--red]="status() === 'red'"
+    >
+      <div>
+        <strong>
+          @switch (status()) {
+            @case ('green') {
+              Green · Ready
+            }
+            @case ('yellow') {
+              Yellow · Reduce
+            }
+            @case ('red') {
+              Red · Restore
+            }
+            @default {
+              Readiness needed
+            }
+          }
+        </strong>
+        <p>
+          @switch (status()) {
+            @case ('green') {
+              Train with sound technique and stable symptoms.
+            }
+            @case ('yellow') {
+              Reduce volume about 25%. Do not increase load.
+            }
+            @case ('red') {
+              No strength today. Restoration only if appropriate.
+            }
+            @default {
+              A same-day check is needed before physical training.
+            }
+          }
+        </p>
+      </div>
+      <a routerLink="/readiness">{{ status() ? 'Check again' : 'Check readiness' }}</a>
+    </div>
+
+    <section aria-labelledby="today-workouts">
+      <h2 id="today-workouts">Today in the Forge</h2>
+      <div class="choice-list">
+        @for (choice of choices(); track choice.id) {
+          <article class="choice" [class.choice--planned]="choice.planned">
+            <div>
+              <p class="choice__kind">{{ choice.planned ? 'Today’s order' : 'As needed' }}</p>
+              <h3>{{ choice.title }}</h3>
+              <p>
+                {{
+                  choice.id === 'chapter-1-restoration'
+                    ? 'Gentle mobility and an easy finish.'
+                    : 'Warm up, work through the sets, and record what happened.'
+                }}
+              </p>
+            </div>
+            @if (active()) {
+              <span class="choice__blocked">Finish or stop your active session first.</span>
+            } @else if (canOpen(choice.id)) {
+              <a [routerLink]="['/forge/session', choice.id]">Open {{ choice.title }}</a>
+            } @else {
+              <span class="choice__blocked">{{
+                status() ? 'Strength is unavailable on Red.' : 'Check readiness first.'
+              }}</span>
+            }
+          </article>
+        }
+      </div>
+    </section>
+
+    @if (sessions().length) {
+      <section class="history" aria-labelledby="today-history">
+        <h2 id="today-history">Saved today</h2>
+        <ul>
+          @for (session of sessions(); track session.id) {
+            <li>
+              <strong>{{ sessionTitle(session) }}</strong
+              ><span
+                >{{ session.outcome === 'stopped' ? 'Stopped, partial work saved' : 'Completed'
+                }}{{ session.reduced ? ' · Reduced' : '' }}</span
+              >
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    <p class="mission-link">
+      After training, <a routerLink="/keep/mission">record today’s mission outcome</a>.
+    </p>
+  }
+</div>

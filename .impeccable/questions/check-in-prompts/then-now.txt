@@ -1,0 +1,26 @@
+Use case: ui-mockup. High-fidelity mobile app UI design comp. Flat frontal screenshot of one phone screen at 390x844 viewport proportion.
+
+Surface: The Ranger's Road, "Monthly check-in": a private, offline training app screen where the person records body measurements and a few simple physical tests once every 28 days. The visitor's job: enter today's numbers, each one beside the value recorded on Day 1, and save. It must read instantly as a working app form, set like a two-column field ledger.
+
+Reference image: it carries the visual world to keep exactly: header bar, warm paper page, serif plus sans pairing, small spaced-caps field labels, bordered fields with large serif numerals, pine button docked above the tab bar, bottom tab bar. Do NOT copy the reference's content (no walk, miles, terrain or effort scale); this screen's content is described below.
+
+Layout, top to bottom:
+1. Header bar as in the reference.
+2. A text link with a left arrow: "Back to Journal".
+3. Large serif page title "Monthly check-in", and under it a quiet sans line in secondary ink: "Day 29 · Monday, October 12".
+4. Two column heads in small spaced capitals, separated by a thin rule below them: left column, about 40% width, "DAY 1 · SEP 14"; right column, about 60% width, "TODAY".
+5. Five ledger rows, each separated by a thin hairline rule. Each row: a small spaced-caps sage label across the top of the row, then the Day 1 value on the left as a medium serif numeral in secondary ink (not editable, no border), and on the right a bordered field with today's value as a large serif numeral in ink, the unit in small sans just after the field. Rows:
+   - "WEIGHT": left "225.4", right field "221.6", unit "lb"
+   - "WAIST": left "42.5", right field "41.5", unit "in"
+   - "RESTING HEART RATE": left "74", right field "68", unit "bpm"
+   - "BLOOD PRESSURE (OPTIONAL)": left "132 / 86", right two small fields "128" and "82" separated by a slash
+   - "PUSH-UPS": left "9", right field "14", unit "reps"
+6. Docked at the bottom, just above the tab bar, a full-width pine button "Save check-in", with a thin paper strip behind it so it reads as docked over the scrolling form.
+7. Tab bar.
+
+Text, verbatim and correctly spelled: "The Ranger's Road"; "Back to Journal"; "Monthly check-in"; "Day 29 · Monday, October 12"; "DAY 1 · SEP 14"; "TODAY"; "WEIGHT"; "225.4"; "221.6"; "lb"; "WAIST"; "42.5"; "41.5"; "in"; "RESTING HEART RATE"; "74"; "68"; "bpm"; "BLOOD PRESSURE (OPTIONAL)"; "132 / 86"; "128"; "82"; "PUSH-UPS"; "9"; "14"; "reps"; "Save check-in"; "Keep"; "Road"; "Forge"; "Journal"; "Field Manual".
+
+Palette only: Night Forest #172B21 for the header bar, Pine #24362B for primary buttons and selected options, warm paper #F6F3EA page, Parchment Tint #E9E5D8 for quiet read-only panels, rules #D4D1C7, Gold Line #A9804A only as the selected tab's short underline, Ink #171A17, Secondary Ink #4F514D, Sage label gray #53655C. Flat surfaces with 1px borders and 6px corners, no shadows.
+Type: a sturdy bracketed book serif for the page title, section headings and all numerals; a narrow humanist sans for labels, help lines, inputs and buttons. Field labels are small spaced capitals in sage gray, like the reference. No decorative fonts.
+Top of the screen: the same dark forest header bar as the reference, with the small gold three-pine mark and "The Ranger's Road" in cream serif. Bottom: the same five-tab bar as the reference, "Keep", "Road", "Forge", "Journal", "Field Manual", with "Journal" selected (pine, short gold underline).
+Avoid: charts, graphs, sparklines, gauges, progress rings, body silhouettes, anatomy, scales or tape-measure drawings, photos, forest scenery, maps, route lines, targets or goal weights, good/bad colors on changes, XP, points, streaks, badges, fake parchment texture, glow, 3D, device frame, status bar, hands.

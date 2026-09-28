@@ -1,0 +1,66 @@
+<div class="route" role="img" [attr.aria-label]="summary()">
+  <span
+    class="route__target-label"
+    [class.route__target-label--raised]="targetLabelRaised()"
+    [style.--x]="target.x"
+    [style.--y]="targetLabelY"
+  >
+    {{ targetText() }}
+  </span>
+
+  @if (started() && !reachedTarget()) {
+    <span
+      class="route__today-label"
+      [style.--x]="today().x"
+      [style.--y]="today().y"
+      [style.--t]="progress()"
+    >
+      Today · Day {{ day() }}
+    </span>
+  } @else if (!started() && startLabel()) {
+    <span
+      class="route__today-label"
+      [style.--x]="today().x"
+      [style.--y]="today().y"
+      [style.--t]="0"
+    >
+      {{ startLabel() }}
+    </span>
+  }
+
+  <svg
+    class="route__line"
+    viewBox="0 0 100 100"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path class="route__ahead" [attr.d]="aheadPath()" />
+  </svg>
+  @if (started()) {
+    <svg
+      class="route__line route__line--traveled"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path class="route__traveled" [attr.d]="traveledPath()" />
+    </svg>
+  }
+
+  @for (tick of ticks(); track tick.label) {
+    <span class="route__tick" [style.--x]="tick.x" [style.--y]="tick.y"></span>
+    <span class="route__week" [style.--x]="tick.labelX">{{ tick.label }}</span>
+  }
+
+  <span
+    class="route__ring"
+    [class.route__ring--reached]="reachedTarget()"
+    [style.--x]="target.x"
+    [style.--y]="target.y"
+  ></span>
+  @if (started() && !reachedTarget()) {
+    <span class="route__today" [style.--x]="today().x" [style.--y]="today().y"></span>
+  }
+</div>

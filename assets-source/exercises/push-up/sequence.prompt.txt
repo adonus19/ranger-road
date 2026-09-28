@@ -1,0 +1,4 @@
+Reference: public/images/exercises/box-squat/sequence.png. Use only its visual style: warm ivory background; four evenly sized vertical panels in one wide horizontal strip; consistent athletic adult man wearing dark forest-green shirt and charcoal shorts; lightly textured realistic editorial anatomy illustration; clean floor line; no borders, labels, arrows, watermarks, extra limbs, or cropped anatomy. Same camera view/model across panels. Accurate beginner instruction, not advertising.
+
+Exercise source: docs/rangers-road-full-program-content/EXERCISE_CATALOG.md > push-up.
+Movement prompt: Standard floor Push-Up. Side three-quarter view. Panel 1 high plank with arms extended, hands just outside shoulders and rigid body line; panel 2 halfway lowering under control with elbows angled back; panel 3 low controlled hover above floor with hips neither sagging nor piking; panel 4 return to high plank. Full body, hands, and feet visible.

@@ -1,0 +1,22 @@
+Use case: ui-mockup. High-fidelity mobile app UI design comp. Flat frontal screenshot of one phone screen at 390x844 viewport proportion.
+
+Surface: The Ranger's Road, "Log a walk": a private, offline training app screen for recording a walk the person has just finished. The visitor's job: enter one fact per screen with one thumb and move on. It must read instantly as a working app form, one step of a short sequence.
+
+Reference image: it carries the visual world to keep exactly: header bar, warm paper page, serif plus sans pairing, small spaced-caps field labels, bordered tap-scale buttons, pine button, bottom tab bar. Do NOT copy the reference's content or layout (no readiness text, no energy scale); this screen shows one question, described below.
+
+Layout, top to bottom:
+1. Header bar as in the reference.
+2. A text link with a left arrow: "Back to Road".
+3. Small sans line "Log a walk · Step 2 of 6", and under it a thin progress rule split into six equal segments, the first two filled pine, the rest pale rule gray.
+4. A quiet answered-summary row on parchment tint: "Distance" label, serif "2.1 miles", and a small "Change" text link on the right.
+5. The question, very large serif, two lines: "How long did you walk?"
+6. One large bordered numeric field, full width, about 96px tall, holding the serif numeral "41" at display size with the unit "minutes" in sans to its right inside the field.
+7. Small help line: "Round to the nearest minute."
+8. Generous empty paper below, then two buttons side by side near the bottom: a secondary bordered "Back" button on the left third and a wide pine "Next" button with a right arrow on the right two thirds, sitting just above the tab bar.
+9. Tab bar.
+
+Text, verbatim and correctly spelled: "The Ranger's Road"; "Back to Road"; "Log a walk · Step 2 of 6"; "DISTANCE"; "2.1 miles"; "Change"; "How long did you walk?"; "41"; "minutes"; "Round to the nearest minute."; "Back"; "Next"; "Keep"; "Road"; "Forge"; "Journal"; "Field Manual".
+Palette only: Night Forest #172B21 for the header bar, Pine #24362B for primary buttons and selected scale options, warm paper #F6F3EA page, Parchment Tint #E9E5D8 for quiet notices, rules #D4D1C7, Gold Line #A9804A only as the selected tab's short underline, Ink #171A17, Secondary Ink #4F514D. Flat surfaces with 1px borders and 6px corners, no shadows.
+Type: a sturdy bracketed book serif for the page title, questions, section headings and all numerals; a narrow humanist sans for labels, help lines, inputs and buttons. Field labels are small spaced capitals in sage gray, like the reference. No decorative fonts.
+Top of the screen: the same dark forest header bar as the reference, with the small gold three-pine mark and "The Ranger's Road" in cream serif. Bottom: the same five-tab bar as the reference, "Keep", "Road", "Forge", "Journal", "Field Manual", with "Road" selected (pine, short gold underline).
+Avoid: maps, route lines, running figures, invented goals or targets, pace, XP, points, streaks, badges, charts, photos, forest scenery, fake parchment texture, glow, 3D, device frame, status bar, hands.
