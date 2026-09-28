@@ -45,14 +45,6 @@ h2 {
   margin-bottom: 0.625rem;
 }
 
-.scale__options--effort {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
-.scale__options--pain {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-}
-
 .pain-toggle {
   display: flex;
   width: 100%;

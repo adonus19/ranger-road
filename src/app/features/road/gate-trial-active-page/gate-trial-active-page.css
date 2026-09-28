@@ -76,6 +76,7 @@
 
 .trial-progress {
   margin: 0.15rem 0 1.1rem;
+  scroll-margin-top: 0.5rem;
 }
 
 .trial-progress ol {
@@ -156,6 +157,7 @@
   font-weight: 700;
   letter-spacing: -0.025em;
   line-height: 1.07;
+  text-wrap: balance;
 }
 
 .trial-phase__sub,
@@ -173,10 +175,8 @@
   font-weight: 600;
 }
 
-.trial-error,
 .trial-hold,
 .trial-notice,
-.trial-saved,
 .trial-ready,
 .trial-all-stations {
   margin: 0.8rem 0;
@@ -186,9 +186,20 @@
   color: var(--text);
 }
 
+.trial-all-stations {
+  scroll-margin-top: 1rem;
+}
+
 .trial-error {
-  background: var(--status-red-surface);
+  margin: 0.8rem 0;
   color: var(--status-red-text);
+  font-weight: 600;
+}
+
+.trial-page input[aria-invalid='true'],
+.trial-page textarea[aria-invalid='true'],
+.trial-check:has(input[aria-invalid='true']) {
+  border-color: var(--status-red-text);
 }
 
 .trial-hold {
@@ -199,13 +210,6 @@
 .trial-ready {
   background: var(--status-green-surface);
   color: var(--status-green-text);
-}
-
-.trial-saved {
-  padding: 0.15rem 0;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.83rem;
 }
 
 .trial-check {
@@ -239,7 +243,6 @@
 .trial-fields label,
 .trial-field,
 .trial-rest label,
-.trial-pain label,
 .trial-optional label {
   display: grid;
   gap: 0.35rem;
@@ -253,7 +256,7 @@
 .trial-fields label span,
 .trial-field span,
 .trial-rest label span,
-.trial-pain label span,
+.trial-group legend span,
 .trial-optional label span {
   color: var(--text-secondary);
   font-size: 0.78rem;
@@ -264,8 +267,6 @@
 .trial-field input,
 .trial-field textarea,
 .trial-rest input,
-.trial-pain input,
-.trial-pain select,
 .trial-optional input {
   width: 100%;
   min-height: var(--touch-target);
@@ -359,19 +360,39 @@
   margin-top: 0.9rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--line);
-}
-
-.trial-station__count {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: 0.88rem;
+  scroll-margin-top: 1rem;
 }
 
 .trial-station h3 {
-  margin: 0.2rem 0 0;
+  margin: 0;
   font-family: var(--font-display);
   font-size: clamp(2rem, 7vw, 2.5rem);
   line-height: 1.05;
+}
+
+.trial-station__count {
+  margin: 0.2rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.trial-group {
+  margin-top: 0.95rem;
+}
+
+.trial-group legend {
+  margin-bottom: 0.4rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.trial-help-line {
+  display: block;
+  margin-top: 0.45rem;
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
 }
 
 .trial-dose {
@@ -506,31 +527,65 @@
   font-size: 0.76rem;
 }
 
-.trial-utility,
+/* On phones, Pain, Stop, messages, and the main action stack in one bar above the tabs. */
 .trial-dock {
   position: fixed;
+  z-index: 12;
   right: 0;
+  bottom: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
   left: 0;
+  padding: 0.45rem var(--page-gutter);
   border-top: 1px solid var(--line);
   background: var(--surface-page);
-  padding: 0.45rem var(--page-gutter);
 }
 
 .trial-utility {
-  z-index: 11;
-  bottom: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom) + 4.15rem);
   display: flex;
   gap: 0.45rem;
   justify-content: center;
+  margin-bottom: 0.45rem;
 }
 
 .trial-utility .trial-secondary {
   width: min(50%, 22.5rem);
 }
 
-.trial-dock {
-  z-index: 12;
-  bottom: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
+.trial-dock__message {
+  width: min(100%, 46rem);
+  margin: 0 auto 0.4rem;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+}
+
+.trial-dock__message:empty {
+  margin-bottom: 0;
+}
+
+.trial-dock__message--error {
+  color: var(--status-red-text);
+  font-weight: 600;
+}
+
+.trial-confirm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  width: min(100%, 46rem);
+}
+
+.trial-confirm p {
+  grid-column: 1 / -1;
+  margin: 0.1rem 0 0.15rem;
+  font-weight: 600;
+}
+
+.trial-confirm .trial-secondary {
+  width: 100%;
+}
+
+.trial-phase > .trial-confirm,
+.trial-review > .trial-confirm {
+  margin: 1.2rem 0;
 }
 
 .trial-primary {
@@ -568,12 +623,16 @@
 
 .trial-help,
 .trial-pain {
-  margin: 1.5rem 0;
+  margin: 0.8rem 0 0;
   padding: 1rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface-tint);
   scroll-margin-top: 1rem;
+}
+
+.trial-pain {
+  margin-bottom: 1.2rem;
 }
 
 .trial-panel-top {
@@ -583,7 +642,8 @@
   gap: 0.8rem;
 }
 
-.trial-panel-top h3 {
+.trial-panel-top h3,
+.trial-panel-top h4 {
   margin: 0;
   font-family: var(--font-display);
   font-size: 1.45rem;
@@ -614,10 +674,6 @@
 
 .trial-help li + li {
   margin-top: 0.35rem;
-}
-
-.trial-pain label {
-  margin-top: 0.8rem;
 }
 
 .trial-pain .trial-primary {
@@ -724,18 +780,22 @@
     padding-top: calc(var(--header-height) + 0.9rem);
   }
 
-  .trial-utility,
+  .trial-page {
+    padding-bottom: calc(var(--mobile-nav-height) + 3rem);
+  }
+
+  /* From tablet width up the actions end the form, like the walk log and check-in. */
   .trial-dock {
-    padding-inline: max(var(--page-gutter), calc((100vw - 48rem) / 2));
+    position: static;
+    margin-top: 1.5rem;
+    padding: 0.9rem 0 0;
+    border-top-color: var(--line-soft);
+    background: transparent;
   }
 }
 
 @media (min-width: 1024px) {
-  .trial-utility {
-    bottom: 4.15rem;
-  }
-
-  .trial-dock {
-    bottom: 0;
+  .trial-page {
+    padding-bottom: 4rem;
   }
 }

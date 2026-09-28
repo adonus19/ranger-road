@@ -130,7 +130,7 @@ async function render(options: { draft?: TrialDraft; check?: ReadinessCheck | nu
 describe('active Gate Trial', () => {
   it('requires a same-day Green check before starting a new trial', async () => {
     const { root, history } = await render({ check: null });
-    expect(root.textContent).toContain('same-day Green · Ready check');
+    expect(root.textContent).toContain('same-day Green · Ready check');
     expect(root.querySelector('a[href="/readiness"]')).not.toBeNull();
     expect(root.textContent).not.toContain('Begin Gate Trial');
     expect(history.startDraft).not.toHaveBeenCalled();
@@ -168,16 +168,9 @@ describe('active Gate Trial', () => {
     });
     (root.querySelector('.trial-utility button') as HTMLButtonElement).click();
     fixture.detectChanges();
-    const area = root.querySelector('.trial-pain input[type="text"]') as HTMLInputElement;
-    area.value = 'Back';
-    area.dispatchEvent(new Event('input', { bubbles: true }));
-    const level = root.querySelector('.trial-pain input[type="number"]') as HTMLInputElement;
-    level.value = '3';
-    level.dispatchEvent(new Event('input', { bubbles: true }));
-    const action = root.querySelector('.trial-pain select') as HTMLSelectElement;
-    action.value = 'reduce';
-    action.dispatchEvent(new Event('input', { bubbles: true }));
-    action.dispatchEvent(new Event('change', { bubbles: true }));
+    root.querySelector<HTMLInputElement>('.trial-pain .segments input[value="Back"]')!.click();
+    root.querySelector<HTMLInputElement>('.trial-pain .scale__options--pain input[value="3"]')!.click();
+    root.querySelector<HTMLInputElement>('.trial-pain .segments input[value="reduce"]')!.click();
     await fixture.whenStable();
     fixture.detectChanges();
     (root.querySelector('.trial-pain form') as HTMLFormElement).dispatchEvent(
@@ -201,11 +194,56 @@ describe('active Gate Trial', () => {
       button.textContent?.includes('Stop trial'),
     ) as HTMLButtonElement;
     stop.click();
+    fixture.detectChanges();
+    // Stopping asks first; nothing is finished until the second tap.
+    expect(root.querySelector('.trial-confirm')?.textContent).toContain('Stop the Gate Trial?');
+    expect(history.finishDraft).not.toHaveBeenCalled();
+    const confirm = [...root.querySelectorAll('.trial-confirm button')].find((button) =>
+      button.textContent?.includes('Stop trial'),
+    ) as HTMLButtonElement;
+    confirm.click();
     await vi.waitFor(() => {
       fixture.detectChanges();
       expect(root.querySelector('#stopped-title')?.textContent).toBe('Trial stopped');
     });
     expect(history.finishDraft).toHaveBeenCalledWith('trial-draft-1', 'stopped');
+  });
+
+  it('names the missing entry and marks its field when a phase is incomplete', async () => {
+    const partial = draftAt(0);
+    const { root, fixture, history } = await render({ draft: partial });
+    root.querySelector<HTMLInputElement>('#trial-full-walk')!.click();
+    await fixture.whenStable();
+    (root.querySelector('.trial-dock .trial-primary') as HTMLButtonElement).click();
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      expect(root.querySelector('.trial-dock [role="alert"]')?.textContent).toContain(
+        'Enter your walk time in minutes.',
+      );
+    });
+    expect(root.querySelector('#trial-walk-minutes')?.getAttribute('aria-invalid')).toBe('true');
+    expect(history.saveDraft).toHaveBeenCalled();
+  });
+
+  it('keeps Keep going as the way out of the stop question', async () => {
+    const { root, fixture, history } = await render({ draft: draftAt(2) });
+    (root.querySelector('.trial-stop') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    (root.querySelector('#trial-stop-keep') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(root.querySelector('.trial-confirm')).toBeNull();
+    expect(root.querySelector('.trial-stop')).not.toBeNull();
+    expect(history.finishDraft).not.toHaveBeenCalled();
+  });
+
+  it('names a later Yellow check instead of asking for a check that exists', async () => {
+    const { root } = await render({
+      draft: draftAt(1),
+      check: { ...readiness, id: 'readiness-yellow', backPain: 4, status: 'yellow' },
+    });
+    expect(root.querySelector('.trial-hold')?.textContent).toContain(
+      'Today’s latest readiness check is Yellow · Reduce',
+    );
   });
 
   it('reviews recorded station values before allowing a completed result', async () => {

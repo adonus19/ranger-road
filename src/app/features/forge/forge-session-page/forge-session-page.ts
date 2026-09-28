@@ -116,7 +116,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   );
   protected readonly helpMediaBase = computed(() => {
     const id = this.helpExerciseId() ?? this.currentPrescription()?.exerciseId;
-    return id ? `/images/exercises/${id}` : '';
+    return id ? `images/exercises/${id}` : '';
   });
   protected readonly readiness = computed(() => {
     const check = this.state.readiness();

@@ -1,4 +1,15 @@
-import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import {
+  Component,
+  ElementRef,
+  Injector,
+  OnDestroy,
+  OnInit,
+  afterNextRender,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { FormField, form } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import type {
@@ -20,6 +31,23 @@ import { Icon } from '../../../shared/icon/icon';
 
 type Station = { round: number; index: number };
 
+/** Readiness names, with no-break spaces so a state never splits across lines. */
+const READINESS_WORDS = {
+  green: 'Green · Ready',
+  yellow: 'Yellow · Reduce',
+  red: 'Red · Restore',
+} as const;
+
+/** An error that belongs to one field, so the page can mark and focus it. */
+class FieldError extends Error {
+  constructor(
+    message: string,
+    readonly field: string,
+  ) {
+    super(message);
+  }
+}
+
 function numeric(value: string, integer = false): number | undefined {
   if (!value.trim()) return undefined;
   const parsed = Number(value);
@@ -34,7 +62,7 @@ function displayNumber(value: unknown): string {
 }
 
 @Component({
-  imports: [FormField, Icon, RouterLink],
+  imports: [FormField, Icon, NgTemplateOutlet, RouterLink],
   selector: 'app-gate-trial-active-page',
   styleUrl: './gate-trial-active-page.css',
   templateUrl: './gate-trial-active-page.html',
@@ -42,6 +70,8 @@ function displayNumber(value: unknown): string {
 export class GateTrialActivePage implements OnInit, OnDestroy {
   protected readonly state = inject(CampaignState);
   private readonly history = inject(TrialHistory);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
   protected readonly trial = gateTrialDefinition;
   protected readonly circuit = gateTrialDefinition.phases[1].circuit!;
   protected readonly shortDate = formatShortDate;
@@ -57,6 +87,8 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   protected readonly helpOpen = signal(false);
   protected readonly painOpen = signal(false);
   protected readonly reviewing = signal(false);
+  protected readonly confirmingStop = signal(false);
+  protected readonly invalidField = signal<string | null>(null);
   protected readonly clock = signal(Date.now());
 
   protected readonly model = signal({
@@ -69,8 +101,9 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   protected readonly fields = form(this.model);
   protected readonly stationModel = signal({ amount: '', left: '', right: '', setup: '', load: '' });
   protected readonly stationFields = form(this.stationModel);
-  protected readonly painModel = signal({ bodyArea: '', severity: '', actionTaken: '' });
+  protected readonly painModel = signal({ bodyArea: '', otherArea: '', severity: '', actionTaken: '' });
   protected readonly painFields = form(this.painModel);
+  protected readonly effortLevels = Array.from({ length: 10 }, (_, index) => index + 1);
   protected readonly painLevels = Array.from({ length: 11 }, (_, level) => level);
   protected readonly painAreas = ['Back', 'Shoulder', 'Neck', 'Knee'];
   protected readonly painActions: { id: TrialPainAction; label: string }[] = [
@@ -106,7 +139,7 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   });
   protected readonly guideBase = computed(() => {
     const movement = this.movement();
-    return movement ? `/images/exercises/${movement.exerciseId}` : '';
+    return movement ? `images/exercises/${movement.exerciseId}` : '';
   });
   protected readonly staleDate = computed(() => {
     const draft = this.draft();
@@ -118,6 +151,34 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   protected readonly physicalBlocked = computed(() =>
     this.phaseIndex() < 2 && (this.staleDate() || this.readiness()?.status !== 'green' || this.painBlocks()),
   );
+  protected readonly restReady = computed(() => {
+    const rest = this.model().restMinutes.trim();
+    return rest !== '' && Number(rest) >= 5;
+  });
+  /** Names why physical work is held, in words, so the tint only repeats it. */
+  protected readonly holdMessage = computed(() => {
+    const kept = 'Your partial work stays saved.';
+    const draft = this.draft();
+    if (draft && this.staleDate()) {
+      return `This attempt began on ${formatShortDate(draft.date)}, so it can’t be completed on a later day. ${kept}`;
+    }
+    if (this.painBlocks()) {
+      return `Pain or a reduced response changed this attempt, so the full trial waits for another Green day. ${kept}`;
+    }
+    const status = this.readiness()?.status;
+    if (status === 'yellow' || status === 'red') {
+      return `Today’s latest readiness check is ${READINESS_WORDS[status]}, so the full trial waits for a Green day. ${kept}`;
+    }
+    return `The full Gate Trial waits for a same-day ${READINESS_WORDS.green} check. ${kept}`;
+  });
+  protected readonly startHold = computed(() => {
+    const status = this.readiness()?.status;
+    if (status === 'yellow' || status === 'red') {
+      return `Today’s readiness is ${READINESS_WORDS[status]}. The full Gate Trial waits for a ${READINESS_WORDS.green} day.`;
+    }
+    return `The full Gate Trial waits for a same-day ${READINESS_WORDS.green} check.`;
+  });
+  protected readonly greenWords = READINESS_WORDS.green;
   protected readonly recordedStations = computed(() =>
     this.draft()?.phaseResults[1].circuitRounds?.reduce((count, round) => count + round.movements.length, 0) ?? 0,
   );
@@ -177,6 +238,7 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     this.error.set(null);
     try {
       this.accept(await this.history.startDraft(this.state.today()));
+      this.revealPhase();
     } catch (error) {
       this.fail(error);
     } finally {
@@ -186,8 +248,20 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
 
   protected queueAutosave(): void {
     if (this.autosave) clearTimeout(this.autosave);
+    this.clearInvalid();
     this.savedMessage.set('Saving progress…');
     this.autosave = setTimeout(() => void this.flush().catch((error) => this.fail(error)), 600);
+  }
+
+  /** Editing the field an error pointed at clears that error. */
+  protected clearInvalid(): void {
+    if (!this.invalidField()) return;
+    this.invalidField.set(null);
+    this.error.set(null);
+  }
+
+  protected invalid(field: string): 'true' | null {
+    return this.invalidField() === field ? 'true' : null;
   }
 
   protected async selectPhase(index: number): Promise<void> {
@@ -200,9 +274,17 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
       this.reviewing.set(false);
       this.helpOpen.set(false);
       this.painOpen.set(false);
+      this.confirmingStop.set(false);
+      this.revealPhase();
     } catch (error) {
       this.fail(error);
     }
+  }
+
+  protected editRecord(): void {
+    this.reviewing.set(false);
+    this.confirmingStop.set(false);
+    this.revealPhase();
   }
 
   protected async continuePhase(event: Event): Promise<void> {
@@ -218,7 +300,8 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
         throw new Error('The full physical trial waits for a Green day. Stop and keep this attempt if needed.');
       }
       if (!gateTrialPhaseComplete(partial.phaseResults[index], index)) {
-        throw new Error(this.phaseError(index));
+        const gap = this.incomplete(index);
+        throw gap ? new FieldError(gap.message, gap.field) : new Error(this.phaseError(index));
       }
       if (index === 4) {
         this.reviewing.set(true);
@@ -229,7 +312,9 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
         this.phaseIndex.set(index + 1);
         this.selectFirstMissing(saved);
       }
+      this.confirmingStop.set(false);
       this.savedMessage.set('Progress saved on this device.');
+      this.revealPhase();
     } catch (error) {
       this.fail(error);
     } finally {
@@ -248,6 +333,7 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
       await this.writes;
       this.completed.set(await this.history.finishDraft(draft.id, 'completed'));
       this.draft.set(null);
+      this.reveal('#completed-title', '.trial-back');
     } catch (error) {
       this.fail(error);
     } finally {
@@ -267,6 +353,8 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
       await this.writes;
       this.stopped.set(await this.history.finishDraft(draft.id, 'stopped'));
       this.draft.set(null);
+      this.confirmingStop.set(false);
+      this.reveal('#stopped-title', '.trial-back');
     } catch (error) {
       this.fail(error);
     } finally {
@@ -274,12 +362,24 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     }
   }
 
+  /** Stopping ends the attempt for good, so it asks once before it happens. */
+  protected askStop(): void {
+    this.painOpen.set(false);
+    this.confirmingStop.set(true);
+    this.reveal('#trial-stop-keep', '#trial-stop-keep', 'nearest');
+  }
+
+  protected cancelStop(): void {
+    this.confirmingStop.set(false);
+    this.reveal('#trial-stop-trigger', '#trial-stop-trigger', 'nearest');
+  }
+
   protected async startTimer(): Promise<void> {
     if (![0, 1, 3].includes(this.phaseIndex()) || (this.phaseIndex() < 2 && this.physicalBlocked())) return;
     try {
       const index = this.phaseIndex();
       if (index === 1 && (numeric(this.model().restMinutes) ?? 0) < 5) {
-        throw new Error('Rest at least 5 minutes after the walk before starting the circuit.');
+        throw new FieldError('Rest at least 5 minutes after the walk before starting the circuit.', 'trial-rest');
       }
       await this.write((next) => {
         const key = index === 0 ? 'walkStartedAt' : index === 1 ? 'circuitStartedAt' : 'prayerStartedAt';
@@ -364,7 +464,7 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     try {
       if (this.physicalBlocked()) throw new Error('Wait for a Green readiness day before more circuit work.');
       if ((numeric(this.model().restMinutes) ?? 0) < 5) {
-        throw new Error('Rest at least 5 minutes after the walk before starting the circuit.');
+        throw new FieldError('Rest at least 5 minutes after the walk before starting the circuit.', 'trial-rest');
       }
       await this.flush();
       const actual = this.stationActual(movement);
@@ -386,6 +486,8 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
       this.savedMessage.set(this.meetsTarget(movement, actual)
         ? 'Station saved on this device.'
         : 'Station saved. This is below the full trial prescription; stop and keep this attempt if needed.');
+      if (this.station()) this.reveal('#trial-station-title', '#trial-station');
+      else this.reveal('#trial-all-stations');
     } catch (error) {
       this.fail(error);
     } finally {
@@ -394,17 +496,30 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   }
 
   protected toggleHelp(): void {
-    this.helpOpen.update((open) => !open);
     if (this.helpOpen()) {
-      this.painOpen.set(false);
-      queueMicrotask(() => document.getElementById('trial-help-title')?.focus());
+      this.closeHelp();
+      return;
     }
+    this.helpOpen.set(true);
+    this.painOpen.set(false);
+    this.reveal('#trial-help-title', '#trial-help');
+  }
+
+  protected closeHelp(): void {
+    this.helpOpen.set(false);
+    this.reveal('#trial-help-trigger', '#trial-help-trigger', 'nearest');
   }
 
   protected openPain(): void {
     this.painOpen.set(true);
     this.helpOpen.set(false);
-    queueMicrotask(() => document.getElementById('trial-pain-title')?.focus());
+    this.confirmingStop.set(false);
+    this.reveal('#trial-pain-title', '#trial-pain');
+  }
+
+  protected closePain(): void {
+    this.painOpen.set(false);
+    this.reveal('#trial-pain-trigger', '#trial-pain-trigger', 'nearest');
   }
 
   protected async recordPain(event: Event): Promise<void> {
@@ -412,26 +527,28 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     const draft = this.draft();
     if (!draft || this.phaseIndex() > 1) return;
     const values = this.painModel();
+    const bodyArea = values.otherArea.trim() || values.bodyArea;
     try {
       const severity = numeric(values.severity, true);
-      if (severity === undefined || severity > 10 || !values.bodyArea.trim() || !values.actionTaken) {
-        throw new Error('Choose a pain area, level from 0 to 10, and what you did.');
-      }
+      if (!bodyArea.trim()) throw new Error('Choose where you felt the pain, or name the place.');
+      if (severity === undefined || severity > 10) throw new Error('Choose a pain level from 0 to 10.');
+      if (!values.actionTaken) throw new Error('Choose what you did about the pain.');
       this.saving.set(true);
       if (this.autosave) clearTimeout(this.autosave);
       // A malformed unsaved field cannot delay an immediate pain record.
       try { await this.flush(); } catch { /* keep the last valid saved draft */ }
       await this.history.recordPain(draft.id, {
         phaseId: this.phaseIndex() === 0 ? 'brisk-walk' : 'controlled-circuit',
-        bodyArea: values.bodyArea, severity,
+        bodyArea, severity,
         actionTaken: values.actionTaken as TrialPainAction,
         ...(this.phaseIndex() === 1 && this.movement() ? { exerciseId: this.movement()!.exerciseId } : {}),
       });
       const refreshed = await this.history.activeDraft();
       if (refreshed) this.draft.set(refreshed);
       this.painOpen.set(false);
-      this.painModel.set({ bodyArea: '', severity: '', actionTaken: '' });
+      this.painModel.set({ bodyArea: '', otherArea: '', severity: '', actionTaken: '' });
       this.savedMessage.set('Pain note saved on this device.');
+      this.reveal('#trial-pain-trigger', '#trial-pain-trigger', 'nearest');
     } catch (error) {
       this.fail(error);
     } finally {
@@ -519,12 +636,13 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     if (planned.perSide) {
       const left = numeric(value.left, planned.reps !== undefined);
       const right = numeric(value.right, planned.reps !== undefined);
-      if (left === undefined || right === undefined) throw new Error('Enter the result for both sides.');
+      if (left === undefined) throw new FieldError('Enter the result for your left side.', 'trial-station-left');
+      if (right === undefined) throw new FieldError('Enter the result for your right side.', 'trial-station-right');
       if (planned.reps !== undefined) actual.repsBySide = { left, right };
       else actual.durationSecondsBySide = { left, right };
     } else {
       const amount = numeric(value.amount, planned.reps !== undefined);
-      if (amount === undefined) throw new Error('Enter what you completed at this station.');
+      if (amount === undefined) throw new FieldError('Enter what you completed at this station.', 'trial-station-amount');
       if (planned.reps !== undefined) actual.reps = amount;
       else actual.durationSeconds = amount;
     }
@@ -612,8 +730,71 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     ][index];
   }
 
+  /** Names the first missing entry in the shown phase, so the error can point at its field. */
+  private incomplete(index: number): { field: string; message: string } | undefined {
+    const value = this.model();
+    const amount = (text: string) => (text.trim() ? Number(text) : Number.NaN);
+    const rpe = amount(value.walkRpe);
+    const rounds = this.draft()?.phaseResults[1].circuitRounds ?? [];
+    const belowPrescription = rounds.some((round) =>
+      round.movements.some((recorded) => {
+        const planned = this.circuit.movements.find((item) => item.exerciseId === recorded.exerciseId);
+        return !planned || !this.meetsTarget(planned, recorded);
+      }),
+    );
+    const gaps: [boolean, string, string][][] = [
+      [
+        [!value.fullWalk, 'trial-full-walk', 'Confirm you completed the full 2-mile walk.'],
+        [!(amount(value.walkMinutes) > 0), 'trial-walk-minutes', 'Enter your walk time in minutes.'],
+        [!(Number.isInteger(rpe) && rpe >= 1 && rpe <= 10), 'trial-rpe-1', 'Choose your effort from 1 to 10.'],
+        [!!value.heartRate.trim() && !(amount(value.heartRate) > 0), 'trial-heart-rate', 'Enter your average heart rate, or leave it blank.'],
+        [!value.knee.trim(), 'trial-knee', 'Describe how your knee responded.'],
+        [!value.back.trim(), 'trial-back', 'Describe how your back responded.'],
+        [!value.recovery.trim(), 'trial-recovery', 'Describe your recovery after 5 minutes.'],
+      ],
+      [
+        [!(amount(value.restMinutes) >= 5), 'trial-rest', 'Record at least 5 minutes of rest after the walk.'],
+        [this.recordedStations() < 18, 'trial-station-title', 'Record all 18 stations before continuing.'],
+        [belowPrescription, 'trial-station-index', 'A station is below the full prescription, so this attempt can’t be completed. Stop to keep the partial record.'],
+        [!(amount(value.circuitMinutes) > 0), 'trial-circuit-minutes', 'Enter the circuit time in minutes.'],
+      ],
+      [
+        [!value.body.trim(), 'trial-body', 'Write one thing you learned about your body.'],
+        [!value.character.trim(), 'trial-character', 'Write one thing you learned about your character.'],
+        [!value.family.trim(), 'trial-family', 'Write one thing you learned about your family.'],
+      ],
+      [
+        [!value.psalmAndPrayer, 'trial-psalm', 'Confirm you read Psalm 121 and spent time in prayer.'],
+        [!(amount(value.prayerMinutes) >= 10), 'trial-prayer-minutes', 'Record at least 10 quiet minutes of prayer.'],
+        [!value.identity.trim(), 'trial-identity', 'Answer the husband and father question.'],
+      ],
+      [[!value.oath.trim(), 'trial-oath', 'Write your personal Ranger’s Oath.']],
+    ];
+    const gap = gaps[index]?.find(([missing]) => missing);
+    return gap ? { field: gap[1], message: gap[2] } : undefined;
+  }
+
+  private revealPhase(): void {
+    this.reveal(this.reviewing() ? '#review-title' : '.trial-phase h2', '.trial-progress');
+  }
+
+  /** Scrolls a changed part of the page into view and moves focus there once it renders. */
+  private reveal(focusSelector: string, scrollSelector = focusSelector, block: ScrollLogicalPosition = 'start'): void {
+    afterNextRender(
+      () => {
+        const root = this.host.nativeElement;
+        const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root.querySelector<HTMLElement>(scrollSelector)?.scrollIntoView?.({ block, behavior: reduced ? 'auto' : 'smooth' });
+        root.querySelector<HTMLElement>(focusSelector)?.focus({ preventScroll: true });
+      },
+      { injector: this.injector },
+    );
+  }
+
   private fail(error: unknown): void {
     this.error.set(error instanceof Error ? error.message : 'The trial could not be saved. Try again.');
     this.savedMessage.set(null);
+    this.invalidField.set(error instanceof FieldError ? error.field : null);
+    if (error instanceof FieldError) this.reveal(`#${error.field}`, `#${error.field}`, 'center');
   }
 }

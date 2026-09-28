@@ -193,6 +193,23 @@
   gap: 0.4375rem 0.375rem;
 }
 
+/* Effort 1–10 in two rows of five; pain 0–10 in two rows of six. */
+.entry-form .scale__options--effort {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.entry-form .scale__options--pain {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.entry-form .segments__options--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.entry-form .segments__options--four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .entry-form .scale__option span {
   font-family: var(--font-display);
   font-size: 1.375rem;
