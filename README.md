@@ -28,6 +28,10 @@ The purpose is not bodybuilding, fantasy role-play, or arbitrary gamification. T
 9. Solo-first. Companions are optional.
 10. Offline-first PWA.
 
+## Deployment
+
+Every push to `main` runs the unit tests, builds the app, and publishes it to GitHub Pages at https://adonus19.github.io/ranger-road/ (`.github/workflows/deploy-pages.yml`). The build takes its base href from the Pages site, so asset URLs in templates and styles must stay relative (`images/...`, not `/images/...`). Records are stored on each device, in IndexedDB, not on GitHub.
+
 ## Source of Truth
 
 Read `/docs` before implementing behavior.

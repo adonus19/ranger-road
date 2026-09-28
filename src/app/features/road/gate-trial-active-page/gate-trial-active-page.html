@@ -1,7 +1,7 @@
 <section class="trial-scene" aria-labelledby="trial-title">
   <picture class="trial-scene__image">
-    <source srcset="/images/forest-band.webp" type="image/webp" />
-    <img src="/images/forest-band.png" alt="" width="1728" height="960" decoding="async" />
+    <source srcset="images/forest-band.webp" type="image/webp" />
+    <img src="images/forest-band.png" alt="" width="1728" height="960" decoding="async" />
   </picture>
   <div class="trial-scene__content">
     <h1 id="trial-title">The Gate Trial</h1>
@@ -175,7 +175,7 @@
                   <p class="trial-dose"><strong>{{ planned.reps ?? planned.durationSeconds }}</strong><span>{{ planned.reps !== undefined ? 'reps' : 'seconds' }}{{ planned.perSide ? ' per side' : '' }}</span></p>
                   <img
                     class="trial-sequence"
-                    src="/images/exercises/box-squat/sequence.webp"
+                    src="images/exercises/box-squat/sequence.webp"
                     [src]="guideBase() + '/sequence.webp'"
                     [alt]="'Illustrated movement sequence for ' + stationName(planned)"
                     width="2020" height="780" loading="lazy"
@@ -310,7 +310,7 @@
             <button type="button" (click)="toggleHelp()">Close</button>
           </div>
           <p>{{ exercise.purpose }}</p>
-          <img src="/images/exercises/box-squat/sequence.webp" [src]="guideBase() + '/sequence.webp'" [alt]="'Movement sequence for ' + exercise.name" width="2020" height="780" loading="lazy" />
+          <img src="images/exercises/box-squat/sequence.webp" [src]="guideBase() + '/sequence.webp'" [alt]="'Movement sequence for ' + exercise.name" width="2020" height="780" loading="lazy" />
           <ol>
             @for (step of guideSteps(); track step) { <li>{{ step }}</li> }
           </ol>
@@ -321,7 +321,7 @@
             <p>{{ exercise.how }}</p>
             @if (exercise.targets) { <p><strong>Targets:</strong> {{ exercise.targets }}</p> }
             @if (exercise.painAwareOptions) { <p><strong>For pain:</strong> {{ exercise.painAwareOptions }}</p> }
-            <img src="/images/exercises/box-squat/muscle-map.webp" [src]="guideBase() + '/muscle-map.webp'" [alt]="'Neck-down front and back muscle map for ' + exercise.name" width="1200" height="1200" loading="lazy" />
+            <img src="images/exercises/box-squat/muscle-map.webp" [src]="guideBase() + '/muscle-map.webp'" [alt]="'Neck-down front and back muscle map for ' + exercise.name" width="1200" height="1200" loading="lazy" />
           </details>
         </section>
       }
