@@ -2,15 +2,17 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { TrialCircuitMovement, TrialResult } from '../../../core/domain/models';
 import {
+  addDays,
   getCampaignDay,
   getChapterOneLeadInDays,
-  getChapterOneTargetDay,
   getGateTrialPlannedDay,
   getGateTrialTargetDate,
+  getNextGateTrialAttempt,
 } from '../../../core/program/campaign';
 import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
 import {
-  hasCompletedChapterOneTrial,
+  getChapterOneTrialPass,
+  getChapterTwoStartDate,
   isChapterOneComplete,
 } from '../../../core/program/chapter-one-completion';
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
@@ -43,8 +45,8 @@ export class RoadPage implements OnInit {
   protected readonly chapterComplete = computed(() =>
     isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
   );
-  protected readonly trialDone = computed(() =>
-    hasCompletedChapterOneTrial(this.state.campaign(), this.completedTrials()),
+  protected readonly trialPass = computed(() =>
+    getChapterOneTrialPass(this.state.campaign(), this.completedTrials()),
   );
   protected readonly walkParts = roadSessionParts;
   protected readonly walkDate = formatShortDate;
@@ -75,56 +77,43 @@ export class RoadPage implements OnInit {
     return campaign ? getChapterOneLeadInDays(campaign.startDate) : 0;
   });
 
-  /** An older campaign's own trial date stays in the card; its chart ends after four full weeks. */
-  private readonly customTarget = computed(() => {
-    const campaign = this.state.campaign();
-    return Boolean(
-      campaign?.trialTargetDate &&
-      campaign.trialTargetDate !== getGateTrialTargetDate(campaign.startDate),
-    );
-  });
-
-  /** The route ends at the Week 4 Saturday trial order; Sunday rests on it. */
+  /** The route ends at the first Gate Trial attempt, the Monday after Week 4. */
   protected readonly targetDay = computed(() => {
     const campaign = this.state.campaign();
-    if (!campaign) return 27;
-    return this.customTarget()
-      ? getChapterOneTargetDay(campaign.startDate)
-      : getGateTrialPlannedDay(campaign.startDate);
+    return campaign ? getGateTrialPlannedDay(campaign.startDate) : 29;
   });
-
-  protected readonly chartTargetLabel = computed(() =>
-    this.customTarget() ? 'End of Week 4' : 'Gate Trial',
-  );
 
   protected readonly startLabel = computed(() => {
     const campaign = this.state.campaign();
     return campaign ? `Day 1 · ${formatLongDate(campaign.startDate)}` : '';
   });
 
+  /** Where the Gate Trial stands: its first attempt, the next one, or the pass. */
   protected readonly trialTarget = computed(() => {
-    if (this.chapterComplete()) {
-      return 'Chapter I complete. Your Gate Trial is saved on this device.';
-    }
-    const latest = this.trialDone() ? this.completedTrials()[0] : undefined;
-    if (latest) {
-      return `Completed ${formatLongDate(latest.date)}. Chapter I closes after Week 4.`;
+    const pass = this.trialPass();
+    if (pass && this.chapterComplete()) {
+      return `Chapter I complete. You passed the Gate Trial on ${formatLongDate(pass.date)}.`;
     }
     const campaign = this.state.campaign();
+    if (pass && campaign) {
+      const chapterTwo = getChapterTwoStartDate(campaign, this.completedTrials()) ?? pass.date;
+      return `Passed ${formatLongDate(pass.date)}. Chapter II begins ${formatLongDate(chapterTwo)}.`;
+    }
     if (!campaign) {
-      return 'Planned for Saturday of Week 4. You can take it when ready.';
+      return 'First attempt on the Monday after Week 4. Chapter II waits until you pass.';
     }
-    const defaultTarget = getGateTrialTargetDate(campaign.startDate);
-    const target = campaign.trialTargetDate ?? defaultTarget;
-    if (target !== defaultTarget) {
-      return this.state.today() > target
-        ? `Your Gate Trial target was ${formatLongDate(target)}. You can take it when ready.`
-        : `Your Gate Trial target is ${formatLongDate(target)}. You can take it when ready.`;
-    }
+    const today = this.state.today();
+    const first = getGateTrialTargetDate(campaign.startDate);
     // Civil dates in YYYY-MM-DD form compare correctly as strings.
-    return this.state.today() > target
-      ? `The Week 4 target was ${formatLongDate(target)}. You can take the Gate Trial when ready.`
-      : `Planned for ${formatLongDate(target)}. If Saturday doesn’t work, Sunday is open too.`;
+    if (today < first) {
+      return `First attempt ${formatLongDate(first)}, the Monday after Week 4. If it doesn’t go, try again that Thursday. Chapter II waits until you pass.`;
+    }
+    const next = getNextGateTrialAttempt(campaign.startDate, today);
+    if (next === today) {
+      const after = getNextGateTrialAttempt(campaign.startDate, addDays(today, 1));
+      return `Today is an attempt day. If it doesn’t go, the next is ${formatLongDate(after)}.`;
+    }
+    return `Next attempt ${formatLongDate(next)}. Chapter II waits until you pass.`;
   });
 
   ngOnInit(): void {

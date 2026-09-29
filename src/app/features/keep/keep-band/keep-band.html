@@ -33,7 +33,7 @@
             </div>
           }
           <div>
-            @if (chapterComplete() || trialDone()) {
+            @if (trialPassedOn()) {
               <dt>Gate Trial</dt>
               <dd class="keep-band__word">Done</dd>
             } @else {
@@ -44,10 +44,12 @@
         </dl>
 
         <p class="keep-band__note">
-          @if (chapterComplete()) {
-            Chapter I complete. Your Gate Trial is saved on this device.
-          } @else if (trialDone()) {
-            Gate Trial saved. Chapter I closes after Week 4.
+          @if (trialPassedOn(); as passed) {
+            @if (chapterComplete()) {
+              Chapter I complete. Gate Trial passed {{ shortDate(passed) }}.
+            } @else {
+              Gate Trial passed. Chapter II begins {{ shortDate(chapterTwoStart() ?? passed) }}.
+            }
           } @else if (isLeadIn()) {
             Lead-in through Sunday. Week 1 begins Monday.
           } @else {

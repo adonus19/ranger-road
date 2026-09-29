@@ -77,8 +77,11 @@ async function render<T>(component: Type<T>, date: string, trials: TrialResult[]
 }
 
 describe('Forge after Chapter I', () => {
-  it('offers no repeated Week 4 workout after four weeks and a completed trial', async () => {
-    const { root } = await render(ForgePage, '2026-11-02', [completedTrial]);
+  it('offers no repeated Week 4 workout once Chapter II’s first day arrives', async () => {
+    // A Monday pass on Nov 2 starts Chapter II on Tuesday.
+    const { root } = await render(ForgePage, '2026-11-03', [
+      { ...completedTrial, date: '2026-11-02' },
+    ]);
     expect(root.textContent).toContain('Chapter I complete');
     expect(root.querySelector('.choice-list')).toBeNull();
   });
@@ -90,9 +93,10 @@ describe('Forge after Chapter I', () => {
     expect(history.start).not.toHaveBeenCalled();
   });
 
-  it('continues the Week 4 template while the Gate Trial is pending', async () => {
+  it('gives an attempt day to the Gate Trial and keeps Restoration as needed', async () => {
     const { root } = await render(ForgePage, '2026-11-02', []);
-    expect(root.textContent).toContain('Forge A');
+    expect(root.textContent).not.toContain('Forge A');
+    expect(root.textContent).toContain('Restoration');
     expect(root.querySelector('.choice-list')).not.toBeNull();
   });
 });

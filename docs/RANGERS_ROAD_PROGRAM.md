@@ -31,9 +31,9 @@ Most chapters use:
 
 The [full program content pack](rangers-road-full-program-content/PROGRAM_INDEX.md) contains the dated work and detailed prescriptions. For Chapter I, use [The Muster](rangers-road-full-program-content/01_THE_MUSTER.md) for Forge A/B, walking doses, restoration, Scripture, and the Gate Trial.
 
-Chapter I has four complete Monday–Sunday weeks. When the chosen Day 1 is Tuesday through Sunday, the days from Day 1 through the first Sunday are a short lead-in: use Week 1's existing content for each matching weekday, then begin the full Week 1 on Monday. A Monday Day 1 begins Week 1 immediately. The lead-in adds no new progression step or trial. While the Gate Trial remains pending after Week 4, continue the Week 4 weekday template.
+Chapter I has four complete Monday–Sunday weeks. When the chosen Day 1 is Tuesday through Sunday, the days from Day 1 through the first Sunday are a short lead-in: use Week 1's existing content for each matching weekday, then begin the full Week 1 on Monday. A Monday Day 1 begins Week 1 immediately. The lead-in adds no new progression step or trial.
 
-Chapter I is acknowledged as complete on the day after the fourth full week ends, if a completed Gate Trial result is in local history. Completing the Gate Trial earlier does not skip the remaining dated orders through Week 4 Sunday. This acknowledgment does not automatically start Chapter II.
+Every chapter's trial follows the Trial Timing rule in `CHAPTERS_AND_TRIALS.md`: it comes after the chapter's last full week, on the next week's Forge A day (Monday), then Forge B day (Thursday), and each following Monday and Thursday until it is passed. The next chapter begins only after a pass. While the Gate Trial is pending after Week 4, the non-attempt days repeat the Week 4 weekday template. Chapter I is complete once the Gate Trial is passed.
 
 For Week 4 Forge B, the documented reduction of about 25% means completing around 15 of the standard 20 work sets. The person chooses about five sets to skip and records those skips; the base Forge B prescription remains available as a historical snapshot. Do not automatically add load or make the deload harder on a Yellow or pain-affected day.
 

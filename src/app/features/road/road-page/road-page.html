@@ -22,7 +22,6 @@
           [leadInDays]="leadInDays()"
           [startLabel]="startLabel()"
           [targetDay]="targetDay()"
-          [targetLabel]="chartTargetLabel()"
         />
       } @else {
         <p class="road-band__message">
@@ -45,7 +44,7 @@
       } @else {
         <p class="trial__target">{{ trialTarget() }}</p>
         <a class="trial__open" routerLink="/road/gate-trial">{{
-          trialDone() ? 'View Gate Trial record' : 'Review the Gate Trial plan'
+          trialPass() ? 'View Gate Trial record' : 'Review the Gate Trial plan'
         }}</a>
       }
       <ol class="trial__phases">

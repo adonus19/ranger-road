@@ -209,6 +209,8 @@
     <span class="station-dock__waiting" role="status">Opening campaign…</span>
   } @else if (state.error() || historyError()) {
     <button type="button" (click)="retry()">Try again</button>
+  } @else if (waitingMessage(); as message) {
+    <span class="station-dock__waiting" role="status">{{ message }}</span>
   } @else {
     <a [routerLink]="readinessLink()">{{ readinessAction() }}</a>
   }

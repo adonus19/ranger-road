@@ -35,14 +35,14 @@ describe('CampaignState', () => {
     expect(state.needsStartDate()).toBe(true);
   });
 
-  it('saves the chosen Day 1 with the Week 4 Saturday trial target and keeps it across a reload', async () => {
+  it('saves the chosen Day 1 with its first Gate Trial attempt and keeps it across a reload', async () => {
     const state = TestBed.inject(CampaignState);
     await state.initialize();
     await state.startCampaign('2026-09-28');
 
     expect(state.campaign()).toMatchObject({
       startDate: '2026-09-28',
-      trialTargetDate: '2026-10-24',
+      trialTargetDate: '2026-10-26',
     });
     expect(state.beforeDayOne()).toBe(true);
 
@@ -100,13 +100,13 @@ describe('CampaignState', () => {
     await state.initialize();
     expect(state.campaign()).toMatchObject({
       startDate: '2026-09-10',
-      trialTargetDate: '2026-10-10',
+      trialTargetDate: '2026-10-12',
       scheduleVersion: 3,
     });
 
     const reloaded = await RoadDatabase.open();
     expect(await reloaded.getCampaign('primary')).toMatchObject({
-      trialTargetDate: '2026-10-10',
+      trialTargetDate: '2026-10-12',
       scheduleVersion: 3,
     });
     expect(await reloaded.getMissionInstancesForDate('2026-09-17')).toEqual([record]);

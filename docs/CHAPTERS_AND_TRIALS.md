@@ -1,5 +1,18 @@
 # Chapters and Trials
 
+## Trial Timing
+
+A chapter's trial comes after its last full week, not inside it, so the person starts the trial rested rather than at the tired end of a week.
+
+- The trial takes the place of the next week's first strength day (Forge A, Monday). If it is not passed, the next attempt takes that week's second strength day (Forge B, Thursday), then each following Monday and Thursday until it is passed.
+- A trial is passed when every part is finished as written on a Green day: the full distances and rounds, the written reflections, the prayer, and the oath, without pain at 3 or more and without a changed movement. There is no time standard; the program does not race.
+- A Yellow or Red morning, a missed day, or a stopped attempt is simply not a pass that day. The next attempt day follows. Stopped attempts and their pain notes stay in history.
+- The next chapter begins only after a pass. After a Monday pass it continues that same week from Tuesday, because the trial took the place of its first strength day. After a pass on any other day it begins the following Monday, and the days in between repeat the previous chapter's final-week easy days.
+- Days between attempts repeat the final week's non-strength days. Nothing new or harder is added while a trial is pending.
+- Each week of retries moves every later chapter back by a week. Monthly check-ins stay anchored to Day 1.
+- Longer trials may need different attempt days (Chapter III is a mountain hike; Chapters VI, VIII, and IX are long efforts). Each later chapter's attempt days are settled when that chapter is built; the rule that the next chapter waits for a pass does not change. Until then, the content packs for Chapters II–IX still list each trial on its last Saturday.
+
+
 ## I — The Muster (Weeks 1–4)
 
 Theme: **Answer the call.**
@@ -41,8 +54,7 @@ Trial: **The Gate Trial**
 
 The [Chapter I content pack](rangers-road-full-program-content/01_THE_MUSTER.md) supplies the exact Forge A/B prescriptions, daily walking doses, six circuit stations, and trial prompts. Complete the Gate Trial phases in the documented order: Road, Gate Circuit, Mind, Spirit, then Oath. Rest 5–10 minutes after the walk before starting the circuit; at least 5 minutes is required, and longer than 10 minutes is allowed when needed to recover safely. Spend 10–15 quiet minutes in prayer; at least 10 minutes is required, and longer is allowed. Record the actual rest and prayer durations on a new completed trial result. The circuit is controlled; its completion time is recorded without a speed target.
 
-For a Chapter I dashboard countdown, the Week 4 Saturday Gate Trial order is the planning target, not a required trial date. It is campaign day 27 for a Monday Day 1, or day 28–33 when a short lead-in follows a Tuesday–Sunday start. Sunday, which closes the fourth full Monday–Sunday week, remains open if Saturday does not work. Readiness and circumstances may change when the trial is attempted.
-The Gate Trial can be recorded on or after campaign Day 1; the planning target is not a minimum attempt date.
+The Gate Trial follows the Trial Timing rule above. Its first attempt is the Monday after Week 4: campaign day 29 for a Monday Day 1, or day 30–35 when a short lead-in follows a Tuesday–Sunday start. The retry days are that week's Thursday, then each following Monday and Thursday. The Gate Trial opens only on those days, and the dashboard countdown points to the next one. Week 4 Saturday is a 30-minute easy walk plus preparation for Monday: choose the 2-mile route and set out the box, pull-up band, and carry weight. Chapter I is complete once the Gate Trial is passed; Chapter II then begins as the Trial Timing rule describes.
 
 ---
 

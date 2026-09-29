@@ -13,10 +13,17 @@ import type {
 import { RECOVERY_AREAS, recoveryOpensAt, recoveryWord } from '../../../core/domain/post-mission-function';
 import type { RecordedTrialPainEvent } from '../../../core/domain/trial-draft';
 import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
+import {
+  addDays,
+  getGateTrialTargetDate,
+  getNextGateTrialAttempt,
+  isGateTrialAttemptDay,
+} from '../../../core/program/campaign';
+import { getChapterOneTrialPass } from '../../../core/program/chapter-one-completion';
 import { gateTrialDefinition } from '../../../core/program/chapter-one-trial.seed';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory } from '../../../core/state/trial-history';
-import { formatMinutes, formatShortDate } from '../../../shared/format-date';
+import { formatLongDate, formatMinutes, formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
 
 const READINESS_GUIDANCE: Record<ReadinessStatus, string> = {
@@ -56,13 +63,47 @@ export class GateTrialPage implements OnInit {
     const check = this.state.readiness();
     return check?.date === this.state.today() ? check : null;
   });
+  protected readonly pass = computed(() =>
+    getChapterOneTrialPass(this.state.campaign(), this.completedResults()),
+  );
+  protected readonly attemptToday = computed(() => {
+    const campaign = this.state.campaign();
+    return !!campaign && isGateTrialAttemptDay(campaign.startDate, this.state.today());
+  });
+  /** On a day the trial is not open, when it opens next, or that it is passed. */
+  protected readonly waitingMessage = computed(() => {
+    const campaign = this.state.campaign();
+    if (!campaign || this.state.beforeDayOne() || this.activeDraft()) return null;
+    const pass = this.pass();
+    if (pass) return `Passed ${formatShortDate(pass.date)}`;
+    if (this.attemptToday()) return null;
+    const today = this.state.today();
+    const next = getNextGateTrialAttempt(campaign.startDate, today);
+    return today < getGateTrialTargetDate(campaign.startDate)
+      ? `First attempt ${formatShortDate(next)}`
+      : `Next attempt ${formatShortDate(next)}`;
+  });
   protected readonly readinessGuidance = computed(() => {
     if (this.state.loading()) return 'Opening your campaign…';
     if (this.state.error())
       return 'Local storage is unavailable. Check browser storage settings, then try again.';
-    if (!this.state.campaign()) return 'Choose Day 1 to start the campaign.';
+    const campaign = this.state.campaign();
+    if (!campaign) return 'Choose Day 1 to start the campaign.';
     if (this.state.beforeDayOne()) return 'Day 1 has not arrived yet. Review the plan now.';
+    const pass = this.pass();
+    if (pass) return `You passed the Gate Trial on ${formatLongDate(pass.date)}.`;
+    if (!this.attemptToday() && !this.activeDraft()) {
+      const today = this.state.today();
+      const next = getNextGateTrialAttempt(campaign.startDate, today);
+      return today < getGateTrialTargetDate(campaign.startDate)
+        ? `The first attempt is ${formatLongDate(next)}, the Monday after Week 4. Review the plan now.`
+        : `The next attempt is ${formatLongDate(next)}. Attempts fall on Mondays and Thursdays until you pass.`;
+    }
     const status = this.readiness()?.status;
+    if (status && status !== 'green') {
+      const after = getNextGateTrialAttempt(campaign.startDate, addDays(this.state.today(), 1));
+      return `${READINESS_GUIDANCE[status]} The next attempt is ${formatLongDate(after)}.`;
+    }
     return status ? READINESS_GUIDANCE[status] : 'Check readiness before the physical parts.';
   });
   protected readonly readinessLink = computed(() =>

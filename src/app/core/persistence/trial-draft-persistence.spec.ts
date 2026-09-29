@@ -1,11 +1,16 @@
 import 'fake-indexeddb/auto';
-import { describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it, vi } from 'vitest';
 import type { Campaign, ReadinessCheck, TrialDraft } from '../domain/models';
 import { createGateTrialResult } from '../domain/trial';
 import { completeGateTrialInput } from '../testing/gate-trial-fixture';
 import { RoadDatabase } from './road-database';
 
-const date = new Date().toISOString().slice(0, 10);
+// Monday, Oct 5, 2026 is the first Gate Trial attempt for a campaign that began Monday, Sep 7.
+vi.useFakeTimers({ toFake: ['Date'] });
+vi.setSystemTime(new Date(2026, 9, 5, 13, 0));
+afterAll(() => vi.useRealTimers());
+
+const date = '2026-10-05';
 const checkedAt = new Date(Date.now() - 60_000).toISOString();
 const green: ReadinessCheck = {
   id: 'trial-green',
@@ -27,7 +32,7 @@ const green: ReadinessCheck = {
 };
 const campaign: Campaign = {
   id: 'primary',
-  startDate: date,
+  startDate: '2026-09-07',
   currentChapterId: 'chapter-1',
   status: 'active',
 };
@@ -164,6 +169,25 @@ describe('Gate Trial draft persistence', () => {
     expect((await database.getActiveTrialDraft())?.id).toBe(draft.id);
     expect(await database.getTrialResultsForTrial('gate-trial')).toEqual([]);
     await database.finishTrialDraft(draft.id, 'stopped');
+    database.close();
+  });
+
+  it('opens a draft only on an attempt day, and not once the trial is passed', async () => {
+    const { database } = await preparedDatabase();
+    // For a campaign that began Monday, Sep 14, Oct 5 is Week 4's Forge A day, not an attempt.
+    await database.putCampaign({ ...campaign, startDate: '2026-09-14' });
+    await expect(database.startTrialDraft(date)).rejects.toThrow(/Monday after Week 4/);
+
+    await database.putCampaign(campaign);
+    await database.addTrialResult(
+      createGateTrialResult({
+        ...completeGateTrialInput(green),
+        id: 'gate-result-passed',
+        recordedAt: new Date().toISOString(),
+      }),
+    );
+    await expect(database.startTrialDraft(date)).rejects.toThrow(/already passed/);
+    expect(await database.getActiveTrialDraft()).toBeUndefined();
     database.close();
   });
 });

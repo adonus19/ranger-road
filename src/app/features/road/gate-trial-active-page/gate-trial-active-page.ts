@@ -18,15 +18,22 @@ import type {
   TrialCircuitMovementResult,
   TrialDraft,
   TrialPhaseResult,
+  TrialResult,
 } from '../../../core/domain/models';
 import type { SavedGateTrialResult } from '../../../core/domain/trial';
 import { gateTrialPhaseComplete, type TrialPainAction } from '../../../core/domain/trial-draft';
+import {
+  getGateTrialTargetDate,
+  getNextGateTrialAttempt,
+  isGateTrialAttemptDay,
+} from '../../../core/program/campaign';
+import { getChapterOneTrialPass } from '../../../core/program/chapter-one-completion';
 import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
 import { getChapterOneQuickHelpSteps } from '../../../core/program/chapter-one-quick-help';
 import { gateTrialDefinition } from '../../../core/program/chapter-one-trial.seed';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory } from '../../../core/state/trial-history';
-import { formatShortDate } from '../../../shared/format-date';
+import { formatLongDate, formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
 
 type Station = { round: number; index: number };
@@ -121,8 +128,34 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     const check = this.state.readiness();
     return check?.date === this.state.today() ? check : null;
   });
+  private readonly completedResults = signal<TrialResult[]>([]);
+  protected readonly pass = computed(() =>
+    getChapterOneTrialPass(this.state.campaign(), this.completedResults()),
+  );
+  protected readonly attemptToday = computed(() => {
+    const campaign = this.state.campaign();
+    return !!campaign && isGateTrialAttemptDay(campaign.startDate, this.state.today());
+  });
+  /** The trial opens only on an attempt day before it is passed. */
+  protected readonly closedMessage = computed(() => {
+    const campaign = this.state.campaign();
+    if (!campaign || this.state.beforeDayOne()) return null;
+    const pass = this.pass();
+    if (pass) return `You passed the Gate Trial on ${formatLongDate(pass.date)}.`;
+    if (this.attemptToday()) return null;
+    const today = this.state.today();
+    const next = getNextGateTrialAttempt(campaign.startDate, today);
+    return today < getGateTrialTargetDate(campaign.startDate)
+      ? `The Gate Trial opens ${formatLongDate(next)}, the Monday after Week 4.`
+      : `The next attempt is ${formatLongDate(next)}. Attempts fall on Mondays and Thursdays until you pass.`;
+  });
   protected readonly canStart = computed(() =>
-    Boolean(this.state.campaign() && !this.state.beforeDayOne() && this.readiness()?.status === 'green'),
+    Boolean(
+      this.state.campaign() &&
+        !this.state.beforeDayOne() &&
+        !this.closedMessage() &&
+        this.readiness()?.status === 'green',
+    ),
   );
   protected readonly phase = computed(() => this.trial.phases[this.phaseIndex()]);
   protected readonly movement = computed(() => {
@@ -218,7 +251,11 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     this.error.set(null);
     try {
       await this.state.initialize();
-      const draft = await this.history.activeDraft();
+      const [draft, completed] = await Promise.all([
+        this.history.activeDraft(),
+        this.history.forTrial(this.trial.id),
+      ]);
+      this.completedResults.set(completed);
       if (draft) this.accept(draft);
     } catch {
       this.error.set('The trial could not open from local storage. Try again.');

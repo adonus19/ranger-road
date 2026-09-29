@@ -1,6 +1,6 @@
 import type { Campaign, LocalDate, MissionType, ReadinessCheck } from '../domain/models';
 import { chapterOneDefinition, chapterOneWeeklyRhythm, type Weekday } from './chapter-one.seed';
-import { getChapterOneDailyContent } from './chapter-one-daily.seed';
+import { getChapterOneDayContent } from './chapter-one-daily.seed';
 
 export const CHAPTER_ONE_FULL_WEEKS = 4;
 export const CHAPTER_ONE_WEEK_DAYS = 7;
@@ -14,8 +14,12 @@ export interface ChapterOneSchedule {
   contentWeek: 1 | 2 | 3 | 4;
   weekday: Weekday;
   leadInDays: number;
+  /** Campaign day that closes Week 4. */
   targetDay: number;
+  /** After Week 4, while the Gate Trial window is open. */
   afterTarget: boolean;
+  /** A Monday or Thursday after Week 4, when the Gate Trial takes the strength slot. */
+  attemptDay: boolean;
 }
 
 export interface TodayOrder {
@@ -75,19 +79,18 @@ export function getDaysUntil(date: LocalDate, today: LocalDate): number {
   return Math.max(0, civilDay(date) - civilDay(today));
 }
 
-/** The Week 4 Saturday trial order is the default planning target; a chosen date can replace it. */
-export function getDaysUntilGateTrial(
-  startDate: LocalDate,
-  today: LocalDate,
-  plannedTargetDate?: LocalDate,
-): number {
-  return getDaysUntil(plannedTargetDate ?? getGateTrialTargetDate(startDate), today);
+/** Days until the next Gate Trial attempt; 0 on an attempt day. */
+export function getDaysUntilGateTrial(startDate: LocalDate, today: LocalDate): number {
+  return getDaysUntil(getNextGateTrialAttempt(startDate, today), today);
 }
 
-function weekday(date: LocalDate): Weekday {
+/** 1 is Monday and 7 is Sunday, for a civil date. */
+export function getWeekday(date: LocalDate): Weekday {
   const utcDay = new Date(civilDay(date) * 86_400_000).getUTCDay();
   return (utcDay === 0 ? 7 : utcDay) as Weekday;
 }
+
+const weekday = getWeekday;
 
 /** A Monday start enters Week 1 at once; other starts lead in through Sunday. */
 export function getChapterOneLeadInDays(startDate: LocalDate): number {
@@ -100,17 +103,29 @@ export function getChapterOneTargetDay(startDate: LocalDate): number {
   return getChapterOneLeadInDays(startDate) + CHAPTER_ONE_FULL_WEEKS * CHAPTER_ONE_WEEK_DAYS;
 }
 
-/** Campaign day of the Week 4 Saturday Gate Trial order, the day before four full weeks close. */
+/** Campaign day of the first Gate Trial attempt: the Monday after Week 4. */
 export function getGateTrialPlannedDay(startDate: LocalDate): number {
-  return getChapterOneTargetDay(startDate) - 1;
+  return getChapterOneTargetDay(startDate) + 1;
 }
 
 /**
- * The Week 4 Saturday Gate Trial order, used only as a planning date. Sunday still
- * closes the fourth week, and the trial can be recorded on any day once Day 1 arrives.
+ * The first Gate Trial attempt, the Monday after Week 4, in place of that week's Forge A.
+ * Until the trial is passed, each following Thursday and Monday is another attempt day.
  */
 export function getGateTrialTargetDate(startDate: LocalDate): LocalDate {
   return addDays(startDate, getGateTrialPlannedDay(startDate) - 1);
+}
+
+/** The next Gate Trial attempt on or after today: the first attempt, then Mondays and Thursdays. */
+export function getNextGateTrialAttempt(startDate: LocalDate, today: LocalDate): LocalDate {
+  const first = getGateTrialTargetDate(startDate);
+  if (today <= first) return first;
+  const day = weekday(today);
+  return addDays(today, day === 1 ? 0 : day <= 4 ? 4 - day : 8 - day);
+}
+
+export function isGateTrialAttemptDay(startDate: LocalDate, date: LocalDate): boolean {
+  return getChapterOneSchedule(startDate, date)?.attemptDay ?? false;
 }
 
 /** Resolve a Chapter I date without making a partial first week count as Week 1. */
@@ -129,22 +144,26 @@ export function getChapterOneSchedule(
       : (Math.min(CHAPTER_ONE_FULL_WEEKS, Math.ceil(fullWeekDay / CHAPTER_ONE_WEEK_DAYS)) as
           1 | 2 | 3 | 4);
 
+  const day = weekday(date);
+  const afterTarget = fullWeekDay > CHAPTER_ONE_FULL_WEEKS * CHAPTER_ONE_WEEK_DAYS;
   return {
     campaignDay,
     week,
     contentWeek: week === 0 ? 1 : week,
-    weekday: weekday(date),
+    weekday: day,
     leadInDays,
     targetDay: getChapterOneTargetDay(startDate),
-    afterTarget: fullWeekDay > CHAPTER_ONE_FULL_WEEKS * CHAPTER_ONE_WEEK_DAYS,
+    afterTarget,
+    attemptDay: afterTarget && (day === 1 || day === 4),
   };
 }
 
 /**
- * Older campaigns saved a generated planning target: Day 1 + 27 (schedule 1) or the
- * Sunday that closes Week 4 (schedule 2). Reconcile only those generated values; an
- * explicitly different target remains the user's. This changes campaign planning
- * metadata, never any append-only history row.
+ * Older campaigns saved a generated planning target: Day 1 + 27 (schedule 1), or the
+ * Sunday that closes Week 4 (schedule 2). Move only a generated value to the first
+ * Gate Trial attempt; any other saved date is left as it was, though attempts now
+ * follow the Monday and Thursday rule. This changes campaign planning metadata, never
+ * any append-only history row.
  */
 export function reconcileChapterOneCampaign(campaign: Campaign): Campaign {
   if (
@@ -152,9 +171,11 @@ export function reconcileChapterOneCampaign(campaign: Campaign): Campaign {
     (campaign.scheduleVersion ?? 0) >= CHAPTER_ONE_SCHEDULE_VERSION
   )
     return campaign;
+  const endOfWeekFour = getChapterOneTargetDay(campaign.startDate);
   const generatedTargets = [
     addDays(campaign.startDate, 27),
-    addDays(campaign.startDate, getChapterOneTargetDay(campaign.startDate) - 1),
+    addDays(campaign.startDate, endOfWeekFour - 1),
+    addDays(campaign.startDate, endOfWeekFour - 2),
   ];
   const targetWasGenerated =
     !campaign.trialTargetDate || generatedTargets.includes(campaign.trialTargetDate);
@@ -184,7 +205,7 @@ export function getTodaysOrders(
   }
 
   const week = schedule.contentWeek;
-  const content = getChapterOneDailyContent(week, slot.weekday);
+  const content = getChapterOneDayContent(week, slot.weekday, schedule.attemptDay);
   let title = content.activity.title;
   let guidance: string | undefined = content.activity.details?.join(' ');
   if (content.activity.plannedTrialId && readinessStatus === 'yellow') {

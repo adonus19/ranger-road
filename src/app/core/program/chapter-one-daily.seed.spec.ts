@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { chapterOneDailySeed, getChapterOneDailyContent } from './chapter-one-daily.seed';
+import {
+  chapterOneDailySeed,
+  chapterOneGateTrialAttempt,
+  getChapterOneDailyContent,
+  getChapterOneDayContent,
+} from './chapter-one-daily.seed';
 
 /** Monday through Sunday, transcribed from 01_THE_MUSTER.md. */
 const datedOrders = [
@@ -36,7 +41,7 @@ const datedOrders = [
     ['Psalm 18:1–6, 29–36', 'Restoration'],
     ['Micah 6:8', 'Forge B at reduced volume'],
     ['Isaiah 40:28–31', 'Easy mobility or rest'],
-    ['2 Timothy 4:7', 'Gate Trial'],
+    ['2 Timothy 4:7', '30-minute easy walk'],
     ['Psalm 23', 'Rest and worship'],
   ],
 ] as const;
@@ -66,8 +71,22 @@ describe('Chapter I daily content', () => {
     );
     expect(chapterOneDailySeed[3].days[4].activity.details).toContain('About 25% less volume.');
     expect(chapterOneDailySeed[3].days[6].activity).toMatchObject({
-      missionType: 'trial',
-      plannedTrialId: 'gate-trial',
+      missionType: 'conditioning',
+      estimatedMinutes: 30,
+    });
+    expect(chapterOneDailySeed[3].days[6].activity.trialPreparation).toContain(
+      'Monday’s Gate Trial',
+    );
+  });
+
+  it('gives each attempt day after Week 4 the Gate Trial and its Scripture', () => {
+    expect(chapterOneGateTrialAttempt).toMatchObject({
+      scriptureReference: '2 Timothy 4:7',
+      activity: { title: 'Gate Trial', missionType: 'trial', plannedTrialId: 'gate-trial' },
+    });
+    expect(getChapterOneDayContent(4, 1, true)).toBe(chapterOneGateTrialAttempt);
+    expect(getChapterOneDayContent(4, 1)).toMatchObject({
+      activity: { title: 'Forge A at reduced effort' },
     });
   });
 });

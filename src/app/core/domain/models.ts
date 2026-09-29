@@ -76,6 +76,8 @@ export interface MissionDefinition {
   optionalFamilyQuest?: string;
   /** A planned trial is completed through TrialResult, never the generic mission logger. */
   plannedTrialId?: string;
+  /** Getting ready for the next Gate Trial attempt; screens show it only while the trial is pending. */
+  trialPreparation?: string;
 }
 
 export interface MissionInstance {

@@ -13,6 +13,8 @@ export interface ChapterOneActivityContent {
   plannedTrialId?: string;
   /** The day includes the week's fieldcraft, so its description is shown with the order. */
   fieldcraftPractice?: boolean;
+  /** Getting ready for the next Gate Trial attempt; shown only while the trial is pending. */
+  trialPreparation?: string;
 }
 
 export interface ChapterOneDayContent {
@@ -39,7 +41,8 @@ export interface ChapterOneWeekContent {
 /**
  * Any start outside Monday uses the remaining weekdays through Sunday as a
  * short lead-in with Week 1 content. Then Weeks 1–4 each run Monday–Sunday.
- * Week 4 remains available after the planning target while the trial is pending.
+ * After Week 4, Mondays and Thursdays are Gate Trial attempts and the other days repeat
+ * Week 4 until the trial is passed.
  */
 export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
   {
@@ -252,10 +255,11 @@ export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
       6: {
         scriptureReference: '2 Timothy 4:7',
         activity: {
-          title: 'Gate Trial',
-          missionType: 'trial',
-          plannedTrialId: 'gate-trial',
-          details: ['Record the trial through its dedicated flow when Green and ready.'],
+          title: '30-minute easy walk',
+          missionType: 'conditioning',
+          estimatedMinutes: 30,
+          trialPreparation:
+            'Then prepare for Monday’s Gate Trial: choose the 2-mile route and set out the box, pull-up band, and carry weight.',
         },
       },
       7: {
@@ -266,6 +270,29 @@ export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
     leadershipMission: 'Plan one simple family activity and handle logistics.',
   },
 ];
+
+/**
+ * A Monday or Thursday after Week 4: the Gate Trial takes that strength slot until it is
+ * passed. The trial's Scripture, 2 Timothy 4:7, is read on each attempt day.
+ */
+export const chapterOneGateTrialAttempt: ChapterOneDayContent = {
+  scriptureReference: '2 Timothy 4:7',
+  activity: {
+    title: 'Gate Trial',
+    missionType: 'trial',
+    plannedTrialId: 'gate-trial',
+    details: ['Record the trial through its dedicated flow when Green and ready.'],
+  },
+};
+
+/** The day's content; an attempt day after Week 4 takes the Gate Trial instead. */
+export function getChapterOneDayContent(
+  week: number,
+  day: Weekday,
+  attemptDay = false,
+): ChapterOneDayContent {
+  return attemptDay ? chapterOneGateTrialAttempt : getChapterOneDailyContent(week, day);
+}
 
 export function getChapterOneDailyContent(week: number, day: Weekday): ChapterOneDayContent {
   const content = chapterOneDailySeed[week - 1]?.days[day];

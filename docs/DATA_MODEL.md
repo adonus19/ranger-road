@@ -22,8 +22,8 @@
 - startDate
 - currentChapterId
 - status
-- trialTargetDate? (planning date; Chapter I uses the Week 4 Saturday Gate Trial order)
-- scheduleVersion? (Chapter I version 2 adds a short lead-in before four complete Monday–Sunday weeks; version 3 moves a generated target from the Sunday that closes Week 4 to that week's Saturday trial order, leaving a separately chosen target alone; older campaigns may lack it)
+- trialTargetDate? (planning date; Chapter I uses the first Gate Trial attempt, the Monday after Week 4. Attempts then follow the Monday and Thursday rule whatever an older saved date says)
+- scheduleVersion? (Chapter I version 2 adds a short lead-in before four complete Monday–Sunday weeks; version 3 moves a generated target (Day 1 + 27, or the Sunday that closes Week 4) to the first Gate Trial attempt, leaving any other saved date as it was; older campaigns may lack it)
 
 ### ChapterDefinition
 
@@ -294,7 +294,7 @@ The check opens 60 minutes after physical effort and suggests 60–120 minutes a
 - painEvents[] (copies of immediately appended trial-linked pain history)
 - photoAsset? (optional attachment reference carried into a completed or stopped snapshot)
 
-Only one trial draft may be active. Starting requires campaign Day 1 and the latest same-day Green readiness check. Draft autosave keeps partial observations even if readiness later turns Yellow or Red. Advancing past either physical phase and saving a completed result requires the latest same-day Green check. Pain at 3 or more, or a reduce, substitute, or end-exercise response, prevents that attempt from being recorded as a full completed Gate Trial. The person can stop and retain the partial attempt.
+Only one trial draft may be active. Starting requires an attempt day (a Monday or Thursday after Week 4), no completed result for the trial yet, and the latest same-day Green readiness check. Draft autosave keeps partial observations even if readiness later turns Yellow or Red. Advancing past either physical phase and saving a completed result requires the latest same-day Green check. Pain at 3 or more, or a reduce, substitute, or end-exercise response, prevents that attempt from being recorded as a full completed Gate Trial. The person can stop and retain the partial attempt.
 
 ### TrialAttempt
 
@@ -350,4 +350,4 @@ Historical records are immutable except explicit user edits.
 Restoring a saved copy is the one operation that replaces history. It runs only after the person confirms, and it replaces every store in a single transaction, so a failure leaves the device unchanged.
 Program definition updates must not rewrite prior completed sessions.
 When Chapter I scheduling changes, reconcile only the campaign's generated planning date. Preserve any separately chosen target date and every historical row. Dated mission attempts retain their definition snapshots and remain readable even when their old week-based ID differs from the newly scheduled order.
-Chapter I completion is derived from the campaign start date, the current day being after the fourth full week's Sunday, and the presence of a completed Gate Trial result. It does not mutate the Campaign or TrialResult, and it does not start Chapter II.
+A completed Gate Trial result is the pass. Chapter II's first day is derived from the first completed result: the day after a Monday pass, the Monday after any other pass, or the first attempt day for an older result saved before the trial window. Chapter I completion is today being on or after that day. None of this mutates the Campaign or TrialResult.

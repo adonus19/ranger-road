@@ -61,7 +61,7 @@ describe('RoadPage', () => {
     const element = await render('2026-09-21', '2026-09-25');
 
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'Planned for Saturday, October 17. If Saturday doesn’t work, Sunday is open too.',
+      'First attempt Monday, October 19, the Monday after Week 4. If it doesn’t go, try again that Thursday. Chapter II waits until you pass.',
     );
     expect(element.querySelector('.trial__open')?.getAttribute('href')).toBe('/road/gate-trial');
     expect(element.querySelector('ol.trial__phases')).not.toBeNull();
@@ -84,28 +84,26 @@ describe('RoadPage', () => {
     expect(circuit.textContent).toContain('Side Plank · 20 seconds per side');
   });
 
-  it('speaks of the target in the past once it has passed', async () => {
+  it('names the next attempt once the first has gone by', async () => {
     const element = await render('2026-08-20', '2026-09-25');
 
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'The Week 4 target was Saturday, September 19. You can take the Gate Trial when ready.',
+      'Next attempt Monday, September 28. Chapter II waits until you pass.',
     );
     expect(element.querySelector('.route')?.getAttribute('aria-label')).toContain(
-      'A 4-day lead-in ends before Week 1 begins on day 5. Gate Trial target on day 31.',
+      'A 4-day lead-in ends before Week 1 begins on day 5. Gate Trial target on day 33.',
     );
   });
 
-  it('keeps a custom trial date distinct from the fixed four-week route endpoint', async () => {
+  it('keeps the attempt rule even when an older campaign saved a different target date', async () => {
     const element = await render('2026-09-21', '2026-09-25', [], '2026-10-24');
-    expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'Your Gate Trial target is Saturday, October 24. You can take it when ready.',
+    expect(element.querySelector('.trial__target')?.textContent?.trim()).toContain(
+      'First attempt Monday, October 19',
     );
     expect(element.querySelector('.route')?.getAttribute('aria-label')).toContain(
-      'End of Week 4 target on day 28.',
+      'Gate Trial target on day 29.',
     );
-    expect(element.querySelector('.route__target-label')?.textContent?.trim()).toBe(
-      'End of Week 4',
-    );
+    expect(element.querySelector('.route__target-label')?.textContent?.trim()).toBe('Gate Trial');
   });
 
   it('offers the walk log and lists the most recent walks', async () => {
@@ -149,12 +147,12 @@ describe('RoadPage', () => {
     );
   });
 
-  it('keeps Chapter I current through Week 4 Sunday and shows the saved trial', async () => {
+  it('keeps Chapter I current through Week 4 Sunday after an older early pass', async () => {
     const element = await render('2026-10-05', '2026-11-01', [], undefined, [completedTrial]);
 
     expect(element.querySelector('.road-band__meta')?.textContent).toContain('Current chapter');
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'Completed Saturday, October 31. Chapter I closes after Week 4.',
+      'Passed Saturday, October 31. Chapter II begins Monday, November 2.',
     );
     expect(element.querySelector('.trial__open')?.textContent?.trim()).toBe(
       'View Gate Trial record',
@@ -166,7 +164,7 @@ describe('RoadPage', () => {
 
     expect(element.querySelector('.road-band__meta')?.textContent).toContain('Chapter I complete');
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'Chapter I complete. Your Gate Trial is saved on this device.',
+      'Chapter I complete. You passed the Gate Trial on Saturday, October 31.',
     );
     expect(element.querySelector('.trial__open')?.textContent?.trim()).toBe(
       'View Gate Trial record',
@@ -177,6 +175,18 @@ describe('RoadPage', () => {
     const element = await render('2026-10-05', '2026-11-02');
 
     expect(element.querySelector('.road-band__meta')?.textContent).toContain('Current chapter');
-    expect(element.querySelector('.trial__target')?.textContent).toContain('The Week 4 target was');
+    expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
+      'Today is an attempt day. If it doesn’t go, the next is Thursday, November 5.',
+    );
+  });
+
+  it('names Chapter II’s first day after a Monday pass', async () => {
+    const monday = { ...completedTrial, date: '2026-11-02' };
+    const element = await render('2026-10-05', '2026-11-02', [], undefined, [monday]);
+
+    expect(element.querySelector('.road-band__meta')?.textContent).toContain('Current chapter');
+    expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
+      'Passed Monday, November 2. Chapter II begins Tuesday, November 3.',
+    );
   });
 });

@@ -1,10 +1,13 @@
 import { Component, computed, inject, input } from '@angular/core';
+import type { LocalDate } from '../../../core/domain/models';
 import {
+  addDays,
   getCampaignDay,
   getChapterOneSchedule,
   getDaysUntil,
   getDaysUntilGateTrial,
   getGateTrialTargetDate,
+  getNextGateTrialAttempt,
 } from '../../../core/program/campaign';
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
 import { formatChapterLine, loadChapterSeed } from '../../../core/program/program-catalog';
@@ -20,8 +23,12 @@ import { formatShortDate } from '../../../shared/format-date';
 export class KeepBand {
   protected readonly state = inject(CampaignState);
   readonly chapterComplete = input(false);
-  /** A completed Gate Trial is saved, possibly before the four weeks end. */
-  readonly trialDone = input(false);
+  /** The day the Gate Trial was passed, once it has been. */
+  readonly trialPassedOn = input<LocalDate | null>(null);
+  /** Chapter II's first day, once the Gate Trial is passed. */
+  readonly chapterTwoStart = input<LocalDate | null>(null);
+
+  protected readonly shortDate = formatShortDate;
 
   /** Before a campaign exists, the band still introduces the first chapter. */
   protected readonly seed = computed(() =>
@@ -48,19 +55,22 @@ export class KeepBand {
     return campaign ? getDaysUntil(campaign.startDate, this.state.today()) : 0;
   });
 
-  /** The Week 4 Saturday order by default; an older campaign may keep a date of its own. */
+  /** Where the Gate Trial stands while it waits to be passed. */
   protected readonly trialNote = computed(() => {
     const campaign = this.state.campaign();
-    const target = campaign?.trialTargetDate;
-    return campaign && target && target !== getGateTrialTargetDate(campaign.startDate)
-      ? `Gate Trial target: ${formatShortDate(target)}. You can take it when ready.`
-      : 'Gate Trial: Saturday of Week 4. You can take it when ready.';
+    if (!campaign) return '';
+    const today = this.state.today();
+    if (today < getGateTrialTargetDate(campaign.startDate)) {
+      return 'Gate Trial on the Monday after Week 4. If it doesn’t go, try again Thursday.';
+    }
+    const next = getNextGateTrialAttempt(campaign.startDate, today);
+    if (next !== today) return `Next Gate Trial attempt: ${formatShortDate(next)}.`;
+    const after = getNextGateTrialAttempt(campaign.startDate, addDays(today, 1));
+    return `Gate Trial today if you’re Green; otherwise ${formatShortDate(after)}.`;
   });
 
   protected readonly daysUntilTrial = computed(() => {
     const campaign = this.state.campaign();
-    return campaign
-      ? getDaysUntilGateTrial(campaign.startDate, this.state.today(), campaign.trialTargetDate)
-      : 0;
+    return campaign ? getDaysUntilGateTrial(campaign.startDate, this.state.today()) : 0;
   });
 }

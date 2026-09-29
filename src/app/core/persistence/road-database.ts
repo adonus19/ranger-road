@@ -45,7 +45,7 @@ import {
   type WorkoutPainInput,
   type WorkoutStart,
 } from '../domain/workout';
-import { addDays, getCampaignDay } from '../program/campaign';
+import { addDays, getCampaignDay, isGateTrialAttemptDay } from '../program/campaign';
 import { checkInSaveError, testsHeldFor } from '../program/check-in-schedule';
 
 export const DATABASE_NAME = 'rangers-road';
@@ -472,17 +472,21 @@ export class RoadDatabase {
       .sort((a, b) => a.timestamp.localeCompare(b.timestamp) || a.id.localeCompare(b.id));
   }
 
-  /** One write transaction checks the campaign, single-draft rule, and latest Green check. */
+  /**
+   * One write transaction checks the campaign, the attempt day, that the trial is not
+   * already passed, the single-draft rule, and the latest Green check.
+   */
   startTrialDraft(date: LocalDate): Promise<TrialDraft> {
     return new Promise((resolve, reject) => {
       const transaction = this.database.transaction(
-        ['campaigns', 'readinessChecks', 'trialDrafts'],
+        ['campaigns', 'readinessChecks', 'trialDrafts', 'trialResults'],
         'readwrite',
       );
       let campaign: Campaign | undefined;
       let campaignLoaded = false;
       let drafts: TrialDraft[] | undefined;
       let checks: ReadinessCheck[] | undefined;
+      let results: TrialResult[] | undefined;
       let started: TrialDraft | undefined;
       let failure: Error | undefined;
       const fail = (error: unknown) => {
@@ -490,10 +494,18 @@ export class RoadDatabase {
         transaction.abort();
       };
       const startWhenLoaded = () => {
-        if (!campaignLoaded || !drafts || !checks || started) return;
+        if (!campaignLoaded || !drafts || !checks || !results || started) return;
         try {
           if (!campaign || getCampaignDay(campaign.startDate, date) < 1) {
             throw new Error('The Gate Trial cannot start before campaign Day 1.');
+          }
+          if (results.some((result) => result.trialId === 'gate-trial')) {
+            throw new Error('The Gate Trial is already passed.');
+          }
+          if (!isGateTrialAttemptDay(campaign.startDate, date)) {
+            throw new Error(
+              'The Gate Trial opens on the Monday after Week 4, then on Mondays and Thursdays until it is passed.',
+            );
           }
           if (drafts.length) {
             throw new Error('Finish or stop the active Gate Trial before starting another.');
@@ -518,6 +530,11 @@ export class RoadDatabase {
       const checksRequest = transaction.objectStore('readinessChecks').index('date').getAll(date);
       checksRequest.onsuccess = () => {
         checks = checksRequest.result as ReadinessCheck[];
+        startWhenLoaded();
+      };
+      const resultsRequest = transaction.objectStore('trialResults').getAll();
+      resultsRequest.onsuccess = () => {
+        results = resultsRequest.result as TrialResult[];
         startWhenLoaded();
       };
       transaction.oncomplete = () => resolve(structuredClone(started!));

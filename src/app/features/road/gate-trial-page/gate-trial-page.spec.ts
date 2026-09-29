@@ -10,7 +10,8 @@ import { TrialHistory } from '../../../core/state/trial-history';
 import { completeGateTrialInput } from '../../../core/testing/gate-trial-fixture';
 import { GateTrialPage } from './gate-trial-page';
 
-const date = '2026-10-03';
+// Monday, Oct 5 is the first Gate Trial attempt for a campaign that began Monday, Sep 7.
+const date = '2026-10-05';
 const campaign: Campaign = {
   id: 'primary',
   startDate: '2026-09-07',
@@ -109,10 +110,32 @@ describe('Station Gate Trial plan', () => {
   it('defers the physical trial on Yellow or Red', async () => {
     const yellow = await render(readiness('yellow'));
     expect(yellow.root.textContent).toContain('Wait for a Green day');
+    expect(yellow.root.textContent).toContain('The next attempt is Thursday, October 8.');
     expect(yellow.root.querySelector('.station-dock a')?.textContent).toContain('Review readiness');
     TestBed.resetTestingModule();
     const red = await render(readiness('red'));
     expect(red.root.textContent).toContain('Do not attempt the physical trial today.');
+  });
+
+  it('opens only on attempt days, and not after a pass', async () => {
+    const { root, state } = await render(readiness('green'));
+    state.today.set('2026-10-03');
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(root.textContent).toContain('The first attempt is Monday, October 5');
+    expect(root.querySelector('.station-dock a')).toBeNull();
+    expect(root.querySelector('.station-dock')?.textContent).toContain('First attempt Mon, Oct 5');
+
+    state.today.set('2026-10-06');
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(root.querySelector('.station-dock')?.textContent).toContain('Next attempt Thu, Oct 8');
+    TestBed.resetTestingModule();
+
+    const passed = await render(readiness('green'), campaign, {}, null, [
+      { ...createGateTrialResult({ ...completeGateTrialInput(readiness('green')) }), date: '2026-10-05' },
+    ]);
+    expect(passed.root.textContent).toContain('You passed the Gate Trial on Monday, October 5.');
+    expect(passed.root.querySelector('.station-dock a')).toBeNull();
+    expect(passed.root.querySelector('.station-dock')?.textContent).toContain('Passed Mon, Oct 5');
   });
 
   it('sends a person without a campaign to Keep', async () => {

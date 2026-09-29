@@ -3,7 +3,7 @@ import { getChapterOneSchedule } from './campaign';
 import { chapterOneDefinition } from './chapter-one.seed';
 import {
   chapterOneContentId,
-  getChapterOneDailyContent,
+  getChapterOneDayContent,
   getChapterOneWeekContent,
   type ChapterOneDayContent,
 } from './chapter-one-daily.seed';
@@ -26,7 +26,7 @@ export function getChapterOneContentForDate(
 ): ChapterOneDayContent | undefined {
   const schedule = getChapterOneSchedule(startDate, date);
   if (!schedule) return undefined;
-  return getChapterOneDailyContent(schedule.contentWeek, schedule.weekday);
+  return getChapterOneDayContent(schedule.contentWeek, schedule.weekday, schedule.attemptDay);
 }
 
 /**
@@ -45,7 +45,7 @@ export function getChapterOneMissionsForDate(
 
   const week = schedule.week;
   const day = schedule.weekday;
-  const content = getChapterOneDailyContent(schedule.contentWeek, day);
+  const content = getChapterOneDayContent(schedule.contentWeek, day, schedule.attemptDay);
   const weekContent = getChapterOneWeekContent(schedule.contentWeek);
   const readingBookTitle = weekContent.readingBookTitle;
   const activityDetails = [
@@ -56,8 +56,9 @@ export function getChapterOneMissionsForDate(
   ];
 
   const shared = { chapterId: chapterOneDefinition.id, week, day, required: true };
-  const idPrefix =
-    week === 0
+  const idPrefix = schedule.attemptDay
+    ? `${chapterOneDefinition.id}-gate-trial-attempt-day-${day}`
+    : week === 0
       ? `${chapterOneDefinition.id}-lead-in-day-${day}`
       : `${chapterOneDefinition.id}-week-${week}-day-${day}`;
 
@@ -87,6 +88,9 @@ export function getChapterOneMissionsForDate(
       ...(activityDetails.length ? { activityDetails } : {}),
       ...(content.activity.plannedTrialId
         ? { plannedTrialId: content.activity.plannedTrialId }
+        : {}),
+      ...(content.activity.trialPreparation
+        ? { trialPreparation: content.activity.trialPreparation }
         : {}),
       ...(content.readingMinutes !== undefined ? { readingMinutes: content.readingMinutes } : {}),
       ...(content.readingMinutes !== undefined && readingBookTitle ? { readingBookTitle } : {}),

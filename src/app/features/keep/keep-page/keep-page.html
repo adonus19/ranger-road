@@ -1,4 +1,8 @@
-<app-keep-band [chapterComplete]="chapterComplete()" [trialDone]="trialDone()" />
+<app-keep-band
+  [chapterComplete]="chapterComplete()"
+  [trialPassedOn]="trialPass()?.date ?? null"
+  [chapterTwoStart]="chapterTwoStart()"
+/>
 
 @if (state.loading() || trialLoading()) {
   <p class="keep-state" role="status">Opening your campaign…</p>
@@ -20,7 +24,10 @@
   <div class="keep-body keep-body--complete">
     <section class="chapter-complete" aria-labelledby="chapter-complete-title">
       <h2 id="chapter-complete-title">Chapter I complete</h2>
-      <p>The four-week window has ended, and your Gate Trial is saved on this device.</p>
+      <p>
+        You passed the Gate Trial on {{ longDate(trialPass()?.date ?? state.today()) }}. Chapter
+        II’s orders will appear here once they are added to the app.
+      </p>
       <a routerLink="/road/gate-trial">View Gate Trial record</a>
     </section>
     <app-check-in-reminder class="check-in-reminder" />
@@ -85,7 +92,9 @@
       </div>
     </section>
 
-    <app-check-in-reminder class="check-in-reminder" />
+    @if (!trialDay()) {
+      <app-check-in-reminder class="check-in-reminder" />
+    }
     <app-gate-trial-recovery-reminder class="recovery-reminder" />
 
     <div class="mission-dock">

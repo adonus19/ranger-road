@@ -2,16 +2,17 @@ import { computed, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { describe, expect, it, vi } from 'vitest';
-import type { Campaign, ReadinessCheck, TrialDraft, TrialPhaseResult } from '../../../core/domain/models';
+import type { Campaign, ReadinessCheck, TrialDraft, TrialPhaseResult, TrialResult } from '../../../core/domain/models';
 import { gateTrialDefinition } from '../../../core/program/chapter-one-trial.seed';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory } from '../../../core/state/trial-history';
 import { GateTrialActivePage } from './gate-trial-active-page';
 
+// Monday, Sep 28 is the first Gate Trial attempt for a campaign that began Monday, Aug 31.
 const date = '2026-09-28';
 const campaign: Campaign = {
   id: 'primary',
-  startDate: date,
+  startDate: '2026-08-31',
   currentChapterId: 'chapter-1',
   status: 'active',
 };
@@ -91,11 +92,13 @@ function draftAt(phase: number): TrialDraft {
   };
 }
 
-async function render(options: { draft?: TrialDraft; check?: ReadinessCheck | null } = {}) {
+async function render(
+  options: { draft?: TrialDraft; check?: ReadinessCheck | null; today?: string; completed?: TrialResult[] } = {},
+) {
   const state = {
     campaign: signal<Campaign | null>(campaign),
     readiness: signal<ReadinessCheck | null>(options.check === undefined ? readiness : options.check),
-    today: signal(date),
+    today: signal(options.today ?? date),
     loading: signal(false),
     error: signal<string | null>(null),
     beforeDayOne: computed(() => false),
@@ -103,6 +106,7 @@ async function render(options: { draft?: TrialDraft; check?: ReadinessCheck | nu
   };
   const history = {
     activeDraft: vi.fn(async () => options.draft),
+    forTrial: vi.fn(async () => options.completed ?? []),
     startDraft: vi.fn(async () => draftAt(0)),
     saveDraft: vi.fn(async (edited: TrialDraft) => ({ ...edited, revision: edited.revision + 1 })),
     recordPain: vi.fn(async () => undefined),
@@ -128,6 +132,24 @@ async function render(options: { draft?: TrialDraft; check?: ReadinessCheck | nu
 }
 
 describe('active Gate Trial', () => {
+  it('opens only on an attempt day, and not after a pass', async () => {
+    const weekFour = await render({ today: '2026-09-24' });
+    expect(weekFour.root.textContent).toContain('The Gate Trial opens Monday, September 28, the Monday after Week 4.');
+    expect(weekFour.root.textContent).not.toContain('Begin Gate Trial');
+    TestBed.resetTestingModule();
+
+    const tuesday = await render({ today: '2026-09-29' });
+    expect(tuesday.root.textContent).toContain('The next attempt is Thursday, October 1.');
+    expect(tuesday.history.startDraft).not.toHaveBeenCalled();
+    TestBed.resetTestingModule();
+
+    const passed = await render({
+      completed: [{ id: 'gate-passed', trialId: 'gate-trial', date, phaseResults: [], reflection: '' }],
+    });
+    expect(passed.root.textContent).toContain('You passed the Gate Trial on Monday, September 28.');
+    expect(passed.root.textContent).not.toContain('Begin Gate Trial');
+  });
+
   it('requires a same-day Green check before starting a new trial', async () => {
     const { root, history } = await render({ check: null });
     expect(root.textContent).toContain('same-day Green · Ready check');

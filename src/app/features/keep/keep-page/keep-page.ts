@@ -2,12 +2,14 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { ReadinessStatus, TrialResult } from '../../../core/domain/models';
 import {
-  hasCompletedChapterOneTrial,
+  getChapterOneTrialPass,
+  getChapterTwoStartDate,
   isChapterOneComplete,
 } from '../../../core/program/chapter-one-completion';
 import {
   getChapterOneSchedule,
   getTodaysOrders,
+  isGateTrialAttemptDay,
   type TodayOrder,
 } from '../../../core/program/campaign';
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
@@ -15,6 +17,7 @@ import { getChapterOneWeekContent } from '../../../core/program/chapter-one-dail
 import { loadChapterSeed } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory } from '../../../core/state/trial-history';
+import { formatLongDate } from '../../../shared/format-date';
 import { Icon, type IconName } from '../../../shared/icon/icon';
 import { CheckInReminder } from '../check-in-reminder/check-in-reminder';
 import { GateTrialRecoveryReminder } from '../gate-trial-recovery-reminder/gate-trial-recovery-reminder';
@@ -65,9 +68,25 @@ export class KeepPage implements OnInit {
   protected readonly chapterComplete = computed(() =>
     isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
   );
-  protected readonly trialDone = computed(() =>
-    hasCompletedChapterOneTrial(this.state.campaign(), this.completedTrials()),
+  /** The Gate Trial pass, if there is one: its date sets when Chapter II begins. */
+  protected readonly trialPass = computed(() =>
+    getChapterOneTrialPass(this.state.campaign(), this.completedTrials()),
   );
+  protected readonly chapterTwoStart = computed(
+    () => getChapterTwoStartDate(this.state.campaign(), this.completedTrials()) ?? null,
+  );
+  /** An attempt day, or the day of the pass: no check-in tests on top of the trial. */
+  protected readonly trialDay = computed(() => {
+    const campaign = this.state.campaign();
+    const pass = this.trialPass();
+    const today = this.state.today();
+    return (
+      !!campaign &&
+      isGateTrialAttemptDay(campaign.startDate, today) &&
+      (!pass || pass.date === today)
+    );
+  });
+  protected readonly longDate = formatLongDate;
 
   /** The current chapter's content; Chapter I before a campaign exists. */
   protected readonly seed = computed(() =>
@@ -81,15 +100,11 @@ export class KeepPage implements OnInit {
       : [];
   });
 
-  /** Once the Gate Trial is saved, its dated order says so instead of asking for it again. */
+  /** Once the Gate Trial is passed, that day's order says so instead of asking for it again. */
   protected readonly mainOrder = computed(() => {
     const order = this.orders().find((item) => item.kind === 'weekly');
-    return order?.missionType === 'trial' && this.trialDone()
-      ? {
-          ...order,
-          title: 'Gate Trial',
-          guidance: 'Complete. Your result is saved on this device.',
-        }
+    return order?.missionType === 'trial' && this.trialPass()
+      ? { ...order, title: 'Gate Trial', guidance: 'Passed. Your result is saved on this device.' }
       : order;
   });
   protected readonly watches = computed(() =>

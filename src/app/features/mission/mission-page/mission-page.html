@@ -85,6 +85,9 @@
           }
         </ul>
       }
+      @if (mission.trialPreparation && !trialPassed()) {
+        <p class="plan-note">{{ mission.trialPreparation }}</p>
+      }
       @if (mission.optionalFamilyQuest) {
         <p class="plan-note">Optional family quest: {{ mission.optionalFamilyQuest }}</p>
       }
@@ -111,17 +114,23 @@
       }
 
       @if (mission.plannedTrialId) {
-        @if (trialDone()) {
+        @if (trialPass(); as pass) {
           <section class="recorded" role="status">
-            <h2>Gate Trial complete</h2>
-            <p>Your result is saved on this device. Chapter I closes after Week 4.</p>
+            <h2>Gate Trial passed</h2>
+            <p>
+              Your result is saved on this device. Chapter II begins
+              {{ longDate(chapterTwoStart() ?? pass.date) }}.
+            </p>
             <a routerLink="/road/gate-trial">View Gate Trial record</a>
           </section>
         } @else {
           <section class="recorded" role="status">
-            <h2>Gate Trial planned</h2>
-            <p>The full trial needs a Green readiness day. Review its five parts on the Road.</p>
-            <a routerLink="/road/gate-trial">Review the Gate Trial</a>
+            <h2>Gate Trial today</h2>
+            <p>
+              The full trial needs a Green readiness day. If it doesn’t go today, the next attempt
+              is {{ longDate(nextAttempt() ?? state.today()) }}.
+            </p>
+            <a routerLink="/road/gate-trial">Open the Gate Trial</a>
           </section>
         }
       }

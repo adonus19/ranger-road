@@ -34,7 +34,7 @@ const campaign: Campaign = {
   startDate: '2026-09-21',
   currentChapterId: 'chapter-1',
   status: 'active',
-  trialTargetDate: '2026-10-18',
+  trialTargetDate: '2026-10-19',
 };
 
 async function render(
@@ -87,7 +87,7 @@ describe('KeepPage', () => {
 
     expect(
       Array.from(element.querySelectorAll('.keep-band__counts dd'), (dd) => dd.textContent?.trim()),
-    ).toEqual(['5', '23']);
+    ).toEqual(['5', '24']);
     expect(text(element, '.readiness-strip__status')).toBe('Not checked today');
     expect(text(element, '.main-order h3')).toBe('20–25-minute easy walk');
     expect(text(element, '.main-order__guidance')).toBe('Check readiness before training.');
@@ -101,15 +101,15 @@ describe('KeepPage', () => {
     const state = fakeState({
       ...campaign,
       startDate: '2026-09-10',
-      trialTargetDate: '2026-10-11',
-      scheduleVersion: 2,
+      trialTargetDate: '2026-10-12',
+      scheduleVersion: 3,
     });
     state.today.set('2026-09-11');
     const element = await render(state);
 
     expect(
       Array.from(element.querySelectorAll('.keep-band__counts dd'), (dd) => dd.textContent?.trim()),
-    ).toEqual(['2', '30']);
+    ).toEqual(['2', '31']);
     expect(text(element, '.keep-band__note')).toBe('Lead-in through Sunday. Week 1 begins Monday.');
     expect(text(element, '.main-order h3')).toBe('20–25-minute easy walk');
     expect(text(element, '.hearth__text p')).toContain('make this week easier');
@@ -160,11 +160,11 @@ describe('KeepPage', () => {
     expect(done.querySelector('.reminder')).toBeNull();
   });
 
-  it('keeps dated orders through Week 4 Sunday even when the Gate Trial was completed early', async () => {
+  it('keeps Week 4’s dated orders through Sunday after an older early pass', async () => {
     const state = fakeState({
       ...campaign,
       startDate: '2026-10-05',
-      trialTargetDate: '2026-10-31',
+      trialTargetDate: '2026-11-02',
     });
     state.today.set('2026-11-01');
     const element = await render(state, [], [completedTrial]);
@@ -172,17 +172,17 @@ describe('KeepPage', () => {
     expect(text(element, '.main-order h3')).toBe('Rest and worship');
     expect(text(element, '.keep-band__counts div:last-child dd')).toBe('Done');
     expect(text(element, '.keep-band__note')).toBe(
-      'Gate Trial saved. Chapter I closes after Week 4.',
+      'Gate Trial passed. Chapter II begins Mon, Nov 2.',
     );
     expect(element.querySelector('.mission-cta')).not.toBeNull();
     expect(element.querySelector('.chapter-complete')).toBeNull();
   });
 
-  it('counts down to the Saturday trial order, then marks that order complete once saved', async () => {
+  it('counts down to the Monday attempt, holds the check-in that day, and marks a pass', async () => {
     const yellow: ReadinessCheck = {
       id: 'yellow-trial-day',
-      date: '2026-10-31',
-      checkedAt: '2026-10-31T11:00:00.000Z',
+      date: '2026-11-02',
+      checkedAt: '2026-11-02T11:00:00.000Z',
       sleepHours: 6,
       poorSleep: true,
       energy: 3,
@@ -198,25 +198,45 @@ describe('KeepPage', () => {
       status: 'yellow',
     };
     const state = fakeState(
-      { ...campaign, startDate: '2026-10-05', trialTargetDate: '2026-10-31' },
+      { ...campaign, startDate: '2026-10-05', trialTargetDate: '2026-11-02' },
       yellow,
     );
     state.today.set('2026-10-31');
-    const pending = await render(state);
+    const saturday = await render(state);
+    expect(text(saturday, '.keep-band__counts div:last-child dd')).toBe('2');
+    expect(text(saturday, '.keep-band__note')).toBe(
+      'Gate Trial on the Monday after Week 4. If it doesn’t go, try again Thursday.',
+    );
+    expect(text(saturday, '.main-order h3')).toBe('30-minute easy walk');
 
+    // Day 29: the monthly check-in is due, but not on top of the trial.
+    TestBed.resetTestingModule();
+    state.today.set('2026-11-02');
+    const pending = await render(state);
     expect(text(pending, '.keep-band__counts div:last-child dd')).toBe('0');
     expect(text(pending, '.keep-band__note')).toBe(
-      'Gate Trial: Saturday of Week 4. You can take it when ready.',
+      'Gate Trial today if you’re Green; otherwise Thu, Nov 5.',
     );
     expect(text(pending, '.main-order h3')).toBe('Gate Trial waits for Green');
+    expect(pending.querySelector('.reminder')).toBeNull();
 
     TestBed.resetTestingModule();
-    const saved = await render(state, [], [completedTrial]);
-    expect(text(saved, '.main-order h3')).toBe('Gate Trial');
-    expect(text(saved, '.main-order__guidance')).toBe(
-      'Complete. Your result is saved on this device.',
+    const passed = await render(state, [], [{ ...completedTrial, date: '2026-11-02' }]);
+    expect(text(passed, '.main-order h3')).toBe('Gate Trial');
+    expect(text(passed, '.main-order__guidance')).toBe(
+      'Passed. Your result is saved on this device.',
     );
-    expect(text(saved, '.keep-band__counts div:last-child dd')).toBe('Done');
+    expect(text(passed, '.keep-band__counts div:last-child dd')).toBe('Done');
+    expect(text(passed, '.keep-band__note')).toBe(
+      'Gate Trial passed. Chapter II begins Tue, Nov 3.',
+    );
+    expect(passed.querySelector('.reminder')).toBeNull();
+
+    TestBed.resetTestingModule();
+    state.today.set('2026-11-03');
+    const nextDay = await render(state, [], [{ ...completedTrial, date: '2026-11-02' }]);
+    expect(text(nextDay, '#chapter-complete-title')).toBe('Chapter I complete');
+    expect(text(nextDay, '.reminder strong')).toBe('Monthly check-in');
   });
 
   it('acknowledges Chapter I after four full weeks and a completed trial while retaining reminders', async () => {
@@ -239,17 +259,18 @@ describe('KeepPage', () => {
     expect(text(element, '.reminder strong')).toBe('Monthly check-in');
   });
 
-  it('continues Week 4 orders after its target while the trial remains pending', async () => {
+  it('repeats Week 4’s easy days between attempts while the trial is pending', async () => {
     const state = fakeState({
       ...campaign,
       startDate: '2026-10-05',
-      trialTargetDate: '2026-10-31',
+      trialTargetDate: '2026-11-02',
     });
-    state.today.set('2026-11-02');
+    state.today.set('2026-11-03');
     const element = await render(state);
 
-    expect(text(element, '.main-order h3')).toBe('Forge A at reduced effort');
-    expect(text(element, '.keep-band__counts div:last-child dd')).toBe('0');
+    expect(text(element, '.main-order h3')).toBe('30-minute easy walk');
+    expect(text(element, '.keep-band__counts div:last-child dd')).toBe('2');
+    expect(text(element, '.keep-band__note')).toBe('Next Gate Trial attempt: Thu, Nov 5.');
     expect(element.querySelector('.chapter-complete')).toBeNull();
   });
 });

@@ -101,12 +101,14 @@ Deload slightly. Do not chase progression.
 **Wednesday:** Restoration. Scripture: Psalm 18:1–6, 29–36.  
 **Thursday:** Forge B at reduced volume (~25% less). Scripture: Micah 6:8.  
 **Friday:** Easy mobility/rest. Scripture: Isaiah 40:28–31.  
-**Saturday:** Gate Trial. Scripture: 2 Timothy 4:7.  
+**Saturday:** 30-minute easy walk; then prepare for Monday's Gate Trial (choose the 2-mile route; set out the box, pull-up band, and carry weight). Scripture: 2 Timothy 4:7.  
 **Sunday:** Rest/worship. Scripture: Psalm 23.
 
 **Leadership mission:** Plan one simple family activity and handle logistics.
 
 # The Gate Trial
+
+Take the Gate Trial on the Monday after Week 4, in place of that week's Forge A. If it is not passed, try again that Thursday (in place of Forge B), then each following Monday and Thursday. Chapter II begins only after a pass. Passing means finishing every part below as written on a Green day, with no pain at 3 or more and no changed movement; there is no time standard. Read 2 Timothy 4:7 on each attempt day.
 
 ## Part I — Road
 2-mile brisk walk.

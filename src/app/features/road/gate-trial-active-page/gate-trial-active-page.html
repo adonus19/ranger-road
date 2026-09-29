@@ -355,6 +355,9 @@
       } @else if (!state.campaign() || state.beforeDayOne()) {
         <p class="trial-hold">Choose Day 1 in Keep before recording the trial.</p>
         <a class="trial-link" routerLink="/keep">Go to Keep</a>
+      } @else if (closedMessage(); as message) {
+        <p class="trial-hold">{{ message }}</p>
+        <a class="trial-link" routerLink="/road/gate-trial">Review the Gate Trial</a>
       } @else if (!canStart()) {
         <p class="trial-hold">{{ startHold() }}</p>
         <a class="trial-link" routerLink="/readiness">Check readiness</a>

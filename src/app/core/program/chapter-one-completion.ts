@@ -1,27 +1,56 @@
 import type { Campaign, LocalDate, TrialResult } from '../domain/models';
-import { getCampaignDay, getChapterOneTargetDay } from './campaign';
+import { addDays, getGateTrialTargetDate, getWeekday } from './campaign';
 import { chapterOneDefinition } from './chapter-one.seed';
 
-/** A completed Gate Trial is saved for this Chapter I campaign, whenever it was taken. */
-export function hasCompletedChapterOneTrial(
+type TrialRecord = Pick<TrialResult, 'trialId' | 'date'>;
+
+/**
+ * The first completed Gate Trial for this Chapter I campaign. A completed result means
+ * every part was finished as written on a Green day, which is what passing requires.
+ */
+export function getChapterOneTrialPass<T extends TrialRecord>(
   campaign: Campaign | null,
-  completedTrials: readonly Pick<TrialResult, 'trialId'>[],
-): boolean {
-  return Boolean(
-    campaign?.currentChapterId === chapterOneDefinition.id &&
-    completedTrials.some((result) => result.trialId === chapterOneDefinition.trialId),
-  );
+  completedTrials: readonly T[],
+): T | undefined {
+  if (campaign?.currentChapterId !== chapterOneDefinition.id) return undefined;
+  return completedTrials
+    .filter((result) => result.trialId === chapterOneDefinition.trialId)
+    .reduce<T | undefined>(
+      (first, result) => (!first || result.date < first.date ? result : first),
+      undefined,
+    );
 }
 
-/** A saved trial may be early; Chapter I closes only after all four full weeks end. */
+export function hasPassedChapterOneTrial(
+  campaign: Campaign | null,
+  completedTrials: readonly TrialRecord[],
+): boolean {
+  return Boolean(getChapterOneTrialPass(campaign, completedTrials));
+}
+
+/**
+ * Chapter II's first day of its own orders: the day after a Monday pass, because the trial
+ * took that week's Forge A, or the Monday after a pass on any other day. A pass saved
+ * before the trial window opened (an older record) starts Chapter II on the first attempt day.
+ */
+export function getChapterTwoStartDate(
+  campaign: Campaign | null,
+  completedTrials: readonly TrialRecord[],
+): LocalDate | undefined {
+  const pass = getChapterOneTrialPass(campaign, completedTrials);
+  if (!campaign || !pass) return undefined;
+  const firstAttempt = getGateTrialTargetDate(campaign.startDate);
+  if (pass.date < firstAttempt) return firstAttempt;
+  const day = getWeekday(pass.date);
+  return addDays(pass.date, day === 1 ? 1 : 8 - day);
+}
+
+/** Chapter I is behind the person once the Gate Trial is passed and Chapter II's first day arrives. */
 export function isChapterOneComplete(
   campaign: Campaign | null,
   today: LocalDate,
-  completedTrials: readonly Pick<TrialResult, 'trialId'>[],
+  completedTrials: readonly TrialRecord[],
 ): boolean {
-  return Boolean(
-    campaign &&
-    hasCompletedChapterOneTrial(campaign, completedTrials) &&
-    getCampaignDay(campaign.startDate, today) > getChapterOneTargetDay(campaign.startDate),
-  );
+  const start = getChapterTwoStartDate(campaign, completedTrials);
+  return Boolean(start && today >= start);
 }

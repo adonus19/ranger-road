@@ -15,18 +15,20 @@ import type {
 } from '../../../core/domain/models';
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
 import {
-  hasCompletedChapterOneTrial,
+  getChapterOneTrialPass,
+  getChapterTwoStartDate,
   isChapterOneComplete,
 } from '../../../core/program/chapter-one-completion';
 import {
   getChapterOneActivityChoicesForDate,
   getChapterOneMissionsForDate,
 } from '../../../core/program/chapter-one-missions';
-import { getTodaysOrders } from '../../../core/program/campaign';
+import { addDays, getNextGateTrialAttempt, getTodaysOrders } from '../../../core/program/campaign';
 import { loadChapterOneWorkout } from '../../../core/program/chapter-one-workouts';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MissionHistory } from '../../../core/state/mission-history';
 import { TrialHistory } from '../../../core/state/trial-history';
+import { formatLongDate } from '../../../shared/format-date';
 import { Icon, type IconName } from '../../../shared/icon/icon';
 import { ActivityChoice } from '../activity-choice/activity-choice';
 import { ReadinessStrip } from '../readiness-strip/readiness-strip';
@@ -77,9 +79,21 @@ export class MissionPage {
   protected readonly chapterComplete = computed(() =>
     isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
   );
-  protected readonly trialDone = computed(() =>
-    hasCompletedChapterOneTrial(this.state.campaign(), this.completedTrials()),
+  protected readonly trialPass = computed(() =>
+    getChapterOneTrialPass(this.state.campaign(), this.completedTrials()),
   );
+  protected readonly trialPassed = computed(() => Boolean(this.trialPass()));
+  protected readonly chapterTwoStart = computed(() =>
+    getChapterTwoStartDate(this.state.campaign(), this.completedTrials()),
+  );
+  /** The attempt after today, for an attempt day that doesn't go. */
+  protected readonly nextAttempt = computed(() => {
+    const campaign = this.state.campaign();
+    return campaign
+      ? getNextGateTrialAttempt(campaign.startDate, addDays(this.state.today(), 1))
+      : null;
+  });
+  protected readonly longDate = formatLongDate;
 
   protected readonly activityChoices = computed(() => {
     const campaign = this.state.campaign();
@@ -118,8 +132,8 @@ export class MissionPage {
       getTodaysOrders(campaign.startDate, this.state.today(), this.readiness()?.status).find(
         (item) => item.kind === 'weekly',
       ) ?? null;
-    // A saved Gate Trial no longer waits for a Green day.
-    return order?.missionType === 'trial' && this.trialDone()
+    // A passed Gate Trial no longer waits for a Green day.
+    return order?.missionType === 'trial' && this.trialPassed()
       ? { ...order, title: 'Gate Trial' }
       : order;
   });
@@ -144,7 +158,7 @@ export class MissionPage {
   protected readonly showActivityDetails = computed(() => {
     const mission = this.definition();
     if (!mission) return true;
-    if (mission.plannedTrialId && this.trialDone()) return false;
+    if (mission.plannedTrialId && this.trialPassed()) return false;
     return !(
       this.readiness()?.status === 'red' &&
       this.needsReadiness() &&
