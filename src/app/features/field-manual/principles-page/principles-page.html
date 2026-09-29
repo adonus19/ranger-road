@@ -1,0 +1,31 @@
+<article class="manual-page">
+  <app-manual-back-link />
+  <h1>Leadership principles</h1>
+  <p class="manual-subline">
+    Twelve principles for leading at home. Each week’s lesson practices two.
+  </p>
+
+  @for (principle of principles; track principle.id) {
+    <section
+      class="manual-section"
+      [id]="principle.id"
+      [attr.aria-labelledby]="principle.id + '-title'"
+    >
+      <h2 [id]="principle.id + '-title'">
+        {{ principle.title }}
+        @if (current().has('principle-' + principle.id)) {
+          <span class="manual-tag"><app-icon name="pine" />{{ currentLabel() }}</span>
+        }
+      </h2>
+      <div class="manual-prose">
+        <p>{{ principle.meaning }}</p>
+      </div>
+      <dl>
+        <dt>Scripture</dt>
+        <dd>{{ principle.scripture.join('; ') }}</dd>
+        <dt>In practice</dt>
+        <dd>{{ principle.practice }}</dd>
+      </dl>
+    </section>
+  }
+</article>

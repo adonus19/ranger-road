@@ -152,6 +152,11 @@ a {
   outline-offset: 3px;
 }
 
+/* Headings and sections focused after a route change are reading positions, not controls. */
+[data-route-focus]:focus {
+  outline: none;
+}
+
 ::selection {
   background: var(--color-parchment);
   color: var(--color-ink);

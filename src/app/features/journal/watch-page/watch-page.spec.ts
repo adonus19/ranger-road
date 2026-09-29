@@ -145,12 +145,50 @@ describe('WatchPage', () => {
     expect(morningRoot.querySelector('.watch-steps')?.textContent).toContain(
       'Reflect: What requires my attention today?',
     );
+    expect(
+      morningRoot
+        .querySelector<HTMLAnchorElement>('a[href*="/field-manual/lessons/"]')
+        ?.getAttribute('href'),
+    ).toBe('/field-manual/lessons/lead-yourself-first?from=watch');
 
     TestBed.resetTestingModule();
     const evening = setup('evening', campaign);
     await evening.fixture.whenStable();
     expect((evening.fixture.nativeElement as HTMLElement).textContent).not.toContain(
       'What requires my attention today?',
+    );
+  });
+
+  it('reads Week 1’s lesson on a midweek Day 1 and again when the full week begins', async () => {
+    const campaign: Campaign = {
+      id: 'primary',
+      startDate: '2026-09-24',
+      currentChapterId: 'chapter-1',
+      status: 'active',
+    };
+    const leadIn = setup('morning', campaign);
+    leadIn.state.today.set('2026-09-24');
+    await leadIn.fixture.whenStable();
+    const root = leadIn.fixture.nativeElement as HTMLElement;
+    const lesson = () => root.querySelector<HTMLAnchorElement>('a[href*="/field-manual/lessons/"]');
+    expect(lesson()?.getAttribute('href')).toBe(
+      '/field-manual/lessons/lead-yourself-first?from=watch',
+    );
+
+    leadIn.state.today.set('2026-09-25');
+    await leadIn.fixture.whenStable();
+    expect(lesson()).toBeNull();
+
+    leadIn.state.today.set('2026-09-28');
+    await leadIn.fixture.whenStable();
+    expect(lesson()?.getAttribute('href')).toBe(
+      '/field-manual/lessons/lead-yourself-first?from=watch',
+    );
+
+    leadIn.state.today.set('2026-10-05');
+    await leadIn.fixture.whenStable();
+    expect(lesson()?.getAttribute('href')).toBe(
+      '/field-manual/lessons/keep-small-promises?from=watch',
     );
   });
 });

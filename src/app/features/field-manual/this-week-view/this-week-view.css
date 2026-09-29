@@ -1,0 +1,140 @@
+:host {
+  display: block;
+}
+
+.view-state {
+  margin: 1.5rem 0 0;
+  color: var(--text-secondary);
+}
+
+.this-week {
+  margin-top: 1.0625rem;
+}
+
+h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+
+.this-week__subline {
+  margin: 0.125rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.rows {
+  margin: 0.5rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.rows li {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.rows li:last-child {
+  border-bottom-color: var(--line);
+}
+
+/* The list closes with a little more room before its last rule. */
+.rows li:last-child .row {
+  min-height: 4.75rem;
+}
+
+.row {
+  display: flex;
+  min-height: 4.375rem;
+  align-items: center;
+  gap: 0.9375rem;
+  padding: 0.5625rem 0.125rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.row__medallion {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-medallion);
+  color: var(--icon-gold);
+}
+
+.row__medallion app-icon {
+  width: 1.875rem;
+  height: 1.875rem;
+}
+
+.row__text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.0625rem;
+}
+
+.row__text strong {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.row__text span {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.row__arrow {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-left: -0.4375rem;
+  color: var(--text-secondary);
+  transition: transform 160ms var(--ease-out);
+}
+
+.row:hover strong {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.row:hover .row__arrow {
+  transform: translateX(2px);
+}
+
+.this-week__done {
+  max-width: 40ch;
+  margin: 1rem 0 0;
+  color: var(--text-secondary);
+}
+
+@media (min-width: 700px) {
+  .this-week {
+    margin-top: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  .row__text span {
+    font-size: 0.875rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row__arrow {
+    transition: none;
+  }
+}

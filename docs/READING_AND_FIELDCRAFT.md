@@ -10,10 +10,7 @@ Use:
 - 10-minute reading blocks
 - one useful reflection prompt
 
-Potential early books:
-- Habits of the Household — Justin Whitmel Earley
-- The Ruthless Elimination of Hurry — John Mark Comer
-- The Motive — Patrick Lencioni
+The campaign reading plan (one suggested book per chapter, tied to that chapter's leadership theme) is in [Field Manual Content](rangers-road-full-program-content/FIELD_MANUAL.md). *Habits of the Household* by Justin Whitmel Earley is the Chapter I book. When a book is finished, the next one on the list begins; the chapter beside each title is where it fits best, not a deadline.
 
 Book completion is not tied to rigid monthly deadlines.
 
@@ -92,14 +89,28 @@ Demonstration:
 
 ## Field Card Shape
 
+A card teaches one practical skill. Tool cards use titled sections of checks; knot cards use numbered steps with a way to check the result. Chapter I's approved cards are in [Field Manual Content](rangers-road-full-program-content/FIELD_MANUAL.md) and in `src/app/core/program/field-manual.seed.ts`.
+
 ```ts
 interface FieldCard {
   id: string;
   title: string;
+  skill: 'tool' | 'knot';
+  week: number;
+  when: string;
   summary: string;
-  keyPoints: string[];
   mission?: string;
-  safetyNotes?: string[];
+  useFor?: string;
+  avoid?: string;
+  steps?: string[];
+  memoryAid?: string;
+  check?: string;
+  sections?: { heading: string; items: string[] }[];
+  closing?: string;
+  /** A four-panel step strip, added only after it is checked against the real knot or tool. */
+  sequence?: { src: string; alt: string };
   relatedSkills: string[];
 }
 ```
+
+When a week practices several cards together (Chapter I Week 3's three knots), a practice page lists them with the practice plan, the equipment, and a safety line.

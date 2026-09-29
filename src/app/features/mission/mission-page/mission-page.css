@@ -109,7 +109,8 @@ h1 {
   font-size: 0.875rem;
 }
 
-.reading-link {
+.reading-link,
+.fieldcraft-link {
   display: inline-flex;
   min-height: var(--touch-target);
   align-items: center;

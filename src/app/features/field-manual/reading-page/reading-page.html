@@ -1,0 +1,67 @@
+<article class="manual-page">
+  <app-manual-back-link />
+  <h1>Reading</h1>
+  <p class="manual-subline">One book at a time, in 10-minute blocks.</p>
+
+  <section class="manual-section" aria-labelledby="chapter-one-book">
+    <h2 id="chapter-one-book">Chapter I book</h2>
+    <p class="reading-book">
+      <cite>{{ book.title }}</cite>
+      <span class="reading-book__author">by {{ book.author }}</span>
+    </p>
+    <p class="manual-note">{{ readingLine() }}</p>
+    @if (notice(); as notice) {
+      <div class="manual-panel">
+        <h3>What to notice</h3>
+        <p>{{ notice }}</p>
+      </div>
+    }
+  </section>
+
+  <section class="manual-section" id="reading-plan" aria-labelledby="reading-plan-title">
+    <h2 id="reading-plan-title">Reading plan</h2>
+    <p class="manual-note">
+      When you finish a book, start the next one on the list. The chapter beside each title is where
+      the book fits best, and there’s no deadline for finishing it. If a book isn’t working for you,
+      move on to the next.
+    </p>
+    <ol class="manual-rows plan" role="list">
+      @for (entry of plan; track entry.id) {
+        <li class="manual-row" [id]="entry.id">
+          <span class="plan__numeral" aria-hidden="true">{{ entry.numeral }}</span>
+          <span class="manual-row__text">
+            <strong
+              ><cite>{{ entry.title }}</cite></strong
+            >
+            <span
+              >{{ entry.author }} · Chapter {{ entry.numeral }}, {{ entry.chapterName }} ·
+              {{ entry.theme }}</span
+            >
+          </span>
+          @if ($first) {
+            <span class="manual-tag"><app-icon name="pine" />Chapter I</span>
+          }
+        </li>
+      }
+    </ol>
+  </section>
+
+  <section class="manual-section" aria-labelledby="also-suggested">
+    <h2 id="also-suggested">Also suggested</h2>
+    <ul class="manual-rows" role="list">
+      @for (extra of extras; track extra.title) {
+        <li>
+          <a class="manual-row" [routerLink]="['/field-manual/lessons', extra.lessonId]">
+            <span class="manual-row__text">
+              <strong
+                ><cite>{{ extra.title }}</cite></strong
+              >
+              <span>{{ extra.author }} · from the Week {{ extra.week }} lesson</span>
+            </span>
+            <app-icon class="manual-row__arrow" name="arrow-right" />
+          </a>
+        </li>
+      }
+    </ul>
+  </section>
+</article>

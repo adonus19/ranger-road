@@ -36,6 +36,14 @@ const ICONS = {
     { d: 'M3 6.8h13.4c0 2.1 2 2.9 4.6 2.9v.6c-2.1.6-3.6 1.9-4.3 3.6H8.6c-.4-1.6-1.8-2.7-3.6-3.2V9C3.8 8.7 3 7.9 3 6.8Z', paint: 'fill' },
     { d: 'M9.3 13.9h5.9v2.5h2.4v2.8H6.9v-2.8h2.4Z', paint: 'fill' },
   ],
+  /** A hatchet, handle and flared head, for tool fieldcraft. */
+  hatchet: [
+    { d: 'M3.61 20.04 14.99 8.51l1.22 1.18L5.04 21.43a1 1 0 0 1-1.43-1.39Z', paint: 'fill' },
+    {
+      d: 'M14.71 6.57 17.16 9.22Q19.09 10.96 21.29 10.99 19.99 13.77 17.25 15.16 17.35 12.47 15.77 10.65L13.04 8.29Z',
+      paint: 'fill',
+    },
+  ],
   renew: [
     { d: 'M19.5 12a7.5 7.5 0 0 1-13 5.1M4.5 12a7.5 7.5 0 0 1 13-5.1M17.6 3.4v3.5h-3.5M6.4 20.6v-3.5h3.5', paint: 'stroke' },
   ],
@@ -71,6 +79,23 @@ const ICONS = {
     { d: 'M4.2 13.8v4.1a2.3 2.3 0 0 0 2.3 2.3h11a2.3 2.3 0 0 0 2.3-2.3v-4.1', paint: 'stroke' },
     { d: 'M12 3.9v11.3M7.7 10.9l4.3 4.3 4.3-4.3', paint: 'stroke' },
   ],
+  /** A rope loop crossing over its standing part, for the knot cards. */
+  knot: [
+    { d: 'M13.4 21.5 12.3 14.9', paint: 'stroke' },
+    {
+      d: 'M11.9 12.4c-1.4-1.2-6.4-1.8-6.4-5.2 0-2.8 2.9-4.6 6.5-4.6s6.5 1.8 6.5 4.6c0 3.4-4 4.7-7.1 7L6.2 20.8',
+      paint: 'stroke',
+    },
+  ],
+  /** One pine from the brand mark, for the small This week tag. */
+  pine: [
+    {
+      d: 'M12 1.2 14.2 5.5h-1l2.2 4.5h-1.2l2.6 5.1H7.2L9.8 10H8.6l2.2-4.5h-1Z',
+      paint: 'fill',
+    },
+    { d: 'M11.5 15.1h1v7.7h-1Z', paint: 'fill' },
+  ],
+  search: [{ d: 'M10.8 17.6a6.8 6.8 0 1 1 0-13.6 6.8 6.8 0 0 1 0 13.6Zm4.9-1.9 4.6 4.6', paint: 'stroke' }],
   'chevron-right': [{ d: 'M9 5.5 15.5 12 9 18.5', paint: 'stroke' }],
   plus: [{ d: 'M12 5v14M5 12h14', paint: 'stroke' }],
   minus: [{ d: 'M5 12h14', paint: 'stroke' }],

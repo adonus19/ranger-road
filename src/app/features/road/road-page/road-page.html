@@ -102,10 +102,7 @@
               <strong>{{ walkDate(walk.date) }}</strong>
               <span>
                 @for (part of walkParts(walk); track $index) {
-                  <span class="part">{{ $last ? part : part + ' ·' }}</span>
-                  @if (!$last) {
-                    &ngsp;
-                  }
+                  <span class="part">{{ $last ? part : part + ' · ' }}</span>
                 }
               </span>
             </li>

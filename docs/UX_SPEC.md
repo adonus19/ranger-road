@@ -3,6 +3,7 @@
 ## Navigation
 
 Suggested tabs:
+
 - Keep
 - Road
 - Forge
@@ -18,6 +19,7 @@ If Day 1 is not Monday, Keep and Today's Mission use Week 1's matching weekday o
 ## Keep — Home
 
 Must show:
+
 - current chapter
 - day
 - days until trial
@@ -51,6 +53,7 @@ From Chapter II's first day, Road labels Chapter I complete and links to the sav
 Road opens a separate screen for manually logging a completed walk or trail session, and lists the most recent sessions below the Gate Trial. The Phase 1 form asks for session date, miles, minutes, terrain, and RPE (1–10), with optional pain before and after (0–10). It does not set a distance, pace, or ruck-load target. Saving a Road session does not record Today's Mission; the outcome is still recorded there. On a conditioning day, once a full or reduced outcome is saved, Today's Mission offers "Log walk details", which opens the log for that date. The readiness check remains a step before training; a retrospective log does not create a past readiness check.
 
 Each chapter:
+
 - title
 - theme
 - current/completed/locked
@@ -60,6 +63,7 @@ Each chapter:
 ## Forge — Training
 
 Workout player:
+
 - current exercise
 - previous load
 - planned load
@@ -93,6 +97,7 @@ Energy (1–5) and each pain area (0–10) are answered with one tap per value. 
 ## Journal
 
 Journal holds a Measurements section:
+
 - the check-in, marked Due now on Day 1 and every 28 days until it is saved, or Tests to add when a Red day held the tests; otherwise it says when the next one opens
 - Weight and waist, a short screen for logging either one on any day, with the latest values
 
@@ -101,11 +106,13 @@ The check-in screen opens on The last 28 days: average sleep and back, shoulder,
 The Tests part links to a same-day readiness check when one has not been saved and keeps the test inputs hidden until then. Saving the body-only check-in finishes that window without tests. Held tests require a fresh same-day non-Red check before saving, including when the tests screen is opened directly.
 
 Journal ends with Your records, because every record lives only on the device:
+
 - Save a copy puts every record in one dated file. On a phone it opens the share sheet (Files, iCloud, email); elsewhere the file downloads. The row shows when this device last saved a copy. Closing the share sheet saves nothing.
 - Restore from a copy reads a chosen file and asks before replacing anything. The confirmation compares the copy with this device (Day 1, latest entry, record count) and says how many records on this device the copy lacks. Replace records swaps in the copy; Cancel changes nothing.
 - A file that isn't a copy, is damaged, or came from a newer version of the app is refused, and nothing changes.
 
 Entries:
+
 - daily watch (a day's reflection appears in the Evening Watch, except Week 1 Monday's "What requires my attention today?", which the Morning Watch asks)
 - trial reflections
 - weight
@@ -118,17 +125,16 @@ Entries:
 
 ## Field Manual
 
-Content:
-- exercise guides
-- field cards
-- reading
-- Scripture references
-- leadership lessons
-- practical skill modules
+The Field Manual opens on **This week**, a short list of the current leadership lesson, fieldcraft practice when scheduled, reading blocks, today's Scripture reference, and exercise guides. A three-way switch also opens **Contents** (the Chapter I sections in program order) and **Index** (A to Z search with topic filters and a keyboard-operable letter rail). Before Day 1, the first week is labeled Week ahead. After a passed Gate Trial, the manual retains Chapter I references while Chapter II pages await implementation. Scripture stays as references; the app does not reproduce Bible text. Exercise guides list the standard doses and show the current week's Forge adjustment beside the relevant session; the active Forge screen remains the place to follow readiness changes and record work.
+
+Monday Morning Watch links to the week's lesson, including Day 1 when a lead-in starts midweek. Keep's Hearth mission links to that lesson. Today's Mission links reading days to the reading plan and the Week 2 tool or Week 3 knot practice choices to their cards. The reading plan calls _Habits of the Household_ the Chapter I book; it does not claim to know which book the person is currently reading.
+
+Content includes the twelve leadership principles, four Chapter I lessons, reading plan, Scripture references, tool and knot field cards, and full exercise guides. The approved text lives in [Field Manual Content](rangers-road-full-program-content/FIELD_MANUAL.md). Knot cards carry written steps; step pictures are added only after each one is checked against a tied knot. Tool rows show a hatchet and knot rows a rope.
 
 ## Trial Flow
 
 Trial should feel distinct:
+
 - preparation screen
 - checklist
 - multi-phase flow
@@ -145,6 +151,7 @@ Save a completed trial without forcing an early post-mission function answer. A 
 ## Pain Flow
 
 Tap Pain:
+
 - body area
 - severity
 - continue

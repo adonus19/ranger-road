@@ -1,0 +1,58 @@
+<article class="manual-page">
+  <app-manual-back-link />
+
+  @if (fieldcraft(); as plan) {
+    <h1>{{ plan.title }}</h1>
+    <p class="manual-subline">
+      Week {{ plan.week }} · {{ plan.days }}
+      @if (current()) {
+        <span class="manual-tag"><app-icon name="pine" />{{ currentLabel() }}</span>
+      }
+    </p>
+
+    @if (plan.equipment; as equipment) {
+      <p class="manual-note">You’ll need {{ equipment }}.</p>
+    }
+
+    @if (plan.practice; as practice) {
+      <div class="manual-panel">
+        <h2>How to practice</h2>
+        <p>{{ practice }}</p>
+      </div>
+    }
+
+    <section class="manual-section" aria-labelledby="practice-cards">
+      <h2 id="practice-cards">The cards</h2>
+      <ul class="manual-rows" role="list">
+        @for (card of cards(); track card.id) {
+          <li>
+            <a
+              class="manual-row"
+              [routerLink]="['/field-manual/cards', card.id]"
+              [queryParams]="{ from: 'practice' }"
+            >
+              <span class="manual-medallion"
+                ><app-icon [name]="card.skill === 'knot' ? 'knot' : 'hatchet'"
+              /></span>
+              <span class="manual-row__text">
+                <strong>{{ card.title }}</strong>
+                <span>{{ card.summary }}</span>
+              </span>
+              <app-icon class="manual-row__arrow" name="arrow-right" />
+            </a>
+          </li>
+        }
+      </ul>
+    </section>
+
+    @if (plan.safety; as safety) {
+      <p class="manual-note">{{ safety }}</p>
+    }
+  } @else {
+    <h1>Practice not found</h1>
+    <p class="manual-empty">
+      There’s no practice plan for that week.
+      <a routerLink="/field-manual/contents">Open Contents</a>
+    </p>
+  }
+</article>

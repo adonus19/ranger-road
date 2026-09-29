@@ -21,10 +21,17 @@ import {
 } from '../../../core/program/chapter-one-completion';
 import {
   getChapterOneActivityChoicesForDate,
+  getChapterOneContentForDate,
   getChapterOneMissionsForDate,
 } from '../../../core/program/chapter-one-missions';
-import { addDays, getNextGateTrialAttempt, getTodaysOrders } from '../../../core/program/campaign';
+import {
+  addDays,
+  getChapterOneSchedule,
+  getNextGateTrialAttempt,
+  getTodaysOrders,
+} from '../../../core/program/campaign';
 import { loadChapterOneWorkout } from '../../../core/program/chapter-one-workouts';
+import { getWeeklyFieldcraft } from '../../../core/program/field-manual.seed';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MissionHistory } from '../../../core/state/mission-history';
 import { TrialHistory } from '../../../core/state/trial-history';
@@ -106,6 +113,29 @@ export class MissionPage {
     return choices.length === 1
       ? (choices[0] ?? null)
       : (choices.find((choice) => choice.id === this.selectedActivityId()) ?? null);
+  });
+
+  /** The card or practice plan taught by a documented fieldcraft order. */
+  protected readonly fieldcraftGuide = computed(() => {
+    const campaign = this.state.campaign();
+    if (campaign?.currentChapterId !== chapterOneDefinition.id) return null;
+    const schedule = getChapterOneSchedule(campaign.startDate, this.state.today());
+    if (!schedule) return null;
+    const day = getChapterOneContentForDate(campaign.startDate, this.state.today());
+    if (this.definition()?.missionType !== 'fieldcraft' && !day?.activity.fieldcraftPractice) {
+      return null;
+    }
+    const fieldcraft = getWeeklyFieldcraft(schedule.contentWeek);
+    if (!fieldcraft) return null;
+    return fieldcraft.cardIds.length === 1
+      ? {
+          label: `Open field card: ${fieldcraft.title}`,
+          link: ['/field-manual/cards', fieldcraft.cardIds[0]],
+        }
+      : {
+          label: `Open ${fieldcraft.title.toLowerCase()} cards`,
+          link: ['/field-manual/practice', String(fieldcraft.week)],
+        };
   });
 
   protected readonly recordedActivityIds = computed(() =>

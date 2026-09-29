@@ -1,0 +1,40 @@
+{
+  "title": "Choose the Field Manual layout",
+  "question": "All three use the Forest Light look and the same Chapter I content. Lock the layout to build, or add a note to borrow from another.",
+  "options": [
+    {
+      "id": "index",
+      "label": "A to Z index",
+      "kicker": "THE ROLL",
+      "thesis": "Everything in the manual sits in one A to Z index with a search field, like the index at the back of an issued manual. Filters narrow it to this week, leadership, fieldcraft, Scripture or exercises.",
+      "palette": ["#172b21", "#24362b", "#f6f3ea", "#e2dbcb", "#a9804a"],
+      "materials": ["warm paper", "hairline rules", "serif letter heads"],
+      "viewport": "Field Manual, a search field, a row of filters with All selected, then letters A to C with Assisted Pull-Up, Bench Press, Bird Dog, Bowline, Box Squat, Carry the details and Cat-Camel.",
+      "risk": "Built for looking things up. This week's lesson and field card wait behind the This week filter instead of greeting you.",
+      "comp": ".impeccable/mocks/decision/field-manual-index.png"
+    },
+    {
+      "id": "contents",
+      "label": "Contents page",
+      "thesis": "The manual opens on its table of contents: Leadership, Fieldcraft, Reading and Scripture as parts, entries joined by dotted leaders to their week, and this week's entries marked.",
+      "palette": ["#172b21", "#24362b", "#f6f3ea", "#e9e5d8", "#a9804a"],
+      "materials": ["warm paper", "dotted leaders", "serif entries"],
+      "viewport": "Field Manual, Chapter I · The Muster, then Leadership with its four weekly lessons (Keep small promises marked This week), Fieldcraft with tool inspection and the three knots, and Reading.",
+      "risk": "Dense, and the exercise guides sit at the end as an appendix, below the first screen.",
+      "comp": ".impeccable/mocks/decision/field-manual-contents.png"
+    },
+    {
+      "id": "week",
+      "label": "This week first",
+      "thesis": "The manual opens on the four things this week asks you to read or practice (the leadership lesson, the field card, the reading and today's Scripture), with the whole manual listed below.",
+      "palette": ["#172b21", "#24362b", "#f6f3ea", "#e2dbcb", "#9c7442"],
+      "materials": ["warm paper", "hairline rules", "medallion rows"],
+      "viewport": "Field Manual, This week, Week 2 · Keep Your Word, four medallion rows (Keep small promises, Tool inspection, Habits of the Household, Matthew 5:33–37), then The whole manual.",
+      "risk": "The most familiar of the three; it reads like Journal and changes every Monday.",
+      "comp": ".impeccable/mocks/decision/field-manual-week.png"
+    }
+  ],
+  "reroll": true,
+  "steer": true,
+  "buildPath": { "value": "comp", "toggle": true }
+}

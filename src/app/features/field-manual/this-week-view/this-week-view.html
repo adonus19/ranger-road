@@ -1,0 +1,33 @@
+@if (!ready()) {
+  <p class="view-state" role="status">Opening this week’s pages…</p>
+} @else {
+  <section class="this-week" aria-labelledby="this-week-heading">
+    <h2 id="this-week-heading">{{ week().heading }}</h2>
+    <p class="this-week__subline">{{ week().subline }}</p>
+
+    @if (week().rows.length) {
+      <ul class="rows" role="list">
+        @for (row of week().rows; track row.kind) {
+          <li>
+            <a class="row" [routerLink]="row.link" [fragment]="row.fragment">
+              <span class="row__medallion row__medallion--{{ row.kind }}">
+                <app-icon [name]="icon(row)" />
+              </span>
+              <span class="row__text">
+                <strong>{{ row.title }}</strong>
+                <span>{{ row.line }}</span>
+              </span>
+              <app-icon class="row__arrow" name="arrow-right" />
+            </a>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="this-week__done">
+        Chapter I’s lessons, field cards, and guides stay in
+        <a routerLink="/field-manual/contents">Contents</a> and the
+        <a routerLink="/field-manual/index">Index</a>.
+      </p>
+    }
+  </section>
+}

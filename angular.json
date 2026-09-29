@@ -30,7 +30,7 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css", "src/styles/entry-form.css"]
+            "styles": ["src/styles.css", "src/styles/entry-form.css", "src/styles/manual.css"]
           },
           "configurations": {
             "production": {

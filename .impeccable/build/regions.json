@@ -17,10 +17,10 @@
       "kind": "chrome",
       "note": "small gold three-pine mark",
       "box": {
-        "x": 0.0509,
-        "y": 0.0171,
-        "w": 0.0903,
-        "h": 0.0459
+        "x": 0.0498,
+        "y": 0.016,
+        "w": 0.0926,
+        "h": 0.0465
       },
       "snap": false
     },
@@ -29,430 +29,430 @@
       "kind": "text",
       "note": "serif app title The Ranger's Road in cream",
       "box": {
-        "x": 0.1574,
-        "y": 0.0246,
-        "w": 0.4757,
-        "h": 0.031
-      },
-      "snap": false
-    },
-    {
-      "id": "back-link",
-      "kind": "control",
-      "note": "left arrow and sans Back to Journal in secondary ink",
-      "box": {
-        "x": 0.0451,
-        "y": 0.1042,
-        "w": 0.3229,
-        "h": 0.0208
+        "x": 0.1586,
+        "y": 0.024,
+        "w": 0.4745,
+        "h": 0.0315
       },
       "snap": false
     },
     {
       "id": "page-title",
       "kind": "text",
-      "note": "large serif page title Monthly check-in",
-      "box": {
-        "x": 0.0394,
-        "y": 0.1426,
-        "w": 0.7431,
-        "h": 0.0481
-      },
-      "snap": false
-    },
-    {
-      "id": "date-line",
-      "kind": "text",
-      "note": "quiet sans line Day 29 · Monday, October 12 in secondary ink",
-      "box": {
-        "x": 0.044,
-        "y": 0.1955,
-        "w": 0.485,
-        "h": 0.0214
-      },
-      "snap": false
-    },
-    {
-      "id": "lookback-heading",
-      "kind": "text",
-      "note": "serif section heading The last 28 days",
-      "box": {
-        "x": 0.0382,
-        "y": 0.2431,
-        "w": 0.5359,
-        "h": 0.039
-      },
-      "snap": false
-    },
-    {
-      "id": "lookback-panel",
-      "kind": "chrome",
-      "note": "read-only parchment-tint panel with 6px corners holding the readiness averages",
-      "box": {
-        "x": 0.0417,
-        "y": 0.2869,
-        "w": 0.9178,
-        "h": 0.187
-      },
-      "snap": false
-    },
-    {
-      "id": "sleep-label",
-      "kind": "text",
-      "note": "spaced caps AVERAGE SLEEP in sage",
-      "box": {
-        "x": 0.0694,
-        "y": 0.3088,
-        "w": 0.2627,
-        "h": 0.0134
-      },
-      "snap": false
-    },
-    {
-      "id": "sleep-value",
-      "kind": "text",
-      "note": "large serif numeral 6.6",
-      "box": {
-        "x": 0.0741,
-        "y": 0.3387,
-        "w": 0.1794,
-        "h": 0.0465
-      },
-      "snap": false
-    },
-    {
-      "id": "sleep-unit",
-      "kind": "text",
-      "note": "sans hours after the numeral",
-      "box": {
-        "x": 0.2789,
-        "y": 0.3654,
-        "w": 0.1053,
-        "h": 0.0182
-      },
-      "snap": false
-    },
-    {
-      "id": "panel-divider",
-      "kind": "chrome",
-      "note": "vertical hairline dividing sleep from the pain rows",
-      "box": {
-        "x": 0.4641,
-        "y": 0.3018,
-        "w": 0.0058,
-        "h": 0.1181
-      },
-      "snap": false
-    },
-    {
-      "id": "back-label",
-      "kind": "text",
-      "note": "spaced caps BACK PAIN in sage",
-      "box": {
-        "x": 0.5104,
-        "y": 0.3114,
-        "w": 0.1505,
-        "h": 0.0128
-      },
-      "snap": false
-    },
-    {
-      "id": "back-value",
-      "kind": "text",
-      "note": "serif numeral 2.4",
-      "box": {
-        "x": 0.8484,
-        "y": 0.3077,
-        "w": 0.0833,
-        "h": 0.023
-      },
-      "snap": false
-    },
-    {
-      "id": "shoulder-label",
-      "kind": "text",
-      "note": "spaced caps SHOULDER PAIN in sage",
-      "box": {
-        "x": 0.5104,
-        "y": 0.3542,
-        "w": 0.2326,
-        "h": 0.0123
-      },
-      "snap": false
-    },
-    {
-      "id": "shoulder-value",
-      "kind": "text",
-      "note": "serif numeral 1.1",
-      "box": {
-        "x": 0.8495,
-        "y": 0.3504,
-        "w": 0.0764,
-        "h": 0.0235
-      },
-      "snap": false
-    },
-    {
-      "id": "neck-label",
-      "kind": "text",
-      "note": "spaced caps NECK PAIN in sage",
-      "box": {
-        "x": 0.5104,
-        "y": 0.3974,
-        "w": 0.1539,
-        "h": 0.0123
-      },
-      "snap": false
-    },
-    {
-      "id": "neck-value",
-      "kind": "text",
-      "note": "serif numeral 0.8",
-      "box": {
-        "x": 0.8472,
-        "y": 0.3937,
-        "w": 0.0833,
-        "h": 0.023
-      },
-      "snap": false
-    },
-    {
-      "id": "panel-rule",
-      "kind": "chrome",
-      "note": "hairline rule across the panel above its note",
-      "box": {
-        "x": 0.0718,
-        "y": 0.4316,
-        "w": 0.8588,
-        "h": 0.0027
-      },
-      "snap": false
-    },
-    {
-      "id": "panel-note",
-      "kind": "text",
-      "note": "sans note Averages from 22 readiness checks.",
-      "box": {
-        "x": 0.0694,
-        "y": 0.4439,
-        "w": 0.4491,
-        "h": 0.0171
-      },
-      "snap": false
-    },
-    {
-      "id": "section-rule",
-      "kind": "chrome",
-      "note": "hairline rule between the look-back and Body",
+      "note": "large serif page title Field Manual",
       "box": {
         "x": 0.0428,
-        "y": 0.4941,
+        "y": 0.1052,
+        "w": 0.5139,
+        "h": 0.0369
+      },
+      "snap": false
+    },
+    {
+      "id": "switch",
+      "kind": "control",
+      "note": "segmented three-way switch, 1px rule border, 6px outer corners, full width",
+      "box": {
+        "x": 0.044,
+        "y": 0.1592,
+        "w": 0.9155,
+        "h": 0.0385
+      },
+      "snap": false
+    },
+    {
+      "id": "switch-selected",
+      "kind": "control",
+      "note": "selected This week segment filled night-forest pine",
+      "box": {
+        "x": 0.0451,
+        "y": 0.1597,
+        "w": 0.3044,
+        "h": 0.0374
+      },
+      "snap": false
+    },
+    {
+      "id": "switch-this-week",
+      "kind": "text",
+      "note": "sans label This week in cream on the selected segment",
+      "box": {
+        "x": 0.1285,
+        "y": 0.1709,
+        "w": 0.1435,
+        "h": 0.015
+      },
+      "snap": false
+    },
+    {
+      "id": "switch-contents",
+      "kind": "text",
+      "note": "sans label Contents in secondary ink",
+      "box": {
+        "x": 0.4375,
+        "y": 0.1715,
+        "w": 0.1308,
+        "h": 0.0144
+      },
+      "snap": false
+    },
+    {
+      "id": "switch-index",
+      "kind": "text",
+      "note": "sans label Index in secondary ink",
+      "box": {
+        "x": 0.7708,
+        "y": 0.1709,
+        "w": 0.0833,
+        "h": 0.015
+      },
+      "snap": false
+    },
+    {
+      "id": "week-heading",
+      "kind": "text",
+      "note": "serif section heading Week 2 · Keep Your Word",
+      "box": {
+        "x": 0.0405,
+        "y": 0.2158,
+        "w": 0.6563,
+        "h": 0.0315
+      },
+      "snap": false
+    },
+    {
+      "id": "week-subline",
+      "kind": "text",
+      "note": "sans subline Chapter I · The Muster in secondary ink",
+      "box": {
+        "x": 0.044,
+        "y": 0.2505,
+        "w": 0.3484,
+        "h": 0.0198
+      },
+      "snap": false
+    },
+    {
+      "id": "rule-this-week",
+      "kind": "chrome",
+      "note": "hairline rule above the rows",
+      "box": {
+        "x": 0.0428,
+        "y": 0.2799,
         "w": 0.9144,
         "h": 0.0021
       },
       "snap": false
     },
     {
-      "id": "body-heading",
-      "kind": "text",
-      "note": "serif section heading Body",
+      "id": "lesson-medallion",
+      "kind": "chrome",
+      "note": "round medallion ground with a gold heart pictogram (icon-sized)",
       "box": {
-        "x": 0.0382,
-        "y": 0.5144,
-        "w": 0.1863,
-        "h": 0.0385
+        "x": 0.044,
+        "y": 0.2922,
+        "w": 0.1343,
+        "h": 0.062
       },
       "snap": false
     },
     {
-      "id": "weight-label",
+      "id": "lesson-title",
       "kind": "text",
-      "note": "spaced caps WEIGHT (LB) in sage",
+      "note": "serif row title Keep small promises",
       "box": {
-        "x": 0.0417,
-        "y": 0.5646,
-        "w": 0.213,
+        "x": 0.2188,
+        "y": 0.2981,
+        "w": 0.419,
+        "h": 0.0251
+      },
+      "snap": false
+    },
+    {
+      "id": "lesson-line",
+      "kind": "text",
+      "note": "sans line Leadership lesson · Read Monday, about 3 minutes in secondary ink",
+      "box": {
+        "x": 0.2222,
+        "y": 0.3264,
+        "w": 0.6597,
+        "h": 0.0176
+      },
+      "snap": false
+    },
+    {
+      "id": "lesson-arrow",
+      "kind": "control",
+      "note": "thin right arrow",
+      "box": {
+        "x": 0.9109,
+        "y": 0.3136,
+        "w": 0.044,
+        "h": 0.0171
+      },
+      "snap": false
+    },
+    {
+      "id": "rule-lesson",
+      "kind": "chrome",
+      "note": "soft hairline between rows",
+      "box": {
+        "x": 0.0428,
+        "y": 0.3632,
+        "w": 0.9144,
+        "h": 0.0021
+      },
+      "snap": false
+    },
+    {
+      "id": "tool-medallion",
+      "kind": "chrome",
+      "note": "round medallion ground with a gold hatchet pictogram (icon-sized)",
+      "box": {
+        "x": 0.044,
+        "y": 0.3734,
+        "w": 0.1377,
+        "h": 0.0636
+      },
+      "snap": false
+    },
+    {
+      "id": "tool-title",
+      "kind": "text",
+      "note": "serif row title Tool inspection",
+      "box": {
+        "x": 0.2188,
+        "y": 0.3798,
+        "w": 0.3275,
+        "h": 0.0256
+      },
+      "snap": false
+    },
+    {
+      "id": "tool-line",
+      "kind": "text",
+      "note": "sans line Field card · Wednesday or Saturday in secondary ink",
+      "box": {
+        "x": 0.2222,
+        "y": 0.4087,
+        "w": 0.4919,
+        "h": 0.0182
+      },
+      "snap": false
+    },
+    {
+      "id": "tool-arrow",
+      "kind": "control",
+      "note": "thin right arrow",
+      "box": {
+        "x": 0.9109,
+        "y": 0.3964,
+        "w": 0.044,
         "h": 0.0166
       },
       "snap": false
     },
     {
-      "id": "weight-field",
-      "kind": "control",
-      "note": "bordered number field holding the large serif numeral 221.6",
+      "id": "rule-tool",
+      "kind": "chrome",
+      "note": "soft hairline between rows",
       "box": {
-        "x": 0.0405,
-        "y": 0.5844,
-        "w": 0.4514,
-        "h": 0.063
+        "x": 0.0428,
+        "y": 0.4471,
+        "w": 0.9144,
+        "h": 0.0021
       },
       "snap": false
     },
     {
-      "id": "waist-label",
-      "kind": "text",
-      "note": "spaced caps WAIST (IN) in sage",
-      "box": {
-        "x": 0.5116,
-        "y": 0.5652,
-        "w": 0.184,
-        "h": 0.016
-      },
-      "snap": false
-    },
-    {
-      "id": "waist-field",
-      "kind": "control",
-      "note": "bordered number field holding the large serif numeral 41.5",
-      "box": {
-        "x": 0.5093,
-        "y": 0.5844,
-        "w": 0.4537,
-        "h": 0.063
-      },
-      "snap": false
-    },
-    {
-      "id": "rhr-label",
-      "kind": "text",
-      "note": "spaced caps RESTING HEART RATE (BPM) in sage",
+      "id": "reading-medallion",
+      "kind": "chrome",
+      "note": "round medallion ground with a gold open-book pictogram (icon-sized)",
       "box": {
         "x": 0.044,
-        "y": 0.6683,
-        "w": 0.4479,
-        "h": 0.016
+        "y": 0.4573,
+        "w": 0.1389,
+        "h": 0.0646
       },
       "snap": false
     },
     {
-      "id": "rhr-field",
-      "kind": "control",
-      "note": "half-width bordered number field holding the large serif numeral 68",
-      "box": {
-        "x": 0.0405,
-        "y": 0.6886,
-        "w": 0.4537,
-        "h": 0.063
-      },
-      "snap": false
-    },
-    {
-      "id": "rhr-help",
+      "id": "reading-title",
       "kind": "text",
-      "note": "two-line sans help Sit quietly for 5 minutes, then count for 60 seconds.",
+      "note": "serif row title Habits of the Household",
       "box": {
-        "x": 0.5208,
-        "y": 0.6993,
-        "w": 0.3449,
-        "h": 0.0358
+        "x": 0.2188,
+        "y": 0.4642,
+        "w": 0.4919,
+        "h": 0.0208
       },
       "snap": false
     },
     {
-      "id": "dock-rule",
+      "id": "reading-line",
+      "kind": "text",
+      "note": "sans line Reading · Wednesday and Friday, 10 minutes in secondary ink",
+      "box": {
+        "x": 0.2222,
+        "y": 0.4925,
+        "w": 0.6111,
+        "h": 0.0176
+      },
+      "snap": false
+    },
+    {
+      "id": "reading-arrow",
+      "kind": "control",
+      "note": "thin right arrow",
+      "box": {
+        "x": 0.9109,
+        "y": 0.4802,
+        "w": 0.044,
+        "h": 0.0166
+      },
+      "snap": false
+    },
+    {
+      "id": "rule-reading",
       "kind": "chrome",
-      "note": "full-width hairline rule above the docked save button",
+      "note": "soft hairline between rows",
       "box": {
-        "x": 0,
-        "y": 0.8419,
-        "w": 1,
-        "h": 0.0027
+        "x": 0.0428,
+        "y": 0.5315,
+        "w": 0.9144,
+        "h": 0.0021
       },
       "snap": false
     },
     {
-      "id": "save-button",
-      "kind": "control",
-      "note": "full-width pine button docked above the tabs",
+      "id": "scripture-medallion",
+      "kind": "chrome",
+      "note": "round medallion ground with a gold sunrise pictogram (icon-sized)",
       "box": {
-        "x": 0.0359,
-        "y": 0.8472,
-        "w": 0.9271,
-        "h": 0.0604
+        "x": 0.044,
+        "y": 0.5422,
+        "w": 0.1389,
+        "h": 0.0646
       },
       "snap": false
     },
     {
-      "id": "save-label",
+      "id": "scripture-title",
       "kind": "text",
-      "note": "Save check-in label in cream",
+      "note": "serif row title Matthew 5:33–37",
       "box": {
-        "x": 0.3762,
-        "y": 0.8675,
-        "w": 0.2523,
-        "h": 0.0187
+        "x": 0.2188,
+        "y": 0.5491,
+        "w": 0.3495,
+        "h": 0.0208
+      },
+      "snap": false
+    },
+    {
+      "id": "scripture-line",
+      "kind": "text",
+      "note": "sans line Scripture today · six more this week in secondary ink",
+      "box": {
+        "x": 0.2211,
+        "y": 0.5775,
+        "w": 0.4803,
+        "h": 0.0176
+      },
+      "snap": false
+    },
+    {
+      "id": "scripture-arrow",
+      "kind": "control",
+      "note": "thin right arrow",
+      "box": {
+        "x": 0.9109,
+        "y": 0.5652,
+        "w": 0.044,
+        "h": 0.0166
+      },
+      "snap": false
+    },
+    {
+      "id": "rule-scripture",
+      "kind": "chrome",
+      "note": "soft hairline between rows",
+      "box": {
+        "x": 0.0428,
+        "y": 0.6154,
+        "w": 0.9144,
+        "h": 0.0021
+      },
+      "snap": false
+    },
+    {
+      "id": "forge-medallion",
+      "kind": "chrome",
+      "note": "round medallion ground with a gold anvil pictogram (icon-sized)",
+      "box": {
+        "x": 0.044,
+        "y": 0.6282,
+        "w": 0.1389,
+        "h": 0.0657
+      },
+      "snap": false
+    },
+    {
+      "id": "forge-title",
+      "kind": "text",
+      "note": "serif row title Forge and Restoration",
+      "box": {
+        "x": 0.2199,
+        "y": 0.6373,
+        "w": 0.4722,
+        "h": 0.0256
+      },
+      "snap": false
+    },
+    {
+      "id": "forge-line",
+      "kind": "text",
+      "note": "sans line Exercise guides · 18 movements this week in secondary ink",
+      "box": {
+        "x": 0.2222,
+        "y": 0.6667,
+        "w": 0.5706,
+        "h": 0.0176
+      },
+      "snap": false
+    },
+    {
+      "id": "forge-arrow",
+      "kind": "control",
+      "note": "thin right arrow",
+      "box": {
+        "x": 0.9109,
+        "y": 0.6522,
+        "w": 0.044,
+        "h": 0.0166
+      },
+      "snap": false
+    },
+    {
+      "id": "rule-forge",
+      "kind": "chrome",
+      "note": "hairline closing the rows",
+      "box": {
+        "x": 0.0428,
+        "y": 0.7057,
+        "w": 0.9144,
+        "h": 0.0021
       },
       "snap": false
     },
     {
       "id": "nav-bar",
       "kind": "chrome",
-      "note": "bottom navigation bar on paper with hairline top rule",
+      "note": "the app-wide five-tab bar (Keep, Road, Forge, Journal, Field Manual selected), inherited from DESIGN.md at 76px; the comp redraws it about 9px short",
       "box": {
         "x": 0,
-        "y": 0.9092,
+        "y": 0.9081,
         "w": 1,
-        "h": 0.0908
-      },
-      "snap": false
-    },
-    {
-      "id": "nav-keep",
-      "kind": "control",
-      "note": "Keep tab: gray house line icon and label",
-      "box": {
-        "x": 0.066,
-        "y": 0.9252,
-        "w": 0.0706,
-        "h": 0.0513
-      },
-      "snap": false
-    },
-    {
-      "id": "nav-road",
-      "kind": "control",
-      "note": "Road tab: gray road icon and label",
-      "box": {
-        "x": 0.2639,
-        "y": 0.9252,
-        "w": 0.0729,
-        "h": 0.0481
-      },
-      "snap": false
-    },
-    {
-      "id": "nav-forge",
-      "kind": "control",
-      "note": "Forge tab: gray anvil icon and label",
-      "box": {
-        "x": 0.4618,
-        "y": 0.9306,
-        "w": 0.0775,
-        "h": 0.0459
-      },
-      "snap": false
-    },
-    {
-      "id": "nav-journal",
-      "kind": "control",
-      "note": "selected Journal tab: pine open-book icon, pine label, short gold underline",
-      "box": {
-        "x": 0.6354,
-        "y": 0.9263,
-        "w": 0.1262,
-        "h": 0.0566
-      },
-      "snap": false
-    },
-    {
-      "id": "nav-field-manual",
-      "kind": "control",
-      "note": "Field Manual tab: folded-map line icon and label",
-      "box": {
-        "x": 0.8148,
-        "y": 0.9252,
-        "w": 0.169,
-        "h": 0.0481
+        "h": 0.0919
       },
       "snap": false
     }

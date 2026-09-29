@@ -3,7 +3,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormField, form, submit, validate } from '@angular/forms/signals';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import type { JournalEntry } from '../../../core/domain/models';
+import { getChapterOneSchedule } from '../../../core/program/campaign';
 import { getChapterOneContentForDate } from '../../../core/program/chapter-one-missions';
+import { getLeadershipLessonForWeek } from '../../../core/program/field-manual.seed';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { Icon } from '../../../shared/icon/icon';
 import {
@@ -40,6 +42,16 @@ export class WatchPage implements OnInit {
     return campaign?.currentChapterId === 'chapter-1'
       ? getChapterOneContentForDate(campaign.startDate, this.today())
       : undefined;
+  });
+  /** Read the week's lesson on Monday, or on Day 1 when the campaign begins midweek. */
+  protected readonly morningLesson = computed(() => {
+    const campaign = this.campaignState.campaign();
+    if (campaign?.currentChapterId !== 'chapter-1') return undefined;
+    const schedule = getChapterOneSchedule(campaign.startDate, this.today());
+    if (!schedule || (schedule.weekday !== 1 && this.today() !== campaign.startDate)) {
+      return undefined;
+    }
+    return getLeadershipLessonForWeek(schedule.contentWeek);
   });
   protected readonly morningPrompt = MORNING_PROMPT;
   protected readonly eveningPrompts = EVENING_PROMPTS;

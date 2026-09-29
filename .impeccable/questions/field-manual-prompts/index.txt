@@ -1,0 +1,20 @@
+Use case: ui-mockup. High-fidelity mobile app UI design comp. Flat frontal screenshot of one phone screen at 390x845 viewport proportion.
+
+Surface: The Ranger's Road, "Field Manual": the reference tab of a private, offline training app. It holds weekly leadership lessons, leadership principles, a reading list, Scripture references, field cards (tool inspection and three knots) and exercise guides. This layout is an index: a search field over one A to Z index of every entry, like the index at the back of an issued manual. It must read instantly as a working app screen.
+
+Reference image: it carries the visual world to keep exactly: header bar, warm paper page, serif plus sans pairing, hairline rules, round medallion icon grounds, bottom tab bar. Do NOT copy the reference's content (no watches, no measurements); this screen is described below.
+
+Layout, top to bottom:
+1. Header bar as in the reference.
+2. Large serif page title "Field Manual".
+3. A full-width bordered search field, 48px tall, with a thin magnifier icon and the placeholder "Search the manual".
+4. One row of small bordered filter buttons that scrolls sideways: "All" (selected, pine fill, cream text), "This week", "Leadership", "Fieldcraft", "Scripture", "Exercises" (the last one cut off by the right edge).
+5. The index: serif letter headings "A", "B", "C" set large in the left margin with a hairline beside each, and under each letter full-width rows separated by soft hairlines. Each row: the entry name in serif on the first line, its kind in small sans secondary ink under it, and a thin right arrow at the far right. Rows:
+   A: "Assisted Pull-Up" / "Exercise guide"
+   B: "Bench Press" / "Exercise guide"; "Bird Dog" / "Exercise guide"; "Bowline" / "Field card · Week 3"; "Box Squat" / "Exercise guide"
+   C: "Carry the details" / "Leadership lesson · Week 4"; "Cat-Camel" / "Exercise guide"
+   The last row may run under the tab bar edge.
+6. A slim vertical A to Z letter rail along the right edge, tiny sans letters in sage gray.
+7. Tab bar.
+
+Text, verbatim and correctly spelled: "The Ranger's Road"; "Field Manual"; "Search the manual"; "All"; "This week"; "Leadership"; "Fieldcraft"; "Scripture"; "Exercises"; "A"; "B"; "C"; "Assisted Pull-Up"; "Exercise guide"; "Bench Press"; "Bird Dog"; "Bowline"; "Field card · Week 3"; "Box Squat"; "Carry the details"; "Leadership lesson · Week 4"; "Cat-Camel"; "Keep"; "Road"; "Forge"; "Journal".

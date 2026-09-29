@@ -152,6 +152,14 @@
   transform: translateX(-50%);
 }
 
+/* The smallest phones give each tab about 64px; the longest label, Field Manual, still fits. */
+@media (max-width: 359px) {
+  .primary-nav__link {
+    font-size: 0.625rem;
+    letter-spacing: -0.01em;
+  }
+}
+
 /* Large screens: the tabs join the brand row at the top, over the scene where there is one. Tablets keep the bottom bar. */
 @media (min-width: 1024px) {
   .site-main {

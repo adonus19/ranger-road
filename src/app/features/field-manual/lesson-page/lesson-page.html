@@ -1,0 +1,78 @@
+<article class="manual-page">
+  <app-manual-back-link />
+
+  @if (lesson(); as lesson) {
+    <h1>{{ lesson.title }}</h1>
+    <p class="manual-subline">
+      Week {{ lesson.week }} · {{ weekContent()?.name }} · Leadership lesson
+      @if (current()) {
+        <span class="manual-tag"><app-icon name="pine" />{{ currentLabel() }}</span>
+      }
+    </p>
+
+    <section class="manual-section manual-prose" aria-label="Lesson">
+      @for (paragraph of lesson.paragraphs; track $index) {
+        <p>{{ paragraph }}</p>
+      }
+    </section>
+
+    @if (weekContent()?.leadershipMission; as mission) {
+      <div class="manual-panel">
+        <h2>Week {{ lesson.week }} Hearth mission</h2>
+        <p>{{ mission }}</p>
+      </div>
+    }
+
+    <section class="manual-section" aria-labelledby="lesson-scripture">
+      <h2 id="lesson-scripture">Scripture</h2>
+      <ul class="manual-rows" role="list">
+        @for (item of lesson.scripture; track item.reference) {
+          <li class="manual-row">
+            <span class="manual-row__text">
+              <strong>{{ item.reference }}</strong>
+              <span>{{ item.day }} of Week {{ lesson.week }}</span>
+            </span>
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section class="manual-section" aria-labelledby="lesson-principles">
+      <h2 id="lesson-principles">Principles</h2>
+      <ul class="manual-rows" role="list">
+        @for (principle of principles(); track principle.id) {
+          <li>
+            <a class="manual-row" routerLink="/field-manual/principles" [fragment]="principle.id">
+              <span class="manual-row__text">
+                <strong>{{ principle.title }}</strong>
+                <span>{{ principle.meaning }}</span>
+              </span>
+              <app-icon class="manual-row__arrow" name="arrow-right" />
+            </a>
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section class="manual-section manual-prose" aria-labelledby="lesson-reading">
+      <h2 id="lesson-reading">From your reading</h2>
+      <p>{{ lesson.fromReading }}</p>
+      <p class="manual-note" [id]="laterBookId()">
+        For later: <cite>{{ lesson.forLater.title }}</cite> by {{ lesson.forLater.author }}.
+        {{ lesson.forLater.note }}
+      </p>
+    </section>
+
+    @if (sundayQuestion(); as question) {
+      <section class="manual-section" aria-labelledby="lesson-sunday">
+        <h2 id="lesson-sunday">Sunday’s question</h2>
+        <p class="manual-note">{{ question }}</p>
+      </section>
+    }
+  } @else {
+    <h1>Lesson not found</h1>
+    <p class="manual-empty">
+      This lesson isn’t in the manual. <a routerLink="/field-manual/contents">Open Contents</a>
+    </p>
+  }
+</article>

@@ -72,7 +72,8 @@ describe('CampaignState', () => {
       startDate: '2026-09-10',
       currentChapterId: 'chapter-1',
       status: 'active',
-      trialTargetDate: '2026-10-07',
+      trialTargetDate: '2026-10-10',
+      scheduleVersion: 3,
     };
     const oldDefinition = {
       id: 'chapter-1-week-2-day-4-weekly',
@@ -101,13 +102,13 @@ describe('CampaignState', () => {
     expect(state.campaign()).toMatchObject({
       startDate: '2026-09-10',
       trialTargetDate: '2026-10-12',
-      scheduleVersion: 3,
+      scheduleVersion: 4,
     });
 
     const reloaded = await RoadDatabase.open();
     expect(await reloaded.getCampaign('primary')).toMatchObject({
       trialTargetDate: '2026-10-12',
-      scheduleVersion: 3,
+      scheduleVersion: 4,
     });
     expect(await reloaded.getMissionInstancesForDate('2026-09-17')).toEqual([record]);
     reloaded.close();

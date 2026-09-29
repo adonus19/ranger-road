@@ -89,12 +89,88 @@ export const routes: Routes = [
     title: 'Daily Watch | The Ranger’s Road',
   },
   {
+    path: 'field-manual/lessons/:lessonId',
+    loadComponent: () =>
+      import('./features/field-manual/lesson-page/lesson-page').then((m) => m.LessonPage),
+    title: 'Leadership Lesson | The Ranger’s Road',
+  },
+  {
+    path: 'field-manual/principles',
+    loadComponent: () =>
+      import('./features/field-manual/principles-page/principles-page').then(
+        (m) => m.PrinciplesPage,
+      ),
+    title: 'Leadership Principles | The Ranger’s Road',
+  },
+  {
+    path: 'field-manual/reading',
+    loadComponent: () =>
+      import('./features/field-manual/reading-page/reading-page').then((m) => m.ReadingPage),
+    title: 'Reading | The Ranger’s Road',
+  },
+  {
+    path: 'field-manual/scripture',
+    loadComponent: () =>
+      import('./features/field-manual/scripture-page/scripture-page').then((m) => m.ScripturePage),
+    title: 'Scripture | The Ranger’s Road',
+  },
+  {
+    path: 'field-manual/cards/:cardId',
+    loadComponent: () =>
+      import('./features/field-manual/field-card-page/field-card-page').then(
+        (m) => m.FieldCardPage,
+      ),
+    title: 'Field Card | The Ranger’s Road',
+  },
+  {
+    path: 'field-manual/practice/:week',
+    loadComponent: () =>
+      import('./features/field-manual/practice-page/practice-page').then((m) => m.PracticePage),
+    title: 'Fieldcraft Practice | The Ranger’s Road',
+  },
+  {
+    path: 'field-manual/exercises',
+    loadComponent: () =>
+      import('./features/field-manual/exercises-page/exercises-page').then((m) => m.ExercisesPage),
+    title: 'Exercise Guides | The Ranger’s Road',
+  },
+  {
+    path: 'field-manual/exercises/:exerciseId',
+    loadComponent: () =>
+      import('./features/field-manual/exercise-guide-page/exercise-guide-page').then(
+        (m) => m.ExerciseGuidePage,
+      ),
+    title: 'Exercise Guide | The Ranger’s Road',
+  },
+  {
     path: 'field-manual',
     loadComponent: () =>
       import('./features/field-manual/field-manual-page/field-manual-page').then(
         (m) => m.FieldManualPage,
       ),
-    title: 'Field Manual | The Ranger’s Road',
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./features/field-manual/this-week-view/this-week-view').then(
+            (m) => m.ThisWeekView,
+          ),
+        title: 'Field Manual | The Ranger’s Road',
+      },
+      {
+        path: 'contents',
+        loadComponent: () =>
+          import('./features/field-manual/contents-view/contents-view').then((m) => m.ContentsView),
+        title: 'Contents · Field Manual | The Ranger’s Road',
+      },
+      {
+        path: 'index',
+        loadComponent: () =>
+          import('./features/field-manual/index-view/index-view').then((m) => m.IndexView),
+        title: 'Index · Field Manual | The Ranger’s Road',
+      },
+    ],
   },
   {
     path: 'readiness',

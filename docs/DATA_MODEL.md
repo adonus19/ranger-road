@@ -23,7 +23,7 @@
 - currentChapterId
 - status
 - trialTargetDate? (planning date; Chapter I uses the first Gate Trial attempt, the Monday after Week 4. Attempts then follow the Monday and Thursday rule whatever an older saved date says)
-- scheduleVersion? (Chapter I version 2 adds a short lead-in before four complete Monday–Sunday weeks; version 3 moves a generated target (Day 1 + 27, or the Sunday that closes Week 4) to the first Gate Trial attempt, leaving any other saved date as it was; older campaigns may lack it)
+- scheduleVersion? (Chapter I version 2 adds a short lead-in before four complete Monday–Sunday weeks; version 3 used Week 4 Saturday as its generated planning date; version 4 moves the generated target for each older version—Day 1 + 27, the closing Sunday, or Week 4 Saturday—to the first Monday Gate Trial attempt. A separately chosen date stays as saved; older campaigns may lack this field.)
 
 ### ChapterDefinition
 

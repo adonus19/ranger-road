@@ -1,0 +1,112 @@
+<article class="manual-page">
+  <app-manual-back-link />
+
+  @if (card(); as card) {
+    <h1>{{ card.title }}</h1>
+    <p class="manual-subline">
+      Field card · {{ card.when }}
+      @if (current()) {
+        <span class="manual-tag"><app-icon name="pine" />{{ currentLabel() }}</span>
+      }
+    </p>
+
+    @if (card.sequence; as sequence) {
+      <figure class="manual-figure">
+        <img [src]="sequence.src" [alt]="sequence.alt" width="2000" height="780" />
+      </figure>
+    }
+
+    <section class="manual-section manual-prose" aria-label="What it’s for">
+      <p>{{ card.useFor ?? card.summary }}</p>
+      @if (card.avoid) {
+        <p>{{ card.avoid }}</p>
+      }
+    </section>
+
+    @if (card.mission; as mission) {
+      <div class="manual-panel">
+        <h2>Mission</h2>
+        <p>{{ mission }}</p>
+      </div>
+    }
+
+    @if (card.steps?.length) {
+      <section class="manual-section manual-prose" aria-labelledby="card-steps">
+        <h2 id="card-steps">Steps</h2>
+        <ol>
+          @for (step of card.steps; track $index) {
+            <li>{{ step }}</li>
+          }
+        </ol>
+        @if (card.memoryAid; as aid) {
+          <p class="manual-note">Memory aid: {{ aid }}</p>
+        }
+      </section>
+    }
+
+    @if (card.check; as check) {
+      <div class="manual-panel">
+        <h2>Check it</h2>
+        <p>{{ check }}</p>
+      </div>
+    }
+
+    @for (section of card.sections ?? []; track section.heading) {
+      <section class="manual-section manual-prose" [attr.aria-label]="section.heading">
+        <h2>{{ section.heading }}</h2>
+        <ul>
+          @for (item of section.items; track $index) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </section>
+    }
+
+    @if (card.closing; as closing) {
+      <p class="manual-note">{{ closing }}</p>
+    }
+
+    @if (practice() || siblings().length) {
+      <section class="manual-section" aria-labelledby="card-practice">
+        <h2 id="card-practice">Practice with</h2>
+        <ul class="manual-rows" role="list">
+          @for (other of siblings(); track other.id) {
+            <li>
+              <a
+                class="manual-row"
+                [routerLink]="['/field-manual/cards', other.id]"
+                [queryParams]="{ from: 'practice' }"
+              >
+                <span class="manual-medallion"
+                  ><app-icon [name]="other.skill === 'knot' ? 'knot' : 'hatchet'"
+                /></span>
+                <span class="manual-row__text">
+                  <strong>{{ other.title }}</strong>
+                  <span>{{ other.summary }}</span>
+                </span>
+                <app-icon class="manual-row__arrow" name="arrow-right" />
+              </a>
+            </li>
+          }
+          @if (practice(); as plan) {
+            <li>
+              <a class="manual-row" [routerLink]="['/field-manual/practice', plan.week]">
+                <span class="manual-medallion"><app-icon name="renew" /></span>
+                <span class="manual-row__text">
+                  <strong>{{ plan.title }}</strong>
+                  <span>The Week {{ plan.week }} practice plan</span>
+                </span>
+                <app-icon class="manual-row__arrow" name="arrow-right" />
+              </a>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  } @else {
+    <h1>Card not found</h1>
+    <p class="manual-empty">
+      This field card isn’t in the manual. <a routerLink="/field-manual/contents">Open Contents</a>
+    </p>
+  }
+</article>

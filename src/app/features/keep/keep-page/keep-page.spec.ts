@@ -95,6 +95,9 @@ describe('KeepPage', () => {
       Array.from(element.querySelectorAll('.watch h3'), (h3) => h3.textContent?.trim()),
     ).toEqual(['Morning Watch', 'Evening Watch']);
     expect(text(element, '.hearth__text p')).toContain('make this week easier');
+    expect(element.querySelector<HTMLAnchorElement>('.hearth__link')?.getAttribute('href')).toBe(
+      '/field-manual/lessons/lead-yourself-first?from=keep',
+    );
   });
 
   it('names a midweek start as a lead-in and keeps Week 1 Hearth work', async () => {
@@ -113,6 +116,20 @@ describe('KeepPage', () => {
     expect(text(element, '.keep-band__note')).toBe('Lead-in through Sunday. Week 1 begins Monday.');
     expect(text(element, '.main-order h3')).toBe('20–25-minute easy walk');
     expect(text(element, '.hearth__text p')).toContain('make this week easier');
+    expect(element.querySelector<HTMLAnchorElement>('.hearth__link')?.getAttribute('href')).toBe(
+      '/field-manual/lessons/lead-yourself-first?from=keep',
+    );
+  });
+
+  it('links the Hearth mission to the current weekly lesson', async () => {
+    const state = fakeState(campaign);
+    state.today.set('2026-09-29');
+    const element = await render(state);
+
+    expect(text(element, '.hearth__text p')).toContain('recurring household responsibility');
+    expect(element.querySelector<HTMLAnchorElement>('.hearth__link')?.getAttribute('href')).toBe(
+      '/field-manual/lessons/keep-small-promises?from=keep',
+    );
   });
 
   it('names a red readiness state in words and replaces the main order with restoration', async () => {

@@ -159,6 +159,7 @@ The system is quiet and legible. The forest painting is the only decorative pict
 The world was chosen as "Forest Light". The Road page borrows the "Night Atlas" route line: a winding trail with a gold Today mark and a ring for the trial.
 
 **Key Characteristics:**
+
 - One painted forest band per screen that has one, with its text set directly on it.
 - Warm paper ground with 1px borders and small radii.
 - Gold as a single accent: the pine mark, the theme line, the main order's top edge, the selected tab.
@@ -170,20 +171,24 @@ The world was chosen as "Forest Light". The Road page borrows the "Night Atlas" 
 A night-green band over warm paper, with one restrained gold and a status set reserved for readiness.
 
 ### Primary
+
 - **Pine** (#24362b): the action color. Begin Today's Mission, Set Day 1, Save readiness check, and the selected tap-scale option. Also the active tab's text and icon.
 - **Night Forest Band** (#172b21): the painted band's ground and fallback, the header bar on pages without a scene, and the Road chart. It stays the same in the dark theme.
 
 ### Secondary
+
 - **Hearth Gold** (#b68a4a): the documented chapter-and-trial accent. In the dark theme it becomes the action color.
 - **Gold Line** (#a9804a): thin gold rules on paper, such as the main order's top edge and the active tab's underline.
 - **Gold on the Band** (#d6b37a): the pine mark, the theme line, the Today mark, the trial ring and the route labels, on the dark band only.
 - **Gold Ink** (#9c7442): gold pictograms on paper (the readiness heart, sunrise, hearth), darkened for contrast.
 
 ### Tertiary
+
 - **Ember** (#8c5137): focus rings on paper. The documented warning color.
 - **Status set**: green (#e1e7da with #2c4633), yellow (#f0e5cc with #5b3f17), red (#f1ddd5 with #692d21). Used only for readiness states, always beside the words "Green · Ready", "Yellow · Reduce" or "Red · Restore".
 
 ### Neutral
+
 - **Paper** (#f6f3ea): the page, cards, tiles and nav.
 - **Parchment Tint** (#e9e5d8): the readiness strip and neutral notices.
 - **Medallion** (#e2dbcb): round icon grounds on paper; #d9d1c0 when the medallion sits on the parchment tint.
@@ -195,6 +200,7 @@ A night-green band over warm paper, with one restrained gold and a status set re
 The dark theme swaps the paper for night green (#111b15). Surfaces use #1a2820, lines #2f3e35 and text #e8e2d3. Actions turn Hearth Gold with Ink text. The full dark set lives in `src/styles.css` and in the sidecar.
 
 ### Named Rules
+
 **The One Gold Rule.** Gold marks identity and progress only: the pine mark, the chapter theme, the main order's top edge, the selected tab, and the route's Today mark and trial ring. It never fills a card or a paragraph.
 
 **The Words First Rule.** A readiness state is always named in words. The tint only repeats what the words say, so the state reads correctly without color.
@@ -207,6 +213,7 @@ The dark theme swaps the paper for night green (#111b15). Surfaces use #1a2820, 
 **Character:** A sturdy, bracketed book serif gives chapters and numbers some weight and age. A narrow humanist sans keeps labels, help text and controls compact and easy to read on a phone. Both are self-hosted as Latin variable fonts, so the app looks the same offline.
 
 ### Hierarchy
+
 - **Display** (700, 2rem, 1; 3rem at 700px and up): the chapter name on the band.
 - **Page title** (700, 2.4375rem, 1.05; 3rem at 700px and up): the title of a screen opened from a tab, such as "Log a walk".
 - **Headline** (700, 1.75rem, 1.1): section headings such as "Today's Orders", "The Gate Trial" and "When is Day 1?".
@@ -218,6 +225,7 @@ The dark theme swaps the paper for night green (#111b15). Surfaces use #1a2820, 
 - **Wordmark** (600, 1.35rem): "The Ranger’s Road", with a typographic apostrophe.
 
 ### Named Rules
+
 **The Serif Names, Sans Works Rule.** Wittgenstein is for names, headings and numbers. Anything a person reads as instructions or taps is set in Noto Sans.
 
 ## Layout
@@ -236,6 +244,7 @@ Pages that open on a band (Keep and Road) let the brand row float over the scene
 The system is flat. Depth comes from the step between the dark band and the paper, from 1px borders, and from tinted surfaces. Nothing on paper casts a shadow. The only exception is the route's Today mark, which gets a two-ring halo in the band color so it separates from the trail.
 
 ### Named Rules
+
 **The Flat Paper Rule.** Surfaces on paper use a border or a tint to separate, never a shadow.
 
 ## Shapes
@@ -245,20 +254,24 @@ Corners are small and consistent. Cards, strips, buttons, inputs and scale optio
 ## Components
 
 ### Buttons
+
 - **Shape:** gently rounded (6px), at least 48px tall.
 - **Primary:** Pine with cream text, 16px medium-bold label, optional arrow icon. It darkens to Deep Forest on hover. In the dark theme it is Hearth Gold with Ink text.
 - **Secondary:** paper with a 1px Rule border and Ink text. The border darkens to Stone on hover.
 - **Focus:** a 3px Ember outline, offset 3px. On the band the outline switches to gold.
 
 ### Readiness Strip
+
 The first thing below the band. A parchment-tinted strip holds a round medallion with a gold heart-pulse line, a serif status line, one help line, and a chevron. The whole strip is a link to the readiness check. Its tint switches to the status set for green, yellow and red, and the status words always say the state.
 
 ### Cards / Containers
+
 - **Main order card:** paper with a 1px Rule border, a 2px gold top edge and a 6px radius. A 64px medallion sits beside the label, the serif title and the guidance line.
 - **Watch tiles:** two half-width tiles with the same border and radius, each with a 52px medallion, a label and a serif title.
-- **Hearth row:** not a card. It sits between two soft rules, with a gold hearth icon, a short vertical divider, a label and the mission text.
+- **Hearth row:** not a card. It sits between two soft rules, with a gold hearth icon, a short vertical divider, a label and the mission text. It opens the week's leadership lesson, so it ends in a chevron like the check-in row.
 
 ### Inputs / Fields
+
 - **Text and date fields:** paper background, 1px Rule border, 6px radius, 48px tall, 16px text. The border darkens to Stone on hover.
 - **Tap scales:** a row of equal buttons, one per value (1 to 5 for energy, 0 to 10 for pain in two rows of six on phones). Each is a real radio button. Selected: filled Pine with cream numerals. Values are set in the serif. Readiness draws them 48px tall. Form screens from the Road log on draw them 46px tall (effort 1 to 10 in two rows of five), with each radio's tap area extended to 48px.
 - **Segmented choices:** a row of equal bordered buttons for one short choice, such as Today, Yesterday or Pick a date. Each is a real radio button drawn 37px tall with its tap area extended to 48px. Unselected labels are Secondary Ink at 15px; the selected one fills Pine with cream text.
@@ -266,17 +279,31 @@ The first thing below the band. A parchment-tinted strip holds a round medallion
 - **Errors:** a short line in the red status text, naming the problem and the fix. The field gains a red border, `aria-invalid` and a link to its error, and a failed save focuses the first field that needs attention.
 
 ### Navigation
+
 Five tabs: Keep, Road, Forge, Journal and Field Manual. Each is a 26px outline icon over a small label, in gray. The selected tab turns Pine, fills its icon where the shape is closed, and gains a 42px gold underline. On large screens the tabs sit in the brand row, in mist and cream on the band.
 
+### Field Manual
+
+The Field Manual opens on **This week**. A three-view switch beneath the page title opens **Contents** and **Index** without leaving the manual. This week lists the current lesson, fieldcraft card or practice, reading, today's Scripture reference and exercise guides when those entries are scheduled. Each row has one gold pictogram in a medallion, a serif name, one plain-language detail line and a link. Fewer scheduled entries mean fewer rows; there are no filler cards or completion marks.
+
+Contents follows Chapter I in program order, using serif entry names, dotted leaders and right-aligned week labels. The entries for the active week have a small pine tag. At narrow phone widths the note wraps below the title. Index is an A to Z list with search and topic filters; its letter rail is a pointer scrubber and keyboard slider, while the same entries remain available through search and normal scrolling. On a phone, the three-view switch stays above the content, and every link or filter has at least a 48px tap area.
+
+Before Day 1, the manual names the first week **Week ahead**. After the Gate Trial passes, Chapter I's reference pages remain available. Detail pages share a back link, serif title, one subline, hairline sections and comfortable prose measure. Route changes move focus to the new view's heading (the Index lands on its heading, not the search field, so a phone keyboard never opens by itself), and fragment links focus their destination without changing scroll position. These reading positions draw no focus ring; controls keep theirs. Keep's Hearth row, Monday Morning Watch and the relevant Mission orders link directly to the lesson, reading plan or fieldcraft card. Pictograms follow the entry: hearth for leadership, hatchet for tool cards, a rope loop for knot cards, open book for reading, sunrise for Scripture, anvil for exercises. The manual uses the existing exercise guide images; no new raster assets ship with this surface yet. Knot illustrations must show the actual crossings and sequence before they can be added.
+
+On phones narrower than 360px, the tab labels drop to 10px so Field Manual still fits its column.
+
 ### Forest Band (signature)
+
 The painted dawn forest (`public/images/forest-band.webp`) fills the top of Keep edge to edge. Text sits directly on it: the chapter line, the chapter name, the gold theme line, the day and trial counts between thin mist hairlines, and the planning-target note. On wide screens a low fade keeps small text legible over the treeline.
 
 ### Route Chart (signature)
+
 Road draws Chapter I as a winding trail on the darkened painted forest. Thin ticks mark where each week begins, with week labels centered under their stretch. The road already walked is a solid cream line and the road ahead is dashed. A gold dot marks today and a gold ring marks the Gate Trial. Labels sit just above their marks. Near the end the trial label steps up a line so the two never meet, and once today reaches the ring they merge into one label. The walked line draws in once on load, left to right, unless the phone asks for reduced motion.
 
 ## Do's and Don'ts
 
 ### Do:
+
 - **Do** give every control a tap area at least 48px tall (the `--touch-target` token). A control may draw smaller only when its tap area still reaches 48px.
 - **Do** name each readiness state in words and let its tint repeat it.
 - **Do** keep gold to the places listed in The One Gold Rule.
@@ -286,6 +313,7 @@ Road draws Chapter I as a winding trail on the darkened painted forest. Thin tic
 - **Do** write labels, errors and buttons in the product's plain voice, naming the action or the fix.
 
 ### Don't:
+
 - **Don't** add small uppercase label lines above headings on new surfaces. Keep's four ("Chapter I · Weeks 1–4", "Main order", "Daily watch", "Hearth mission") are an exception the user approved for that screen, not a pattern to repeat.
 - **Don't** put drop shadows on paper surfaces, and don't use glows, gradient text, neon or game-style HUD details.
 - **Don't** add fake parchment texture, medieval ornament, or decorative pictures beyond the forest painting. Exercise sequence and muscle-map images serve instruction in the Forge and Field Manual.

@@ -275,12 +275,31 @@
 }
 
 .hearth {
-  display: flex;
-  align-items: flex-start;
   margin-top: 0.875rem;
-  padding: 0.6875rem 0 0.5rem 0.9375rem;
   border-top: 1px solid var(--line-soft);
   border-bottom: 1px solid var(--line-soft);
+}
+
+.hearth__link {
+  display: flex;
+  min-height: var(--touch-target);
+  align-items: flex-start;
+  padding: 0.6875rem 0 0.5rem 0.9375rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.hearth__link:hover .hearth__mission {
+  color: var(--text);
+}
+
+/* The row opens the week's leadership lesson, so it carries the same chevron as the check-in row. */
+.hearth__chevron {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 0.25rem 0 auto;
+  align-self: center;
+  color: var(--text-secondary);
 }
 
 .hearth__icon {
@@ -296,7 +315,9 @@
   border-left: 1px solid var(--line-soft);
 }
 
-.hearth__text p {
+.hearth__text p,
+.hearth__mission {
+  display: block;
   max-width: 15rem;
   margin: 0.0625rem 0 0;
   color: var(--text-tertiary);

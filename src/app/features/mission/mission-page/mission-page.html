@@ -72,7 +72,12 @@
           }
         </p>
         @if (dailyOrder.readingBookTitle) {
-          <a class="reading-link" routerLink="/field-manual">See the reading assignment</a>
+          <a
+            class="reading-link"
+            routerLink="/field-manual/reading"
+            [queryParams]="{ from: 'mission' }"
+            >See the reading assignment</a
+          >
         }
       }
     }
@@ -84,6 +89,11 @@
             <li>{{ detail }}</li>
           }
         </ul>
+      }
+      @if (fieldcraftGuide(); as guide) {
+        <a class="fieldcraft-link" [routerLink]="guide.link" [queryParams]="{ from: 'mission' }">
+          {{ guide.label }}
+        </a>
       }
       @if (mission.trialPreparation && !trialPassed()) {
         <p class="plan-note">{{ mission.trialPreparation }}</p>

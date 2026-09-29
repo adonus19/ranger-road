@@ -2,40 +2,103 @@
   display: block;
 }
 
-.field-manual-page {
+.field-manual {
   max-width: 47rem;
-  margin-inline: auto;
-  padding: 1rem var(--page-gutter) 2rem;
-}
-
-h1,
-h2 {
-  font-family: var(--font-display);
+  padding-top: 1.3125rem;
+  padding-bottom: 2rem;
 }
 
 h1 {
-  margin: 0 0 1.5rem;
-  font-size: 2rem;
-  line-height: 1.1;
-}
-
-.reading {
-  padding-block: 1rem;
-  border-block: 1px solid var(--line);
-}
-
-.reading h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.3125rem;
-  line-height: 1.2;
-}
-
-.reading p {
   margin: 0;
-  max-width: 65ch;
+  font-family: var(--font-display);
+  font-size: 2.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
 }
 
-.coming-soon {
-  margin: 1.5rem 0 0;
+/* One joined switch: equal segments that share their borders, the current view filled. */
+.views {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-page);
+}
+
+.views__option {
+  position: relative;
+  display: flex;
+  min-height: 1.875rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.5rem;
   color: var(--text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color 160ms var(--ease-out),
+    color 160ms var(--ease-out);
+}
+
+.views__option + .views__option {
+  border-left: 1px solid var(--line);
+}
+
+.views__option:first-child {
+  border-radius: calc(var(--radius-sm) - 1px) 0 0 calc(var(--radius-sm) - 1px);
+}
+
+.views__option:last-child {
+  border-radius: 0 calc(var(--radius-sm) - 1px) calc(var(--radius-sm) - 1px) 0;
+}
+
+/* The switch draws 32px tall; each option's tap area still reaches 48px. */
+.views__option::after {
+  position: absolute;
+  inset: calc((1.875rem - var(--touch-target)) / 2) 0;
+  content: '';
+}
+
+.views__option:hover {
+  color: var(--text);
+}
+
+.views__option.is-active {
+  background: var(--action);
+  color: var(--on-action);
+  font-weight: 600;
+}
+
+.views__option:focus-visible {
+  z-index: 1;
+}
+
+@media (min-width: 700px) {
+  .field-manual {
+    padding-top: 2rem;
+  }
+
+  h1 {
+    font-size: 2.4375rem;
+  }
+
+  .views {
+    max-width: 27rem;
+    margin-top: 1rem;
+  }
+
+  .views__option {
+    font-size: 0.9375rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .views__option {
+    transition: none;
+  }
 }

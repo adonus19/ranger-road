@@ -1,0 +1,20 @@
+Use case: ui-mockup. High-fidelity mobile app UI design comp. Flat frontal screenshot of one phone screen at 390x845 viewport proportion.
+
+Surface: The Ranger's Road, "Field Manual": the reference tab of a private, offline training app. It holds weekly leadership lessons, leadership principles, a reading list, Scripture references, field cards (tool inspection and three knots) and exercise guides. This layout opens on this week's pages, the four things the week asks you to read or practice, with the whole manual listed below them. It must read instantly as a working app screen whose rows open.
+
+Reference image: it carries the visual world to keep exactly: header bar, warm paper page, serif plus sans pairing, hairline rules, round medallion icon grounds with gold pictograms, the row style with a thin right arrow, bottom tab bar. Do NOT copy the reference's content (no watches, no measurements); this screen is described below.
+
+Layout, top to bottom:
+1. Header bar as in the reference.
+2. Large serif page title "Field Manual".
+3. Serif section heading "This week", and under it one sans line in secondary ink: "Week 2 · Keep Your Word".
+4. Four rows between hairlines, each with a round medallion on the left holding a gold pictogram, a serif title, one sans line in secondary ink, and a thin right arrow:
+   - hearth pictogram: "Keep small promises" / "Leadership lesson · Read Monday, about 3 minutes"
+   - hatchet pictogram: "Tool inspection" / "Field card · Wednesday or Saturday"
+   - open book pictogram: "Habits of the Household" / "Reading · Wednesday and Friday, 10 minutes"
+   - sunrise pictogram: "Matthew 5:33–37" / "Scripture today · six more this week"
+5. Serif section heading "The whole manual".
+6. Compact rows without medallions, serif names with a right-aligned sans count and a thin arrow, separated by soft hairlines: "Leadership principles" ... "12"; "Field cards" ... "4"; "Reading list" ... "9 books"; "Scripture by week" ... "4 weeks"; "Exercise guides" ... "18". The last rows may run under the tab bar edge.
+7. Tab bar.
+
+Text, verbatim and correctly spelled: "The Ranger's Road"; "Field Manual"; "This week"; "Week 2 · Keep Your Word"; "Keep small promises"; "Leadership lesson · Read Monday, about 3 minutes"; "Tool inspection"; "Field card · Wednesday or Saturday"; "Habits of the Household"; "Reading · Wednesday and Friday, 10 minutes"; "Matthew 5:33–37"; "Scripture today · six more this week"; "The whole manual"; "Leadership principles"; "12"; "Field cards"; "4"; "Reading list"; "9 books"; "Scripture by week"; "4 weeks"; "Exercise guides"; "18"; "Keep"; "Road"; "Forge"; "Journal".

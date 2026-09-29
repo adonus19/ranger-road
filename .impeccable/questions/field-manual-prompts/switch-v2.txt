@@ -1,0 +1,12 @@
+Use case: ui-mockup. High-fidelity mobile app UI design comp. Flat frontal screenshot of one phone screen at 390x845 viewport proportion.
+
+Surface: The Ranger's Road, "Field Manual", This week view: a three-way switch under the page title flips the manual between This week, Contents and Index. This view lists only what the current week asks you to read, practice or train, one row each.
+
+Reference image: the Field Manual screen to revise. Keep its visual world and everything above the rows exactly: the header bar, the page title, the switch with "This week" selected, the heading "Week 2 · Keep Your Word" with "Chapter I · The Muster" under it, the hairlines, the medallion row style, the tab bar. Make only the changes below.
+
+Changes:
+1. Remove "The whole manual" heading and all of its rows (Leadership principles, Field cards, Reading list, Scripture by week).
+2. Keep the four medallion rows exactly as in the reference, and add a fifth row after "Matthew 5:33–37" in the identical style: a round medallion with a gold anvil pictogram, the serif title "Forge and Restoration", the sans line in secondary ink "Exercise guides · 18 movements this week", and a thin right arrow, closed by a hairline.
+3. Below the fifth row the warm paper page simply continues, calm and empty, down to the tab bar. Do not add anything there.
+
+Text, verbatim and correctly spelled: "The Ranger's Road"; "Field Manual"; "This week"; "Contents"; "Index"; "Week 2 · Keep Your Word"; "Chapter I · The Muster"; "Keep small promises"; "Leadership lesson · Read Monday, about 3 minutes"; "Tool inspection"; "Field card · Wednesday or Saturday"; "Habits of the Household"; "Reading · Wednesday and Friday, 10 minutes"; "Matthew 5:33–37"; "Scripture today · six more this week"; "Forge and Restoration"; "Exercise guides · 18 movements this week"; "Keep"; "Road"; "Forge"; "Journal".

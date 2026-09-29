@@ -121,9 +121,39 @@ describe('MissionPage', () => {
     expect(root.querySelector('.plan-note cite')?.textContent).toBe('Habits of the Household');
     expect(root.textContent).toContain('for 10 minutes');
     expect(root.querySelector<HTMLAnchorElement>('.reading-link')?.getAttribute('href')).toBe(
-      '/field-manual',
+      '/field-manual/reading?from=mission',
     );
     expect(root.textContent).toContain('Choose a path to record today’s mission.');
+  });
+
+  it('links the documented fieldcraft days to their card or knot practice plan', async () => {
+    const weekTwoWednesday = setup(null, '2026-09-30');
+    const wednesdayRoot = await ready(weekTwoWednesday.fixture);
+    expect(wednesdayRoot.querySelector('.fieldcraft-link')).toBeNull();
+    choose(wednesdayRoot, 'Tool inspection');
+    await weekTwoWednesday.fixture.whenStable();
+    expect(
+      wednesdayRoot.querySelector<HTMLAnchorElement>('.fieldcraft-link')?.getAttribute('href'),
+    ).toBe('/field-manual/cards/tool-inspection?from=mission');
+    choose(wednesdayRoot, 'Restoration');
+    await weekTwoWednesday.fixture.whenStable();
+    expect(wednesdayRoot.querySelector('.fieldcraft-link')).toBeNull();
+
+    TestBed.resetTestingModule();
+    const weekTwoSaturday = setup(null, '2026-10-03');
+    const saturdayRoot = await ready(weekTwoSaturday.fixture);
+    expect(
+      saturdayRoot.querySelector<HTMLAnchorElement>('.fieldcraft-link')?.getAttribute('href'),
+    ).toBe('/field-manual/cards/tool-inspection?from=mission');
+
+    TestBed.resetTestingModule();
+    const weekThreeWednesday = setup(null, skillWednesday);
+    const knotRoot = await ready(weekThreeWednesday.fixture);
+    choose(knotRoot, 'Knot practice');
+    await weekThreeWednesday.fixture.whenStable();
+    expect(
+      knotRoot.querySelector<HTMLAnchorElement>('.fieldcraft-link')?.getAttribute('href'),
+    ).toBe('/field-manual/practice/3?from=mission');
   });
 
   it('allows a reduced Yellow mission and saves an immutable definition snapshot', async () => {

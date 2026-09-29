@@ -62,6 +62,8 @@ Use Wednesday and Friday or as needed:
 
 **Leadership/Hearth mission:** Ask spouse what one thing would genuinely make this week easier; take ownership of it.
 
+**Leadership lesson (Monday's Morning Watch):** Lead yourself first. The lessons are in [Field Manual Content](FIELD_MANUAL.md).
+
 **Reading:** Begin *Habits of the Household*; three 10-minute sessions.
 
 # Week 2 — Keep Your Word
@@ -76,6 +78,8 @@ Use Wednesday and Friday or as needed:
 
 **Leadership mission:** Choose one recurring household responsibility and completely own it this week.
 
+**Leadership lesson (Monday's Morning Watch):** Keep small promises.
+
 **Fieldcraft:** Inspect axe/maul, pickaxe, and commonly used tools. Learn safe storage, handle/head inspection, damage recognition, and edge maintenance.
 
 # Week 3 — Strength in Service
@@ -89,6 +93,8 @@ Use Wednesday and Friday or as needed:
 **Sunday:** Rest/worship. Scripture: Psalm 112. Reflection: **Does my family experience my strength primarily as service or control?**
 
 **Leadership mission:** Complete one meaningful household act before being asked.
+
+**Leadership lesson (Monday's Morning Watch):** Serve without an audience.
 
 **Fieldcraft:** Learn and practice square knot, bowline, and two half hitches.
 
@@ -105,6 +111,8 @@ Deload slightly. Do not chase progression.
 **Sunday:** Rest/worship. Scripture: Psalm 23.
 
 **Leadership mission:** Plan one simple family activity and handle logistics.
+
+**Leadership lesson (Monday's Morning Watch):** Carry the details.
 
 # The Gate Trial
 

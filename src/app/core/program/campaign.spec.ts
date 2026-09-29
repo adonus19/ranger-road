@@ -113,17 +113,31 @@ describe('campaign calendar', () => {
       trialTargetDate: '2026-10-07',
     };
     const upgraded = reconcileChapterOneCampaign(saved);
-    expect(upgraded).toMatchObject({ scheduleVersion: 3, trialTargetDate: '2026-10-12' });
+    expect(upgraded).toMatchObject({ scheduleVersion: 4, trialTargetDate: '2026-10-12' });
     expect(saved.trialTargetDate).toBe('2026-10-07');
     expect(reconcileChapterOneCampaign(upgraded)).toBe(upgraded);
-    // Schedule 2 generated the Sunday that closes Week 4; it moves to the next day's first attempt.
+    // Version 2 generated the Sunday closing Week 4.
     expect(
       reconcileChapterOneCampaign({ ...saved, scheduleVersion: 2, trialTargetDate: '2026-10-11' }),
-    ).toMatchObject({ scheduleVersion: 3, trialTargetDate: '2026-10-12' });
+    ).toMatchObject({ scheduleVersion: 4, trialTargetDate: '2026-10-12' });
+    // Version 3 generated Saturday's former trial order; that saved target must also move.
+    expect(
+      reconcileChapterOneCampaign({ ...saved, scheduleVersion: 3, trialTargetDate: '2026-10-10' }),
+    ).toMatchObject({ scheduleVersion: 4, trialTargetDate: '2026-10-12' });
+    // On version 1 or 2, Saturday was never generated, so preserve a chosen Saturday.
+    for (const scheduleVersion of [undefined, 2]) {
+      expect(
+        reconcileChapterOneCampaign({ ...saved, scheduleVersion, trialTargetDate: '2026-10-10' }),
+      ).toMatchObject({ scheduleVersion: 4, trialTargetDate: '2026-10-10' });
+    }
+    // The prior Monday-target build also stored version 3. Its generated Monday is already correct.
+    expect(
+      reconcileChapterOneCampaign({ ...saved, scheduleVersion: 3, trialTargetDate: '2026-10-12' }),
+    ).toMatchObject({ scheduleVersion: 4, trialTargetDate: '2026-10-12' });
     expect(reconcileChapterOneCampaign({ ...saved, trialTargetDate: '2026-10-20' })).toMatchObject({
       trialTargetDate: '2026-10-20',
     });
-    const future = { ...saved, scheduleVersion: 4 };
+    const future = { ...saved, scheduleVersion: 5 };
     expect(reconcileChapterOneCampaign(future)).toBe(future);
   });
 

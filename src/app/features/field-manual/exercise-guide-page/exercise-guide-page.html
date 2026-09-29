@@ -1,0 +1,76 @@
+<article class="manual-page">
+  <app-manual-back-link />
+
+  @if (guide(); as guide) {
+    <h1>{{ guide.name }}</h1>
+    <p class="manual-subline">{{ guide.purpose }}</p>
+
+    <figure class="manual-figure">
+      <img
+        [src]="media() + '/sequence.webp'"
+        [alt]="'Four illustrated stages of ' + guide.name"
+        width="2017"
+        height="780"
+      />
+    </figure>
+
+    <section class="manual-section manual-prose" aria-labelledby="guide-steps">
+      <h2 id="guide-steps">How to do it</h2>
+      <ol>
+        @for (step of steps(); track $index) {
+          <li>{{ step }}</li>
+        }
+      </ol>
+    </section>
+
+    @if (notes().length) {
+      <section class="manual-section" aria-label="Notes">
+        <dl>
+          @for (note of notes(); track note.label) {
+            <div>
+              <dt>{{ note.label }}</dt>
+              <dd>{{ note.text }}</dd>
+            </div>
+          }
+        </dl>
+      </section>
+    }
+
+    @if (usedIn().length) {
+      <section class="manual-section" aria-labelledby="guide-used">
+        <h2 id="guide-used">In Chapter I</h2>
+        <ul class="manual-rows" role="list">
+          @for (use of usedIn(); track use.id) {
+            <li>
+              <a class="manual-row" routerLink="/field-manual/exercises" [fragment]="use.id">
+                <span class="manual-row__text">
+                  <strong>{{ use.title }}</strong>
+                  <span>{{ use.dose }}</span>
+                </span>
+              </a>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    <section class="manual-section" aria-labelledby="guide-map">
+      <h2 id="guide-map">Muscle map</h2>
+      <figure class="manual-figure muscle-map">
+        <img
+          [src]="media() + '/muscle-map.webp'"
+          [alt]="'Neck-down front and back muscle map for ' + guide.name"
+          width="1591"
+          height="989"
+          loading="lazy"
+        />
+      </figure>
+    </section>
+  } @else {
+    <h1>Guide not found</h1>
+    <p class="manual-empty">
+      This exercise isn’t in the manual.
+      <a routerLink="/field-manual/exercises">Open the exercise guides</a>
+    </p>
+  }
+</article>

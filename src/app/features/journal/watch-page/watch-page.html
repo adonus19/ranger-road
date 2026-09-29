@@ -20,6 +20,15 @@
         <ol class="watch-steps" aria-label="Morning Watch steps">
           <li>Read {{ dailyContent()?.scriptureReference ?? 'Scripture' }}.</li>
           <li>Pray briefly.</li>
+          @if (morningLesson(); as lesson) {
+            <li>
+              <a
+                [routerLink]="['/field-manual/lessons', lesson.id]"
+                [queryParams]="{ from: 'watch' }"
+                >Read this week’s leadership lesson: {{ lesson.title }}</a
+              >.
+            </li>
+          }
           <li><a routerLink="/keep">Review Today’s Orders</a>.</li>
           @if (dailyContent()?.morningReflectionPrompt; as prompt) {
             <li>Reflect: {{ prompt }}</li>

@@ -1,0 +1,61 @@
+<article class="manual-page">
+  <app-manual-back-link />
+  <h1>Scripture</h1>
+  <p class="manual-subline">
+    Chapter I, one reference each morning. Read it in your own Bible during the Morning Watch.
+  </p>
+
+  @for (item of weeks; track item.week) {
+    <section
+      class="manual-section"
+      [id]="'week-' + item.week"
+      [attr.aria-labelledby]="'week-' + item.week + '-title'"
+    >
+      <h2 [id]="'week-' + item.week + '-title'">
+        Week {{ item.week }} · {{ item.name }}
+        @if (
+          (week().stage === 'week' || week().stage === 'ahead') && week().contentWeek === item.week
+        ) {
+          <span class="manual-tag"
+            ><app-icon name="pine" />{{
+              week().stage === 'ahead' ? 'Week ahead' : 'This week'
+            }}</span
+          >
+        }
+      </h2>
+      <ul class="manual-rows" role="list">
+        @for (day of item.days; track day.weekday) {
+          <li class="day" [id]="day.id">
+            <span class="day__name">{{ day.day }}</span>
+            <span class="day__reference">
+              {{ day.reference }}
+              @if (todayWeekday() === day.weekday && week().contentWeek === item.week) {
+                <span class="manual-tag">Today</span>
+              }
+            </span>
+            @if (day.reflectionPrompt) {
+              <span class="day__question">Reflection: {{ day.reflectionPrompt }}</span>
+            }
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  <section class="manual-section" id="gate-trial" aria-labelledby="gate-trial-title">
+    <h2 id="gate-trial-title">
+      The Gate Trial
+      @if (week().stage === 'trial') {
+        <span class="manual-tag"><app-icon name="pine" />This week</span>
+      }
+    </h2>
+    <ul class="manual-rows" role="list">
+      @for (item of gateTrial; track item.label) {
+        <li class="day" [id]="item.id">
+          <span class="day__name">{{ item.label }}</span>
+          <span class="day__reference">{{ item.reference }}</span>
+        </li>
+      }
+    </ul>
+  </section>
+</article>

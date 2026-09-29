@@ -28,6 +28,7 @@ The program should train:
 5–10 min:
 - Scripture
 - prayer
+- on Monday (or a midweek Day 1), the week's leadership lesson, about 3 minutes
 - review orders
 - prompt: "What does my family need from me today?"
 
@@ -41,6 +42,18 @@ The program should train:
 ## Weekly Formation Pattern
 
 Scripture -> reflection -> prayer -> action
+
+## Weekly Leadership Lesson
+
+Leadership is part of the normal training week, not a separate course:
+
+- Each week has one short lesson built on one or two of the principles below and the week's Scripture. It is read in Monday's Morning Watch.
+- The week's Hearth mission is the lesson's practice. Keep shows the mission all week and opens the lesson.
+- Where the week has a Sunday reflection question, it looks back on the lesson.
+- Each lesson ties into the current book and suggests one book for later. The reading plan keeps one book at a time, with no deadline.
+- Nothing about the lessons is scored.
+
+The approved lessons, the principles with their Scripture and practice, and the reading plan are in [Field Manual Content](rangers-road-full-program-content/FIELD_MANUAL.md). Later chapters get their lessons when their content is built.
 
 ## Family Leadership Principles
 

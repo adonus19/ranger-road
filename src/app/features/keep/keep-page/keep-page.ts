@@ -14,6 +14,7 @@ import {
 } from '../../../core/program/campaign';
 import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
 import { getChapterOneWeekContent } from '../../../core/program/chapter-one-daily.seed';
+import { getLeadershipLessonForWeek } from '../../../core/program/field-manual.seed';
 import { loadChapterSeed } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory } from '../../../core/state/trial-history';
@@ -134,6 +135,13 @@ export class KeepPage implements OnInit {
     if (!schedule) return '';
     const week = getChapterOneWeekContent(schedule.contentWeek);
     return week.hearthMission ?? week.leadershipMission ?? this.seed()?.leadership[0] ?? '';
+  });
+
+  protected readonly hearthLessonId = computed(() => {
+    const campaign = this.state.campaign();
+    if (!campaign || campaign.currentChapterId !== chapterOneDefinition.id) return null;
+    const schedule = getChapterOneSchedule(campaign.startDate, this.state.today());
+    return schedule ? (getLeadershipLessonForWeek(schedule.contentWeek)?.id ?? null) : null;
   });
 
   ngOnInit(): void {

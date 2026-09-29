@@ -1,0 +1,104 @@
+<section class="index" aria-labelledby="index-heading">
+  <h2 id="index-heading" class="visually-hidden">Index</h2>
+
+  <div class="search">
+    <label class="visually-hidden" for="manual-search">Search the manual</label>
+    <app-icon class="search__icon" name="search" />
+    <input
+      id="manual-search"
+      type="search"
+      placeholder="Search the manual"
+      autocomplete="off"
+      enterkeyhint="search"
+      [value]="query()"
+      (input)="search($event)"
+    />
+  </div>
+
+  <div class="filters" role="group" aria-label="Show">
+    @for (option of filters(); track option.id) {
+      <button
+        type="button"
+        class="filter"
+        [class.is-selected]="filter() === option.id"
+        [attr.aria-pressed]="filter() === option.id"
+        (click)="choose(option.id)"
+      >
+        {{ option.label }}
+      </button>
+    }
+  </div>
+
+  <p class="visually-hidden" aria-live="polite">
+    {{ visible().length }} {{ visible().length === 1 ? 'entry' : 'entries' }}
+  </p>
+
+  @if (groups().length) {
+    <div class="index__body">
+      <div class="index__groups">
+        @for (group of groups(); track group.letter) {
+          <section
+            class="group"
+            [id]="'index-' + group.letter"
+            [attr.aria-labelledby]="'letter-' + group.letter"
+          >
+            <h3 class="group__letter" [id]="'letter-' + group.letter">{{ group.letter }}</h3>
+            <ul class="group__entries" role="list">
+              @for (entry of group.entries; track entry.id) {
+                <li>
+                  <a
+                    class="entry"
+                    [routerLink]="entry.link"
+                    [fragment]="entry.fragment"
+                    [queryParams]="{ from: 'index' }"
+                  >
+                    <span class="entry__medallion"><app-icon [name]="icon(entry)" /></span>
+                    <span class="entry__text">
+                      <strong>{{ entry.name }}</strong>
+                      <span>{{ entry.detail }}</span>
+                    </span>
+                    <app-icon class="entry__arrow" name="arrow-right" />
+                  </a>
+                </li>
+              }
+            </ul>
+          </section>
+        }
+      </div>
+
+      <div
+        #rail
+        class="rail"
+        role="slider"
+        tabindex="0"
+        aria-label="Jump to index letter"
+        aria-valuemin="1"
+        aria-valuemax="26"
+        [attr.aria-valuenow]="letters.indexOf(activeLetter()) + 1"
+        [attr.aria-valuetext]="activeLetter()"
+        (pointerdown)="railStart($event)"
+        (pointermove)="railMove($event)"
+        (pointerup)="railEnd()"
+        (pointercancel)="railEnd()"
+        (keydown)="railKey($event)"
+      >
+        @for (letter of letters; track letter) {
+          <span
+            class="rail__letter"
+            aria-hidden="true"
+            [class.is-empty]="!available().has(letter)"
+            >{{ letter }}</span
+          >
+        }
+      </div>
+    </div>
+  } @else {
+    <p class="index__empty">
+      @if (query()) {
+        Nothing in the manual matches “{{ query() }}”.
+      } @else {
+        Nothing in the manual is filed under this filter yet.
+      }
+    </p>
+  }
+</section>

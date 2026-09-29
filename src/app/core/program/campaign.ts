@@ -4,7 +4,7 @@ import { getChapterOneDayContent } from './chapter-one-daily.seed';
 
 export const CHAPTER_ONE_FULL_WEEKS = 4;
 export const CHAPTER_ONE_WEEK_DAYS = 7;
-export const CHAPTER_ONE_SCHEDULE_VERSION = 3;
+export const CHAPTER_ONE_SCHEDULE_VERSION = 4;
 
 export interface ChapterOneSchedule {
   campaignDay: number;
@@ -159,11 +159,10 @@ export function getChapterOneSchedule(
 }
 
 /**
- * Older campaigns saved a generated planning target: Day 1 + 27 (schedule 1), or the
- * Sunday that closes Week 4 (schedule 2). Move only a generated value to the first
- * Gate Trial attempt; any other saved date is left as it was, though attempts now
- * follow the Monday and Thursday rule. This changes campaign planning metadata, never
- * any append-only history row.
+ * Older campaigns generated Day 1 + 27 (version 1), the Sunday closing Week 4
+ * (version 2), or Week 4 Saturday (version 3). Match only the saved version's
+ * generated date, so a separately chosen date survives. Version 4 places the
+ * first attempt on Monday. This changes planning metadata, never history rows.
  */
 export function reconcileChapterOneCampaign(campaign: Campaign): Campaign {
   if (
@@ -171,14 +170,16 @@ export function reconcileChapterOneCampaign(campaign: Campaign): Campaign {
     (campaign.scheduleVersion ?? 0) >= CHAPTER_ONE_SCHEDULE_VERSION
   )
     return campaign;
+  const previousVersion = campaign.scheduleVersion ?? 1;
   const endOfWeekFour = getChapterOneTargetDay(campaign.startDate);
-  const generatedTargets = [
-    addDays(campaign.startDate, 27),
-    addDays(campaign.startDate, endOfWeekFour - 1),
-    addDays(campaign.startDate, endOfWeekFour - 2),
-  ];
+  const generatedTarget =
+    previousVersion === 3
+      ? addDays(campaign.startDate, endOfWeekFour - 2)
+      : previousVersion === 2
+        ? addDays(campaign.startDate, endOfWeekFour - 1)
+        : addDays(campaign.startDate, 27);
   const targetWasGenerated =
-    !campaign.trialTargetDate || generatedTargets.includes(campaign.trialTargetDate);
+    !campaign.trialTargetDate || campaign.trialTargetDate === generatedTarget;
   return {
     ...campaign,
     scheduleVersion: CHAPTER_ONE_SCHEDULE_VERSION,
