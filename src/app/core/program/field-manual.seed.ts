@@ -64,8 +64,11 @@ export interface FieldCard {
   check?: string;
   sections?: readonly FieldCardSection[];
   closing?: string;
-  /** A generated step strip in the exercise-guide style, when one has been approved. */
-  sequence?: { src: string; alt: string };
+  /**
+   * A generated step strip in the exercise-guide style, when one has been approved.
+   * `grid` holds the same four steps as a 2x2 grid for phones.
+   */
+  sequence?: { src: string; grid?: string; alt: string };
   relatedSkills: readonly string[];
 }
 
@@ -427,6 +430,11 @@ const fieldCards: readonly FieldCard[] = [
     ],
     check:
       'Each end lies alongside its own standing part, and both ends leave the knot on the same side. If they leave crosswise, you tied a granny knot. Untie it and remember: right over left, then left over right.',
+    sequence: {
+      src: 'images/field-manual/square-knot/sequence.webp',
+      grid: 'images/field-manual/square-knot/grid.webp',
+      alt: 'Square knot in four steps: the right end crosses over the left and tucks under and back up, then the left end crosses over the right and tucks through the middle, and both ends pull snug into two interlocked loops.',
+    },
     relatedSkills: ['Bowline', 'Two half hitches'],
   },
   {

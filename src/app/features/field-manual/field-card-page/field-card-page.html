@@ -12,7 +12,12 @@
 
     @if (card.sequence; as sequence) {
       <figure class="manual-figure">
-        <img [src]="sequence.src" [alt]="sequence.alt" width="2000" height="780" />
+        <picture>
+          @if (sequence.grid; as grid) {
+            <source media="(max-width: 599px)" [attr.srcset]="grid" width="1004" height="1548" />
+          }
+          <img [src]="sequence.src" [alt]="sequence.alt" width="2000" height="780" />
+        </picture>
       </figure>
     }
 

@@ -1,6 +1,6 @@
 # Field Manual Content
 
-**Status: approved 2026-09-29.** The lessons, principles, reading plan and field cards were reviewed and approved for release. The knot cards ship with written steps; their step pictures follow once each one is checked against a tied knot. Scripture is stored as references only.
+**Status: approved 2026-09-29.** The lessons, principles, reading plan and field cards were reviewed and approved for release. The knot cards ship with written steps. Each knot's step pictures are added once they are checked against a tied knot: the square knot's were approved 2026-09-29; the bowline's and two half hitches' follow. Scripture is stored as references only.
 
 This file holds the Field Manual's written content: the leadership principles, the weekly leadership lessons, the reading plan and the field cards. The chapter packs keep the day-by-day orders, and this file keeps the material those orders point to.
 

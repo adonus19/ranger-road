@@ -23,7 +23,7 @@
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "resources": {
-        "files": ["/images/exercises/*/*.webp"]
+        "files": ["/images/exercises/*/*.webp", "/images/field-manual/*/*.webp"]
       }
     },
     {
