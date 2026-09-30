@@ -50,21 +50,18 @@ describe('Field Manual content', () => {
     expect(getWeeklyFieldcraft(1)).toBeUndefined();
   });
 
-  it('ships an optimized step strip for every card that has one', () => {
+  it('ships an optimized 2×2 step image for every card that has one', () => {
     expect(getFieldCard('square-knot')?.sequence).toMatchObject({
       src: 'images/field-manual/square-knot/sequence.webp',
-      grid: 'images/field-manual/square-knot/grid.webp',
     });
     for (const card of listFieldCards()) {
       if (!card.sequence) continue;
       expect(card.sequence.alt.length, card.id).toBeGreaterThan(20);
-      for (const src of [card.sequence.src, card.sequence.grid].filter(Boolean)) {
-        const path = `public/${src}`;
-        const data = readFileSync(path);
-        expect(data.toString('ascii', 0, 4), path).toBe('RIFF');
-        expect(data.toString('ascii', 8, 12), path).toBe('WEBP');
-        expect(statSync(path).size, path).toBeGreaterThan(5_000);
-      }
+      const path = `public/${card.sequence.src}`;
+      const data = readFileSync(path);
+      expect(data.toString('ascii', 0, 4), path).toBe('RIFF');
+      expect(data.toString('ascii', 8, 12), path).toBe('WEBP');
+      expect(statSync(path).size, path).toBeGreaterThan(5_000);
     }
   });
 });

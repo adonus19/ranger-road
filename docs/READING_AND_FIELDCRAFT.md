@@ -108,10 +108,9 @@ interface FieldCard {
   sections?: { heading: string; items: string[] }[];
   closing?: string;
   /**
-   * A four-panel step strip, added only after it is checked against the real knot or tool.
-   * `grid` is the same four steps as a 2x2 grid, shown on screens narrower than 600px.
+   * Four checked step pictures in a 2x2 grid at every screen width.
    */
-  sequence?: { src: string; grid?: string; alt: string };
+  sequence?: { src: string; alt: string };
   relatedSkills: string[];
 }
 ```

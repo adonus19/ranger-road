@@ -1,7 +1,5 @@
 #!/bin/zsh
-# Builds a card's step pictures from four painted 1024x1536 steps:
-#   sequence.webp  2000x780 strip (four 490x760 panels), wider screens
-#   grid.webp      1004x1548 2x2 grid of the same panels, phones
+# Builds a card's 1004x1548 2x2 step image from four painted 1024x1536 steps.
 # usage: tools/knots/compose.sh <card-id> <step1.png> <step2.png> <step3.png> <step4.png>
 set -e
 id=$1; shift
@@ -19,17 +17,11 @@ for src in "$@"; do
     -channel B -evaluate multiply $(( 230.0 / b )) +channel \
     -resize 507x760 -gravity center -crop 490x760+0+0 +repage $tmp/panel-$i.png
 done
-magick -size 2000x780 xc:'#FEFDF9' \
-  $tmp/panel-1.png -geometry +8+10 -composite \
-  $tmp/panel-2.png -geometry +506+10 -composite \
-  $tmp/panel-3.png -geometry +1004+10 -composite \
-  $tmp/panel-4.png -geometry +1502+10 -composite \
-  -quality 82 -define webp:method=6 $out/sequence.webp
 magick -size 1004x1548 xc:'#FEFDF9' \
   $tmp/panel-1.png -geometry +8+10 -composite \
   $tmp/panel-2.png -geometry +506+10 -composite \
   $tmp/panel-3.png -geometry +8+778 -composite \
   $tmp/panel-4.png -geometry +506+778 -composite \
-  -quality 82 -define webp:method=6 $out/grid.webp
+  -quality 82 -define webp:method=6 $out/sequence.webp
 rm -rf $tmp
 ls -la $out
