@@ -129,7 +129,7 @@ The Field Manual opens on **This week**, a short list of the current leadership 
 
 Monday Morning Watch links to the week's lesson, including Day 1 when a lead-in starts midweek. Keep's Hearth mission links to that lesson. Today's Mission links reading days to the reading plan and the Week 2 tool or Week 3 knot practice choices to their cards. The reading plan calls _Habits of the Household_ the Chapter I book; it does not claim to know which book the person is currently reading.
 
-Content includes the twelve leadership principles, four Chapter I lessons, reading plan, Scripture references, tool and knot field cards, and full exercise guides. The approved text lives in [Field Manual Content](rangers-road-full-program-content/FIELD_MANUAL.md). Knot cards carry written steps and four pictures in a 2×2 grid, added only after the steps are checked against a tied knot (the square knot's is in; the bowline's and two half hitches' follow). Step pictures are prefetched for offline use like the exercise guides. Tool rows show a hatchet and knot rows a rope.
+Content includes the twelve leadership principles, four Chapter I lessons, reading plan, Scripture references, tool and knot field cards, and full exercise guides. The approved text lives in [Field Manual Content](rangers-road-full-program-content/FIELD_MANUAL.md). Knot cards carry written steps and one picture per step, two per row, added only after they are checked against a tied knot (four steps for the square knot and bowline, six for two half hitches, where each hitch's tuck gets its own picture). Step pictures are prefetched for offline use like the exercise guides. Tool rows show a hatchet and knot rows a rope.
 
 ## Trial Flow
 

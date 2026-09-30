@@ -177,6 +177,19 @@ export function panelSVG(panel, analysis, { debug = false, w = 34, scale = 1 } =
     // clip the shadow to the under strand's neighbourhood so it only darkens the rope below
     parts.push(ropeLayers(sd, w, 'butt'));
   }
+  if (panel.post) {
+    // A horizontal wooden rail: rope behind it is hidden, pieces listed in overPost are redrawn in front.
+    const { y0, y1 } = panel.post;
+    parts.push(
+      `<defs><linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a07850"/><stop offset="0.35" stop-color="#8a6440"/><stop offset="1" stop-color="#5e4128"/></linearGradient></defs>`,
+      `<rect x="0" y="${y0}" width="${W}" height="${y1 - y0}" fill="url(#wood)"/>`,
+      `<rect x="0" y="${y1}" width="${W}" height="10" fill="rgba(60,40,20,0.18)" filter="url(#blur)"/>`,
+    );
+    for (const name of panel.overPost ?? []) {
+      const seg = pts.filter((p) => p.piece === name);
+      if (seg.length) parts.push(ropeLayers(polyD(seg), w, 'butt'));
+    }
+  }
   if (debug) {
     crossings.forEach((c, i) => {
       const over = c.overIsA === undefined ? '?' : c.overIsA ? c.pa : c.pb;

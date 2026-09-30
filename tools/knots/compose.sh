@@ -1,6 +1,7 @@
 #!/bin/zsh
-# Builds a card's 1004x1548 2x2 step image from four painted 1024x1536 steps.
-# usage: tools/knots/compose.sh <card-id> <step1.png> <step2.png> <step3.png> <step4.png>
+# Builds a card's step image from an even number of painted 1024x1536 steps, two per row:
+# four steps give a 1004x1548 2x2 grid, six a 1004x2316 2x3 grid.
+# usage: tools/knots/compose.sh <card-id> <step1.png> ... <stepN.png>
 set -e
 id=$1; shift
 out=public/images/field-manual/$id
@@ -17,11 +18,14 @@ for src in "$@"; do
     -channel B -evaluate multiply $(( 230.0 / b )) +channel \
     -resize 507x760 -gravity center -crop 490x760+0+0 +repage $tmp/panel-$i.png
 done
-magick -size 1004x1548 xc:'#FEFDF9' \
-  $tmp/panel-1.png -geometry +8+10 -composite \
-  $tmp/panel-2.png -geometry +506+10 -composite \
-  $tmp/panel-3.png -geometry +8+778 -composite \
-  $tmp/panel-4.png -geometry +506+778 -composite \
-  -quality 82 -define webp:method=6 $out/sequence.webp
+rows=$(( ($# + 1) / 2 ))
+height=$(( 20 + rows * 760 + (rows - 1) * 8 ))
+args=()
+for n in $(seq 1 $#); do
+  col=$(( (n - 1) % 2 )); row=$(( (n - 1) / 2 ))
+  args+=($tmp/panel-$n.png -geometry +$(( 8 + col * 498 ))+$(( 10 + row * 768 )) -composite)
+done
+magick -size 1004x$height xc:'#FEFDF9' $args -quality 82 -define webp:method=6 $out/sequence.webp
+echo "$out/sequence.webp: 1004x$height"
 rm -rf $tmp
 ls -la $out

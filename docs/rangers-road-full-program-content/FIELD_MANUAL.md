@@ -282,9 +282,11 @@ Week 3: Wednesday's knot practice.
 Use it to tie a rope to a post, rail, ring or tree that will hold steady tension, such as a tarp line or a clothesline. It ties and unties quickly.
 
 1. Pass the end around the post and bring it back alongside the standing part.
-2. Take the end over the standing part, around it, and out through the loop you just made. That's the first half hitch.
-3. Tie a second one the same way, in the same direction, a little farther along the standing part.
-4. Slide both hitches snug against the post and pull the standing part tight.
+2. Take the end over the standing part and around behind it.
+3. Bring it out through the loop you just made, crossing over its own rope. That's the first half hitch.
+4. Tie a second one a little farther along the standing part, in the same direction: over the standing part and around behind it.
+5. Bring the end out through the new loop the same way, over its own rope. That's the second half hitch.
+6. Slide both hitches snug against the post and pull the standing part tight.
 
 Check it: the two hitches sit side by side and look like a small clove hitch around the standing part. If they twist away from each other, the second went the opposite direction. Leave a few inches of tail.
 

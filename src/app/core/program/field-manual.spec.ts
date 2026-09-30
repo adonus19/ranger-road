@@ -51,12 +51,17 @@ describe('Field Manual content', () => {
   });
 
   it('ships an optimized 2×2 step image for every card that has one', () => {
-    expect(getFieldCard('square-knot')?.sequence).toMatchObject({
-      src: 'images/field-manual/square-knot/sequence.webp',
-    });
+    for (const id of ['square-knot', 'bowline', 'two-half-hitches']) {
+      expect(getFieldCard(id)?.sequence, id).toMatchObject({
+        src: `images/field-manual/${id}/sequence.webp`,
+      });
+    }
     for (const card of listFieldCards()) {
       if (!card.sequence) continue;
       expect(card.sequence.alt.length, card.id).toBeGreaterThan(20);
+      // One panel per written step, two panels to a 768px row.
+      const rows = ((card.sequence.height ?? 1548) - 12) / 768;
+      expect(rows * 2, card.id).toBe(card.steps?.length);
       const path = `public/${card.sequence.src}`;
       const data = readFileSync(path);
       expect(data.toString('ascii', 0, 4), path).toBe('RIFF');

@@ -1,0 +1,10 @@
+Repaint the reference image as a finished instructional illustration of a rope knot step. The reference is an exact technical diagram: keep its composition exactly.
+
+Keep, without any change:
+- one single continuous rope following exactly the same path, loops and curves as the reference;
+- the same over/under order at every crossing: where one part of the rope passes over another in the reference, it passes over in the painting, and where it passes under, it passes under;
+- the standing part leaving the top edge in the same place, and the single cut rope end in the same place;
+- the same framing and scale.
+Do not add, remove, shorten or reroute any rope. No hands, no people, no text, no labels, no arrows, no other objects.
+
+Style: a clean semi-realistic digital painting, like a plate from an exercise instruction guide. Plain warm off-white paper background (#F4F0E6), evenly lit, soft light from the upper left, a soft contact shadow under the rope. The rope is a 3/8-inch natural tan braided utility rope with a fine braided texture, gentle shading that makes it read as round, and neatly cut ends. Every crossing reads clearly: the upper strand casts a small soft shadow onto the strand beneath it. Full-bleed plate with no border and no vignette.

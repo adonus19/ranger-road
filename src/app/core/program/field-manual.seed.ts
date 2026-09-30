@@ -64,8 +64,11 @@ export interface FieldCard {
   check?: string;
   sections?: readonly FieldCardSection[];
   closing?: string;
-  /** Four checked step pictures in a 2×2 grid. */
-  sequence?: { src: string; alt: string };
+  /**
+   * Checked step pictures, one panel per written step, two per row at 1004px wide.
+   * `height` is 1548 for four steps (the default) and 2316 for six.
+   */
+  sequence?: { src: string; alt: string; height?: number };
   relatedSkills: readonly string[];
 }
 
@@ -452,6 +455,10 @@ const fieldCards: readonly FieldCard[] = [
       'The rabbit comes up out of the hole, runs around the tree, and goes back down the hole.',
     check:
       'The end sits inside the big loop, beside the loop’s leg, held by a collar around the standing part. Leave a tail of several inches. A bowline can shake loose when it isn’t under load, so check it before you trust it.',
+    sequence: {
+      src: 'images/field-manual/bowline/sequence.webp',
+      alt: 'Bowline in four steps: form a small loop, bring the end up through it, pass the end behind the standing part, then bring it back down through the loop to leave a short tail inside the large fixed loop.',
+    },
     relatedSkills: ['Square knot', 'Two half hitches'],
   },
   {
@@ -465,12 +472,19 @@ const fieldCards: readonly FieldCard[] = [
       'Use it to tie a rope to a post, rail, ring or tree that will hold steady tension, such as a tarp line or a clothesline. It ties and unties quickly.',
     steps: [
       'Pass the end around the post and bring it back alongside the standing part.',
-      'Take the end over the standing part, around it, and out through the loop you just made. That’s the first half hitch.',
-      'Tie a second one the same way, in the same direction, a little farther along the standing part.',
+      'Take the end over the standing part and around behind it.',
+      'Bring it out through the loop you just made, crossing over its own rope. That’s the first half hitch.',
+      'Tie a second one a little farther along the standing part, in the same direction: over the standing part and around behind it.',
+      'Bring the end out through the new loop the same way, over its own rope. That’s the second half hitch.',
       'Slide both hitches snug against the post and pull the standing part tight.',
     ],
     check:
       'The two hitches sit side by side and look like a small clove hitch around the standing part. If they twist away from each other, the second went the opposite direction. Leave a few inches of tail.',
+    sequence: {
+      src: 'images/field-manual/two-half-hitches/sequence.webp',
+      alt: 'Two half hitches in six steps: pass the rope around the post, take the end over and around the standing part, bring it out through its loop over its own rope, repeat a little lower in the same direction, then slide both hitches snug against the post.',
+      height: 2316,
+    },
     relatedSkills: ['Square knot', 'Bowline'],
   },
 ];

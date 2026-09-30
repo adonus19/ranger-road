@@ -12,7 +12,7 @@
 
     @if (card.sequence; as sequence) {
       <figure class="manual-figure">
-        <img [src]="sequence.src" [alt]="sequence.alt" width="1004" height="1548" />
+        <img [src]="sequence.src" [alt]="sequence.alt" width="1004" [attr.height]="sequence.height ?? 1548" />
       </figure>
     }
 

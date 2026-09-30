@@ -108,9 +108,11 @@ interface FieldCard {
   sections?: { heading: string; items: string[] }[];
   closing?: string;
   /**
-   * Four checked step pictures in a 2x2 grid at every screen width.
+   * Checked step pictures, one panel per written step, two per row at 1004px wide,
+   * added only after they are checked against the real knot or tool.
+   * `height` is 1548 for four steps (the default) and 2316 for six.
    */
-  sequence?: { src: string; alt: string };
+  sequence?: { src: string; alt: string; height?: number };
   relatedSkills: string[];
 }
 ```
