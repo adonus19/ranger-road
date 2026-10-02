@@ -1,6 +1,9 @@
 <div class="forge-page">
   <h1>Forge</h1>
-  <p class="intro">Your strength work for Chapter I. Check readiness before you begin.</p>
+  <p class="intro">
+    Your strength work for Chapter {{ numeral(program().chapter.number) }}. Check readiness before
+    you begin.
+  </p>
 
   @if (loading() || state.loading()) {
     <p class="notice" role="status">Opening your training plan…</p>
@@ -22,13 +25,13 @@
     </div>
   } @else if (chapterComplete()) {
     <section class="notice" aria-labelledby="forge-complete-title">
-      <h2 id="forge-complete-title">Chapter I complete</h2>
-      <p>Your four full weeks and completed Gate Trial are on record.</p>
+      <h2 id="forge-complete-title">Chapter {{ numeral(program().chapter.number) }} complete</h2>
+      <p>Your four full weeks and completed {{ program().trialName }} are on record.</p>
       @if (active(); as draft) {
         <p>A session started {{ shortDate(draft.date) }} still has partial work to save.</p>
         <a [routerLink]="['/forge/session', draft.workoutDefinitionId]">Open saved session</a>
       } @else {
-        <a routerLink="/road/gate-trial">View Gate Trial record</a>
+        <a [routerLink]="program().trialRoute">View {{ program().trialName }} record</a>
       }
     </section>
   } @else {
@@ -93,7 +96,7 @@
               <h3>{{ choice.title }}</h3>
               <p>
                 {{
-                  choice.id === 'chapter-1-restoration'
+                  isRestoration(choice.id)
                     ? 'Gentle mobility and an easy finish.'
                     : 'Warm up, work through the sets, and record what happened.'
                 }}

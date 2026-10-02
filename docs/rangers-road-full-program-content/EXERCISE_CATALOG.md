@@ -322,7 +322,7 @@ Every named movement in the app should have a Quick Help view and a Full Guide. 
 
 **Avoid:** Swinging the body, letting elbows drift forward, leaning back, going heavy enough that form breaks.
 
-**Pain-aware options:** Lighter weights, one arm at a time, sit on a bench, or skip it. Skipping an optional exercise never counts as a missed work set.
+**Pain-aware options:** Lighter weights, one arm at a time, sit on a bench, or skip it; it is optional.
 
 ---
 

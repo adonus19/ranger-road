@@ -13,20 +13,16 @@ import type {
 import type { PreviousWorkoutLoad } from '../../../core/domain/workout';
 import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
 import { getChapterOneQuickHelpSteps } from '../../../core/program/chapter-one-quick-help';
+import { resolveCampaignPosition } from '../../../core/program/campaign-position';
+import { getWorkoutChoices, isWorkoutPlanned } from '../../../core/program/chapter-orders';
 import {
-  chapterOneWorkoutsForDate,
-  chapterOneWorkoutIsPlanned,
-} from '../../../core/program/chapter-one-workout-access';
-import { getChapterOneSchedule } from '../../../core/program/campaign';
-import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
-import { isChapterOneComplete } from '../../../core/program/chapter-one-completion';
-import {
-  chapterOneWorkoutWeekNote,
-  chapterOneWeekFourVolumeGuide,
-  loadChapterOneWorkout,
-} from '../../../core/program/chapter-one-workouts';
+  chapterPrograms,
+  formatChapterNumeral,
+  isRestorationWorkout,
+  loadWorkout,
+} from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
-import { TrialHistory } from '../../../core/state/trial-history';
+import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { WorkoutHistory } from '../../../core/state/workout-history';
 import { formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
@@ -92,7 +88,29 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   protected readonly finishModel = signal({ sessionRpe: '', notes: '' });
   protected readonly finishForm = form(this.finishModel);
 
-  protected readonly definition = computed(() => loadChapterOneWorkout(this.workoutId));
+  protected readonly definition = computed(() => loadWorkout(this.workoutId));
+  /** Today's chapter and week, from Day 1 and the saved trial passes. */
+  private readonly position = computed(() => {
+    const campaign = this.state.campaign();
+    return campaign
+      ? resolveCampaignPosition(campaign.startDate, this.state.today(), this.completedTrials())
+      : null;
+  });
+  /** The chapter day a saved draft was started on, or today. */
+  private readonly sessionDay = computed(() => {
+    const campaign = this.state.campaign();
+    const date = this.draft()?.date ?? this.state.today();
+    return campaign
+      ? (resolveCampaignPosition(campaign.startDate, date, this.completedTrials())?.chapter ?? null)
+      : null;
+  });
+  /** Today's chapter; Chapter I before Day 1. */
+  protected readonly program = computed(
+    () => this.position()?.chapter.program ?? chapterPrograms[0],
+  );
+  protected readonly chapterNumeral = computed(() =>
+    formatChapterNumeral(this.program().chapter.number),
+  );
   protected readonly currentPrescription = computed(() => {
     const draft = this.draft();
     return draft?.definitionSnapshot.exercises[draft.currentExerciseIndex] ?? null;
@@ -129,21 +147,13 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     return check?.date === this.state.today() ? check : null;
   });
   protected readonly weekNote = computed(() => {
-    const campaign = this.state.campaign();
-    if (!campaign) return undefined;
-    const schedule = getChapterOneSchedule(campaign.startDate, this.state.today());
-    return schedule ? chapterOneWorkoutWeekNote(this.workoutId, schedule.contentWeek) : undefined;
+    const chapter = this.position()?.chapter;
+    return chapter?.program.workoutPlan(this.workoutId, chapter.contentWeek).note;
   });
-  protected readonly weekFourVolume = computed(() => {
-    const campaign = this.state.campaign();
-    if (!campaign) return undefined;
-    const schedule = getChapterOneSchedule(
-      campaign.startDate,
-      this.draft()?.date ?? this.state.today(),
-    );
-    return schedule
-      ? chapterOneWeekFourVolumeGuide(this.workoutId, schedule.contentWeek)
-      : undefined;
+  /** A deload week's set guide, from the week the session was started in. */
+  protected readonly volumeGuide = computed(() => {
+    const chapter = this.sessionDay();
+    return chapter?.program.workoutPlan(this.workoutId, chapter.contentWeek).volumeGuide;
   });
   protected readonly completedSets = computed(
     () =>
@@ -160,24 +170,17 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       ) ?? 0,
   );
   protected readonly planned = computed(() => {
-    const campaign = this.state.campaign();
-    return campaign
-      ? chapterOneWorkoutIsPlanned(campaign.startDate, this.state.today(), this.workoutId)
-      : false;
+    const chapter = this.position()?.chapter;
+    return chapter ? isWorkoutPlanned(chapter, this.workoutId) : false;
   });
   protected readonly allowed = computed(() => {
-    const campaign = this.state.campaign();
+    const chapter = this.position()?.chapter;
     return Boolean(
-      campaign &&
-      campaign.currentChapterId === chapterOneDefinition.id &&
-      !this.chapterComplete() &&
-      chapterOneWorkoutsForDate(campaign.startDate, this.state.today()).includes(this.workoutId),
+      chapter && !this.chapterComplete() && getWorkoutChoices(chapter).includes(this.workoutId),
     );
   });
-  protected readonly chapterComplete = computed(() =>
-    isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
-  );
-  protected readonly isRestoration = this.workoutId === 'chapter-1-restoration';
+  protected readonly chapterComplete = computed(() => !!this.position()?.awaitingNextChapter);
+  protected readonly isRestoration = isRestorationWorkout(this.workoutId);
   protected readonly painLocked = computed(
     () =>
       !this.isRestoration &&
@@ -191,7 +194,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     const draft = this.draft();
     if (draft && draft.date !== this.state.today())
       return 'This session was started on another day. Save the partial work and start fresh today.';
-    if (this.chapterComplete()) return 'Chapter I is complete. Save this session as partial work.';
+    if (this.chapterComplete())
+      return `Chapter ${this.chapterNumeral()} is complete. Save this session as partial work.`;
     if (!this.readiness()) return 'Check readiness today before training.';
     if (!this.isRestoration && this.readiness()?.status === 'red')
       return 'Red readiness means no strength work today.';
@@ -223,7 +227,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       await this.state.initialize();
       const [active, completedTrials] = await Promise.all([
         this.history.active(),
-        this.trialHistory.forTrial(chapterOneDefinition.trialId),
+        loadCampaignTrials(this.trialHistory),
       ]);
       this.completedTrials.set(completedTrials);
       if (active?.workoutDefinitionId === this.workoutId) {
@@ -246,11 +250,9 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     try {
       await this.state.initialize();
       const definition = this.definition();
-      const campaign = this.state.campaign();
-      if (!definition || !campaign || !this.allowed()) return;
-      const schedule = getChapterOneSchedule(campaign.startDate, this.state.today());
-      const note = this.weekNote();
-      const reduced = schedule?.contentWeek === 4 && !this.isRestoration;
+      const chapter = this.position()?.chapter;
+      if (!definition || !chapter || !this.allowed()) return;
+      const { note, reduced } = chapter.program.workoutPlan(this.workoutId, chapter.contentWeek);
       const draft = await this.history.start({
         date: this.state.today(),
         definition,

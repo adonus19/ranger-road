@@ -1,5 +1,6 @@
 import type { Campaign, LocalDate, TrialResult } from '../domain/models';
-import { addDays, getGateTrialTargetDate, getWeekday } from './campaign';
+import { getGateTrialTargetDate } from './campaign';
+import { getNextChapterStart } from './campaign-position';
 import { chapterOneDefinition } from './chapter-one.seed';
 
 type TrialRecord = Pick<TrialResult, 'trialId' | 'date'>;
@@ -39,10 +40,7 @@ export function getChapterTwoStartDate(
 ): LocalDate | undefined {
   const pass = getChapterOneTrialPass(campaign, completedTrials);
   if (!campaign || !pass) return undefined;
-  const firstAttempt = getGateTrialTargetDate(campaign.startDate);
-  if (pass.date < firstAttempt) return firstAttempt;
-  const day = getWeekday(pass.date);
-  return addDays(pass.date, day === 1 ? 1 : 8 - day);
+  return getNextChapterStart(pass.date, getGateTrialTargetDate(campaign.startDate));
 }
 
 /** Chapter I is behind the person once the Gate Trial is passed and Chapter II's first day arrives. */

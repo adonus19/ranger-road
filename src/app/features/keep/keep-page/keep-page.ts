@@ -1,23 +1,16 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { ReadinessStatus, TrialResult } from '../../../core/domain/models';
+import { resolveCampaignPosition } from '../../../core/program/campaign-position';
 import {
-  getChapterOneTrialPass,
-  getChapterTwoStartDate,
-  isChapterOneComplete,
-} from '../../../core/program/chapter-one-completion';
-import {
-  getChapterOneSchedule,
-  getTodaysOrders,
-  isGateTrialAttemptDay,
+  getDayOrders,
+  getWeekContent,
   type TodayOrder,
-} from '../../../core/program/campaign';
-import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
-import { getChapterOneWeekContent } from '../../../core/program/chapter-one-daily.seed';
+} from '../../../core/program/chapter-orders';
 import { getLeadershipLessonForWeek } from '../../../core/program/field-manual.seed';
-import { loadChapterSeed } from '../../../core/program/program-catalog';
+import { chapterPrograms, formatChapterNumeral } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
-import { TrialHistory } from '../../../core/state/trial-history';
+import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate } from '../../../shared/format-date';
 import { Icon, type IconName } from '../../../shared/icon/icon';
 import { BackupReminder } from '../backup-reminder/backup-reminder';
@@ -75,46 +68,40 @@ export class KeepPage implements OnInit {
   protected readonly trialLoading = signal(true);
   protected readonly trialError = signal(false);
   private readonly completedTrials = signal<TrialResult[]>([]);
-  protected readonly chapterComplete = computed(() =>
-    isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
-  );
-  /** The Gate Trial pass, if there is one: its date sets when Chapter II begins. */
-  protected readonly trialPass = computed(() =>
-    getChapterOneTrialPass(this.state.campaign(), this.completedTrials()),
-  );
-  protected readonly chapterTwoStart = computed(
-    () => getChapterTwoStartDate(this.state.campaign(), this.completedTrials()) ?? null,
-  );
-  /** An attempt day, or the day of the pass: no check-in tests on top of the trial. */
-  protected readonly trialDay = computed(() => {
-    const campaign = this.state.campaign();
-    const pass = this.trialPass();
-    const today = this.state.today();
-    return (
-      !!campaign &&
-      isGateTrialAttemptDay(campaign.startDate, today) &&
-      (!pass || pass.date === today)
-    );
-  });
-  protected readonly longDate = formatLongDate;
 
-  /** The current chapter's content; Chapter I before a campaign exists. */
-  protected readonly seed = computed(() =>
-    loadChapterSeed(this.state.campaign()?.currentChapterId ?? chapterOneDefinition.id),
-  );
-
-  private readonly orders = computed<TodayOrder[]>(() => {
+  /** Today's chapter and week, from Day 1 and the saved trial passes. */
+  protected readonly position = computed(() => {
     const campaign = this.state.campaign();
     return campaign
-      ? getTodaysOrders(campaign.startDate, this.state.today(), this.state.readiness()?.status)
-      : [];
+      ? resolveCampaignPosition(campaign.startDate, this.state.today(), this.completedTrials())
+      : null;
+  });
+  /** Today's chapter; Chapter I before Day 1. */
+  protected readonly program = computed(
+    () => this.position()?.chapter.program ?? chapterPrograms[0],
+  );
+  protected readonly chapterComplete = computed(() => !!this.position()?.awaitingNextChapter);
+  /** The chapter's trial pass, if there is one: its date sets when the next chapter begins. */
+  protected readonly trialPass = computed(() => this.position()?.chapter.pass);
+  /** An attempt day, or the day of the pass: no check-in tests on top of the trial. */
+  protected readonly trialDay = computed(() => !!this.position()?.chapter.attemptDay);
+  protected readonly longDate = formatLongDate;
+  protected readonly numeral = formatChapterNumeral;
+
+  private readonly orders = computed<TodayOrder[]>(() => {
+    const position = this.position();
+    return position ? getDayOrders(position.chapter, this.state.readiness()?.status) : [];
   });
 
-  /** Once the Gate Trial is passed, that day's order says so instead of asking for it again. */
+  /** Once the trial is passed, that day's order says so instead of asking for it again. */
   protected readonly mainOrder = computed(() => {
     const order = this.orders().find((item) => item.kind === 'weekly');
     return order?.missionType === 'trial' && this.trialPass()
-      ? { ...order, title: 'Gate Trial', guidance: 'Passed. Your result is saved on this device.' }
+      ? {
+          ...order,
+          title: this.program().trialName,
+          guidance: 'Passed. Your result is saved on this device.',
+        }
       : order;
   });
   protected readonly watches = computed(() =>
@@ -136,21 +123,16 @@ export class KeepPage implements OnInit {
   protected readonly readinessCopy = computed(() => READINESS_COPY[this.readinessStatus()]);
 
   protected readonly hearthMission = computed(() => {
-    const campaign = this.state.campaign();
-    if (!campaign || campaign.currentChapterId !== chapterOneDefinition.id) {
-      return this.seed()?.leadership[0] ?? '';
-    }
-    const schedule = getChapterOneSchedule(campaign.startDate, this.state.today());
-    if (!schedule) return '';
-    const week = getChapterOneWeekContent(schedule.contentWeek);
-    return week.hearthMission ?? week.leadershipMission ?? this.seed()?.leadership[0] ?? '';
+    const chapter = this.position()?.chapter;
+    if (!chapter) return '';
+    const week = getWeekContent(chapter);
+    return week.hearthMission ?? week.leadershipMission ?? chapter.program.leadership[0] ?? '';
   });
 
+  /** The week's leadership lesson in the Field Manual, when it has one. */
   protected readonly hearthLessonId = computed(() => {
-    const campaign = this.state.campaign();
-    if (!campaign || campaign.currentChapterId !== chapterOneDefinition.id) return null;
-    const schedule = getChapterOneSchedule(campaign.startDate, this.state.today());
-    return schedule ? (getLeadershipLessonForWeek(schedule.contentWeek)?.id ?? null) : null;
+    const chapter = this.position()?.chapter;
+    return chapter ? (getLeadershipLessonForWeek(chapter.contentWeek)?.id ?? null) : null;
   });
 
   ngOnInit(): void {
@@ -173,7 +155,7 @@ export class KeepPage implements OnInit {
       else await this.state.initialize();
       if (this.state.error()) return;
       if (!this.state.campaign() || this.state.beforeDayOne()) return;
-      this.completedTrials.set(await this.trialHistory.forTrial(chapterOneDefinition.trialId));
+      this.completedTrials.set(await loadCampaignTrials(this.trialHistory));
     } catch {
       this.trialError.set(true);
     } finally {

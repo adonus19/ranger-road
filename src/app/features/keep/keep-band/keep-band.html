@@ -11,12 +11,12 @@
     />
   </picture>
 
-  @if (!state.loading() && !state.error() && seed(); as seed) {
+  @if (!state.loading() && !state.error()) {
     <div class="keep-band__body">
       <div class="keep-band__chapter">
         <p class="keep-band__chapter-line">{{ chapterLine() }}</p>
-        <h1 id="chapter-title">{{ seed.chapter.name }}</h1>
-        <p class="keep-band__theme">{{ seed.chapter.theme }}</p>
+        <h1 id="chapter-title">{{ program().chapter.name }}</h1>
+        <p class="keep-band__theme">{{ program().chapter.theme }}</p>
       </div>
 
       @if (state.campaign()) {
@@ -34,10 +34,10 @@
           }
           <div>
             @if (trialPassedOn()) {
-              <dt>Gate Trial</dt>
+              <dt>{{ program().trialName }}</dt>
               <dd class="keep-band__word">Done</dd>
             } @else {
-              <dt>Days until Gate Trial</dt>
+              <dt>Days until {{ program().trialName }}</dt>
               <dd>{{ daysUntilTrial() }}</dd>
             }
           </div>
@@ -46,9 +46,11 @@
         <p class="keep-band__note">
           @if (trialPassedOn(); as passed) {
             @if (chapterComplete()) {
-              Chapter I complete. Gate Trial passed {{ shortDate(passed) }}.
+              Chapter {{ chapterNumeral() }} complete. {{ program().trialName }} passed
+              {{ shortDate(passed) }}.
             } @else {
-              Gate Trial passed. Chapter II begins {{ shortDate(chapterTwoStart() ?? passed) }}.
+              {{ program().trialName }} passed. Chapter {{ nextChapterNumeral() }} begins
+              {{ shortDate(nextChapterStart() ?? passed) }}.
             }
           } @else if (isLeadIn()) {
             Lead-in through Sunday. Week 1 begins Monday.

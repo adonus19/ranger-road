@@ -1,14 +1,11 @@
 import type { LocalDate } from '../domain/models';
-import { getChapterOneActivityChoicesForDate } from './chapter-one-missions';
-import { chapterOneRestoration, loadChapterOneWorkout } from './chapter-one-workouts';
+import { getChapterOneDay } from './campaign';
+import { getWorkoutChoices, isWorkoutPlanned } from './chapter-orders';
 
-/** Workout choices in the dated order. Restoration is also available as needed. */
+/** Chapter I's workout choices for a date, without trial history. Restoration is also open as needed. */
 export function chapterOneWorkoutsForDate(startDate: LocalDate, date: LocalDate): string[] {
-  const choices = getChapterOneActivityChoicesForDate(startDate, date);
-  if (!choices.length) return [];
-  const ids = choices.flatMap((choice) => choice.contentReferences);
-  ids.push(chapterOneRestoration.id);
-  return [...new Set(ids)].filter((id) => Boolean(loadChapterOneWorkout(id)));
+  const day = getChapterOneDay(startDate, date);
+  return day ? getWorkoutChoices(day) : [];
 }
 
 export function chapterOneWorkoutIsPlanned(
@@ -16,7 +13,6 @@ export function chapterOneWorkoutIsPlanned(
   date: LocalDate,
   workoutId: string,
 ): boolean {
-  return getChapterOneActivityChoicesForDate(startDate, date).some((choice) =>
-    choice.contentReferences.includes(workoutId),
-  );
+  const day = getChapterOneDay(startDate, date);
+  return day ? isWorkoutPlanned(day, workoutId) : false;
 }

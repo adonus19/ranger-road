@@ -1,15 +1,16 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { TrialResult, WorkoutDraft, WorkoutSession } from '../../../core/domain/models';
-import { isChapterOneComplete } from '../../../core/program/chapter-one-completion';
+import { resolveCampaignPosition } from '../../../core/program/campaign-position';
+import { getWorkoutChoices, isWorkoutPlanned } from '../../../core/program/chapter-orders';
 import {
-  chapterOneWorkoutsForDate,
-  chapterOneWorkoutIsPlanned,
-} from '../../../core/program/chapter-one-workout-access';
-import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
-import { loadChapterOneWorkout } from '../../../core/program/chapter-one-workouts';
+  chapterPrograms,
+  formatChapterNumeral,
+  isRestorationWorkout,
+  loadWorkout,
+} from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
-import { TrialHistory } from '../../../core/state/trial-history';
+import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { WorkoutHistory } from '../../../core/state/workout-history';
 import { formatShortDate } from '../../../shared/format-date';
 
@@ -28,18 +29,29 @@ export class ForgePage implements OnInit {
   protected readonly active = signal<WorkoutDraft | null>(null);
   protected readonly sessions = signal<WorkoutSession[]>([]);
   private readonly completedTrials = signal<TrialResult[]>([]);
-  protected readonly chapterComplete = computed(() =>
-    isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
+  /** Today's chapter and week, from Day 1 and the saved trial passes. */
+  private readonly position = computed(() => {
+    const campaign = this.state.campaign();
+    return campaign
+      ? resolveCampaignPosition(campaign.startDate, this.state.today(), this.completedTrials())
+      : null;
+  });
+  /** Today's chapter; Chapter I before Day 1. */
+  protected readonly program = computed(
+    () => this.position()?.chapter.program ?? chapterPrograms[0],
   );
+  protected readonly chapterComplete = computed(() => !!this.position()?.awaitingNextChapter);
+  protected readonly numeral = formatChapterNumeral;
   protected readonly shortDate = formatShortDate;
+  protected readonly isRestoration = isRestorationWorkout;
 
   protected readonly choices = computed(() => {
-    const campaign = this.state.campaign();
-    if (!campaign || campaign.currentChapterId !== chapterOneDefinition.id) return [];
-    return chapterOneWorkoutsForDate(campaign.startDate, this.state.today()).map((id) => ({
+    const chapter = this.position()?.chapter;
+    if (!chapter) return [];
+    return getWorkoutChoices(chapter).map((id) => ({
       id,
-      title: loadChapterOneWorkout(id)?.title ?? id,
-      planned: chapterOneWorkoutIsPlanned(campaign.startDate, this.state.today(), id),
+      title: loadWorkout(id)?.title ?? id,
+      planned: isWorkoutPlanned(chapter, id),
     }));
   });
 
@@ -55,13 +67,13 @@ export class ForgePage implements OnInit {
   protected sessionTitle(session: WorkoutSession): string {
     return (
       session.definitionSnapshot?.title ??
-      loadChapterOneWorkout(session.workoutDefinitionId)?.title ??
+      loadWorkout(session.workoutDefinitionId)?.title ??
       'Workout'
     );
   }
 
   protected canOpen(id: string): boolean {
-    return Boolean(this.status()) && (this.status() !== 'red' || id === 'chapter-1-restoration');
+    return Boolean(this.status()) && (this.status() !== 'red' || isRestorationWorkout(id));
   }
 
   protected async load(): Promise<void> {
@@ -72,7 +84,7 @@ export class ForgePage implements OnInit {
       const [active, sessions, completedTrials] = await Promise.all([
         this.history.active(),
         this.history.forDate(this.state.today()),
-        this.trialHistory.forTrial(chapterOneDefinition.trialId),
+        loadCampaignTrials(this.trialHistory),
       ]);
       this.active.set(active ?? null);
       this.sessions.set(sessions);

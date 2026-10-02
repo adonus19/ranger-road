@@ -1,16 +1,16 @@
 import { Component, computed, inject, input } from '@angular/core';
-import type { LocalDate } from '../../../core/domain/models';
 import {
   addDays,
   getCampaignDay,
-  getChapterOneSchedule,
   getDaysUntil,
   getDaysUntilGateTrial,
-  getGateTrialTargetDate,
-  getNextGateTrialAttempt,
 } from '../../../core/program/campaign';
-import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
-import { formatChapterLine, loadChapterSeed } from '../../../core/program/program-catalog';
+import { getNextAttempt, type CampaignPosition } from '../../../core/program/campaign-position';
+import {
+  chapterPrograms,
+  formatChapterLine,
+  formatChapterNumeral,
+} from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { formatShortDate } from '../../../shared/format-date';
 
@@ -22,55 +22,62 @@ import { formatShortDate } from '../../../shared/format-date';
 })
 export class KeepBand {
   protected readonly state = inject(CampaignState);
-  readonly chapterComplete = input(false);
-  /** The day the Gate Trial was passed, once it has been. */
-  readonly trialPassedOn = input<LocalDate | null>(null);
-  /** Chapter II's first day, once the Gate Trial is passed. */
-  readonly chapterTwoStart = input<LocalDate | null>(null);
+  /** Today's place in the campaign, once Day 1 has arrived and trial history is read. */
+  readonly position = input<CampaignPosition | null>(null);
 
   protected readonly shortDate = formatShortDate;
 
-  /** Before a campaign exists, the band still introduces the first chapter. */
-  protected readonly seed = computed(() =>
-    loadChapterSeed(this.state.campaign()?.currentChapterId ?? chapterOneDefinition.id),
+  /** Today's chapter; before Day 1 the band still introduces the first chapter. */
+  protected readonly program = computed(
+    () => this.position()?.chapter.program ?? chapterPrograms[0],
   );
-
-  protected readonly chapterLine = computed(() => {
-    const chapter = this.seed()?.chapter;
-    return chapter ? formatChapterLine(chapter) : '';
-  });
+  protected readonly chapterLine = computed(() => formatChapterLine(this.program().chapter));
+  protected readonly chapterNumeral = computed(() =>
+    formatChapterNumeral(this.program().chapter.number),
+  );
+  protected readonly nextChapterNumeral = computed(() =>
+    formatChapterNumeral(this.program().chapter.number + 1),
+  );
+  protected readonly chapterComplete = computed(() => !!this.position()?.awaitingNextChapter);
+  /** The day the chapter's trial was passed, once it has been. */
+  protected readonly trialPassedOn = computed(() => this.position()?.chapter.pass?.date ?? null);
+  protected readonly nextChapterStart = computed(() => this.position()?.chapter.nextStart ?? null);
 
   protected readonly campaignDay = computed(() => {
     const campaign = this.state.campaign();
     return campaign ? getCampaignDay(campaign.startDate, this.state.today()) : 0;
   });
 
-  protected readonly isLeadIn = computed(() => {
-    const campaign = this.state.campaign();
-    return !!campaign && getChapterOneSchedule(campaign.startDate, this.state.today())?.week === 0;
-  });
+  protected readonly isLeadIn = computed(() => !!this.position()?.chapter.leadIn);
 
   protected readonly daysUntilStart = computed(() => {
     const campaign = this.state.campaign();
     return campaign ? getDaysUntil(campaign.startDate, this.state.today()) : 0;
   });
 
-  /** Where the Gate Trial stands while it waits to be passed. */
+  /** Where the trial stands while it waits to be passed. */
   protected readonly trialNote = computed(() => {
-    const campaign = this.state.campaign();
-    if (!campaign) return '';
+    if (!this.state.campaign()) return '';
+    const program = this.program();
+    const chapter = this.position()?.chapter;
     const today = this.state.today();
-    if (today < getGateTrialTargetDate(campaign.startDate)) {
-      return 'Gate Trial on the Monday after Week 4. If it doesn’t go, try again Thursday.';
+    if (!chapter || today < chapter.firstAttempt) {
+      return `${program.trialName} on the Monday after Week ${program.chapter.weeks.at(-1)}. If it doesn’t go, try again Thursday.`;
     }
-    const next = getNextGateTrialAttempt(campaign.startDate, today);
-    if (next !== today) return `Next Gate Trial attempt: ${formatShortDate(next)}.`;
-    const after = getNextGateTrialAttempt(campaign.startDate, addDays(today, 1));
-    return `Gate Trial today if you’re Green; otherwise ${formatShortDate(after)}.`;
+    const next = getNextAttempt(chapter, today);
+    if (next !== today) return `Next ${program.trialName} attempt: ${formatShortDate(next)}.`;
+    const after = getNextAttempt(chapter, addDays(today, 1));
+    return `${program.trialName} today if you’re Green; otherwise ${formatShortDate(after)}.`;
   });
 
   protected readonly daysUntilTrial = computed(() => {
     const campaign = this.state.campaign();
-    return campaign ? getDaysUntilGateTrial(campaign.startDate, this.state.today()) : 0;
+    if (!campaign) return 0;
+    const chapter = this.position()?.chapter;
+    const today = this.state.today();
+    // Before Day 1 there is no position yet; the count runs to Chapter I's first attempt.
+    return chapter
+      ? getDaysUntil(getNextAttempt(chapter, today), today)
+      : getDaysUntilGateTrial(campaign.startDate, today);
   });
 }

@@ -30,10 +30,10 @@
     </div>
   } @else if (chapterComplete()) {
     <section class="page-state" aria-labelledby="chapter-complete-title">
-      <h2 id="chapter-complete-title">Chapter I complete</h2>
+      <h2 id="chapter-complete-title">Chapter {{ numeral(program().chapter.number) }} complete</h2>
       <p>
-        Your four full weeks and the Gate Trial are recorded. Your Chapter I history remains on this
-        device.
+        Your four full weeks and the {{ program().trialName }} are recorded. Your Chapter
+        {{ numeral(program().chapter.number) }} history remains on this device.
       </p>
       <a routerLink="/road">Review the Road</a>
     </section>
@@ -104,20 +104,20 @@
 
       @if (workoutId(); as workout) {
         @if (
-          readiness() && (readiness()?.status !== 'red' || workout === 'chapter-1-restoration')
+          readiness() && (readiness()?.status !== 'red' || workout === program().restorationId)
         ) {
           <a class="workout-link" [routerLink]="['/forge/session', workout]">
             <app-icon name="anvil" />
             Open {{ mission.title }} in the Forge
           </a>
         } @else if (readiness()?.status === 'red') {
-          <a class="workout-link" routerLink="/forge/session/chapter-1-restoration">
+          <a class="workout-link" [routerLink]="['/forge/session', program().restorationId]">
             <app-icon name="renew" />
             Open Restoration in the Forge
           </a>
         }
       } @else if (restorationLink()) {
-        <a class="workout-link" routerLink="/forge/session/chapter-1-restoration">
+        <a class="workout-link" [routerLink]="['/forge/session', program().restorationId]">
           <app-icon name="renew" />
           Open Restoration in the Forge
         </a>
@@ -126,21 +126,22 @@
       @if (mission.plannedTrialId) {
         @if (trialPass(); as pass) {
           <section class="recorded" role="status">
-            <h2>Gate Trial passed</h2>
+            <h2>{{ program().trialName }} passed</h2>
             <p>
-              Your result is saved on this device. Chapter II begins
-              {{ longDate(chapterTwoStart() ?? pass.date) }}.
+              Your result is saved on this device. Chapter
+              {{ numeral(program().chapter.number + 1) }} begins
+              {{ longDate(nextChapterStart() ?? pass.date) }}.
             </p>
-            <a routerLink="/road/gate-trial">View Gate Trial record</a>
+            <a [routerLink]="program().trialRoute">View {{ program().trialName }} record</a>
           </section>
         } @else {
           <section class="recorded" role="status">
-            <h2>Gate Trial today</h2>
+            <h2>{{ program().trialName }} today</h2>
             <p>
               The full trial needs a Green readiness day. If it doesn’t go today, the next attempt
               is {{ longDate(nextAttempt() ?? state.today()) }}.
             </p>
-            <a routerLink="/road/gate-trial">Open the Gate Trial</a>
+            <a [routerLink]="program().trialRoute">Open the {{ program().trialName }}</a>
           </section>
         }
       }

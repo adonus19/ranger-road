@@ -5,8 +5,8 @@ import {
   chapterOneRestoration,
   chapterOneWorkoutWeekNote,
   chapterOneWeekFourVolumeGuide,
-  loadChapterOneWorkout,
 } from './chapter-one-workouts';
+import { loadWorkout } from './program-catalog';
 
 describe('Chapter I workout content', () => {
   it('keeps the documented Forge A and B prescriptions distinct', () => {
@@ -77,11 +77,11 @@ describe('Chapter I workout content', () => {
   });
 
   it('returns a detached definition for historical snapshots', () => {
-    const first = loadChapterOneWorkout(chapterOneForgeA.id);
+    const first = loadWorkout(chapterOneForgeA.id);
     expect(first).toEqual(chapterOneForgeA);
     expect(first).not.toBe(chapterOneForgeA);
     first!.exercises[0].reps = 100;
-    expect(loadChapterOneWorkout(chapterOneForgeA.id)?.exercises[0].reps).toBe(6);
-    expect(loadChapterOneWorkout('unknown')).toBeUndefined();
+    expect(loadWorkout(chapterOneForgeA.id)?.exercises[0].reps).toBe(6);
+    expect(loadWorkout('unknown')).toBeUndefined();
   });
 });

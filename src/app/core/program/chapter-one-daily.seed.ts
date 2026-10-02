@@ -1,42 +1,14 @@
-import type { MissionType } from '../domain/models';
-import type { Weekday } from './chapter-one.seed';
+import type { ChapterDayContent, ChapterWeekContent, Weekday } from './chapter-program';
 
-/** The day-by-day Chapter I orders in 01_THE_MUSTER.md. */
-export interface ChapterOneActivityContent {
-  title: string;
-  missionType: MissionType;
-  estimatedMinutes?: number;
-  details?: readonly string[];
-  /** A definition or guide whose prescription supplies the full activity. */
-  definitionId?: string;
-  /** A target in the manual, never an automatic trial completion. */
-  plannedTrialId?: string;
-  /** The day includes the week's fieldcraft, so its description is shown with the order. */
-  fieldcraftPractice?: boolean;
-  /** Getting ready for the next Gate Trial attempt; shown only while the trial is pending. */
-  trialPreparation?: string;
-}
-
-export interface ChapterOneDayContent {
-  scriptureReference: string;
-  activity: ChapterOneActivityContent;
-  readingMinutes?: number;
-  /** Shown in the Evening Watch. */
-  reflectionPrompt?: string;
-  /** A reflection about the day ahead, shown in the Morning Watch instead. */
-  morningReflectionPrompt?: string;
-  optionalFamilyQuest?: string;
-}
-
-export interface ChapterOneWeekContent {
-  name: string;
-  days: Record<Weekday, ChapterOneDayContent>;
-  leadershipMission?: string;
-  hearthMission?: string;
-  reading?: string;
-  readingBookTitle?: string;
-  fieldcraft?: string;
-}
+/** The restoration a Week 1–3 Friday offers in place of its easy walk. */
+const fridayRestoration = [
+  {
+    idSuffix: 'restoration',
+    title: 'Restoration',
+    missionType: 'restoration',
+    contentReferences: ['chapter-1-restoration'],
+  },
+] as const;
 
 /**
  * Any start outside Monday uses the remaining weekdays through Sunday as a
@@ -44,7 +16,7 @@ export interface ChapterOneWeekContent {
  * After Week 4, Mondays and Thursdays are Gate Trial attempts and the other days repeat
  * Week 4 until the trial is passed.
  */
-export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
+export const chapterOneDailySeed: readonly ChapterWeekContent[] = [
   {
     name: 'The Call',
     days: {
@@ -75,6 +47,7 @@ export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
         activity: {
           title: '20–25-minute easy walk',
           missionType: 'conditioning',
+          alternatives: fridayRestoration,
         },
         readingMinutes: 10,
       },
@@ -122,6 +95,21 @@ export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
           title: 'Restoration',
           missionType: 'restoration',
           definitionId: 'chapter-1-restoration',
+          alternatives: [
+            {
+              idSuffix: 'skill',
+              title: 'Tool inspection',
+              missionType: 'fieldcraft',
+              contentReferences: [chapterOneContentId(2, 3, 'fieldcraft')],
+              nonexertional: true,
+              fieldcraftPractice: true,
+            },
+          ],
+          redDayOrder: {
+            title: 'Restoration or skill practice',
+            guidance:
+              'No strength or conditioning. Nonexertional tool inspection remains available; restoration or easy movement only if appropriate.',
+          },
         },
         readingMinutes: 10,
       },
@@ -135,6 +123,7 @@ export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
           title: '25-minute easy walk',
           missionType: 'conditioning',
           estimatedMinutes: 25,
+          alternatives: fridayRestoration,
         },
         readingMinutes: 10,
       },
@@ -182,6 +171,22 @@ export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
           title: 'Restoration and knot practice',
           missionType: 'restoration',
           definitionId: 'chapter-1-restoration',
+          choiceTitle: 'Restoration',
+          alternatives: [
+            {
+              idSuffix: 'skill',
+              title: 'Knot practice',
+              missionType: 'fieldcraft',
+              contentReferences: [chapterOneContentId(3, 3, 'fieldcraft')],
+              nonexertional: true,
+              fieldcraftPractice: true,
+            },
+          ],
+          redDayOrder: {
+            title: 'Restoration or skill practice',
+            guidance:
+              'No strength or conditioning. Nonexertional knot practice remains available; restoration or easy movement only if appropriate.',
+          },
         },
       },
       4: {
@@ -190,7 +195,11 @@ export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
       },
       5: {
         scriptureReference: 'Romans 12:9–13',
-        activity: { title: '25–30-minute easy walk', missionType: 'conditioning' },
+        activity: {
+          title: '25–30-minute easy walk',
+          missionType: 'conditioning',
+          alternatives: fridayRestoration,
+        },
         readingMinutes: 10,
       },
       6: {
@@ -275,7 +284,7 @@ export const chapterOneDailySeed: readonly ChapterOneWeekContent[] = [
  * A Monday or Thursday after Week 4: the Gate Trial takes that strength slot until it is
  * passed. The trial's Scripture, 2 Timothy 4:7, is read on each attempt day.
  */
-export const chapterOneGateTrialAttempt: ChapterOneDayContent = {
+export const chapterOneGateTrialAttempt: ChapterDayContent = {
   scriptureReference: '2 Timothy 4:7',
   activity: {
     title: 'Gate Trial',
@@ -290,17 +299,17 @@ export function getChapterOneDayContent(
   week: number,
   day: Weekday,
   attemptDay = false,
-): ChapterOneDayContent {
+): ChapterDayContent {
   return attemptDay ? chapterOneGateTrialAttempt : getChapterOneDailyContent(week, day);
 }
 
-export function getChapterOneDailyContent(week: number, day: Weekday): ChapterOneDayContent {
+export function getChapterOneDailyContent(week: number, day: Weekday): ChapterDayContent {
   const content = chapterOneDailySeed[week - 1]?.days[day];
   if (!content) throw new RangeError(`No Chapter I content for week ${week}, day ${day}.`);
   return content;
 }
 
-export function getChapterOneWeekContent(week: number): ChapterOneWeekContent {
+export function getChapterOneWeekContent(week: number): ChapterWeekContent {
   const content = chapterOneDailySeed[week - 1];
   if (!content) throw new RangeError(`No Chapter I content for week ${week}.`);
   return content;

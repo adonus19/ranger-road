@@ -35,14 +35,14 @@
     </section>
   } @else if (chapterComplete() && !draft()) {
     <section class="notice" aria-labelledby="session-chapter-complete-title">
-      <h1 id="session-chapter-complete-title">Chapter I complete</h1>
-      <p>Your four full weeks and completed Gate Trial are on record.</p>
+      <h1 id="session-chapter-complete-title">Chapter {{ chapterNumeral() }} complete</h1>
+      <p>Your four full weeks and completed {{ program().trialName }} are on record.</p>
       <a routerLink="/forge">Return to Forge</a>
     </section>
   } @else if ((!definition() || !allowed()) && !draft()) {
     <section class="notice">
       <h1>Session unavailable</h1>
-      <p>This workout is not part of today’s Chapter I plan.</p>
+      <p>This workout is not part of today’s Chapter {{ chapterNumeral() }} plan.</p>
       <a routerLink="/forge">View today in the Forge</a>
     </section>
   } @else if (draft(); as session) {
@@ -82,7 +82,7 @@
             }
           </div>
         }
-        @if (weekFourVolume(); as guide) {
+        @if (volumeGuide(); as guide) {
           <p class="volume-guide">
             Week 4 volume: <strong>{{ completedSets() }} completed</strong> of around
             {{ guide.aroundCompletedSets }} work sets · {{ skippedSets() }} skipped.
@@ -120,7 +120,7 @@
           </div>
         }
 
-        @if (weekFourVolume(); as guide) {
+        @if (volumeGuide(); as guide) {
           <p class="volume-guide">
             Week 4 volume: <strong>{{ completedSets() }} completed</strong> of around
             {{ guide.aroundCompletedSets }} work sets · {{ skippedSets() }} skipped of
@@ -299,7 +299,7 @@
               : 'Review the finish before saving this session.'
           }}
         </p>
-        @if (weekFourVolume(); as guide) {
+        @if (volumeGuide(); as guide) {
           <p class="volume-guide">
             Week 4 volume: <strong>{{ completedSets() }} completed</strong> of around
             {{ guide.aroundCompletedSets }} work sets · {{ skippedSets() }} skipped of
@@ -549,7 +549,9 @@
     </button>
   } @else {
     <section class="preflight" aria-labelledby="preflight-title">
-      <p class="eyebrow">Chapter I · {{ planned() ? 'Today’s order' : 'As needed' }}</p>
+      <p class="eyebrow">
+        Chapter {{ chapterNumeral() }} · {{ planned() ? 'Today’s order' : 'As needed' }}
+      </p>
       <h1 id="preflight-title">{{ definition()?.title }}</h1>
       <p class="section-intro">
         {{

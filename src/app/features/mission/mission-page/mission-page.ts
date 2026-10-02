@@ -13,28 +13,23 @@ import type {
   ReadinessStatus,
   TrialResult,
 } from '../../../core/domain/models';
-import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
+import { addDays } from '../../../core/program/calendar';
+import { getNextAttempt, resolveCampaignPosition } from '../../../core/program/campaign-position';
 import {
-  getChapterOneTrialPass,
-  getChapterTwoStartDate,
-  isChapterOneComplete,
-} from '../../../core/program/chapter-one-completion';
-import {
-  getChapterOneActivityChoicesForDate,
-  getChapterOneContentForDate,
-  getChapterOneMissionsForDate,
-} from '../../../core/program/chapter-one-missions';
-import {
-  addDays,
-  getChapterOneSchedule,
-  getNextGateTrialAttempt,
-  getTodaysOrders,
-} from '../../../core/program/campaign';
-import { loadChapterOneWorkout } from '../../../core/program/chapter-one-workouts';
+  getActivityChoices,
+  getDayContent,
+  getDayMissions,
+  getDayOrders,
+} from '../../../core/program/chapter-orders';
 import { getWeeklyFieldcraft } from '../../../core/program/field-manual.seed';
+import {
+  chapterPrograms,
+  formatChapterNumeral,
+  loadWorkout,
+} from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MissionHistory } from '../../../core/state/mission-history';
-import { TrialHistory } from '../../../core/state/trial-history';
+import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate } from '../../../shared/format-date';
 import { Icon, type IconName } from '../../../shared/icon/icon';
 import { ActivityChoice } from '../activity-choice/activity-choice';
@@ -83,29 +78,32 @@ export class MissionPage {
   private loadedDate: LocalDate | null = null;
   private loadSequence = 0;
 
-  protected readonly chapterComplete = computed(() =>
-    isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
-  );
-  protected readonly trialPass = computed(() =>
-    getChapterOneTrialPass(this.state.campaign(), this.completedTrials()),
-  );
-  protected readonly trialPassed = computed(() => Boolean(this.trialPass()));
-  protected readonly chapterTwoStart = computed(() =>
-    getChapterTwoStartDate(this.state.campaign(), this.completedTrials()),
-  );
-  /** The attempt after today, for an attempt day that doesn't go. */
-  protected readonly nextAttempt = computed(() => {
+  /** Today's chapter and week, from Day 1 and the saved trial passes. */
+  private readonly position = computed(() => {
     const campaign = this.state.campaign();
     return campaign
-      ? getNextGateTrialAttempt(campaign.startDate, addDays(this.state.today(), 1))
+      ? resolveCampaignPosition(campaign.startDate, this.state.today(), this.completedTrials())
       : null;
   });
+  /** Today's chapter; Chapter I before Day 1. */
+  protected readonly program = computed(
+    () => this.position()?.chapter.program ?? chapterPrograms[0],
+  );
+  protected readonly chapterComplete = computed(() => !!this.position()?.awaitingNextChapter);
+  protected readonly trialPass = computed(() => this.position()?.chapter.pass);
+  protected readonly trialPassed = computed(() => Boolean(this.trialPass()));
+  protected readonly nextChapterStart = computed(() => this.position()?.chapter.nextStart);
+  /** The attempt after today, for an attempt day that doesn't go. */
+  protected readonly nextAttempt = computed(() => {
+    const chapter = this.position()?.chapter;
+    return chapter ? getNextAttempt(chapter, addDays(this.state.today(), 1)) : null;
+  });
   protected readonly longDate = formatLongDate;
+  protected readonly numeral = formatChapterNumeral;
 
   protected readonly activityChoices = computed(() => {
-    const campaign = this.state.campaign();
-    if (!campaign || campaign.currentChapterId !== chapterOneDefinition.id) return [];
-    return getChapterOneActivityChoicesForDate(campaign.startDate, this.state.today());
+    const chapter = this.position()?.chapter;
+    return chapter ? getActivityChoices(chapter) : [];
   });
 
   protected readonly definition = computed(() => {
@@ -117,15 +115,13 @@ export class MissionPage {
 
   /** The card or practice plan taught by a documented fieldcraft order. */
   protected readonly fieldcraftGuide = computed(() => {
-    const campaign = this.state.campaign();
-    if (campaign?.currentChapterId !== chapterOneDefinition.id) return null;
-    const schedule = getChapterOneSchedule(campaign.startDate, this.state.today());
-    if (!schedule) return null;
-    const day = getChapterOneContentForDate(campaign.startDate, this.state.today());
-    if (this.definition()?.missionType !== 'fieldcraft' && !day?.activity.fieldcraftPractice) {
+    const chapter = this.position()?.chapter;
+    if (!chapter) return null;
+    const day = getDayContent(chapter);
+    if (this.definition()?.missionType !== 'fieldcraft' && !day.activity.fieldcraftPractice) {
       return null;
     }
-    const fieldcraft = getWeeklyFieldcraft(schedule.contentWeek);
+    const fieldcraft = getWeeklyFieldcraft(chapter.contentWeek);
     if (!fieldcraft) return null;
     return fieldcraft.cardIds.length === 1
       ? {
@@ -149,22 +145,19 @@ export class MissionPage {
   });
 
   protected readonly originalOrderTitle = computed(() => {
-    const campaign = this.state.campaign();
-    return campaign
-      ? (getChapterOneMissionsForDate(campaign.startDate, this.state.today())[1]?.title ?? null)
-      : null;
+    const chapter = this.position()?.chapter;
+    return chapter ? (getDayMissions(chapter)[1]?.title ?? null) : null;
   });
 
   protected readonly mainOrder = computed(() => {
-    const campaign = this.state.campaign();
-    if (!campaign) return null;
+    const chapter = this.position()?.chapter;
+    if (!chapter) return null;
     const order =
-      getTodaysOrders(campaign.startDate, this.state.today(), this.readiness()?.status).find(
-        (item) => item.kind === 'weekly',
-      ) ?? null;
-    // A passed Gate Trial no longer waits for a Green day.
+      getDayOrders(chapter, this.readiness()?.status).find((item) => item.kind === 'weekly') ??
+      null;
+    // A passed trial no longer waits for a Green day.
     return order?.missionType === 'trial' && this.trialPassed()
-      ? { ...order, title: 'Gate Trial' }
+      ? { ...order, title: chapter.program.trialName }
       : order;
   });
 
@@ -183,7 +176,7 @@ export class MissionPage {
 
   /**
    * On Red, a walk's or workout's own instructions (such as brisk intervals) are not today's
-   * plan, and a saved Gate Trial no longer needs its instructions for recording.
+   * plan, and a saved trial no longer needs its instructions for recording.
    */
   protected readonly showActivityDetails = computed(() => {
     const mission = this.definition();
@@ -207,8 +200,7 @@ export class MissionPage {
   });
 
   protected readonly workoutId = computed(
-    () =>
-      this.definition()?.contentReferences.find((id) => Boolean(loadChapterOneWorkout(id))) ?? null,
+    () => this.definition()?.contentReferences.find((id) => Boolean(loadWorkout(id))) ?? null,
   );
 
   protected readonly readiness = computed(() => {
@@ -380,13 +372,10 @@ export class MissionPage {
       if (this.state.today() !== date) return;
       const campaign = this.state.campaign();
       if (campaign) {
-        // The trial order and the chapter's end both depend on a saved Gate Trial.
-        const needsTrialHistory = campaign.currentChapterId === chapterOneDefinition.id;
+        // Today's chapter, its trial order, and the chapter's end all depend on saved trials.
         const [records, trials] = await Promise.all([
           this.history.forDate(date),
-          needsTrialHistory
-            ? this.trialHistory.forTrial(chapterOneDefinition.trialId)
-            : Promise.resolve([]),
+          loadCampaignTrials(this.trialHistory),
         ]);
         if (sequence !== this.loadSequence || this.state.today() !== date) return;
         this.records.set(records);
@@ -400,7 +389,7 @@ export class MissionPage {
     } catch {
       if (sequence === this.loadSequence) {
         this.historyError.set(
-          'Local mission or Gate Trial history is unavailable. Check browser storage settings, then try again.',
+          `Local mission or ${this.program().trialName} history is unavailable. Check browser storage settings, then try again.`,
         );
       }
     } finally {

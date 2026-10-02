@@ -10,6 +10,7 @@ import type { RecoveryInput } from '../domain/post-mission-function';
 import type { SavedGateTrialResult } from '../domain/trial';
 import type { RecordedTrialPainEvent, TrialPainInput } from '../domain/trial-draft';
 import { RoadDatabase } from '../persistence/road-database';
+import { chapterPrograms } from '../program/program-catalog';
 
 /** Gate Trial history uses the existing versioned IndexedDB store and short-lived connections. */
 @Injectable({ providedIn: 'root' })
@@ -119,4 +120,14 @@ export class TrialHistory {
       database.close();
     }
   }
+}
+
+/** Completed results for every chapter trial in the app: they place a date in the campaign. */
+export async function loadCampaignTrials(
+  history: Pick<TrialHistory, 'forTrial'>,
+): Promise<TrialResult[]> {
+  const results = await Promise.all(
+    chapterPrograms.map((program) => history.forTrial(program.trial.id)),
+  );
+  return results.flat();
 }

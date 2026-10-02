@@ -22,7 +22,7 @@ Names in the two Forge lists are the Chapter II step-ups, each with its own guid
 - Glute Bridge — 3 x 12
 - Farmer Carry — 3 x 45–60 sec
 - Bird Dog — 2 x 8/side
-- Optional Hammer Curl — 2 x 10 (light; never counted in the standard 20 work sets)
+- Optional Hammer Curl — 2 x 10 (light; its 2 sets count toward Forge B's 22 work sets)
 
 # Restoration II
 - cat-camel — 6
@@ -75,7 +75,7 @@ Hearth mission: one full hour at home with phone put away.
 Monday: Forge A, no aggressive progression: the written sets and reps, no load increases. Scripture: Micah 6:8.  
 Tuesday: 30-min easy walk. Scripture: Galatians 5:22–26.  
 Wednesday: Restoration. Scripture: Psalm 119:105.  
-Thursday: Forge B at reduced volume (about 25% less, around 15 of the standard 20 work sets; Hammer Curl is not part of the 20). Scripture: Proverbs 3:5–8.  
+Thursday: Forge B at reduced volume (about 25% less, around 16–17 of the 22 work sets, Hammer Curl included). Scripture: Proverbs 3:5–8.  
 Friday: easy recovery. Scripture: Hebrews 10:23–25.  
 Saturday: 30-minute easy walk; then prepare for Monday's Three-Mile Trial (choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs). Scripture: Psalm 121.  
 Sunday: Isaiah 40:28–31. Reflection: **Where has consistent small effort begun changing me?**

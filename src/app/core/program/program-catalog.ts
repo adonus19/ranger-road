@@ -1,27 +1,45 @@
-import type { ChapterDefinition, TrialDefinition } from '../domain/models';
-import { chapterOneSeed, type WeeklyMissionSlot } from './chapter-one.seed';
+import type { ChapterDefinition, WorkoutDefinition } from '../domain/models';
+import type { ChapterProgram, ChapterSeed } from './chapter-program';
+import { chapterOneProgram } from './chapter-one.program';
 
-/** Program content is kept separate from screens and historical user records. */
-export interface ChapterSeed {
-  chapter: ChapterDefinition;
-  trial: TrialDefinition;
-  weeklyRhythm: readonly WeeklyMissionSlot[];
-  faithThemes: readonly string[];
-  leadership: readonly string[];
-  fieldcraft: readonly string[];
-}
+export type { ChapterProgram, ChapterSeed } from './chapter-program';
 
-const chapters: ReadonlyMap<string, ChapterSeed> = new Map([
-  [chapterOneSeed.chapter.id, chapterOneSeed],
-]);
+/**
+ * Chapters whose dated orders are in the app, in campaign order. A chapter is added here
+ * once its content is built; until then the previous chapter shows as complete.
+ */
+export const chapterPrograms: readonly ChapterProgram[] = [chapterOneProgram];
 
 export function loadChapterSeed(chapterId: string): ChapterSeed | undefined {
-  return chapters.get(chapterId);
+  return loadChapterProgram(chapterId);
+}
+
+export function loadChapterProgram(chapterId: string): ChapterProgram | undefined {
+  return chapterPrograms.find((program) => program.chapter.id === chapterId);
+}
+
+/** A fresh definition can be snapped into history without exposing the seed to mutation. */
+export function loadWorkout(id: string): WorkoutDefinition | undefined {
+  for (const program of chapterPrograms) {
+    const definition = program.workouts.find((workout) => workout.id === id);
+    if (definition) return structuredClone(definition);
+  }
+  return undefined;
+}
+
+/** Restoration stays open as needed, and on a Red day. */
+export function isRestorationWorkout(id: string): boolean {
+  return chapterPrograms.some((program) => program.restorationId === id);
 }
 
 const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'] as const;
 
+/** "II" for Chapter 2. */
+export function formatChapterNumeral(chapterNumber: number): string {
+  return ROMAN_NUMERALS[chapterNumber - 1] ?? String(chapterNumber);
+}
+
 /** "Chapter I · Weeks 1–4", built from the chapter definition rather than typed per screen. */
 export function formatChapterLine(chapter: ChapterDefinition): string {
-  return `Chapter ${ROMAN_NUMERALS[chapter.number - 1]} · Weeks ${chapter.weeks[0]}–${chapter.weeks.at(-1)}`;
+  return `Chapter ${formatChapterNumeral(chapter.number)} · Weeks ${chapter.weeks[0]}–${chapter.weeks.at(-1)}`;
 }

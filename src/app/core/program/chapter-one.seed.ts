@@ -1,15 +1,9 @@
 import type { ChapterDefinition } from '../domain/models';
+import type { ChapterSeed, WeeklyMissionSlot } from './chapter-program';
 import { gateTrialDefinition } from './chapter-one-trial.seed';
 
 export { gateTrialDefinition } from './chapter-one-trial.seed';
-
-export type Weekday = 1 | 2 | 3 | 4 | 5 | 6 | 7;
-
-/** A documented weekly slot. Alternatives remain open until the mission engine is built. */
-export interface WeeklyMissionSlot {
-  weekday: Weekday;
-  title: string;
-}
+export type { Weekday, WeeklyMissionSlot } from './chapter-program';
 
 export const chapterOneDefinition: ChapterDefinition = {
   id: 'chapter-1',
@@ -38,7 +32,7 @@ export const chapterOneWeeklyRhythm: readonly WeeklyMissionSlot[] = [
   { weekday: 7, title: 'Rest, worship, reflection' },
 ];
 
-export const chapterOneSeed = {
+export const chapterOneSeed: ChapterSeed = {
   chapter: chapterOneDefinition,
   trial: gateTrialDefinition,
   weeklyRhythm: chapterOneWeeklyRhythm,
@@ -49,4 +43,4 @@ export const chapterOneSeed = {
     'practice presence',
   ],
   fieldcraft: ['tool inspection', 'basic knots'],
-} as const;
+};

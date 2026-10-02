@@ -1,12 +1,22 @@
-import { Component, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  PendingTasks,
+  computed,
+  effect,
+  inject,
+  signal,
+  untracked,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormField, form, submit, validate } from '@angular/forms/signals';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import type { JournalEntry } from '../../../core/domain/models';
-import { getChapterOneSchedule } from '../../../core/program/campaign';
-import { getChapterOneContentForDate } from '../../../core/program/chapter-one-missions';
+import type { JournalEntry, TrialResult } from '../../../core/domain/models';
+import { resolveCampaignPosition } from '../../../core/program/campaign-position';
+import { getDayContent } from '../../../core/program/chapter-orders';
 import { getLeadershipLessonForWeek } from '../../../core/program/field-manual.seed';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { Icon } from '../../../shared/icon/icon';
 import {
   EVENING_PROMPTS,
@@ -27,6 +37,10 @@ export class WatchPage implements OnInit {
   private readonly store = inject(JournalStore);
   private readonly route = inject(ActivatedRoute);
   private readonly campaignState = inject(CampaignState);
+  private readonly trialHistory = inject(TrialHistory);
+  private readonly pendingTasks = inject(PendingTasks);
+  /** Saved trial passes decide today's chapter; dated content waits until they are read. */
+  private readonly completedTrials = signal<TrialResult[] | null>(null);
   private readonly params = toSignal(this.route.paramMap, {
     initialValue: this.route.snapshot.paramMap,
   });
@@ -37,21 +51,21 @@ export class WatchPage implements OnInit {
   });
   protected readonly today = this.campaignState.today;
   protected readonly dateLabel = computed(() => formatJournalDate(this.today()));
-  protected readonly dailyContent = computed(() => {
+  private readonly chapterDay = computed(() => {
     const campaign = this.campaignState.campaign();
-    return campaign?.currentChapterId === 'chapter-1'
-      ? getChapterOneContentForDate(campaign.startDate, this.today())
-      : undefined;
+    const trials = this.completedTrials();
+    if (!campaign || !trials) return null;
+    return resolveCampaignPosition(campaign.startDate, this.today(), trials)?.chapter ?? null;
   });
-  /** Read the week's lesson on Monday, or on Day 1 when the campaign begins midweek. */
+  protected readonly dailyContent = computed(() => {
+    const day = this.chapterDay();
+    return day ? getDayContent(day) : undefined;
+  });
+  /** Read the week's lesson on Monday, or on a chapter's first day when it begins midweek. */
   protected readonly morningLesson = computed(() => {
-    const campaign = this.campaignState.campaign();
-    if (campaign?.currentChapterId !== 'chapter-1') return undefined;
-    const schedule = getChapterOneSchedule(campaign.startDate, this.today());
-    if (!schedule || (schedule.weekday !== 1 && this.today() !== campaign.startDate)) {
-      return undefined;
-    }
-    return getLeadershipLessonForWeek(schedule.contentWeek);
+    const day = this.chapterDay();
+    if (!day || (day.weekday !== 1 && this.today() !== day.start)) return undefined;
+    return getLeadershipLessonForWeek(day.contentWeek);
   });
   protected readonly morningPrompt = MORNING_PROMPT;
   protected readonly eveningPrompts = EVENING_PROMPTS;
@@ -111,6 +125,14 @@ export class WatchPage implements OnInit {
 
   ngOnInit(): void {
     void this.campaignState.initialize();
+    void this.pendingTasks.run(async () => {
+      try {
+        this.completedTrials.set(await loadCampaignTrials(this.trialHistory));
+      } catch {
+        // Without trial history, Chapter I's dated content still applies.
+        this.completedTrials.set([]);
+      }
+    });
   }
 
   protected async save(event: Event): Promise<void> {

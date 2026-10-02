@@ -69,18 +69,6 @@ export const chapterOneRestoration: WorkoutDefinition = {
   finish: [{ kind: 'walk', minutes: 1, pace: 'easy' }],
 };
 
-const chapterOneWorkouts = new Map<string, WorkoutDefinition>([
-  [chapterOneForgeA.id, chapterOneForgeA],
-  [chapterOneForgeB.id, chapterOneForgeB],
-  [chapterOneRestoration.id, chapterOneRestoration],
-]);
-
-/** A fresh definition can be snapped into history without exposing the seed to mutation. */
-export function loadChapterOneWorkout(id: string): WorkoutDefinition | undefined {
-  const definition = chapterOneWorkouts.get(id);
-  return definition ? structuredClone(definition) : undefined;
-}
-
 /** Week 4 uses the documented approximate volume reduction without choosing skipped sets. */
 export function chapterOneWeekFourVolumeGuide(
   id: string,

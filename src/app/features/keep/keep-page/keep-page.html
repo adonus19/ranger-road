@@ -1,8 +1,4 @@
-<app-keep-band
-  [chapterComplete]="chapterComplete()"
-  [trialPassedOn]="trialPass()?.date ?? null"
-  [chapterTwoStart]="chapterTwoStart()"
-/>
+<app-keep-band [position]="position()" />
 
 @if (state.loading() || trialLoading()) {
   <p class="keep-state" role="status">Opening your campaign…</p>
@@ -14,7 +10,7 @@
   </div>
 } @else if (trialError()) {
   <div class="keep-state" role="alert">
-    <h2>Gate Trial history could not open</h2>
+    <h2>{{ program().trialName }} history could not open</h2>
     <p>Chapter completion could not be checked on this device.</p>
     <button type="button" (click)="retry()">Try again</button>
   </div>
@@ -23,12 +19,14 @@
 } @else if (chapterComplete()) {
   <div class="keep-body keep-body--complete">
     <section class="chapter-complete" aria-labelledby="chapter-complete-title">
-      <h2 id="chapter-complete-title">Chapter I complete</h2>
+      <h2 id="chapter-complete-title">Chapter {{ numeral(program().chapter.number) }} complete</h2>
       <p>
-        You passed the Gate Trial on {{ longDate(trialPass()?.date ?? state.today()) }}. Chapter
-        II’s orders will appear here once they are added to the app.
+        You passed the {{ program().trialName }} on
+        {{ longDate(trialPass()?.date ?? state.today()) }}. Chapter
+        {{ numeral(program().chapter.number + 1) }}’s orders will appear here once they are added to
+        the app.
       </p>
-      <a routerLink="/road/gate-trial">View Gate Trial record</a>
+      <a [routerLink]="program().trialRoute">View {{ program().trialName }} record</a>
     </section>
     <div class="check-in-reminder">
       <app-check-in-reminder />
@@ -36,7 +34,7 @@
     </div>
     <app-gate-trial-recovery-reminder class="recovery-reminder" />
   </div>
-} @else if (seed()) {
+} @else if (position()) {
   <div class="keep-body">
     <a class="readiness-strip readiness-strip--{{ readinessStatus() }}" routerLink="/readiness">
       <span class="medallion medallion--strip">

@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { describe, expect, it, vi } from 'vitest';
 import type { Campaign, JournalEntry } from '../../../core/domain/models';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { TrialHistory } from '../../../core/state/trial-history';
 import { JournalStore, type EveningAnswers } from '../journal-store';
 import { WatchPage } from './watch-page';
 
@@ -41,6 +42,7 @@ function setup(watch: 'morning' | 'evening', campaign: Campaign | null = null) {
       },
       { provide: JournalStore, useValue: { saveMorning, saveEvening } },
       { provide: CampaignState, useValue: state },
+      { provide: TrialHistory, useValue: { forTrial: async () => [] } },
     ],
   });
   return { fixture: TestBed.createComponent(WatchPage), saveMorning, saveEvening, state };

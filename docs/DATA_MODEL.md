@@ -20,10 +20,20 @@
 
 - id
 - startDate
-- currentChapterId
+- currentChapterId (the chapter the campaign began in, always Chapter I; today's chapter is derived, see Campaign Position)
 - status
 - trialTargetDate? (planning date; Chapter I uses the first Gate Trial attempt, the Monday after Week 4. Attempts then follow the Monday and Thursday rule whatever an older saved date says)
 - scheduleVersion? (Chapter I version 2 adds a short lead-in before four complete Monday–Sunday weeks; version 3 used Week 4 Saturday as its generated planning date; version 4 moves the generated target for each older version—Day 1 + 27, the closing Sunday, or Week 4 Saturday—to the first Monday Gate Trial attempt. A separately chosen date stays as saved; older campaigns may lack this field.)
+
+### Campaign Position (derived, never stored)
+
+Today's chapter, week, and weekday come from Day 1 and the saved trial results, so a restored copy always lands in the same place. Chapter I starts on Day 1, with a short lead-in when Day 1 is not a Monday. Each later chapter starts the day after its predecessor's trial pass if that was a Monday, otherwise the following Monday. Its first week is the Monday–Sunday week that holds that first day, so after a Monday pass the trial day counts as the new chapter's first Monday. Campaign week numbers run across chapters (Chapter II is Weeks 5–8). After a chapter's last week, its Mondays and Thursdays are trial attempts until the day of the pass, and the other days repeat the last week. A chapter whose orders are not in the app yet shows the previous chapter as complete from its first day.
+
+Mission IDs name the chapter and week (`chapter-2-week-5-day-3-weekly`), the chapter and trial on attempt days (`chapter-2-three-mile-trial-attempt-day-1-weekly`), or Chapter I's lead-in (`chapter-1-lead-in-day-4-weekly`). Chapter I's IDs are unchanged by the multi-chapter schedule.
+
+### ChapterProgram (seed content, not stored)
+
+A chapter is in the app once its program is registered in order: its ChapterDefinition and TrialDefinition, the trial's name and page, whether it leads in, its dated weeks, its attempt-day content, its workouts and restoration, and each workout's week plan (instructions, deload set guide, and whether the session is saved as reduced). A day's documented alternatives, such as Friday restoration or nonexertional skill practice, and its Red-day wording live in the dated content, not in screen code.
 
 ### ChapterDefinition
 
@@ -350,4 +360,4 @@ Historical records are immutable except explicit user edits.
 Restoring a saved copy is the one operation that replaces history. It runs only after the person confirms, and it replaces every store in a single transaction, so a failure leaves the device unchanged.
 Program definition updates must not rewrite prior completed sessions.
 When Chapter I scheduling changes, reconcile only the campaign's generated planning date. Preserve any separately chosen target date and every historical row. Dated mission attempts retain their definition snapshots and remain readable even when their old week-based ID differs from the newly scheduled order.
-A completed Gate Trial result is the pass. Chapter II's first day is derived from the first completed result: the day after a Monday pass, the Monday after any other pass, or the first attempt day for an older result saved before the trial window. Chapter I completion is today being on or after that day. None of this mutates the Campaign or TrialResult.
+A completed trial result is the pass for its chapter. The next chapter's first day is derived from the first completed result: the day after a Monday pass, the Monday after any other pass, or the first attempt day for an older result saved before the trial window. A chapter is complete once today is on or after that day. None of this mutates the Campaign or TrialResult.
