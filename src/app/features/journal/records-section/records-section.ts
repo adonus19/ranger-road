@@ -19,13 +19,11 @@ import {
   type RecordsBackup,
   type RecordsSummary,
 } from '../../../core/persistence/records-backup';
+import { COPY_SAVED_AT_KEY, readCopySavedAt } from '../../../core/state/backup-reminder';
 import { localDateToday } from '../../../core/state/campaign-state';
 import { LocalRecords, recordsBackupFileName } from '../../../core/state/local-records';
 import { formatClockTime, formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
-
-/** Per-device note of the last copy made here; the copy itself is the person's file. */
-const SAVED_AT_KEY = 'rangers-road.copy-saved-at';
 
 interface RestoreCandidate {
   backup: RecordsBackup;
@@ -58,7 +56,7 @@ export class RecordsSection {
 
   /** Phones get the share sheet (Files, iCloud, email); other devices download the file. */
   protected readonly shares = canShareCopies();
-  protected readonly savedAt = signal<IsoTimestamp | null>(readSavedAt());
+  protected readonly savedAt = signal<IsoTimestamp | null>(readCopySavedAt());
   protected readonly saving = signal(false);
   protected readonly saveError = signal<string | null>(null);
   /** A prepared copy that needs one more tap, when the share sheet asked for a fresh one. */
@@ -230,7 +228,7 @@ export class RecordsSection {
     this.savedAt.set(savedAt);
     this.announcement.set(announcement);
     try {
-      localStorage.setItem(SAVED_AT_KEY, savedAt);
+      localStorage.setItem(COPY_SAVED_AT_KEY, savedAt);
     } catch {
       // Storage can be refused in a private window; the copy was still made.
     }
@@ -247,15 +245,6 @@ export class RecordsSection {
 function describeInstant(instant: IsoTimestamp): string {
   const time = formatClockTime(instant).replace(/\s(?=[AP]M)/, ' ');
   return `${formatShortDate(localDateToday(new Date(instant)))} at ${time}`;
-}
-
-function readSavedAt(): IsoTimestamp | null {
-  try {
-    const value = localStorage.getItem(SAVED_AT_KEY);
-    return value && Number.isFinite(Date.parse(value)) ? value : null;
-  } catch {
-    return null;
-  }
 }
 
 /** Touch devices that can share a JSON file get the share sheet; the rest download it. */

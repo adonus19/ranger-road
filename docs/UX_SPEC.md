@@ -28,6 +28,7 @@ Must show:
 - primary Begin Mission button
 - current Hearth mission
 - a quiet check-in reminder while the Day 1 or monthly check-in is due, or while tests held by a Red day wait (not shown on a Red day)
+- a quiet backup reminder on Sunday when no copy was saved that week (Monday through Sunday): one row opening Journal's Save a copy, with a "Not today" link that hides it until tomorrow; it never counts missed weeks
 - optional quick stats
 
 The trial countdown points at the next Gate Trial attempt: the Monday after Week 4, then each Thursday and Monday until the trial is passed (see Trial Timing in `CHAPTERS_AND_TRIALS.md`). The band's note says when the next attempt is, or that the trial is today if the person is Green. On an attempt day, and on the day of a pass, the check-in reminder waits until the next day so its tests never land on top of the trial. Once the trial is passed, the countdown reads Done, the day's order reads Gate Trial passed, and the note names the day Chapter II begins.

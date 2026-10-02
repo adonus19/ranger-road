@@ -30,7 +30,10 @@
       </p>
       <a routerLink="/road/gate-trial">View Gate Trial record</a>
     </section>
-    <app-check-in-reminder class="check-in-reminder" />
+    <div class="check-in-reminder">
+      <app-check-in-reminder />
+      <app-backup-reminder />
+    </div>
     <app-gate-trial-recovery-reminder class="recovery-reminder" />
   </div>
 } @else if (seed()) {
@@ -111,7 +114,14 @@
     </section>
 
     @if (!trialDay()) {
-      <app-check-in-reminder class="check-in-reminder" />
+      <div class="check-in-reminder">
+        <app-check-in-reminder />
+        <app-backup-reminder />
+      </div>
+    } @else {
+      <div class="check-in-reminder">
+        <app-backup-reminder />
+      </div>
     }
     <app-gate-trial-recovery-reminder class="recovery-reminder" />
 

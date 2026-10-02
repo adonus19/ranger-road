@@ -270,6 +270,10 @@ The first thing below the band. A parchment-tinted strip holds a round medallion
 - **Watch tiles:** two half-width tiles with the same border and radius, each with a 52px medallion, a label and a serif title.
 - **Hearth row:** not a card. It sits between two soft rules, with a gold hearth icon, a short vertical divider, a label and the mission text. It opens the week's leadership lesson, so it ends in a chevron like the check-in row.
 
+### Reminder Rows
+
+Quiet rows under the Hearth row, between soft rules, in the same form: gold icon, short vertical divider, serif title, one help line and a chevron. The check-in row uses a tape measure; the Sunday backup row uses the tray-and-arrow icon and opens Journal. The backup row has a plain "Not today" text link on its own line (48px tap area) that hides it until tomorrow. Neither row counts or names missed weeks.
+
 ### Inputs / Fields
 
 - **Text and date fields:** paper background, 1px Rule border, 6px radius, 48px tall, 16px text. The border darkens to Stone on hover.

@@ -20,6 +20,7 @@ import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory } from '../../../core/state/trial-history';
 import { formatLongDate } from '../../../shared/format-date';
 import { Icon, type IconName } from '../../../shared/icon/icon';
+import { BackupReminder } from '../backup-reminder/backup-reminder';
 import { CheckInReminder } from '../check-in-reminder/check-in-reminder';
 import { GateTrialRecoveryReminder } from '../gate-trial-recovery-reminder/gate-trial-recovery-reminder';
 import { KeepBand } from '../keep-band/keep-band';
@@ -55,7 +56,15 @@ const READINESS_COPY: Readonly<Record<ReadinessStatus | 'pending', ReadinessCopy
 };
 
 @Component({
-  imports: [CheckInReminder, GateTrialRecoveryReminder, Icon, KeepBand, RouterLink, StartDay],
+  imports: [
+    BackupReminder,
+    CheckInReminder,
+    GateTrialRecoveryReminder,
+    Icon,
+    KeepBand,
+    RouterLink,
+    StartDay,
+  ],
   selector: 'app-keep-page',
   styleUrl: './keep-page.css',
   templateUrl: './keep-page.html',

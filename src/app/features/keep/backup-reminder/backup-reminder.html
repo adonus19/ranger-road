@@ -1,0 +1,13 @@
+@if (due()) {
+  <div class="reminder">
+    <a class="reminder__link" routerLink="/journal">
+      <app-icon class="reminder__icon" name="tray-arrow-up" />
+      <span class="reminder__text">
+        <strong>Save a copy of your records</strong>
+        <span>Your records live only on this phone. Save a copy for the week.</span>
+      </span>
+      <app-icon class="reminder__arrow" name="chevron-right" />
+    </a>
+    <button type="button" class="reminder__later" (click)="notToday()">Not today</button>
+  </div>
+}
