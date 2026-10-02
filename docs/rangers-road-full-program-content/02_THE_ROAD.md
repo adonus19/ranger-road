@@ -3,6 +3,8 @@
 **Theme:** Build the engine.  
 **Trial:** The Three-Mile Trial.
 
+Names in the two Forge lists are the Chapter II step-ups, each with its own guide in `EXERCISE_CATALOG.md`: Split Squat steps up from Chapter I's Supported Split Squat, Goblet Squat from Goblet Squat to Box, and Supported Deep Squat from Supported Squat Hold. A step-up is a new exercise, not a rename; keep the Chapter I version available as the easier choice on a Yellow or pain-affected day.
+
 # Forge A
 - Box Squat — 3 x 6
 - Bench Press — 3 x 6
@@ -20,17 +22,21 @@
 - Glute Bridge — 3 x 12
 - Farmer Carry — 3 x 45–60 sec
 - Bird Dog — 2 x 8/side
-- Optional Hammer Curl — 2 x 10
+- Optional Hammer Curl — 2 x 10 (light; never counted in the standard 20 work sets)
 
 # Restoration II
 - cat-camel — 6
 - bird dog — 5/side
 - half-kneeling hip-flexor stretch — 30–45 sec/side
 - neutral-spine hamstring stretch — 30 sec/side
-- supported deep squat — 2 x 20–30 sec
+- supported deep squat (Supported Deep Squat) — 2 x 20–30 sec
 - ankle rock — 10/side
 - wall slide — 8
 - open-book rotation — 6/side
+
+## Friday intervals
+
+Every Friday interval walk is written out as plain steps (warm-up, each brisk and easy block, cooldown) and can be done by feel or with any watch. The app may also offer an optional on-screen interval timer that the person chooses to start; it is never required, never starts on its own, and completing the walk never depends on it. On a Red day the intervals are hidden and Restoration is offered instead, as in Chapter I.
 
 # Week 5 — Be Still
 Monday: Forge A. Scripture: Psalm 46:1–11.  
@@ -66,12 +72,12 @@ Sunday: Psalm 128.
 Hearth mission: one full hour at home with phone put away.
 
 # Week 8 — Walk Faithfully
-Monday: Forge A, no aggressive progression. Scripture: Micah 6:8.  
+Monday: Forge A, no aggressive progression: the written sets and reps, no load increases. Scripture: Micah 6:8.  
 Tuesday: 30-min easy walk. Scripture: Galatians 5:22–26.  
 Wednesday: Restoration. Scripture: Psalm 119:105.  
-Thursday: Forge B, slightly reduced volume. Scripture: Proverbs 3:5–8.  
+Thursday: Forge B at reduced volume (about 25% less, around 15 of the standard 20 work sets; Hammer Curl is not part of the 20). Scripture: Proverbs 3:5–8.  
 Friday: easy recovery. Scripture: Hebrews 10:23–25.  
-Saturday: Three-Mile Trial. Scripture: Psalm 121.  
+Saturday: 30-minute easy walk; then prepare for Monday's Three-Mile Trial (choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs). Scripture: Psalm 121.  
 Sunday: Isaiah 40:28–31. Reflection: **Where has consistent small effort begun changing me?**
 
 # Fieldcraft — Navigation I
@@ -89,6 +95,8 @@ Field mission: before one Saturday walk, study the trail map and predict directi
 Daughter quest: let daughter navigate one simple marked portion.
 
 # The Three-Mile Trial
+
+Take the Three-Mile Trial on the Monday after Week 8, in place of that week's Forge A. If it is not passed, try again that Thursday (in place of Forge B), then each following Monday and Thursday. Chapter III begins only after a pass. Passing means finishing every part below as written on a Green day, with no pain at 3 or more and no changed movement; there is no time standard. Read Psalm 121 on each attempt day. Days between attempts repeat Week 8's easy days.
 1. Walk 3 continuous miles; record time, splits if available, HR, RPE, knee/back discomfort, 5-min recovery.
 2. 30-lb suitcase carry — 60 sec right, 60 sec left; record grip/core/posture difficulty.
 3. Three-flight stair test at steady pace if appropriate; rate breathlessness 1–10.

@@ -70,6 +70,26 @@ Every named movement in the app should have a Quick Help view and a Full Guide. 
 
 ---
 
+## Split Squat
+
+**Purpose:** Build single-leg strength and balance without holding a rack. Chapter II's step-up from Supported Split Squat.
+
+**Movement pattern:** Lunge / split stance.
+
+**Targets:** Front-leg quads and glutes; hamstrings, adductors, and core secondarily.
+
+**How:** Take a long split stance with feet hip-width apart, front foot flat and back heel lifted. Keep your torso tall and brace. Lower straight down under control until the back knee is just above the floor or as deep as feels comfortable. Push through the whole front foot to rise. Finish all reps on one side, then switch.
+
+**Feel:** Front quad and glute, with some stretch in the back hip.
+
+**Avoid:** Front knee collapsing inward, leaning far forward, bouncing out of the bottom, a stance so short the front heel lifts.
+
+**Pain-aware options:** Shorten the range, touch a hand to a wall or rack for balance, or go back to Supported Split Squat.
+
+**Step-up from:** Supported Split Squat.
+
+---
+
 ## Suitcase Carry
 
 **Purpose:** Build grip and anti-side-bend trunk strength.
@@ -107,6 +127,26 @@ Every named movement in the app should have a Quick Help view and a Full Guide. 
 **How:** Hold dumbbell at chest. Brace, sit down under control to box, lightly touch, stand.
 
 **Feel:** Quads, glutes, upper trunk tension.
+
+---
+
+## Goblet Squat
+
+**Purpose:** Build squat strength with a front-loaded counterbalance and no box to rest on. Chapter II's step-up from Goblet Squat to Box.
+
+**Movement pattern:** Squat.
+
+**Targets:** Quads, glutes, core.
+
+**How:** Hold one dumbbell against your chest with both hands. Stand with feet about shoulder width. Brace, then sit down and back under control to a comfortable depth, keeping heels flat and chest tall. Drive through the whole foot to stand.
+
+**Feel:** Quads, glutes, upper trunk tension.
+
+**Avoid:** Heels lifting, knees collapsing inward, rounding forward, dropping quickly into the bottom.
+
+**Pain-aware options:** Squat to a box or bench again, shorten the depth, or lighten the dumbbell.
+
+**Step-up from:** Goblet Squat to Box.
 
 ---
 
@@ -268,6 +308,24 @@ Every named movement in the app should have a Quick Help view and a Full Guide. 
 
 ---
 
+## Hammer Curl
+
+**Purpose:** Optional light arm work that supports carrying and pulling. It is an add-on to Forge B and never replaces a main exercise.
+
+**Movement pattern:** Elbow flexion.
+
+**Targets:** Biceps and the forearm muscles that help grip.
+
+**How:** Stand tall holding a light dumbbell in each hand with palms facing your thighs. Keep elbows beside your ribs. Bend the elbows to raise the weights until your thumbs approach your shoulders, then lower slowly. Keep the wrists straight.
+
+**Feel:** Front of the upper arm and forearm.
+
+**Avoid:** Swinging the body, letting elbows drift forward, leaning back, going heavy enough that form breaks.
+
+**Pain-aware options:** Lighter weights, one arm at a time, sit on a bench, or skip it. Skipping an optional exercise never counts as a missed work set.
+
+---
+
 ## Cat-Camel
 
 **Purpose:** Gentle spinal movement and awareness.
@@ -293,6 +351,24 @@ Every named movement in the app should have a Quick Help view and a Full Guide. 
 **Purpose:** Gradually improve squat-position comfort/mobility.
 
 **How:** Hold rack or stable support and descend only to comfortable depth. Breathe while maintaining whole-foot contact.
+
+---
+
+## Supported Deep Squat
+
+**Purpose:** Improve comfort in a deep squat position by holding it for time. Chapter II's step-up from Supported Squat Hold.
+
+**Targets:** Hips, ankles, and the whole lower body, with trunk position.
+
+**How:** Hold a rack or stable support in front of you. Lower into the deepest squat that feels comfortable, with your whole foot on the floor and your chest up. Breathe slowly and stay relaxed for the hold, then stand up.
+
+**Feel:** Stretch through the hips, groin, and ankles; no sharp or pinching pain at the knee or hip.
+
+**Avoid:** Heels lifting, bouncing, forcing depth, holding your breath, pain at the knee or hip.
+
+**Pain-aware options:** Use more support, sit higher, shorten the hold, or go back to Supported Squat Hold.
+
+**Step-up from:** Supported Squat Hold.
 
 ---
 

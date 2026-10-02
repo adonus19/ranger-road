@@ -63,6 +63,8 @@ Each chapter:
 
 ## Forge — Training
 
+Friday interval walks always show their written steps. An optional interval timer may be offered on Road; the person starts it, it never starts itself, and a walk can be logged without it.
+
 Workout player:
 
 - current exercise
@@ -76,7 +78,7 @@ Workout player:
 
 The Chapter I Forge opens the workout named in today's order. Restoration is also available as needed after a same-day readiness check. An in-progress session resumes at the saved exercise and set, with its prescription snapshot intact. The warm-up is shown before the work sets; the documented easy finish is required for Restoration and optional for Forge A. The Current Set screen keeps the dose, planned load, Quick Help, Pain, and Substitute visible together; Complete set opens a short confirmation of actual reps or seconds and optional effort before saving. Exact numeric targets may fill that confirmation for review, while ranges remain blank. Each work set is marked done or skipped before a completed session is saved. Skipped sets and described substitutions mark the session reduced. The rest timer shows elapsed time because Chapter I gives no fixed rest interval. Previous load is display-only; the app never fills in or increases the next load automatically.
 
-In Week 4 Forge B, show the documented approximate 25% deload as an around-15-of-20-work-set guide. The person chooses which roughly five sets to skip, and the active and finish screens show the number actually completed and skipped. Keep the base prescription and actual set marks in the saved snapshot; this guidance does not silently remove exercises or auto-progress load.
+In Week 8 Forge B, show the same approximate 25% guide (around 15 of 20 work sets, Hammer Curl not counted); Week 8 Forge A shows no reduction and no load increase. In Week 4 Forge B, show the documented approximate 25% deload as an around-15-of-20-work-set guide. The person chooses which roughly five sets to skip, and the active and finish screens show the number actually completed and skipped. Keep the base prescription and actual set marks in the saved snapshot; this guidance does not silently remove exercises or auto-progress load.
 
 After Chapter I is acknowledged complete, Forge stops offering the repeated Week 4 choices. A saved draft still opens so partial work can be ended and kept in history.
 

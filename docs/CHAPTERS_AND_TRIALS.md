@@ -10,7 +10,7 @@ A chapter's trial comes after its last full week, not inside it, so the person s
 - The next chapter begins only after a pass. After a Monday pass it continues that same week from Tuesday, because the trial took the place of its first strength day. After a pass on any other day it begins the following Monday, and the days in between repeat the previous chapter's final-week easy days.
 - Days between attempts repeat the final week's non-strength days. Nothing new or harder is added while a trial is pending.
 - Each week of retries moves every later chapter back by a week. Monthly check-ins stay anchored to Day 1.
-- Longer trials may need different attempt days (Chapter III is a mountain hike; Chapters VI, VIII, and IX are long efforts). Each later chapter's attempt days are settled when that chapter is built; the rule that the next chapter waits for a pass does not change. Until then, the content packs for Chapters II–IX still list each trial on its last Saturday.
+- Longer trials may need different attempt days (Chapter III is a mountain hike; Chapters VI, VIII, and IX are long efforts). Each later chapter's attempt days are settled when that chapter is built; the rule that the next chapter waits for a pass does not change. Chapter II's Three-Mile Trial is settled: it follows the rule above on Mondays and Thursdays, like the Gate Trial. Until Chapters III–IX are built, their content packs still list each trial on its last Saturday.
 
 
 ## I — The Muster (Weeks 1–4)
@@ -94,6 +94,10 @@ Trial: **The Three-Mile Trial**
 - stair test
 - leadership reflection
 - prayer for family
+
+The Three-Mile Trial follows the Trial Timing rule above, exactly as the Gate Trial does. Its first attempt is the Monday after Week 8 in place of Forge A; the retry days are that week's Thursday, then each following Monday and Thursday, and it opens only on those days. Week 8 Saturday is a 30-minute easy walk plus preparation for Monday: choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs. Psalm 121 is read on Saturday and on every attempt day. Passing means finishing every part as written on a Green day with no pain at 3 or more and no changed movement; there is no time standard. Days between attempts repeat Week 8's non-strength days. Chapter III begins only after a pass: after a Monday pass from Tuesday, otherwise the following Monday.
+
+Friday's brisk-interval walks are always written as plain steps. An optional on-screen interval timer may be offered, started only by the person and never required. Week 8 Monday (Forge A) keeps the written sets and reps with no load increases. Week 8 Thursday (Forge B) is about 25% lighter, around 15 of the standard 20 work sets chosen by the person, with Hammer Curl outside that count; like Week 4, this is a guide and not a hard limit on saving.
 
 ---
 

@@ -76,6 +76,8 @@ Adds:
 - suitcase carry
 - side plank
 - goblet squat to box
+- split squat, goblet squat, supported deep squat (Chapter II step-ups; each its own exercise with its own guide and images)
+- hammer curl (optional, Chapter II Forge B)
 - step-up
 - one-arm DB row
 - push-up
