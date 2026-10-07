@@ -97,6 +97,7 @@ const ICONS = {
   ],
   search: [{ d: 'M10.8 17.6a6.8 6.8 0 1 1 0-13.6 6.8 6.8 0 0 1 0 13.6Zm4.9-1.9 4.6 4.6', paint: 'stroke' }],
   'chevron-right': [{ d: 'M9 5.5 15.5 12 9 18.5', paint: 'stroke' }],
+  check: [{ d: 'M5 12.6 9.6 17 19 7.4', paint: 'stroke' }],
   plus: [{ d: 'M12 5v14M5 12h14', paint: 'stroke' }],
   minus: [{ d: 'M5 12h14', paint: 'stroke' }],
   'arrow-right': [{ d: 'M4 12h15m-5.5-5.5L19 12l-5.5 5.5', paint: 'stroke' }],

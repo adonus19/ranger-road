@@ -3,15 +3,18 @@ import { RouterLink } from '@angular/router';
 import type { ReadinessStatus, TrialResult } from '../../../core/domain/models';
 import { resolveCampaignPosition } from '../../../core/program/campaign-position';
 import {
+  getActivityChoices,
   getDayOrders,
-  getWeekContent,
+  getHearthMission,
   type TodayOrder,
 } from '../../../core/program/chapter-orders';
 import { getLeadershipLessonForWeek } from '../../../core/program/field-manual.seed';
 import { chapterPrograms, formatChapterNumeral } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { DayProgress, recordLabel } from '../../../core/state/day-progress';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate } from '../../../shared/format-date';
+import { DoneMark } from '../../../shared/done-mark/done-mark';
 import { Icon, type IconName } from '../../../shared/icon/icon';
 import { BackupReminder } from '../backup-reminder/backup-reminder';
 import { CheckInReminder } from '../check-in-reminder/check-in-reminder';
@@ -52,6 +55,7 @@ const READINESS_COPY: Readonly<Record<ReadinessStatus | 'pending', ReadinessCopy
   imports: [
     BackupReminder,
     CheckInReminder,
+    DoneMark,
     GateTrialRecoveryReminder,
     Icon,
     KeepBand,
@@ -65,6 +69,7 @@ const READINESS_COPY: Readonly<Record<ReadinessStatus | 'pending', ReadinessCopy
 export class KeepPage implements OnInit {
   protected readonly state = inject(CampaignState);
   private readonly trialHistory = inject(TrialHistory);
+  protected readonly progress = inject(DayProgress);
   protected readonly trialLoading = signal(true);
   protected readonly trialError = signal(false);
   private readonly completedTrials = signal<TrialResult[]>([]);
@@ -119,14 +124,21 @@ export class KeepPage implements OnInit {
     return order.missionType === 'strength' ? 'anvil' : 'footprints';
   });
 
+  /** Today's main order is marked once something is recorded for it (or its trial is passed). */
+  protected readonly mainLabel = computed(() => {
+    const chapter = this.position()?.chapter;
+    if (!chapter) return null;
+    if (this.trialPass()?.date === this.state.today()) return 'Done';
+    const ids = getActivityChoices(chapter).map((choice) => choice.id);
+    return recordLabel(this.progress.recordFor(ids));
+  });
+
   protected readonly readinessStatus = computed(() => this.state.readiness()?.status ?? 'pending');
   protected readonly readinessCopy = computed(() => READINESS_COPY[this.readinessStatus()]);
 
   protected readonly hearthMission = computed(() => {
     const chapter = this.position()?.chapter;
-    if (!chapter) return '';
-    const week = getWeekContent(chapter);
-    return week.hearthMission ?? week.leadershipMission ?? chapter.program.leadership[0] ?? '';
+    return chapter ? getHearthMission(chapter) : '';
   });
 
   /** The week's leadership lesson in the Field Manual, when it has one. */
@@ -156,6 +168,7 @@ export class KeepPage implements OnInit {
       if (this.state.error()) return;
       if (!this.state.campaign() || this.state.beforeDayOne()) return;
       this.completedTrials.set(await loadCampaignTrials(this.trialHistory));
+      await this.progress.refresh(this.state.today());
     } catch {
       this.trialError.set(true);
     } finally {

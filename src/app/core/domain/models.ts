@@ -307,6 +307,17 @@ export interface RoadSession {
   editedAt?: IsoTimestamp;
 }
 
+/** A Done tap for one of the day's smaller orders. Today only; undoing removes the row. */
+export type DailyCheckItem = 'hearth' | 'reading' | 'family-quest';
+
+export interface DailyCheck {
+  /** `${date}:${item}`, so a second tap on the same day is the same row. */
+  id: string;
+  date: LocalDate;
+  item: DailyCheckItem;
+  doneAt: IsoTimestamp;
+}
+
 export interface CarryResult {
   type: string;
   load: number;

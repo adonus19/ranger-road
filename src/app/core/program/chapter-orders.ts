@@ -204,3 +204,9 @@ export function getWorkoutChoices(day: ChapterDay): string[] {
 export function isWorkoutPlanned(day: ChapterDay, workoutId: string): boolean {
   return getActivityChoices(day).some((choice) => choice.contentReferences.includes(workoutId));
 }
+
+/** The week's Hearth mission, falling back to its leadership mission or the chapter's first. */
+export function getHearthMission(day: ChapterDay): string {
+  const week = getWeekContent(day);
+  return week.hearthMission ?? week.leadershipMission ?? day.program.leadership[0] ?? '';
+}

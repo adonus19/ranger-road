@@ -191,3 +191,10 @@ Between sets, the rest clock counts up from when the set was marked. It has Paus
 - Ending a Forge session early records the mission as Reduced; finishing records Full (Reduced if sets were skipped or changed). The result can be changed on Today's Mission with "Record another attempt".
 - Today's Mission shows each walk logged today with "Edit or remove" and "Log another walk". Editing keeps an "Edited" note (`editedAt`); removing asks first. Neither changes the mission record already saved.
 - Only today is recorded this way. Earlier days are not made up from a walk.
+
+## Today's Progress
+
+- Today's Mission opens with a "Today so far" list: the main order, Morning Watch, Hearth mission, reading (when the day has it), the optional family quest, and Evening Watch. A ring becomes a check when done.
+- The main order shows "Done" for a full outcome and a neutral "Recorded" for Reduced, Restoration or Rest. Watches show "Saved".
+- Hearth mission, reading and the family quest have a Done button, undoable ("Undo") the same day. These marks are for today only; earlier days are never revisited, and nothing counts or tallies what was missed.
+- Keep shows the same check marks on the main order, the watches and the Hearth mission once they are done. Nothing is shown for items not yet done.

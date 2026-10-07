@@ -44,6 +44,57 @@
       [help]="readinessHelp()"
     />
 
+    <section class="progress" aria-labelledby="progress-title">
+      <h2 id="progress-title">Today so far</h2>
+      <ul>
+        <li>
+          <app-done-mark [done]="!!mainLabel()" [label]="mainLabel() ?? 'Done'" />
+          <span class="progress__text">{{ mainOrder()?.title ?? 'Today’s order' }}</span>
+          <span class="progress__state">{{ mainLabel() ?? 'To do' }}</span>
+        </li>
+        <li>
+          <app-done-mark [done]="progress.morningWatch()" label="Saved" />
+          <a class="progress__text" routerLink="/journal/morning">Morning Watch</a>
+          <span class="progress__state">{{ progress.morningWatch() ? 'Saved' : 'To do' }}</span>
+        </li>
+        @if (hearthMission()) {
+          <li>
+            <app-done-mark [done]="progress.isDone('hearth')" />
+            <span class="progress__text">Hearth mission: {{ hearthMission() }}</span>
+            <button type="button" (click)="toggleDone('hearth')">
+              {{ progress.isDone('hearth') ? 'Undo' : 'Done' }}
+            </button>
+          </li>
+        }
+        @if (readingOrder(); as reading) {
+          <li>
+            <app-done-mark [done]="progress.isDone('reading')" />
+            <span class="progress__text">{{ reading }}</span>
+            <button type="button" (click)="toggleDone('reading')">
+              {{ progress.isDone('reading') ? 'Undo' : 'Done' }}
+            </button>
+          </li>
+        }
+        @if (familyQuest(); as quest) {
+          <li>
+            <app-done-mark [done]="progress.isDone('family-quest')" />
+            <span class="progress__text">Optional family quest: {{ quest }}</span>
+            <button type="button" (click)="toggleDone('family-quest')">
+              {{ progress.isDone('family-quest') ? 'Undo' : 'Done' }}
+            </button>
+          </li>
+        }
+        <li>
+          <app-done-mark [done]="progress.eveningWatch()" label="Saved" />
+          <a class="progress__text" routerLink="/journal/evening">Evening Watch</a>
+          <span class="progress__state">{{ progress.eveningWatch() ? 'Saved' : 'To do' }}</span>
+        </li>
+      </ul>
+      @if (doneError(); as message) {
+        <p class="field-error" role="alert">{{ message }}</p>
+      }
+    </section>
+
     <section class="order" aria-labelledby="order-title">
       <span class="order__icon"><app-icon [name]="mainOrderIcon()" /></span>
       <div>

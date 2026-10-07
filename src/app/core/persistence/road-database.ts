@@ -1,5 +1,6 @@
 import type {
   Campaign,
+  DailyCheck,
   IsoTimestamp,
   JournalEntry,
   LocalDate,
@@ -49,7 +50,7 @@ import { addDays, getCampaignDay, isGateTrialAttemptDay } from '../program/campa
 import { checkInSaveError, testsHeldFor } from '../program/check-in-schedule';
 
 export const DATABASE_NAME = 'rangers-road';
-export const DATABASE_VERSION = 4;
+export const DATABASE_VERSION = 5;
 
 export const STORE_NAMES = [
   'campaigns',
@@ -65,6 +66,7 @@ export const STORE_NAMES = [
   'trialDrafts',
   'trialAttempts',
   'postMissionFunctions',
+  'dailyChecks',
 ] as const;
 
 export type StoreName = (typeof STORE_NAMES)[number];
@@ -233,15 +235,20 @@ export class RoadDatabase {
   }
 
   deleteRoadSession(id: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const transaction = this.database.transaction('roadSessions', 'readwrite');
-      transaction.oncomplete = () => resolve();
-      transaction.onerror = () =>
-        reject(transaction.error ?? new Error('Unable to remove the walk.'));
-      transaction.onabort = () =>
-        reject(transaction.error ?? new Error('Unable to remove the walk.'));
-      transaction.objectStore('roadSessions').delete(id);
-    });
+    return this.remove('roadSessions', id);
+  }
+
+  /** Done taps for the day's smaller orders; a tap can be undone the same day. */
+  async getDailyChecksForDate(date: LocalDate): Promise<DailyCheck[]> {
+    return (await this.readAll<DailyCheck>('dailyChecks')).filter((check) => check.date === date);
+  }
+
+  setDailyCheck(check: DailyCheck): Promise<void> {
+    return this.write('dailyChecks', 'put', check);
+  }
+
+  deleteDailyCheck(id: string): Promise<void> {
+    return this.remove('dailyChecks', id);
   }
 
   /** Version 2 permits one resumable draft; all completed workout rows remain in the v1 store. */
@@ -468,7 +475,9 @@ export class RoadDatabase {
   async getActiveTrialDraft(): Promise<TrialDraft | undefined> {
     const drafts = await this.readAll<TrialDraft>('trialDrafts');
     if (drafts.length > 1) {
-      throw new Error('More than one active trial was found. Preserve the drafts before continuing.');
+      throw new Error(
+        'More than one active trial was found. Preserve the drafts before continuing.',
+      );
     }
     return drafts[0];
   }
@@ -510,7 +519,8 @@ export class RoadDatabase {
       let started: TrialDraft | undefined;
       let failure: Error | undefined;
       const fail = (error: unknown) => {
-        failure = error instanceof Error ? error : new Error('The Gate Trial could not be started.');
+        failure =
+          error instanceof Error ? error : new Error('The Gate Trial could not be started.');
         transaction.abort();
       };
       const startWhenLoaded = () => {
@@ -581,11 +591,7 @@ export class RoadDatabase {
       const saveWhenLoaded = () => {
         if (!stored || !checks || saved) return;
         try {
-          saved = updateGateTrialDraft(
-            stored,
-            edited,
-            latestSameDayReadiness(checks, stored.date),
-          );
+          saved = updateGateTrialDraft(stored, edited, latestSameDayReadiness(checks, stored.date));
           transaction.objectStore('trialDrafts').put(saved);
         } catch (error) {
           fail(error);
@@ -618,7 +624,8 @@ export class RoadDatabase {
       let recorded: RecordedTrialPainEvent | undefined;
       let failure: Error | undefined;
       const fail = (error: unknown) => {
-        failure = error instanceof Error ? error : new Error('The trial pain record could not be saved.');
+        failure =
+          error instanceof Error ? error : new Error('The trial pain record could not be saved.');
         transaction.abort();
       };
       const draftRequest = transaction.objectStore('trialDrafts').get(draftId);
@@ -657,7 +664,8 @@ export class RoadDatabase {
       let saved: SavedGateTrialResult | TrialAttempt | undefined;
       let failure: Error | undefined;
       const fail = (error: unknown) => {
-        failure = error instanceof Error ? error : new Error('The Gate Trial could not be finished.');
+        failure =
+          error instanceof Error ? error : new Error('The Gate Trial could not be finished.');
         transaction.abort();
       };
       const draftRequest = transaction.objectStore('trialDrafts').get(draftId);
@@ -881,7 +889,8 @@ export class RoadDatabase {
       let saved: PostMissionFunction | undefined;
       let failure: Error | undefined;
       const fail = (error: unknown) => {
-        failure = error instanceof Error ? error : new Error('The recovery check could not be saved.');
+        failure =
+          error instanceof Error ? error : new Error('The recovery check could not be saved.');
         transaction.abort();
       };
       const resultRequest = transaction.objectStore('trialResults').get(input.trialResultId);
@@ -1001,6 +1010,18 @@ export class RoadDatabase {
       const request = transaction.objectStore(store).getAll();
       request.onsuccess = () => resolve(request.result as T[]);
       request.onerror = () => reject(request.error ?? new Error(`Unable to read ${store}.`));
+    });
+  }
+
+  private remove(store: string, id: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(store, 'readwrite');
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () =>
+        reject(transaction.error ?? new Error(`Unable to write ${store}.`));
+      transaction.onabort = () =>
+        reject(transaction.error ?? new Error(`Unable to write ${store}.`));
+      transaction.objectStore(store).delete(id);
     });
   }
 

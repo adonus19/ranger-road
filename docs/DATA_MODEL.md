@@ -365,3 +365,7 @@ A completed trial result is the pass for its chapter. The next chapter's first d
 ## RoadSession additions
 
 `missionId?` links a walk to the planned mission it fulfilled (today's walks only). `editedAt?` marks a corrected walk. A walk may be edited (`createdAt` kept) or removed; mission records stay append-only.
+
+## DailyCheck (database version 5)
+
+Store `dailyChecks`: `{ id: "<date>:<item>", date, item: 'hearth' | 'reading' | 'family-quest', doneAt }`. A Done tap writes the row; Undo deletes it. Included in backups; a backup made before version 5 restores with no checks.

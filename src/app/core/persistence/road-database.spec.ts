@@ -46,7 +46,7 @@ describe('RoadDatabase', () => {
   it('opens a versioned schema and explicitly updates campaign state', async () => {
     const name = newName();
     const db = await RoadDatabase.open(name);
-    expect(DATABASE_VERSION).toBe(4);
+    expect(DATABASE_VERSION).toBe(5);
     expect(await db.getCampaign('primary')).toBeUndefined();
 
     await db.putCampaign(campaign);

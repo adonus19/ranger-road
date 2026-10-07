@@ -58,6 +58,9 @@
           <span class="medallion medallion--main">
             <app-icon [name]="mainOrderIcon()" />
           </span>
+          @if (mainLabel(); as label) {
+            <app-done-mark class="order-mark" [done]="true" [label]="label" />
+          }
           <div class="main-order__text">
             <p class="order-label">Main order</p>
             <h3>{{ order.title }}</h3>
@@ -79,6 +82,11 @@
               </span>
               <p class="order-label">Daily watch</p>
               <h3>{{ watch.title }}</h3>
+              @if (
+                watch.id === 'morning-watch' ? progress.morningWatch() : progress.eveningWatch()
+              ) {
+                <app-done-mark class="order-mark" [done]="true" label="Saved" />
+              }
             </a>
           </li>
         }
@@ -97,6 +105,9 @@
             <div class="hearth__text">
               <h2 class="order-label" id="hearth-title">Hearth mission</h2>
               <p class="hearth__mission">{{ hearthMission() }}</p>
+              @if (progress.isDone('hearth')) {
+                <app-done-mark class="order-mark" [done]="true" />
+              }
               <span class="visually-hidden">Open this week’s leadership lesson.</span>
             </div>
             <app-icon class="hearth__chevron" name="chevron-right" />
@@ -107,6 +118,9 @@
             <div class="hearth__text">
               <h2 class="order-label" id="hearth-title">Hearth mission</h2>
               <p>{{ hearthMission() }}</p>
+              @if (progress.isDone('hearth')) {
+                <app-done-mark class="order-mark" [done]="true" />
+              }
             </div>
           </div>
         }

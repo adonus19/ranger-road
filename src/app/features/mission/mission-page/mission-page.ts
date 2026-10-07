@@ -19,6 +19,7 @@ import {
   getActivityChoices,
   getDayContent,
   getDayMissions,
+  getHearthMission,
   getDayOrders,
 } from '../../../core/program/chapter-orders';
 import { getWeeklyFieldcraft } from '../../../core/program/field-manual.seed';
@@ -28,11 +29,13 @@ import {
   loadWorkout,
 } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { DayProgress, recordLabel } from '../../../core/state/day-progress';
 import { MissionHistory } from '../../../core/state/mission-history';
 import { RoadHistory, type SavedRoadSession } from '../../../core/state/road-history';
 import { describeRoadPain, roadSessionParts } from '../../road/road-session-summary';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate } from '../../../shared/format-date';
+import { DoneMark } from '../../../shared/done-mark/done-mark';
 import { Icon, type IconName } from '../../../shared/icon/icon';
 import { IntervalTimer } from '../../../shared/interval-timer/interval-timer';
 import { ActivityChoice } from '../activity-choice/activity-choice';
@@ -59,7 +62,7 @@ const OUTCOME_OPTIONS: ReadonlyArray<{ value: MissionOutcome; label: string }> =
 ];
 
 @Component({
-  imports: [ActivityChoice, FormField, Icon, IntervalTimer, ReadinessStrip, RouterLink],
+  imports: [ActivityChoice, DoneMark, FormField, Icon, IntervalTimer, ReadinessStrip, RouterLink],
   selector: 'app-mission-page',
   styleUrl: './mission-page.css',
   templateUrl: './mission-page.html',
@@ -69,6 +72,7 @@ export class MissionPage {
   private readonly history = inject(MissionHistory);
   private readonly trialHistory = inject(TrialHistory);
   private readonly roadHistory = inject(RoadHistory);
+  protected readonly progress = inject(DayProgress);
 
   protected readonly records = signal<MissionInstance[]>([]);
   /** Walks logged today, newest first. */
@@ -148,6 +152,39 @@ export class MissionPage {
           link: ['/field-manual/practice', String(fieldcraft.week)],
         };
   });
+
+  /** What today has so far: the main order, the watches, and the smaller Done-tap orders. */
+  protected readonly mainLabel = computed(() => {
+    if (this.trialPass()?.date === this.state.today()) return 'Done';
+    const ids = this.activityChoices().map((choice) => choice.id);
+    return recordLabel(
+      this.records()
+        .filter((r) => ids.includes(r.definitionId))
+        .at(-1) ?? null,
+    );
+  });
+  protected readonly hearthMission = computed(() => {
+    const chapter = this.position()?.chapter;
+    return chapter ? getHearthMission(chapter) : '';
+  });
+  protected readonly familyQuest = computed(() => this.activityChoices()[0]?.optionalFamilyQuest);
+  protected readonly readingOrder = computed(() => {
+    const first = this.activityChoices()[0];
+    if (!first?.readingMinutes) return null;
+    return first.readingBookTitle
+      ? `Read ${first.readingBookTitle} for ${first.readingMinutes} minutes`
+      : `Read for ${first.readingMinutes} minutes`;
+  });
+  protected readonly doneError = signal<string | null>(null);
+
+  protected async toggleDone(item: 'hearth' | 'reading' | 'family-quest'): Promise<void> {
+    this.doneError.set(null);
+    try {
+      await this.progress.setDone(this.state.today(), item, !this.progress.isDone(item));
+    } catch {
+      this.doneError.set('That could not be saved. Try again.');
+    }
+  }
 
   protected readonly recordedActivityIds = computed(() =>
     this.records().map((record) => record.definitionId),
@@ -399,6 +436,7 @@ export class MissionPage {
         if (sequence !== this.loadSequence || this.state.today() !== date) return;
         this.records.set(records);
         this.walks.set(walks);
+        void this.progress.refresh(date);
         this.completedTrials.set(trials);
         const choiceIds = new Set(this.activityChoices().map((choice) => choice.id));
         this.selectedActivityId.set(

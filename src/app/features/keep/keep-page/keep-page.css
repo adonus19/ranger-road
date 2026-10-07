@@ -437,3 +437,23 @@
     transition: none;
   }
 }
+
+.main-order,
+.watch a {
+  position: relative;
+}
+
+.order-mark {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+.hearth__text {
+  position: relative;
+}
+
+.hearth__text .order-mark {
+  position: static;
+  margin-top: 0.25rem;
+}
