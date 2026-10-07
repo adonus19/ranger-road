@@ -46,7 +46,7 @@ describe('RoadDatabase', () => {
   it('opens a versioned schema and explicitly updates campaign state', async () => {
     const name = newName();
     const db = await RoadDatabase.open(name);
-    expect(DATABASE_VERSION).toBe(5);
+    expect(DATABASE_VERSION).toBe(6);
     expect(await db.getCampaign('primary')).toBeUndefined();
 
     await db.putCampaign(campaign);
@@ -287,6 +287,18 @@ describe('RoadDatabase', () => {
     });
     await db.deleteRoadSession('road-1');
     expect(await db.getRoadSessionsForDate('2026-09-25')).toEqual([]);
+    db.close();
+  });
+
+  it('saves light activity by date and removes it on request', async () => {
+    const db = await RoadDatabase.open(newName());
+    const base = { date: '2026-10-27', createdAt: '2026-10-27T10:00:00.000Z' };
+    await db.addLightActivity({ ...base, id: 'a', activity: 'Cycling', time: 30 });
+    await db.addLightActivity({ ...base, id: 'b', activity: 'Swim' });
+    await db.addLightActivity({ ...base, id: 'c', activity: 'Walk', date: '2026-10-28' });
+    expect((await db.getLightActivitiesForDate('2026-10-27')).map((e) => e.id)).toEqual(['a', 'b']);
+    await db.deleteLightActivity('a');
+    expect((await db.getLightActivitiesForDate('2026-10-27')).map((e) => e.id)).toEqual(['b']);
     db.close();
   });
 

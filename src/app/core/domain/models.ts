@@ -318,6 +318,25 @@ export interface DailyCheck {
   doneAt: IsoTimestamp;
 }
 
+/**
+ * Activity the program does not prescribe (a long walk, cycling, swimming), logged by choice,
+ * mainly in deload weeks. Only the name is required; the rest depends on the activity.
+ */
+export interface LightActivity {
+  id: string;
+  date: LocalDate;
+  activity: string;
+  /** Pounds. */
+  weight?: number;
+  sets?: number;
+  reps?: number;
+  /** Miles. */
+  distance?: number;
+  /** Minutes. */
+  time?: number;
+  createdAt: IsoTimestamp;
+}
+
 export interface CarryResult {
   type: string;
   load: number;

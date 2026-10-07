@@ -210,4 +210,4 @@ When a Forge session is missed, the next morning's Keep, Today's Mission and For
 - The schedule is worked out from saved mission records, Forge sessions (including ones saved before one-step recording) and Red readiness days. If that history cannot be read, every day shows its own dated orders and nothing is treated as missed.
 - In a three-Forge week, a missed carried session on Monday is dropped; Forge A can still move from Wednesday to Thursday, pushing Forge B to Saturday.
 
-(Planned) Light Activity (deload weeks and any day): a log with a required activity name and optional weight, sets, reps, distance and time.
+(Planned) Light Activity (`/keep/activity`): opened from a link at the foot of Today's Mission, worded "Add a walk or light cardio, if you like" in a deload week and "Log light activity (optional)" otherwise. A required activity name; optional time (minutes), distance (miles), weight (lb), sets and reps. Today's entries are listed with Remove. It is never required, scored or used to set a target.

@@ -1,0 +1,152 @@
+<div class="light-activity entry-form">
+  <a class="back-link" routerLink="/keep/mission">
+    <app-icon name="arrow-left" />
+    Back to Today’s Mission
+  </a>
+
+  <h1>Light activity</h1>
+  <p class="intro">
+    Anything extra you chose to do, such as a long walk, cycling or an easy swim. Only the name is
+    needed; add whatever else fits.
+  </p>
+
+  @if (entries().length) {
+    <section class="logged" aria-labelledby="logged-title" role="status">
+      <h2 id="logged-title">Logged today</h2>
+      <ul>
+        @for (entry of entries(); track entry.id) {
+          <li>
+            <span>
+              <strong>{{ entry.activity }}</strong>
+              @if (summary(entry); as text) {
+                <span class="logged__detail">{{ text }}</span>
+              }
+            </span>
+            <button type="button" class="remove" (click)="remove(entry)">Remove</button>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  <form class="log-form" (submit)="save($event)" novalidate>
+    <section class="half" aria-labelledby="activity-title">
+      <h2 id="activity-title">{{ entries().length ? 'Add another' : 'What did you do?' }}</h2>
+
+      <div class="field">
+        <label class="label" for="activity-name">Activity</label>
+        <input
+          id="activity-name"
+          type="text"
+          autocomplete="off"
+          placeholder="Long walk, cycling, swimming…"
+          [formField]="logForm.activity"
+          [attr.aria-invalid]="showError(logForm.activity)"
+          [attr.aria-describedby]="showError(logForm.activity) ? 'activity-name-error' : null"
+        />
+        @if (showError(logForm.activity)) {
+          <span class="field-error" id="activity-name-error">{{
+            logForm.activity().errors()[0]?.message
+          }}</span>
+        }
+      </div>
+
+      <p class="help">Everything below is optional.</p>
+
+      <div class="pair">
+        <div class="field">
+          <label class="label" for="activity-time">Time (minutes)</label>
+          <input
+            id="activity-time"
+            class="numeral"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            [formField]="logForm.time"
+            [attr.aria-invalid]="showError(logForm.time)"
+          />
+          @if (showError(logForm.time)) {
+            <span class="field-error">{{ logForm.time().errors()[0]?.message }}</span>
+          }
+        </div>
+        <div class="field">
+          <label class="label" for="activity-distance">Distance (miles)</label>
+          <input
+            id="activity-distance"
+            class="numeral"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            [formField]="logForm.distance"
+            [attr.aria-invalid]="showError(logForm.distance)"
+          />
+          @if (showError(logForm.distance)) {
+            <span class="field-error">{{ logForm.distance().errors()[0]?.message }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="field">
+          <label class="label" for="activity-weight">Weight (lb)</label>
+          <input
+            id="activity-weight"
+            class="numeral"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            [formField]="logForm.weight"
+            [attr.aria-invalid]="showError(logForm.weight)"
+          />
+          @if (showError(logForm.weight)) {
+            <span class="field-error">{{ logForm.weight().errors()[0]?.message }}</span>
+          }
+        </div>
+        <div class="field">
+          <label class="label" for="activity-sets">Sets</label>
+          <input
+            id="activity-sets"
+            class="numeral"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            [formField]="logForm.sets"
+            [attr.aria-invalid]="showError(logForm.sets)"
+          />
+          @if (showError(logForm.sets)) {
+            <span class="field-error">{{ logForm.sets().errors()[0]?.message }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="activity-reps">Reps</label>
+        <input
+          id="activity-reps"
+          class="numeral"
+          type="text"
+          inputmode="numeric"
+          autocomplete="off"
+          [formField]="logForm.reps"
+          [attr.aria-invalid]="showError(logForm.reps)"
+        />
+        @if (showError(logForm.reps)) {
+          <span class="field-error">{{ logForm.reps().errors()[0]?.message }}</span>
+        }
+      </div>
+    </section>
+
+    @if (saveError(); as message) {
+      <p class="save-error" role="alert">{{ message }}</p>
+    }
+    @if (justSaved()) {
+      <p class="help" role="status">Saved.</p>
+    }
+
+    <div class="dock">
+      <button class="save-button" type="submit" [disabled]="saving()">
+        {{ saving() ? 'Saving…' : 'Save activity' }}
+      </button>
+    </div>
+  </form>
+</div>

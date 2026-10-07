@@ -384,6 +384,12 @@
       </section>
     }
 
+    <a class="light-activity-link" routerLink="/keep/activity">
+      {{
+        inDeloadWeek() ? 'Add a walk or light cardio, if you like' : 'Log light activity (optional)'
+      }}
+    </a>
+
     <nav class="watch-links" aria-label="Daily watches">
       <a routerLink="/journal/morning">Morning Watch</a>
       <a routerLink="/journal/evening">Evening Watch</a>

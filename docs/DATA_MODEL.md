@@ -370,6 +370,6 @@ A completed trial result is the pass for its chapter. The next chapter's first d
 
 Store `dailyChecks`: `{ id: "<date>:<item>", date, item: 'hearth' | 'reading' | 'family-quest', doneAt }`. A Done tap writes the row; Undo deletes it. Included in backups; a backup made before version 5 restores with no checks.
 
-## Make-up schedule and Light Activity (Light Activity planned)
+## Make-up schedule and Light Activity (database version 6)
 
-The make-up schedule (`core/program/makeup-schedule.ts`, applied as `ChapterDay.makeup`) is derived from saved Forge sessions and mission records and is never stored; moved sessions keep their original mission ids so records still match. Light Activity needs a new record: `{ id, date, activity (required), weight?, sets?, reps?, distance?, time? }`, which will raise the database version when built.
+The make-up schedule (`core/program/makeup-schedule.ts`, applied as `ChapterDay.makeup`) is derived from saved Forge sessions and mission records and is never stored; moved sessions keep their original mission ids so records still match. Light Activity is store `lightActivities`: `{ id, date, activity (required), weight? (lb), sets?, reps?, distance? (miles), time? (minutes), createdAt }`. It can be added or removed, is included in backups, and a backup made before version 6 restores with none.

@@ -15,6 +15,14 @@ export const routes: Routes = [
     title: 'Today’s Mission | The Ranger’s Road',
   },
   {
+    path: 'keep/activity',
+    loadComponent: () =>
+      import('./features/activity/light-activity-page/light-activity-page').then(
+        (m) => m.LightActivityPage,
+      ),
+    title: 'Light Activity | The Ranger’s Road',
+  },
+  {
     path: 'road',
     loadComponent: () => import('./features/road/road-page/road-page').then((m) => m.RoadPage),
     title: 'Road | The Ranger’s Road',

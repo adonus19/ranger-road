@@ -1,6 +1,7 @@
 import type {
   Campaign,
   DailyCheck,
+  LightActivity,
   IsoTimestamp,
   JournalEntry,
   LocalDate,
@@ -50,7 +51,7 @@ import { addDays, getCampaignDay, isGateTrialAttemptDay } from '../program/campa
 import { checkInSaveError, testsHeldFor } from '../program/check-in-schedule';
 
 export const DATABASE_NAME = 'rangers-road';
-export const DATABASE_VERSION = 5;
+export const DATABASE_VERSION = 6;
 
 export const STORE_NAMES = [
   'campaigns',
@@ -67,6 +68,7 @@ export const STORE_NAMES = [
   'trialAttempts',
   'postMissionFunctions',
   'dailyChecks',
+  'lightActivities',
 ] as const;
 
 export type StoreName = (typeof STORE_NAMES)[number];
@@ -236,6 +238,20 @@ export class RoadDatabase {
 
   deleteRoadSession(id: string): Promise<void> {
     return this.remove('roadSessions', id);
+  }
+
+  async getLightActivitiesForDate(date: LocalDate): Promise<LightActivity[]> {
+    return (await this.readAll<LightActivity>('lightActivities'))
+      .filter((entry) => entry.date === date)
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id));
+  }
+
+  addLightActivity(entry: LightActivity): Promise<void> {
+    return this.write('lightActivities', 'add', entry);
+  }
+
+  deleteLightActivity(id: string): Promise<void> {
+    return this.remove('lightActivities', id);
   }
 
   /** Done taps for the day's smaller orders; a tap can be undone the same day. */

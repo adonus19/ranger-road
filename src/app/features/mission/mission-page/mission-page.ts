@@ -130,6 +130,11 @@ export class MissionPage {
       ? this.schedule.dayFor(campaign.startDate, today, today, this.completedTrials())
       : null;
   });
+  /** A chapter's last full week is its deload; a trial wait after it keeps that light shape. */
+  protected readonly inDeloadWeek = computed(() => {
+    const day = this.position()?.chapter;
+    return !!day && !day.leadIn && day.week === day.program.chapter.weeks.at(-1);
+  });
   protected readonly makeupNote = computed(() => this.scheduledDay()?.makeup?.note ?? null);
 
   protected readonly activityChoices = computed(() => {

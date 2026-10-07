@@ -471,3 +471,12 @@ h1 {
   font: inherit;
   font-weight: 600;
 }
+
+.light-activity-link {
+  display: flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  margin-top: 1rem;
+  color: var(--action);
+  font-weight: 600;
+}
