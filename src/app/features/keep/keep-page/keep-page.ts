@@ -1,6 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { ReadinessStatus, TrialResult } from '../../../core/domain/models';
+import type { MissionInstance, ReadinessStatus, TrialResult } from '../../../core/domain/models';
+import { needsBackOnTrack, previousTwoDays } from '../../../core/program/back-on-track';
 import { resolveCampaignPosition } from '../../../core/program/campaign-position';
 import {
   getActivityChoices,
@@ -11,6 +12,7 @@ import {
 import { getLeadershipLessonForWeek } from '../../../core/program/field-manual.seed';
 import { chapterPrograms, formatChapterNumeral } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { MissionHistory } from '../../../core/state/mission-history';
 import { DayProgress, recordLabel } from '../../../core/state/day-progress';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate } from '../../../shared/format-date';
@@ -70,6 +72,8 @@ export class KeepPage implements OnInit {
   protected readonly state = inject(CampaignState);
   private readonly trialHistory = inject(TrialHistory);
   protected readonly progress = inject(DayProgress);
+  private readonly missionHistory = inject(MissionHistory);
+  private readonly recentRecords = signal<MissionInstance[] | null>(null);
   protected readonly trialLoading = signal(true);
   protected readonly trialError = signal(false);
   private readonly completedTrials = signal<TrialResult[]>([]);
@@ -133,6 +137,19 @@ export class KeepPage implements OnInit {
     return recordLabel(this.progress.recordFor(ids));
   });
 
+  /** A calm note after two ordered days in a row went unrecorded; gone once today is recorded. */
+  protected readonly backOnTrack = computed(() => {
+    const campaign = this.state.campaign();
+    const recent = this.recentRecords();
+    if (!campaign || !recent || this.mainLabel() || this.chapterComplete()) return false;
+    return needsBackOnTrack(
+      campaign.startDate,
+      this.state.today(),
+      this.completedTrials(),
+      (date) => recent.filter((record) => record.date === date),
+    );
+  });
+
   protected readonly readinessStatus = computed(() => this.state.readiness()?.status ?? 'pending');
   protected readonly readinessCopy = computed(() => READINESS_COPY[this.readinessStatus()]);
 
@@ -169,6 +186,14 @@ export class KeepPage implements OnInit {
       if (!this.state.campaign() || this.state.beforeDayOne()) return;
       this.completedTrials.set(await loadCampaignTrials(this.trialHistory));
       await this.progress.refresh(this.state.today());
+      try {
+        const days = previousTwoDays(this.state.today());
+        this.recentRecords.set(
+          (await Promise.all(days.map((day) => this.missionHistory.forDate(day)))).flat(),
+        );
+      } catch {
+        // The note is a courtesy; without history it simply stays away.
+      }
     } catch {
       this.trialError.set(true);
     } finally {

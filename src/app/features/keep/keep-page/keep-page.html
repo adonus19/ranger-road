@@ -50,6 +50,13 @@
       <app-icon class="readiness-strip__chevron" name="chevron-right" />
     </a>
 
+    @if (backOnTrack()) {
+      <p class="back-on-track" role="note">
+        Welcome back. Pick up with today’s orders. Today is a fresh day, and one small step is
+        enough.
+      </p>
+    }
+
     <section class="orders" aria-labelledby="orders-title">
       <h2 id="orders-title">Today’s Orders</h2>
 

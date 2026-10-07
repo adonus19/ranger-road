@@ -198,3 +198,7 @@ Between sets, the rest clock counts up from when the set was marked. It has Paus
 - The main order shows "Done" for a full outcome and a neutral "Recorded" for Reduced, Restoration or Rest. Watches show "Saved".
 - Hearth mission, reading and the family quest have a Done button, undoable ("Undo") the same day. These marks are for today only; earlier days are never revisited, and nothing counts or tallies what was missed.
 - Keep shows the same check marks on the main order, the watches and the Hearth mission once they are done. Nothing is shown for items not yet done.
+
+## Back on Track Note
+
+Keep shows a calm note ("Welcome back. Pick up with today's orders…") when each of the two days before today had a main order and nothing was recorded for either. A recorded Rest counts as recorded; Sundays, trial attempt days and days before Day 1 never count. It looks no further back, shows no counts or streaks, and asks for no make-up work. It disappears once today's main order is recorded.

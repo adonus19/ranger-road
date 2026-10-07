@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import type { Campaign, ReadinessCheck, TrialResult } from '../../../core/domain/models';
 import { getCampaignDay } from '../../../core/program/campaign';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { MissionHistory } from '../../../core/state/mission-history';
 import { MeasurementHistory } from '../../../core/state/measurement-history';
 import { TrialHistory } from '../../../core/state/trial-history';
 import { KeepPage } from './keep-page';
@@ -41,12 +42,14 @@ async function render(
   state: ReturnType<typeof fakeState>,
   measurements: unknown[] = [],
   completedTrials: TrialResult[] = [],
+  missions: unknown[] = [],
 ): Promise<HTMLElement> {
   TestBed.configureTestingModule({
     imports: [KeepPage],
     providers: [
       provideRouter([]),
       { provide: CampaignState, useValue: state },
+      { provide: MissionHistory, useValue: { forDate: async () => missions } },
       { provide: MeasurementHistory, useValue: { all: async () => measurements } },
       {
         provide: TrialHistory,
@@ -73,6 +76,22 @@ const completedTrial: TrialResult = {
 };
 
 describe('KeepPage', () => {
+  it('offers a calm note after two unrecorded days, with no counts, and none once they are recorded', async () => {
+    const root = await render(fakeState(campaign));
+    const note = root.querySelector('.back-on-track');
+    expect(note?.textContent).toContain('Welcome back');
+    expect(note?.textContent).not.toMatch(/\d|missed/i);
+
+    TestBed.resetTestingModule();
+    const recorded = await render(
+      fakeState(campaign),
+      [],
+      [],
+      [{ id: 'a', date: '2026-09-24', definitionId: 'x', status: 'rest' }],
+    );
+    expect(recorded.querySelector('.back-on-track')).toBeNull();
+  });
+
   it('asks for Day 1 on first launch while still introducing the chapter', async () => {
     const element = await render(fakeState(null));
 
