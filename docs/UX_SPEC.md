@@ -180,3 +180,7 @@ Pain event must be persisted.
 ## App Updates
 
 The installed app looks for a new version when it opens, returns to the foreground, comes back online, and hourly. When one is ready, a quiet bar above the navigation reads "A new version is ready." with a Reload button. The app never reloads by itself, so unsaved text is never lost.
+
+## Forge Rest Timer
+
+Between sets, the rest clock counts up from when the set was marked. It has Pause/Resume, Reset and Hide (a "Show rest timer" button brings it back), and an optional rest length from 0:30 to 5:00 that plays a soft chime when reached (remembered on the device). Rest time is never saved.

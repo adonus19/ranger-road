@@ -166,10 +166,44 @@
         </div>
 
         @if (session.restStartedAt) {
-          <div class="rest-clock" role="timer">
-            <span>Rest elapsed</span><strong>{{ restLabel() }}</strong
-            ><small>Resume when ready. No fixed rest interval is prescribed.</small>
-          </div>
+          @if (restHidden()) {
+            <button type="button" class="rest-show" (click)="restHidden.set(false)">
+              Show rest timer
+            </button>
+          } @else {
+            <div class="rest-clock" role="timer">
+              <span>Rest elapsed</span><strong>{{ restLabel() }}</strong>
+              @if (restLength()) {
+                <span class="rest-target">of {{ restLengthLabel(restLength()) }}</span>
+              }
+              <div class="rest-actions">
+                <button type="button" (click)="toggleRestPause()">
+                  {{ restPaused() ? 'Resume' : 'Pause' }}
+                </button>
+                <button type="button" (click)="resetRest()">Reset</button>
+                <button type="button" (click)="restHidden.set(true)">Hide</button>
+              </div>
+              <label class="rest-length">
+                Rest length
+                <select [value]="restLength()" (change)="setRestLength($any($event.target).value)">
+                  @for (seconds of restLengths; track seconds) {
+                    <option [value]="seconds" [selected]="seconds === restLength()">
+                      {{ restLengthLabel(seconds) }}
+                    </option>
+                  }
+                </select>
+              </label>
+              <small
+                >Resume when ready.
+                {{
+                  restLength()
+                    ? 'A soft chime sounds at your rest length.'
+                    : 'No fixed rest interval is prescribed.'
+                }}
+                Rest time is not saved.</small
+              >
+            </div>
+          }
         }
 
         <div class="set-fields">

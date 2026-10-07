@@ -26,6 +26,7 @@ import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-hist
 import { WorkoutHistory } from '../../../core/state/workout-history';
 import { formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
+import { REST_LENGTHS, RestClock, formatRest, restLengthLabel } from './rest-clock';
 
 type Panel = 'help' | 'pain' | 'substitute' | null;
 
@@ -46,6 +47,17 @@ function firstPending(draft: WorkoutDraft): { exercise: number; set: number } {
     if (set !== -1) return { exercise, set };
   }
   return { exercise: draft.exerciseResults.length, set: 0 };
+}
+
+const REST_LENGTH_KEY = 'rangers-road.rest-length';
+
+function readRestLength(): number {
+  try {
+    const value = Number(localStorage.getItem(REST_LENGTH_KEY));
+    return (REST_LENGTHS as readonly number[]).includes(value) ? value : 0;
+  } catch {
+    return 0;
+  }
 }
 
 @Component({
@@ -71,6 +83,14 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   protected readonly recordingSet = signal(false);
   protected readonly helpExerciseId = signal<string | null>(null);
   protected readonly restSeconds = signal(0);
+  protected readonly restPaused = signal(false);
+  protected readonly restHidden = signal(false);
+  protected readonly restLength = signal(readRestLength());
+  protected readonly restLengths = REST_LENGTHS;
+  protected readonly restLengthLabel = restLengthLabel;
+  private readonly restClock = new RestClock();
+  private restChimed = false;
+  private audio: AudioContext | null = null;
   protected readonly previousLoad = signal<PreviousWorkoutLoad | null>(null);
   protected readonly shortDate = formatShortDate;
   private restInterval?: ReturnType<typeof setInterval>;
@@ -317,6 +337,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   }
 
   protected async markSet(completed: boolean): Promise<void> {
+    if (this.restLength()) this.prepareAudio();
     const draft = this.draft();
     const prescription = this.currentPrescription();
     if (!draft || !prescription || this.blocked()) return;
@@ -567,8 +588,33 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   }
 
   protected restLabel(): string {
-    const total = this.restSeconds();
-    return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
+    return formatRest(this.restSeconds());
+  }
+
+  protected toggleRestPause(): void {
+    if (this.restClock.paused) this.restClock.resume();
+    else this.restClock.pause();
+    this.restPaused.set(this.restClock.paused);
+    this.updateRest();
+  }
+
+  protected resetRest(): void {
+    this.restClock.reset();
+    this.restChimed = false;
+    this.updateRest();
+  }
+
+  protected setRestLength(value: string): void {
+    const seconds = Number(value);
+    this.restLength.set(seconds);
+    this.restChimed = false;
+    try {
+      localStorage.setItem(REST_LENGTH_KEY, String(seconds));
+    } catch {
+      // The choice still applies for this session.
+    }
+    if (seconds) this.prepareAudio();
+    this.updateRest();
   }
 
   private async save(edit: (draft: WorkoutDraft) => void): Promise<void> {
@@ -625,9 +671,55 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
 
   private updateRest(): void {
     const started = this.draft()?.restStartedAt;
-    this.restSeconds.set(
-      started ? Math.max(0, Math.floor((Date.now() - Date.parse(started)) / 1000)) : 0,
-    );
+    this.restClock.sync(started);
+    this.restSeconds.set(this.restClock.elapsed());
+    this.restPaused.set(this.restClock.paused);
+    const target = this.restLength();
+    if (!started) {
+      this.restChimed = false;
+      this.restHidden.set(false);
+    } else if (target && !this.restClock.paused && this.restSeconds() >= target) {
+      if (!this.restChimed) this.chime();
+      this.restChimed = true;
+    } else if (target && this.restSeconds() < target) {
+      this.restChimed = false;
+    }
+  }
+
+  /** Audio can only start from a tap, so the context is made when a set is marked. */
+  private prepareAudio(): void {
+    if (this.audio) return;
+    try {
+      const Context =
+        window.AudioContext ??
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      this.audio = Context ? new Context() : null;
+      void this.audio?.resume();
+    } catch {
+      this.audio = null;
+    }
+  }
+
+  /** A soft two-note chime; the screen still shows when the rest length is reached. */
+  private chime(): void {
+    const context = this.audio;
+    if (!context) return;
+    try {
+      [523, 659].forEach((frequency, index) => {
+        const start = context.currentTime + index * 0.25;
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        oscillator.frequency.value = frequency;
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(0.08, start + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.6);
+        oscillator.connect(gain).connect(context.destination);
+        oscillator.start(start);
+        oscillator.stop(start + 0.65);
+      });
+    } catch {
+      // A chime is a courtesy.
+    }
   }
 
   private showError(error: unknown): void {
