@@ -74,13 +74,46 @@ A completed Gate Trial uses the full documented 2-mile walk and 3-round circuit,
 
 - Never miss twice.
 - No hero workouts.
-- Do not compensate for missed work with excessive volume.
+- Do not compensate for missed work with excessive volume. A make-up moves work already owed and never adds to it (see Missed Forge Make-ups).
 - Progress only when technique is good and symptoms are stable.
 - Do not auto-progress after a yellow/red session.
 - Running is not required early.
 - Heavy deadlifting is not part of the default program.
 - Rucking begins conservatively.
 - Strength is trained for usefulness, not 1RM status.
+
+## Missed Forge Make-ups
+
+A missed Forge session is moved, not punished. The rule reschedules strength work already owed; it never adds sets, never stacks two Forge sessions on one day, and never runs on back-to-back days. It is an offer, shown calmly, and the person may always skip it.
+
+**What counts as missed.** A Forge day ends with no Forge session saved and no outcome recorded (Rest and Restoration count as recorded). A Red readiness day is not a miss: the session simply moves to the next allowed day. A completed Yellow session counts as done.
+
+**Where a missed session goes.** The moved session appears on the next morning's orders. The normal week is Forge A Monday and Forge B Thursday.
+
+| What happens | Result |
+|---|---|
+| Forge A missed Monday | Forge A on Tuesday |
+| Forge A missed Monday and Tuesday | Forge A on Wednesday; Forge B moves from Thursday to Friday so the two are never back to back; Wednesday's restoration moves to Thursday |
+| Forge A missed Monday, Tuesday and Wednesday | Forge A is dropped; carry on with Forge B on Thursday |
+| Forge B missed Thursday | Forge B on Friday |
+| Forge B missed Thursday and Friday | Forge B on Saturday |
+| Forge B missed Thursday, Friday and Saturday (or a pushed Forge B missed on both its days) | The following week is a three-Forge week: Forge B Monday, Forge A Wednesday, Forge B Friday; Wednesday's restoration moves to Thursday and Friday's walk moves to Tuesday |
+| The next week would be a deload week, or a trial week | No three-Forge week: the make-up is dropped and the program carries on |
+| A third miss of the same session | Dropped; carry on next week |
+
+**Days a moved Forge lands on.** That day's walk becomes optional. The person may do it alongside the Forge, or in place of the sets of one leg exercise (squats, split squats, step-ups and similar; never an upper-body exercise). If two walks land on one day (the three-Forge week's Tuesday), keep the longer one. Saturday can take both a make-up and a shifted session. Sunday is always rest.
+
+**Full or reduced.** A make-up session, and every session of a three-Forge week, can be done at full volume or reduced (about 25% fewer work sets, a guide and never a hard limit). That week's Saturday walk can likewise be reduced or kept. Yellow and pain rules still apply: no load increase after a reduced or pain-affected session.
+
+**Deload weeks.** Deload weeks (Weeks 4 and 8, the week before a trial) never take a make-up or a three-Forge week, and a Forge missed inside a deload week is dropped. The week before a deload (Weeks 3 and 7) may take make-ups and three-Forge weeks. A dropped make-up changes nothing else: the normal deload days stand. The person may add walks or light cardio of their own choosing (see Light Activity below), never required.
+
+**Trials are never moved.** Make-ups never move, replace or delay a trial attempt day.
+
+**How this fits the rules.** "Never miss twice" is served by a quick return. "No punishment workouts" holds because nothing is added: a make-up replaces the missed session, and the only week with a third session is optional, reducible, and never in a deload or trial week. "Only 3 days feel like major commitments" is relaxed only in a three-Forge week, where the person may reduce every session and the Saturday walk.
+
+### Light Activity
+
+An optional log for deload weeks (and any day the person wants it) for activity the program does not prescribe: a long walk, cycling, swimming, an elliptical. A required text box names the activity. Weight, sets, reps, distance and time are all optional, because the activity is the person's own. It is never required, never scored, and never increases a target.
 
 ## Strength Progression
 

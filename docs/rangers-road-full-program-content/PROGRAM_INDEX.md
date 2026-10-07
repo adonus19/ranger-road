@@ -26,7 +26,7 @@ It is intended to serve two purposes:
 - Capability over appearance.
 - Consistency over heroics.
 - Never miss twice.
-- No punishment workouts for missed sessions.
+- No punishment workouts for missed sessions. A missed Forge session may be moved (never added to), as written in `docs/RANGERS_ROAD_PROGRAM.md` under Missed Forge Make-ups.
 - Heavy deadlifting is not part of the default program.
 - Running is not required during the early campaign.
 - Rucking begins conservatively.

@@ -74,4 +74,4 @@ Weekly summary:
 - reduced
 - abandoned
 
-No guilt copy.
+No guilt copy. A missed Forge session is offered a calm make-up the next morning (see Missed Forge Make-ups in `RANGERS_ROAD_PROGRAM.md`); it is never shown as a debt or a count.

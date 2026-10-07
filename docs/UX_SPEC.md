@@ -202,3 +202,9 @@ Between sets, the rest clock counts up from when the set was marked. It has Paus
 ## Back on Track Note
 
 Keep shows a calm note ("Welcome back. Pick up with today's orders…") when each of the two days before today had a main order and nothing was recorded for either. A recorded Rest counts as recorded; Sundays, trial attempt days and days before Day 1 never count. It looks no further back, shows no counts or streaks, and asks for no make-up work. It disappears once today's main order is recorded.
+
+## Forge Make-ups (planned)
+
+When a Forge session is missed, the next morning's Keep and Today's Mission show the moved session in place of that day's order, worded calmly ("Forge A moved to today"), with a full or reduced choice and a way to skip it. The displaced walk is marked optional, with the choice to do it alongside or in place of a leg exercise's sets. No counts of missed sessions are shown. The full rule is in `RANGERS_ROAD_PROGRAM.md`, Missed Forge Make-ups.
+
+Light Activity (deload weeks and any day): a log with a required activity name and optional weight, sets, reps, distance and time.
