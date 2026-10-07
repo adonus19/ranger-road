@@ -37,7 +37,7 @@ Every chapter's trial follows the Trial Timing rule in `CHAPTERS_AND_TRIALS.md`:
 
 Chapter II's Three-Mile Trial follows the same rule on the Monday after Week 8 (retries Thursday, then Mondays and Thursdays), with Week 8 Saturday as its preparation day.
 
-For Week 4 Forge B, the documented reduction of about 25% means completing around 15 of the standard 20 work sets. Week 8 Forge B has 22 work sets, including the optional Hammer Curl's 2, so its 25% guide is around 16–17. The person chooses about five sets to skip and records those skips; the base Forge B prescription remains available as a historical snapshot. Do not automatically add load or make the deload harder on a Yellow or pain-affected day.
+For Week 4 Forge B, the documented reduction of about 25% means completing around 15 of the standard 20 work sets. Week 8 Forge B has 22 work sets, including the optional Hammer Curl's 2, so its 25% guide is around 17. The person chooses about five sets to skip and records those skips; the base Forge B prescription remains available as a historical snapshot. Do not automatically add load or make the deload harder on a Yellow or pain-affected day.
 
 Only 3 days should feel like major commitments.
 Two optional/support days should generally stay near 30 minutes.

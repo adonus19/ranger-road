@@ -1,6 +1,7 @@
 import type { ChapterDefinition, WorkoutDefinition } from '../domain/models';
 import type { ChapterProgram, ChapterSeed } from './chapter-program';
 import { chapterOneProgram } from './chapter-one.program';
+import { chapterTwoProgram } from './chapter-two.program';
 
 export type { ChapterProgram, ChapterSeed } from './chapter-program';
 
@@ -8,7 +9,7 @@ export type { ChapterProgram, ChapterSeed } from './chapter-program';
  * Chapters whose dated orders are in the app, in campaign order. A chapter is added here
  * once its content is built; until then the previous chapter shows as complete.
  */
-export const chapterPrograms: readonly ChapterProgram[] = [chapterOneProgram];
+export const chapterPrograms: readonly ChapterProgram[] = [chapterOneProgram, chapterTwoProgram];
 
 export function loadChapterSeed(chapterId: string): ChapterSeed | undefined {
   return loadChapterProgram(chapterId);

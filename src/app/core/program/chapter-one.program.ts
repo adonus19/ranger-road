@@ -24,7 +24,7 @@ export const chapterOneProgram: ChapterProgram = {
     const volumeGuide = chapterOneWeekFourVolumeGuide(workoutId, week);
     return {
       ...(note ? { note } : {}),
-      ...(volumeGuide ? { volumeGuide } : {}),
+      ...(volumeGuide ? { volumeGuide: { week, ...volumeGuide } } : {}),
       reduced: week === 4 && workoutId !== chapterOneRestoration.id,
     };
   },

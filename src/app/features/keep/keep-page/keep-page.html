@@ -85,31 +85,33 @@
       </ul>
     </section>
 
-    <section class="hearth" aria-labelledby="hearth-title">
-      @if (hearthLessonId(); as lessonId) {
-        <a
-          class="hearth__link"
-          [routerLink]="['/field-manual/lessons', lessonId]"
-          [queryParams]="{ from: 'keep' }"
-        >
-          <app-icon class="hearth__icon" name="hearth" />
-          <div class="hearth__text">
-            <h2 class="order-label" id="hearth-title">Hearth mission</h2>
-            <p class="hearth__mission">{{ hearthMission() }}</p>
-            <span class="visually-hidden">Open this week’s leadership lesson.</span>
+    @if (hearthMission()) {
+      <section class="hearth" aria-labelledby="hearth-title">
+        @if (hearthLessonId(); as lessonId) {
+          <a
+            class="hearth__link"
+            [routerLink]="['/field-manual/lessons', lessonId]"
+            [queryParams]="{ from: 'keep' }"
+          >
+            <app-icon class="hearth__icon" name="hearth" />
+            <div class="hearth__text">
+              <h2 class="order-label" id="hearth-title">Hearth mission</h2>
+              <p class="hearth__mission">{{ hearthMission() }}</p>
+              <span class="visually-hidden">Open this week’s leadership lesson.</span>
+            </div>
+            <app-icon class="hearth__chevron" name="chevron-right" />
+          </a>
+        } @else {
+          <div class="hearth__link">
+            <app-icon class="hearth__icon" name="hearth" />
+            <div class="hearth__text">
+              <h2 class="order-label" id="hearth-title">Hearth mission</h2>
+              <p>{{ hearthMission() }}</p>
+            </div>
           </div>
-          <app-icon class="hearth__chevron" name="chevron-right" />
-        </a>
-      } @else {
-        <div class="hearth__link">
-          <app-icon class="hearth__icon" name="hearth" />
-          <div class="hearth__text">
-            <h2 class="order-label" id="hearth-title">Hearth mission</h2>
-            <p>{{ hearthMission() }}</p>
-          </div>
-        </div>
-      }
-    </section>
+        }
+      </section>
+    }
 
     @if (!trialDay()) {
       <div class="check-in-reminder">

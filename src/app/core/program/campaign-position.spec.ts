@@ -130,9 +130,9 @@ describe('resolveCampaignPosition', () => {
 
   it('shows the passed chapter as complete while the next chapter is not in the app', () => {
     const trials = [pass('gate-trial', '2026-11-02')];
-    const passDay = resolveCampaignPosition(start, '2026-11-02', trials)!;
+    const passDay = resolveCampaignPosition(start, '2026-11-02', trials, [chapterOneProgram])!;
     expect(passDay.awaitingNextChapter).toBe(false);
-    const next = resolveCampaignPosition(start, '2026-11-03', trials)!;
+    const next = resolveCampaignPosition(start, '2026-11-03', trials, [chapterOneProgram])!;
     expect(next.awaitingNextChapter).toBe(true);
     expect(next.chapter.program.chapter.id).toBe('chapter-1');
     expect(next.chapter.pass?.date).toBe('2026-11-02');

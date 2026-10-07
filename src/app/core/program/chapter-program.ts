@@ -73,6 +73,8 @@ export interface ChapterWeekContent {
 
 /** A deload week's documented volume, as a guide rather than a save limit. */
 export interface VolumeGuide {
+  /** The campaign week the guide applies to. */
+  week: number;
   plannedSets: number;
   aroundCompletedSets: number;
   aroundSkippedSets: number;

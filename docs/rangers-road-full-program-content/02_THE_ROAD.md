@@ -5,6 +5,8 @@
 
 Names in the two Forge lists are the Chapter II step-ups, each with its own guide in `EXERCISE_CATALOG.md`: Split Squat steps up from Chapter I's Supported Split Squat, Goblet Squat from Goblet Squat to Box, and Supported Deep Squat from Supported Squat Hold. A step-up is a new exercise, not a rename; keep the Chapter I version available as the easier choice on a Yellow or pain-affected day.
 
+Warm-up for both Forge sessions, the optional 5-minute easy walk after Forge A, and the 1-minute easy walk after Restoration II are the same as in Chapter I (`01_THE_MUSTER.md`). Chapter II adds no warm-up of its own.
+
 # Forge A
 - Box Squat — 3 x 6
 - Bench Press — 3 x 6
@@ -75,7 +77,7 @@ Hearth mission: one full hour at home with phone put away.
 Monday: Forge A, no aggressive progression: the written sets and reps, no load increases. Scripture: Micah 6:8.  
 Tuesday: 30-min easy walk. Scripture: Galatians 5:22–26.  
 Wednesday: Restoration. Scripture: Psalm 119:105.  
-Thursday: Forge B at reduced volume (about 25% less, around 16–17 of the 22 work sets, Hammer Curl included). Scripture: Proverbs 3:5–8.  
+Thursday: Forge B at reduced volume (about 25% less, around 17 of the 22 work sets, Hammer Curl included). Scripture: Proverbs 3:5–8.  
 Friday: easy recovery. Scripture: Hebrews 10:23–25.  
 Saturday: 30-minute easy walk; then prepare for Monday's Three-Mile Trial (choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs). Scripture: Psalm 121.  
 Sunday: Isaiah 40:28–31. Reflection: **Where has consistent small effort begun changing me?**

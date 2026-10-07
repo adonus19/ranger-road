@@ -24,6 +24,16 @@ const completedTrial: TrialResult = {
   reflection: '',
 };
 
+// A Monday Gate Trial pass on Nov 2 starts Chapter II on Tuesday (Weeks 5–8); a Monday
+// Three-Mile Trial pass on Nov 30 ends it, and Chapter III is not in the app yet.
+const gatePass: TrialResult = { ...completedTrial, date: '2026-11-02' };
+const threeMilePass: TrialResult = {
+  ...completedTrial,
+  id: 'three-mile-result-1',
+  trialId: 'three-mile-trial',
+  date: '2026-11-30',
+};
+
 function stateFor(date: string) {
   const state = {
     campaign: signal<Campaign | null>(campaign),
@@ -76,19 +86,28 @@ async function render<T>(component: Type<T>, date: string, trials: TrialResult[]
   return { root, history };
 }
 
-describe('Forge after Chapter I', () => {
-  it('offers no repeated Week 4 workout once Chapter II’s first day arrives', async () => {
-    // A Monday pass on Nov 2 starts Chapter II on Tuesday.
-    const { root } = await render(ForgePage, '2026-11-03', [
-      { ...completedTrial, date: '2026-11-02' },
-    ]);
-    expect(root.textContent).toContain('Chapter I complete');
+describe('Forge across chapters', () => {
+  it('offers Chapter II’s workouts, not a repeated Week 4 workout, once Chapter II begins', async () => {
+    const { root } = await render(ForgePage, '2026-11-03', [gatePass]);
+    expect(root.textContent).toContain('Chapter II');
+    expect(root.textContent).not.toContain('Chapter I complete');
+    // Tuesday's walk has no workout; Chapter II's restoration stays open as needed.
+    expect(root.textContent).toContain('Restoration');
+    expect(root.textContent).not.toContain('Forge B');
+  });
+
+  it('offers no workout once the last chapter in the app is complete', async () => {
+    const { root } = await render(ForgePage, '2026-12-01', [gatePass, threeMilePass]);
+    expect(root.textContent).toContain('Chapter II complete');
     expect(root.querySelector('.choice-list')).toBeNull();
   });
 
   it('blocks a direct workout route after completion', async () => {
-    const { root, history } = await render(ForgeSessionPage, '2026-11-02', [completedTrial]);
-    expect(root.textContent).toContain('Chapter I complete');
+    const { root, history } = await render(ForgeSessionPage, '2026-12-01', [
+      gatePass,
+      threeMilePass,
+    ]);
+    expect(root.textContent).toContain('Chapter II complete');
     expect(root.textContent).not.toContain('Start Forge A');
     expect(history.start).not.toHaveBeenCalled();
   });

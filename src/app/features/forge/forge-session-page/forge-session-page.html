@@ -84,7 +84,7 @@
         }
         @if (volumeGuide(); as guide) {
           <p class="volume-guide">
-            Week 4 volume: <strong>{{ completedSets() }} completed</strong> of around
+            Week {{ guide.week }} volume: <strong>{{ completedSets() }} completed</strong> of around
             {{ guide.aroundCompletedSets }} work sets · {{ skippedSets() }} skipped.
           </p>
         }
@@ -122,7 +122,7 @@
 
         @if (volumeGuide(); as guide) {
           <p class="volume-guide">
-            Week 4 volume: <strong>{{ completedSets() }} completed</strong> of around
+            Week {{ guide.week }} volume: <strong>{{ completedSets() }} completed</strong> of around
             {{ guide.aroundCompletedSets }} work sets · {{ skippedSets() }} skipped of
             {{ guide.plannedSets }} planned.
           </p>
@@ -301,7 +301,7 @@
         </p>
         @if (volumeGuide(); as guide) {
           <p class="volume-guide">
-            Week 4 volume: <strong>{{ completedSets() }} completed</strong> of around
+            Week {{ guide.week }} volume: <strong>{{ completedSets() }} completed</strong> of around
             {{ guide.aroundCompletedSets }} work sets · {{ skippedSets() }} skipped of
             {{ guide.plannedSets }} planned.
           </p>

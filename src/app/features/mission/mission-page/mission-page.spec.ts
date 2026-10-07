@@ -459,19 +459,35 @@ describe('MissionPage', () => {
     expect(option(root, 'full')).toBeNull();
   });
 
-  it('shows Chapter I completion on the direct mission route once Chapter II’s first day arrives', async () => {
+  it('moves on to Chapter II’s orders once the Gate Trial is passed', async () => {
     // Passed on the first attempt, Monday, Oct 19; Chapter II continues from Tuesday.
     const { fixture, state, forTrial } = setup(null, '2026-10-20');
     forTrial.mockResolvedValue([{ trialId: 'gate-trial', date: '2026-10-19' } as TrialResult]);
     const root = await ready(fixture);
 
     expect(forTrial).toHaveBeenCalledWith('gate-trial');
-    expect(root.textContent).toContain('Chapter I complete');
+    expect(forTrial).toHaveBeenCalledWith('three-mile-trial');
+    expect(root.textContent).not.toContain('Chapter I complete');
+    expect(root.textContent).toContain('30-minute continuous walk');
+    expect(state.today()).toBe('2026-10-20');
+  });
+
+  it('shows Chapter II completion on the direct mission route once Chapter III’s first day arrives', async () => {
+    // Gate Trial passed Oct 19 (Chapter II's Week 5 began that Monday); Three-Mile Trial passed
+    // on its first attempt, Monday, Nov 16, so Chapter III's first day is Tuesday.
+    const { fixture, state, forTrial } = setup(null, '2026-11-17');
+    forTrial.mockResolvedValue([
+      { trialId: 'gate-trial', date: '2026-10-19' },
+      { trialId: 'three-mile-trial', date: '2026-11-16' },
+    ] as TrialResult[]);
+    const root = await ready(fixture);
+
+    expect(root.textContent).toContain('Chapter II complete');
     expect(root.textContent).not.toContain('Record your outcome');
     expect(root.querySelector<HTMLAnchorElement>('.page-state a')?.getAttribute('href')).toBe(
       '/road',
     );
-    expect(state.today()).toBe('2026-10-20');
+    expect(state.today()).toBe('2026-11-17');
   });
 
   it('does not claim completion or show repeated orders when Gate Trial history cannot load', async () => {

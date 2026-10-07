@@ -97,7 +97,7 @@ Trial: **The Three-Mile Trial**
 
 The Three-Mile Trial follows the Trial Timing rule above, exactly as the Gate Trial does. Its first attempt is the Monday after Week 8 in place of Forge A; the retry days are that week's Thursday, then each following Monday and Thursday, and it opens only on those days. Week 8 Saturday is a 30-minute easy walk plus preparation for Monday: choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs. Psalm 121 is read on Saturday and on every attempt day. Passing means finishing every part as written on a Green day with no pain at 3 or more and no changed movement; there is no time standard. Days between attempts repeat Week 8's non-strength days. Chapter III begins only after a pass: after a Monday pass from Tuesday, otherwise the following Monday.
 
-Friday's brisk-interval walks are always written as plain steps. An optional on-screen interval timer may be offered, started only by the person and never required. Week 8 Monday (Forge A) keeps the written sets and reps with no load increases. Week 8 Thursday (Forge B) is about 25% lighter, around 16–17 of its 22 work sets (Hammer Curl included) chosen by the person; like Week 4, this is a guide and not a hard limit on saving.
+Friday's brisk-interval walks are always written as plain steps. An optional on-screen interval timer may be offered, started only by the person and never required. Week 8 Monday (Forge A) keeps the written sets and reps with no load increases. Week 8 Thursday (Forge B) is about 25% lighter, around 17 of its 22 work sets (Hammer Curl included) chosen by the person; like Week 4, this is a guide and not a hard limit on saving.
 
 ---
 

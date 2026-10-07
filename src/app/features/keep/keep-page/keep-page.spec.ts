@@ -249,14 +249,22 @@ describe('KeepPage', () => {
     );
     expect(passed.querySelector('.reminder')).toBeNull();
 
+    // Chapter II begins the day after a Monday pass, counting that Monday as Week 5.
     TestBed.resetTestingModule();
     state.today.set('2026-11-03');
     const nextDay = await render(state, [], [{ ...completedTrial, date: '2026-11-02' }]);
-    expect(text(nextDay, '#chapter-complete-title')).toBe('Chapter I complete');
+    expect(text(nextDay, 'h1')).toBe('The Road');
+    expect(text(nextDay, '.keep-band__chapter-line')).toBe('Chapter II · Weeks 5–8');
+    expect(text(nextDay, '.keep-band__counts div:last-child dt')).toBe(
+      'Days until Three-Mile Trial',
+    );
+    expect(text(nextDay, '.keep-band__counts div:last-child dd')).toBe('27');
+    expect(text(nextDay, '.main-order h3')).toBe('30-minute continuous walk');
+    expect(nextDay.querySelector('.chapter-complete')).toBeNull();
     expect(text(nextDay, '.reminder strong')).toBe('Monthly check-in');
   });
 
-  it('acknowledges Chapter I after four full weeks and a completed trial while retaining reminders', async () => {
+  it('starts Chapter II on the first attempt day after an older early pass', async () => {
     const state = fakeState({
       ...campaign,
       startDate: '2026-10-05',
@@ -265,11 +273,37 @@ describe('KeepPage', () => {
     state.today.set('2026-11-02');
     const element = await render(state, [], [completedTrial]);
 
-    expect(text(element, '#chapter-complete-title')).toBe('Chapter I complete');
+    expect(text(element, 'h1')).toBe('The Road');
+    expect(text(element, '.main-order h3')).toBe('Forge A');
+    expect(text(element, '.keep-band__counts div:last-child dd')).toBe('28');
+    expect(text(element, '.keep-band__note')).toBe(
+      'Three-Mile Trial on the Monday after Week 8. If it doesn’t go, try again Thursday.',
+    );
+  });
+
+  it('acknowledges Chapter II after four full weeks and a Three-Mile Trial pass while retaining reminders', async () => {
+    const state = fakeState({
+      ...campaign,
+      startDate: '2026-10-05',
+      trialTargetDate: '2026-11-02',
+    });
+    // The Gate Trial passed on Nov 2 (Chapter II from Nov 3); the Three-Mile Trial passed on its
+    // first attempt, Monday, Nov 30, so Chapter III begins Dec 1, and it is not in the app yet.
+    state.today.set('2026-12-01');
+    const element = await render(
+      state,
+      [],
+      [
+        { ...completedTrial, date: '2026-11-02' },
+        { ...completedTrial, id: 'three-mile-1', trialId: 'three-mile-trial', date: '2026-11-30' },
+      ],
+    );
+
+    expect(text(element, '#chapter-complete-title')).toBe('Chapter II complete');
     expect(text(element, '.keep-band__counts div:last-child dd')).toBe('Done');
-    expect(text(element, '.keep-band__note')).toContain('Chapter I complete');
+    expect(text(element, '.keep-band__note')).toContain('Chapter II complete');
     expect(element.querySelector('.chapter-complete a')?.getAttribute('href')).toBe(
-      '/road/gate-trial',
+      '/road/three-mile-trial',
     );
     expect(element.querySelector('.orders')).toBeNull();
     expect(element.querySelector('.mission-cta')).toBeNull();
