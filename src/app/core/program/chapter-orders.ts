@@ -117,6 +117,37 @@ export function getDayMissions(day: ChapterDay): MissionDefinition[] {
  * definition snapshots retain their titles.
  */
 export function getActivityChoices(day: ChapterDay): MissionDefinition[] {
+  if (!day.makeup) return getOwnActivityChoices(day);
+  // A moved session keeps its own IDs; the day's reading and family quest stay with the day.
+  const ownWeekly = getDayMissions(day)[1];
+  const dayExtras = {
+    ...(ownWeekly?.readingMinutes !== undefined
+      ? { readingMinutes: ownWeekly.readingMinutes }
+      : {}),
+    ...(ownWeekly?.readingBookTitle ? { readingBookTitle: ownWeekly.readingBookTitle } : {}),
+    ...(ownWeekly?.optionalFamilyQuest
+      ? { optionalFamilyQuest: ownWeekly.optionalFamilyQuest }
+      : {}),
+  };
+  const strip = (choice: MissionDefinition): MissionDefinition => {
+    const copy = { ...choice };
+    delete copy.readingMinutes;
+    delete copy.readingBookTitle;
+    delete copy.optionalFamilyQuest;
+    return copy;
+  };
+  const primary = getOwnActivityChoices(day.makeup.primary).map(strip);
+  if (primary[0]) primary[0] = { ...primary[0], ...dayExtras };
+  const optional = day.makeup.optional.flatMap((source) =>
+    getOwnActivityChoices(source).map((choice) => ({
+      ...strip(choice),
+      title: `${choice.title} (optional)`,
+    })),
+  );
+  return [...primary, ...optional];
+}
+
+function getOwnActivityChoices(day: ChapterDay): MissionDefinition[] {
   const weekly = getDayMissions(day)[1];
   if (!weekly) return [];
   const activity = getDayContent(day).activity;
@@ -149,7 +180,8 @@ export function getDayOrders(
   readinessStatus: ReadinessCheck['status'] | null = null,
 ): TodayOrder[] {
   const content = getDayContent(day);
-  const activity = content.activity;
+  // A moved session leads the day; the day's own Scripture stays with the watches.
+  const activity = day.makeup ? getDayContent(day.makeup.primary).activity : content.activity;
   const trialName = day.program.trialName;
   const restDay = day.weekday === 7;
   let title = activity.title;
@@ -171,6 +203,8 @@ export function getDayOrders(
   } else if (readinessStatus === null && !restDay) {
     guidance = 'Check readiness before training.';
   }
+
+  if (day.makeup?.note) guidance = guidance ? `${day.makeup.note} ${guidance}` : day.makeup.note;
 
   return [
     {

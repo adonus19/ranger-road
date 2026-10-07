@@ -31,7 +31,7 @@ export class ActivityChoice {
   }
 
   protected icon(choice: MissionDefinition): IconName {
-    if (choice.missionType === 'fieldcraft') return 'anvil';
+    if (choice.missionType === 'fieldcraft' || choice.missionType === 'strength') return 'anvil';
     return choice.missionType === 'restoration' ? 'renew' : 'footprints';
   }
 }

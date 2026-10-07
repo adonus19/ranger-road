@@ -13,7 +13,9 @@ import { getCampaignDay } from '../../../core/program/campaign';
 import { getChapterOneMissionsForDate } from '../../../core/program/chapter-one-missions';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MissionHistory } from '../../../core/state/mission-history';
+import type { MakeupHistory } from '../../../core/program/makeup-schedule';
 import { DayProgress } from '../../../core/state/day-progress';
+import { ScheduleHistory } from '../../../core/state/schedule-history';
 import { RoadHistory } from '../../../core/state/road-history';
 import { TrialHistory } from '../../../core/state/trial-history';
 import { MissionPage } from './mission-page';
@@ -57,6 +59,7 @@ function setup(
   initialRecords: MissionInstance[] = [],
   walks: unknown[] = [],
   done: string[] = [],
+  schedule: MakeupHistory | null = null,
 ) {
   const checks = signal(new Set<string>(done));
   const setDone = vi.fn(async (_date: string, item: string, on: boolean) => {
@@ -103,6 +106,14 @@ function setup(
       { provide: MissionHistory, useValue: { forDate, add } },
       { provide: TrialHistory, useValue: { forTrial } },
       { provide: DayProgress, useValue: progress },
+      {
+        provide: ScheduleHistory,
+        useFactory: () => {
+          const history = new ScheduleHistory();
+          history.refresh = async () => history.history.set(schedule);
+          return history;
+        },
+      },
       { provide: RoadHistory, useValue: { forDate: async () => walks } },
     ],
   });
@@ -484,6 +495,21 @@ describe('MissionPage', () => {
     hearth.querySelector('button')!.click();
     await fixture.whenStable();
     expect(setDone).toHaveBeenLastCalledWith(date, 'hearth', false);
+  });
+
+  it('shows a missed Forge A the next morning with the day’s walk as optional', async () => {
+    const tuesday = '2026-09-22';
+    const { fixture } = setup(readiness('green', tuesday), tuesday, [], [], [], {
+      records: [],
+      sessions: [],
+      redDates: new Set(),
+    });
+    const root = await ready(fixture);
+    expect(root.querySelector('#order-title')?.textContent).toContain('Forge A');
+    expect(root.querySelector('.makeup-note')?.textContent).toContain(
+      'Forge A, moved from Monday.',
+    );
+    expect(root.textContent).toContain('(optional)');
   });
 
   it('marks the main order Recorded once an outcome is saved', async () => {

@@ -14,6 +14,7 @@ import { chapterPrograms, formatChapterNumeral } from '../../../core/program/pro
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MissionHistory } from '../../../core/state/mission-history';
 import { DayProgress, recordLabel } from '../../../core/state/day-progress';
+import { ScheduleHistory } from '../../../core/state/schedule-history';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate } from '../../../shared/format-date';
 import { DoneMark } from '../../../shared/done-mark/done-mark';
@@ -72,6 +73,7 @@ export class KeepPage implements OnInit {
   protected readonly state = inject(CampaignState);
   private readonly trialHistory = inject(TrialHistory);
   protected readonly progress = inject(DayProgress);
+  private readonly schedule = inject(ScheduleHistory);
   private readonly missionHistory = inject(MissionHistory);
   private readonly recentRecords = signal<MissionInstance[] | null>(null);
   protected readonly trialLoading = signal(true);
@@ -97,9 +99,18 @@ export class KeepPage implements OnInit {
   protected readonly longDate = formatLongDate;
   protected readonly numeral = formatChapterNumeral;
 
+  /** Today's chapter day, with a missed Forge session moved here when the rule calls for it. */
+  private readonly scheduledDay = computed(() => {
+    const campaign = this.state.campaign();
+    const today = this.state.today();
+    return campaign && this.position()
+      ? this.schedule.dayFor(campaign.startDate, today, today, this.completedTrials())
+      : null;
+  });
+
   private readonly orders = computed<TodayOrder[]>(() => {
-    const position = this.position();
-    return position ? getDayOrders(position.chapter, this.state.readiness()?.status) : [];
+    const day = this.scheduledDay();
+    return day ? getDayOrders(day, this.state.readiness()?.status) : [];
   });
 
   /** Once the trial is passed, that day's order says so instead of asking for it again. */
@@ -130,7 +141,7 @@ export class KeepPage implements OnInit {
 
   /** Today's main order is marked once something is recorded for it (or its trial is passed). */
   protected readonly mainLabel = computed(() => {
-    const chapter = this.position()?.chapter;
+    const chapter = this.scheduledDay();
     if (!chapter) return null;
     if (this.trialPass()?.date === this.state.today()) return 'Done';
     const ids = getActivityChoices(chapter).map((choice) => choice.id);
@@ -185,7 +196,7 @@ export class KeepPage implements OnInit {
       if (this.state.error()) return;
       if (!this.state.campaign() || this.state.beforeDayOne()) return;
       this.completedTrials.set(await loadCampaignTrials(this.trialHistory));
-      await this.progress.refresh(this.state.today());
+      await Promise.all([this.progress.refresh(this.state.today()), this.schedule.refresh()]);
       try {
         const days = previousTwoDays(this.state.today());
         this.recentRecords.set(

@@ -38,6 +38,21 @@ export interface ChapterDay<T extends TrialRecord = TrialRecord> {
   pass?: T;
   /** The next chapter's first day, once the trial is passed. */
   nextStart?: LocalDate;
+  /** Set when a missed Forge session changes this day's orders (see makeup-schedule.ts). */
+  makeup?: DayMakeup;
+}
+
+/**
+ * A day whose main order comes from another date: a moved Forge session, or an order a moved
+ * session displaced. Each source keeps its own mission IDs, so saved records still match.
+ */
+export interface DayMakeup {
+  /** The source of the day's main order. */
+  primary: ChapterDay;
+  /** Orders kept beside it as optional, such as the day's own walk. */
+  optional: ChapterDay[];
+  /** Calm wording shown with the main order. */
+  note: string;
 }
 
 export interface CampaignPosition<T extends TrialRecord = TrialRecord> {

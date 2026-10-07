@@ -33,6 +33,7 @@ import { DayProgress, recordLabel } from '../../../core/state/day-progress';
 import { MissionHistory } from '../../../core/state/mission-history';
 import { RoadHistory, type SavedRoadSession } from '../../../core/state/road-history';
 import { describeRoadPain, roadSessionParts } from '../../road/road-session-summary';
+import { ScheduleHistory } from '../../../core/state/schedule-history';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate } from '../../../shared/format-date';
 import { DoneMark } from '../../../shared/done-mark/done-mark';
@@ -73,6 +74,7 @@ export class MissionPage {
   private readonly trialHistory = inject(TrialHistory);
   private readonly roadHistory = inject(RoadHistory);
   protected readonly progress = inject(DayProgress);
+  private readonly schedule = inject(ScheduleHistory);
 
   protected readonly records = signal<MissionInstance[]>([]);
   /** Walks logged today, newest first. */
@@ -120,16 +122,27 @@ export class MissionPage {
   protected readonly longDate = formatLongDate;
   protected readonly numeral = formatChapterNumeral;
 
+  /** Today's chapter day, with a missed Forge session moved here when the rule calls for it. */
+  private readonly scheduledDay = computed(() => {
+    const campaign = this.state.campaign();
+    const today = this.state.today();
+    return campaign && this.position()
+      ? this.schedule.dayFor(campaign.startDate, today, today, this.completedTrials())
+      : null;
+  });
+  protected readonly makeupNote = computed(() => this.scheduledDay()?.makeup?.note ?? null);
+
   protected readonly activityChoices = computed(() => {
-    const chapter = this.position()?.chapter;
+    const chapter = this.scheduledDay();
     return chapter ? getActivityChoices(chapter) : [];
   });
 
   protected readonly definition = computed(() => {
     const choices = this.activityChoices();
-    return choices.length === 1
-      ? (choices[0] ?? null)
-      : (choices.find((choice) => choice.id === this.selectedActivityId()) ?? null);
+    if (choices.length === 1) return choices[0] ?? null;
+    const selected = choices.find((choice) => choice.id === this.selectedActivityId());
+    // A moved session leads its day; the optional orders beside it stay one tap away.
+    return selected ?? (this.scheduledDay()?.makeup ? (choices[0] ?? null) : null);
   });
 
   /** The card or practice plan taught by a documented fieldcraft order. */
@@ -202,7 +215,7 @@ export class MissionPage {
   });
 
   protected readonly mainOrder = computed(() => {
-    const chapter = this.position()?.chapter;
+    const chapter = this.scheduledDay();
     if (!chapter) return null;
     const order =
       getDayOrders(chapter, this.readiness()?.status).find((item) => item.kind === 'weekly') ??
@@ -432,6 +445,7 @@ export class MissionPage {
           this.history.forDate(date),
           loadCampaignTrials(this.trialHistory),
           this.roadHistory.forDate(date),
+          this.schedule.refresh(),
         ]);
         if (sequence !== this.loadSequence || this.state.today() !== date) return;
         this.records.set(records);

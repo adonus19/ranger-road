@@ -25,6 +25,7 @@ import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { WorkoutHistory } from '../../../core/state/workout-history';
 import { formatShortDate } from '../../../shared/format-date';
+import { ScheduleHistory } from '../../../core/state/schedule-history';
 import { MissionRecorder, type RecordedMission } from '../../../core/state/mission-recorder';
 import { Icon } from '../../../shared/icon/icon';
 import { REST_LENGTHS, RestClock, formatRest, restLengthLabel } from './rest-clock';
@@ -81,6 +82,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   protected readonly savedSession = signal<WorkoutSession | null>(null);
   protected readonly missionRecorded = signal<RecordedMission | null>(null);
   private readonly recorder = inject(MissionRecorder);
+  private readonly schedule = inject(ScheduleHistory);
   private readonly completedTrials = signal<TrialResult[]>([]);
   protected readonly panel = signal<Panel>(null);
   protected readonly recordingSet = signal(false);
@@ -124,7 +126,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     const campaign = this.state.campaign();
     const date = this.draft()?.date ?? this.state.today();
     return campaign
-      ? (resolveCampaignPosition(campaign.startDate, date, this.completedTrials())?.chapter ?? null)
+      ? this.schedule.dayFor(campaign.startDate, date, this.state.today(), this.completedTrials())
       : null;
   });
   /** Today's chapter; Chapter I before Day 1. */
@@ -251,6 +253,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       const [active, completedTrials] = await Promise.all([
         this.history.active(),
         loadCampaignTrials(this.trialHistory),
+        this.schedule.refresh(),
       ]);
       this.completedTrials.set(completedTrials);
       if (active?.workoutDefinitionId === this.workoutId) {

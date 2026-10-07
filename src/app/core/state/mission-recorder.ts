@@ -5,10 +5,10 @@ import {
   type MissionOutcome,
 } from '../domain/mission';
 import type { MissionDefinition, MissionInstance } from '../domain/models';
-import { resolveCampaignPosition } from '../program/campaign-position';
 import { getActivityChoices } from '../program/chapter-orders';
 import { CampaignState } from './campaign-state';
 import { MissionHistory } from './mission-history';
+import { ScheduleHistory } from './schedule-history';
 import { TrialHistory, loadCampaignTrials } from './trial-history';
 
 export type RecordedMission =
@@ -35,18 +35,20 @@ export class MissionRecorder {
   private readonly state = inject(CampaignState);
   private readonly history = inject(MissionHistory);
   private readonly trialHistory = inject(TrialHistory);
+  private readonly schedule = inject(ScheduleHistory);
 
   /** The mission today's work belongs to, or null on a day with no such mission. */
   async findToday(match: MissionMatch): Promise<MissionDefinition | null> {
     await this.state.initialize();
     const campaign = this.state.campaign();
     if (!campaign) return null;
-    const trials = await loadCampaignTrials(this.trialHistory);
-    const chapter = resolveCampaignPosition(
-      campaign.startDate,
-      this.state.today(),
-      trials,
-    )?.chapter;
+    const [trials] = await Promise.all([
+      loadCampaignTrials(this.trialHistory),
+      this.schedule.refresh(),
+    ]);
+    const today = this.state.today();
+    // Today's orders, including a Forge session moved here by a make-up.
+    const chapter = this.schedule.dayFor(campaign.startDate, today, today, trials);
     if (!chapter) return null;
     const choices = getActivityChoices(chapter);
     return (

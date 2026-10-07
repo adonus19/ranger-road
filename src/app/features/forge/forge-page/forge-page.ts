@@ -10,6 +10,7 @@ import {
   loadWorkout,
 } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { ScheduleHistory } from '../../../core/state/schedule-history';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { WorkoutHistory } from '../../../core/state/workout-history';
 import { formatShortDate } from '../../../shared/format-date';
@@ -24,6 +25,7 @@ export class ForgePage implements OnInit {
   protected readonly state = inject(CampaignState);
   private readonly history = inject(WorkoutHistory);
   private readonly trialHistory = inject(TrialHistory);
+  private readonly schedule = inject(ScheduleHistory);
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
   protected readonly active = signal<WorkoutDraft | null>(null);
@@ -46,7 +48,13 @@ export class ForgePage implements OnInit {
   protected readonly isRestoration = isRestorationWorkout;
 
   protected readonly choices = computed(() => {
-    const chapter = this.position()?.chapter;
+    const campaign = this.state.campaign();
+    const today = this.state.today();
+    // Today's orders, including a Forge session moved here by a make-up.
+    const chapter =
+      campaign && this.position()
+        ? this.schedule.dayFor(campaign.startDate, today, today, this.completedTrials())
+        : null;
     if (!chapter) return [];
     return getWorkoutChoices(chapter).map((id) => ({
       id,
@@ -85,6 +93,7 @@ export class ForgePage implements OnInit {
         this.history.active(),
         this.history.forDate(this.state.today()),
         loadCampaignTrials(this.trialHistory),
+        this.schedule.refresh(),
       ]);
       this.active.set(active ?? null);
       this.sessions.set(sessions);

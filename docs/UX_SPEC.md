@@ -203,8 +203,11 @@ Between sets, the rest clock counts up from when the set was marked. It has Paus
 
 Keep shows a calm note ("Welcome back. Pick up with today's orders…") when each of the two days before today had a main order and nothing was recorded for either. A recorded Rest counts as recorded; Sundays, trial attempt days and days before Day 1 never count. It looks no further back, shows no counts or streaks, and asks for no make-up work. It disappears once today's main order is recorded.
 
-## Forge Make-ups (planned)
+## Forge Make-ups
 
-When a Forge session is missed, the next morning's Keep and Today's Mission show the moved session in place of that day's order, worded calmly ("Forge A moved to today"), with a full or reduced choice and a way to skip it. The displaced walk is marked optional, with the choice to do it alongside or in place of a leg exercise's sets. No counts of missed sessions are shown. The full rule is in `RANGERS_ROAD_PROGRAM.md`, Missed Forge Make-ups.
+When a Forge session is missed, the next morning's Keep, Today's Mission and Forge show the moved session as the day's main order, with a calm note ("Forge A, moved from Monday. Full or reduced, your choice."). The day's own walk appears beside it as "(optional)", with the note to do it alongside or in place of one leg exercise's sets. Today's Mission selects the moved session by default; the optional order is one tap away. No counts of missed sessions are shown. Rules are in `RANGERS_ROAD_PROGRAM.md`, Missed Forge Make-ups. Details settled in the build:
 
-Light Activity (deload weeks and any day): a log with a required activity name and optional weight, sets, reps, distance and time.
+- The schedule is worked out from saved mission records, Forge sessions (including ones saved before one-step recording) and Red readiness days. If that history cannot be read, every day shows its own dated orders and nothing is treated as missed.
+- In a three-Forge week, a missed carried session on Monday is dropped; Forge A can still move from Wednesday to Thursday, pushing Forge B to Saturday.
+
+(Planned) Light Activity (deload weeks and any day): a log with a required activity name and optional weight, sets, reps, distance and time.
