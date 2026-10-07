@@ -19,6 +19,13 @@
     <router-outlet />
   </main>
 
+  @if (update.ready()) {
+    <div class="update-bar" role="status">
+      <span>A new version is ready.</span>
+      <button type="button" (click)="update.reload()">Reload</button>
+    </div>
+  }
+
   <nav class="primary-nav" aria-label="Primary navigation">
     <div class="primary-nav__inner">
       @for (item of navItems; track item.path) {

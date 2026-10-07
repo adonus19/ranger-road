@@ -176,3 +176,7 @@ Pain event must be persisted.
 - quick voice notes later
 - offline functionality
 - one-tap reduced mission
+
+## App Updates
+
+The installed app looks for a new version when it opens, returns to the foreground, comes back online, and hourly. When one is ready, a quiet bar above the navigation reads "A new version is ready." with a Reload button. The app never reloads by itself, so unsaved text is never lost.

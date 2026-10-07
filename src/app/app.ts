@@ -2,6 +2,7 @@ import { Component, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { AppUpdate } from './core/state/app-update';
 import { Icon, type IconName } from './shared/icon/icon';
 import { focusRouteHeading } from './shared/route-focus';
 
@@ -21,9 +22,14 @@ interface NavItem {
 })
 export class App {
   private readonly router = inject(Router);
+  protected readonly update = inject(AppUpdate);
   private readonly navigated = toSignal(
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)),
   );
+
+  constructor() {
+    this.update.start();
+  }
 
   /**
    * After a route change, reading focus moves to the new view's heading. The Index lands on
