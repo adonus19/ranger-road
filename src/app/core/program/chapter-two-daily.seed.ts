@@ -1,7 +1,14 @@
 import type { ChapterDayContent, ChapterWeekContent } from './chapter-program';
 
 /** Friday's brisk-interval walk, written as plain steps; any timer is optional. */
-function intervalWalk(brisk: string, totalMinutes?: number): ChapterDayContent['activity'] {
+function intervalWalk(
+  briskSeconds: number,
+  brisk: string,
+  totalMinutes?: number,
+): ChapterDayContent['activity'] {
+  const warmupMinutes = 5;
+  const rounds = 6;
+  const easySeconds = 120;
   return {
     title: 'Walk with brisk intervals',
     missionType: 'conditioning',
@@ -9,6 +16,19 @@ function intervalWalk(brisk: string, totalMinutes?: number): ChapterDayContent['
     details: [
       `5 minutes easy, then 6 rounds of ${brisk} brisk / 2 minutes easy, then an easy ${totalMinutes ? 'remainder' : 'cooldown'}.`,
     ],
+    intervals: {
+      warmupMinutes,
+      rounds,
+      briskSeconds,
+      easySeconds,
+      // Week 5 is written as 30 minutes with an easy remainder; the others give no cooldown length.
+      ...(totalMinutes
+        ? {
+            cooldownMinutes:
+              totalMinutes - warmupMinutes - (rounds * (briskSeconds + easySeconds)) / 60,
+          }
+        : {}),
+    },
   };
 }
 
@@ -53,7 +73,7 @@ export const chapterTwoDailySeed: readonly ChapterWeekContent[] = [
         readingMinutes: 10,
       },
       4: { scriptureReference: 'Luke 10:38–42', activity: forgeB },
-      5: { scriptureReference: 'Isaiah 30:15', activity: intervalWalk('1 minute', 30) },
+      5: { scriptureReference: 'Isaiah 30:15', activity: intervalWalk(60, '1 minute', 30) },
       6: {
         scriptureReference: 'Psalm 131',
         activity: {
@@ -84,7 +104,7 @@ export const chapterTwoDailySeed: readonly ChapterWeekContent[] = [
       },
       3: { scriptureReference: 'Proverbs 20:5', activity: restoration, readingMinutes: 10 },
       4: { scriptureReference: 'Luke 8:4–15', activity: forgeB },
-      5: { scriptureReference: 'Ecclesiastes 5:1–2', activity: intervalWalk('90 seconds') },
+      5: { scriptureReference: 'Ecclesiastes 5:1–2', activity: intervalWalk(90, '90 seconds') },
       6: {
         scriptureReference: '1 Samuel 3:1–10',
         activity: {
@@ -112,7 +132,7 @@ export const chapterTwoDailySeed: readonly ChapterWeekContent[] = [
       },
       3: { scriptureReference: 'Ephesians 5:15–21', activity: restoration },
       4: { scriptureReference: 'Colossians 3:12–17', activity: forgeB },
-      5: { scriptureReference: 'Proverbs 17:22', activity: intervalWalk('2 minutes') },
+      5: { scriptureReference: 'Proverbs 17:22', activity: intervalWalk(120, '2 minutes') },
       6: {
         scriptureReference: 'Mark 10:13–16',
         activity: {

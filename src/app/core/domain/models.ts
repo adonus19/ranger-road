@@ -55,6 +55,16 @@ export type MissionType =
   | 'familyQuest'
   | 'trial';
 
+/** A brisk-interval walk, as the written steps give it. The timer built from it is optional. */
+export interface IntervalPlan {
+  warmupMinutes?: number;
+  rounds: number;
+  briskSeconds: number;
+  easySeconds: number;
+  /** Only when the pack gives a length; otherwise the timer ends with a reminder to cool down. */
+  cooldownMinutes?: number;
+}
+
 export interface MissionDefinition {
   id: string;
   chapterId: string;
@@ -74,6 +84,8 @@ export interface MissionDefinition {
   readingMinutes?: number;
   readingBookTitle?: string;
   optionalFamilyQuest?: string;
+  /** Brisk intervals written as steps; an optional timer can be started from them. */
+  intervals?: IntervalPlan;
   /** A planned trial is completed through TrialResult, never the generic mission logger. */
   plannedTrialId?: string;
   /** Getting ready for the next Gate Trial attempt; screens show it only while the trial is pending. */

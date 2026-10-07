@@ -32,6 +32,7 @@ import { MissionHistory } from '../../../core/state/mission-history';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate } from '../../../shared/format-date';
 import { Icon, type IconName } from '../../../shared/icon/icon';
+import { IntervalTimer } from '../../../shared/interval-timer/interval-timer';
 import { ActivityChoice } from '../activity-choice/activity-choice';
 import { ReadinessStrip } from '../readiness-strip/readiness-strip';
 
@@ -56,7 +57,7 @@ const OUTCOME_OPTIONS: ReadonlyArray<{ value: MissionOutcome; label: string }> =
 ];
 
 @Component({
-  imports: [ActivityChoice, FormField, Icon, ReadinessStrip, RouterLink],
+  imports: [ActivityChoice, FormField, Icon, IntervalTimer, ReadinessStrip, RouterLink],
   selector: 'app-mission-page',
   styleUrl: './mission-page.css',
   templateUrl: './mission-page.html',

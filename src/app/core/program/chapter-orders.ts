@@ -89,6 +89,7 @@ export function getDayMissions(day: ChapterDay): MissionDefinition[] {
         ? { estimatedMinutes: content.activity.estimatedMinutes }
         : {}),
       ...(activityDetails.length ? { activityDetails } : {}),
+      ...(content.activity.intervals ? { intervals: content.activity.intervals } : {}),
       ...(content.activity.plannedTrialId
         ? { plannedTrialId: content.activity.plannedTrialId }
         : {}),
@@ -135,6 +136,7 @@ export function getActivityChoices(day: ChapterDay): MissionDefinition[] {
       };
       delete choice.estimatedMinutes;
       delete choice.activityDetails;
+      delete choice.intervals;
       if (alternative.fieldcraftPractice && fieldcraft) choice.activityDetails = [fieldcraft];
       return choice;
     }),

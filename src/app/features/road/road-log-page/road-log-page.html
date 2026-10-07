@@ -6,6 +6,10 @@
 
   <h1>Log a walk</h1>
 
+  @if (!saved()) {
+    <app-interval-timer [editable]="true" />
+  }
+
   @if (saved(); as session) {
     <app-walk-saved
       [session]="session"

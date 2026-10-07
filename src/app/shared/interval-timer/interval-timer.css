@@ -1,0 +1,162 @@
+:host {
+  display: block;
+  margin: 1rem 0;
+}
+
+.timer {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-page);
+}
+
+.timer__summary {
+  display: flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  padding: 0 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.timer__body {
+  display: grid;
+  gap: 0.9rem;
+  padding: 0 1rem 1rem;
+}
+
+.timer__fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.timer__fields label {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--text-label);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.timer__fields input {
+  min-height: var(--touch-target);
+  width: 100%;
+  padding: 0 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-page);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.timer__plan,
+.timer__help,
+.timer__done p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.timer__help {
+  font-size: 0.8125rem;
+}
+
+.timer__error {
+  margin: 0;
+  color: var(--status-red-text);
+  font-size: 0.875rem;
+}
+
+.timer__start,
+.timer__button {
+  min-height: var(--touch-target);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.timer__start {
+  border: 0;
+  background: var(--action);
+  color: var(--on-action);
+}
+
+.timer__start:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.timer__button {
+  border: 1px solid var(--line);
+  background: var(--surface-page);
+  color: var(--text);
+}
+
+.timer__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.timer__face {
+  display: grid;
+  justify-items: center;
+  gap: 0.15rem;
+  padding: 1.25rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-tint);
+  text-align: center;
+}
+
+.timer__face[data-phase='brisk'] {
+  background: var(--status-yellow-surface);
+  color: var(--status-yellow-text);
+}
+
+.timer__face[data-phase='easy'],
+.timer__face[data-phase='warmup'],
+.timer__face[data-phase='cooldown'] {
+  background: var(--status-green-surface);
+  color: var(--status-green-text);
+}
+
+.timer__phase {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.timer__clock {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.timer__round,
+.timer__next {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.timer__sound {
+  display: flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.timer__sound input {
+  accent-color: var(--action);
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.timer__done {
+  display: grid;
+  gap: 0.6rem;
+}

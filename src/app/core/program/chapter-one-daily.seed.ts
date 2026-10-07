@@ -163,6 +163,7 @@ export const chapterOneDailySeed: readonly ChapterWeekContent[] = [
           missionType: 'conditioning',
           estimatedMinutes: 30,
           details: ['5 rounds of 1 minute brisk / 2 minutes normal.'],
+          intervals: { rounds: 5, briskSeconds: 60, easySeconds: 120 },
         },
       },
       3: {

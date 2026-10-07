@@ -1,0 +1,84 @@
+<details class="timer">
+  <summary class="timer__summary">Interval timer (optional)</summary>
+
+  <div class="timer__body">
+    @if (editable() && !plan()) {
+      <div class="timer__fields" role="group" aria-label="Set your own intervals">
+        <label>
+          Rounds
+          <input
+            type="text"
+            inputmode="numeric"
+            [value]="rounds()"
+            (input)="setField('rounds', $event)"
+            [disabled]="state() !== 'idle'"
+          />
+        </label>
+        <label>
+          Brisk (seconds)
+          <input
+            type="text"
+            inputmode="numeric"
+            [value]="brisk()"
+            (input)="setField('brisk', $event)"
+            [disabled]="state() !== 'idle'"
+          />
+        </label>
+        <label>
+          Easy (seconds)
+          <input
+            type="text"
+            inputmode="numeric"
+            [value]="easy()"
+            (input)="setField('easy', $event)"
+            [disabled]="state() !== 'idle'"
+          />
+        </label>
+      </div>
+    }
+
+    @if (summary(); as text) {
+      <p class="timer__plan">{{ text }}.</p>
+    } @else if (editable()) {
+      <p class="timer__error" role="alert">
+        Use 1 to 20 rounds and 10 to 600 seconds for each block.
+      </p>
+    }
+
+    @if (state() === 'idle') {
+      <button type="button" class="timer__start" [disabled]="!valid()" (click)="start()">
+        Start timer
+      </button>
+    } @else if (state() === 'done') {
+      <div class="timer__done" role="status">
+        <p>{{ finishNote() }}</p>
+        <button type="button" class="timer__button" (click)="reset()">Reset</button>
+      </div>
+    } @else {
+      <div class="timer__face" [attr.data-phase]="phase()">
+        <p class="timer__phase">{{ phaseLabel() }}</p>
+        <p class="timer__clock">{{ clock() }}</p>
+        <p class="timer__round">{{ roundLabel() }}</p>
+        <p class="timer__next">{{ nextLabel() }}</p>
+      </div>
+      <div class="timer__actions">
+        @if (state() === 'running') {
+          <button type="button" class="timer__button" (click)="pause()">Pause</button>
+        } @else {
+          <button type="button" class="timer__button" (click)="resume()">Resume</button>
+        }
+        <button type="button" class="timer__button" (click)="reset()">Stop</button>
+      </div>
+    }
+
+    <label class="timer__sound">
+      <input type="checkbox" [checked]="sound()" (change)="toggleSound($event)" />
+      Soft chime at each switch
+    </label>
+    <p class="timer__help">
+      The steps above are the plan. Keep the screen on while the timer runs; if the phone sleeps, it
+      catches up when you open it again.
+    </p>
+    <p class="visually-hidden" role="status" aria-live="polite">{{ announcement() }}</p>
+  </div>
+</details>

@@ -212,6 +212,17 @@ describe('Chapter I main activity choices', () => {
     expect(saturday.plannedTrialId).toBeUndefined();
   });
 
+  it('gives Week 3 Tuesday’s brisk intervals an optional timer plan and no other Chapter I day', () => {
+    expect(getChapterOneMissionsForDate('2026-09-07', '2026-09-22')[1].intervals).toEqual({
+      rounds: 5,
+      briskSeconds: 60,
+      easySeconds: 120,
+    });
+    for (const date of ['2026-09-08', '2026-09-15', '2026-09-29']) {
+      expect(getChapterOneMissionsForDate('2026-09-07', date)[1].intervals).toBeUndefined();
+    }
+  });
+
   it('keeps other days and the Week 4 template stable', () => {
     const monday = getChapterOneActivityChoicesForDate('2026-09-07', '2026-09-07');
     expect(monday).toEqual([getChapterOneMissionsForDate('2026-09-07', '2026-09-07')[1]]);

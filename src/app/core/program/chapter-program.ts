@@ -1,5 +1,6 @@
 import type {
   ChapterDefinition,
+  IntervalPlan,
   MissionType,
   TrialDefinition,
   WorkoutDefinition,
@@ -43,6 +44,8 @@ export interface ChapterActivityContent {
   fieldcraftPractice?: boolean;
   /** Getting ready for the next trial attempt; shown only while the trial is pending. */
   trialPreparation?: string;
+  /** Brisk intervals as written steps; an optional timer can be started from them. */
+  intervals?: IntervalPlan;
   /** The main order's own name when it is offered beside alternatives. */
   choiceTitle?: string;
   alternatives?: readonly ChapterActivityAlternative[];

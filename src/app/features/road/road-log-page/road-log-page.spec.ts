@@ -64,6 +64,17 @@ async function save(root: HTMLElement, harness: RouterTestingHarness): Promise<v
 }
 
 describe('RoadLogPage', () => {
+  it('offers an optional interval timer that the person sets up themselves', async () => {
+    const { root } = await open();
+
+    const timer = root.querySelector('app-interval-timer details') as HTMLDetailsElement;
+    expect(timer.textContent).toContain('Interval timer (optional)');
+    expect(timer.open).toBe(false);
+    expect(root.querySelectorAll('.timer__fields input')).toHaveLength(3);
+    // The walk can be logged without ever touching the timer.
+    expect(root.querySelector('.log-form')).not.toBeNull();
+  });
+
   it('saves a walk for today in the units entered and keeps the last terrain as the default', async () => {
     const { harness, root, add } = await open('/road/log', 'Gravel trail');
 

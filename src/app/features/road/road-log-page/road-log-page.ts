@@ -24,6 +24,7 @@ import { addDays, isLocalDate } from '../../../core/program/campaign';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { RoadHistory, type SavedRoadSession } from '../../../core/state/road-history';
 import { Icon } from '../../../shared/icon/icon';
+import { IntervalTimer } from '../../../shared/interval-timer/interval-timer';
 import { WalkSaved } from '../walk-saved/walk-saved';
 
 type DateChoice = 'today' | 'yesterday' | 'other';
@@ -46,7 +47,7 @@ function blankEntry(terrain = '') {
 }
 
 @Component({
-  imports: [FormField, Icon, RouterLink, WalkSaved],
+  imports: [FormField, Icon, IntervalTimer, RouterLink, WalkSaved],
   selector: 'app-road-log-page',
   styleUrl: './road-log-page.css',
   templateUrl: './road-log-page.html',

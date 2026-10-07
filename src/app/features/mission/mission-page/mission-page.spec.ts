@@ -525,6 +525,24 @@ describe('MissionPage', () => {
     expect(details(await ready(skill.fixture))).toContain('No readiness check needed');
   });
 
+  it('offers the optional interval timer with the written steps on an interval day, never as a requirement', async () => {
+    const { fixture } = setup(readiness('green', '2026-10-06'), '2026-10-06');
+    const root = await ready(fixture);
+
+    expect(root.textContent).toContain('5 rounds of 1 minute brisk / 2 minutes normal.');
+    const timer = root.querySelector('app-interval-timer details');
+    expect(timer?.textContent).toContain('Interval timer (optional)');
+    expect(timer?.textContent).toContain('5 rounds of 1 minute brisk / 2 minutes easy.');
+    expect((timer as HTMLDetailsElement).open).toBe(false);
+    expect(root.querySelector('.timer__face')).toBeNull();
+    // Saving the mission never waits on the timer.
+    expect(root.querySelector('form')).not.toBeNull();
+
+    TestBed.resetTestingModule();
+    const other = setup(readiness('green', '2026-10-07'), '2026-10-07');
+    expect((await ready(other.fixture)).querySelector('app-interval-timer')).toBeNull();
+  });
+
   it('drops a walk’s brisk intervals on a Red day and links the Restoration routine', async () => {
     const { fixture } = setup(readiness('red', '2026-10-06'), '2026-10-06');
     const root = await ready(fixture);
@@ -533,6 +551,7 @@ describe('MissionPage', () => {
       'Restoration or easy movement',
     );
     expect(root.textContent).not.toContain('5 rounds of 1 minute brisk');
+    expect(root.querySelector('app-interval-timer')).toBeNull();
     expect(root.querySelector('.workout-link')?.getAttribute('href')).toBe(
       '/forge/session/chapter-1-restoration',
     );

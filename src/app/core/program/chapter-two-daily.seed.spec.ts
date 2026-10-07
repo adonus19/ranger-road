@@ -83,6 +83,21 @@ describe('Chapter II daily content', () => {
     expect(friday(1)).not.toHaveProperty('estimatedMinutes');
   });
 
+  it('offers each Friday walk as an optional timer plan that matches its written steps', () => {
+    const plans = [0, 1, 2].map((week) => chapterTwoDailySeed[week].days[5].activity.intervals);
+    expect(plans).toEqual([
+      { warmupMinutes: 5, rounds: 6, briskSeconds: 60, easySeconds: 120, cooldownMinutes: 7 },
+      { warmupMinutes: 5, rounds: 6, briskSeconds: 90, easySeconds: 120 },
+      { warmupMinutes: 5, rounds: 6, briskSeconds: 120, easySeconds: 120 },
+    ]);
+    expect(chapterTwoDailySeed[3].days[5].activity.intervals).toBeUndefined();
+    // The mission carries the plan; a Red day's restoration alternative never does.
+    const friday = resolveCampaignPosition('2026-10-05', '2026-11-06', [
+      { trialId: 'gate-trial', date: '2026-11-02' },
+    ])!.chapter;
+    expect(getDayMissions(friday)[1].intervals?.briskSeconds).toBe(60);
+  });
+
   it('keeps the weekly missions, reflections, reading, and Week 8 trial preparation', () => {
     expect(chapterTwoDailySeed[0].days[3].readingMinutes).toBe(10);
     expect(chapterTwoDailySeed[0].days[7].reflectionPrompt).toBe(

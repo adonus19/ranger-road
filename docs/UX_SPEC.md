@@ -65,7 +65,7 @@ Each chapter:
 
 ## Forge — Training
 
-Friday interval walks always show their written steps. An optional interval timer may be offered on Road; the person starts it, it never starts itself, and a walk can be logged without it.
+Brisk-interval walks always show their written steps. An optional interval timer is offered in a closed "Interval timer (optional)" section under those steps on Today's Mission (Chapter I Week 3 Tuesday and Chapter II's Friday walks; hidden on a Red day with the steps) and on Log a walk, where the person sets their own rounds, brisk seconds and easy seconds (1–20 rounds, 10–600 seconds). It never starts itself, nothing waits for it, and a mission or walk saves without it. It shows the current block (Warm up, Brisk, Easy, Cool down), a large countdown, the round, and what comes next, with Pause and Stop. A soft chime marks each switch (higher for brisk, lower for easy; three notes at the end), with a Sound switch remembered on the device. It keeps the screen awake while it runs where the browser allows, and takes its time from the clock so a sleeping phone catches up when reopened, though a chime cannot sound while the phone is asleep. When a plan gives no cooldown length, the timer ends with "Finish the walk at an easy pace."
 
 Workout player:
 

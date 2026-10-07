@@ -90,6 +90,9 @@
           }
         </ul>
       }
+      @if (showActivityDetails() && mission.intervals; as intervals) {
+        <app-interval-timer [plan]="intervals" />
+      }
       @if (fieldcraftGuide(); as guide) {
         <a class="fieldcraft-link" [routerLink]="guide.link" [queryParams]="{ from: 'mission' }">
           {{ guide.label }}
