@@ -1,5 +1,5 @@
 <section class="saved" role="status" aria-labelledby="saved-title">
-  <h2 id="saved-title" tabindex="-1">Walk saved</h2>
+  <h2 id="saved-title" tabindex="-1">{{ heading() }}</h2>
   <p class="saved__date">{{ date() }}</p>
   <p class="saved__summary">
     @for (line of lines(); track $index) {
@@ -9,6 +9,13 @@
   @if (pain(); as pain) {
     <p class="saved__pain">{{ pain }}</p>
   }
+  @if (note(); as note) {
+    <p class="saved__pain">{{ note }}</p>
+  }
   <a class="primary-button" [routerLink]="backPath()">{{ backLabel() }}</a>
-  <button type="button" class="secondary-button" (click)="another.emit()">Log another walk</button>
+  @if (allowAnother()) {
+    <button type="button" class="secondary-button" (click)="another.emit()">
+      Log another walk
+    </button>
+  }
 </section>

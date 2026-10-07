@@ -361,3 +361,7 @@ Restoring a saved copy is the one operation that replaces history. It runs only 
 Program definition updates must not rewrite prior completed sessions.
 When Chapter I scheduling changes, reconcile only the campaign's generated planning date. Preserve any separately chosen target date and every historical row. Dated mission attempts retain their definition snapshots and remain readable even when their old week-based ID differs from the newly scheduled order.
 A completed trial result is the pass for its chapter. The next chapter's first day is derived from the first completed result: the day after a Monday pass, the Monday after any other pass, or the first attempt day for an older result saved before the trial window. A chapter is complete once today is on or after that day. None of this mutates the Campaign or TrialResult.
+
+## RoadSession additions
+
+`missionId?` links a walk to the planned mission it fulfilled (today's walks only). `editedAt?` marks a corrected walk. A walk may be edited (`createdAt` kept) or removed; mission records stay append-only.

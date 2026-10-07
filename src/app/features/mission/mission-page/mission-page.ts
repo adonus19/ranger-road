@@ -29,6 +29,8 @@ import {
 } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MissionHistory } from '../../../core/state/mission-history';
+import { RoadHistory, type SavedRoadSession } from '../../../core/state/road-history';
+import { describeRoadPain, roadSessionParts } from '../../road/road-session-summary';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate } from '../../../shared/format-date';
 import { Icon, type IconName } from '../../../shared/icon/icon';
@@ -66,8 +68,20 @@ export class MissionPage {
   protected readonly state = inject(CampaignState);
   private readonly history = inject(MissionHistory);
   private readonly trialHistory = inject(TrialHistory);
+  private readonly roadHistory = inject(RoadHistory);
 
   protected readonly records = signal<MissionInstance[]>([]);
+  /** Walks logged today, newest first. */
+  protected readonly walks = signal<SavedRoadSession[]>([]);
+  protected readonly walkLines = (walk: SavedRoadSession) => {
+    const [distance, duration, terrain, effort] = roadSessionParts(walk);
+    return `${distance} · ${duration} · ${terrain} · ${effort}`;
+  };
+  protected readonly walkPain = describeRoadPain;
+  protected readonly isWalkMission = computed(() => {
+    const mission = this.definition();
+    return mission?.missionType === 'conditioning' && !mission.plannedTrialId;
+  });
   private readonly completedTrials = signal<TrialResult[]>([]);
   protected readonly historyLoading = signal(true);
   protected readonly historyError = signal<string | null>(null);
@@ -282,7 +296,9 @@ export class MissionPage {
   /** A full or reduced conditioning outcome can carry the walk's details over to the Road log. */
   protected walkDetailsFor(record: MissionInstance): boolean {
     return (
-      record.status === 'completed' && record.definitionSnapshot?.missionType === 'conditioning'
+      record.status === 'completed' &&
+      record.definitionSnapshot?.missionType === 'conditioning' &&
+      !this.walks().length
     );
   }
 
@@ -356,6 +372,7 @@ export class MissionPage {
     this.loadedDate = date;
     // A rollover must clear yesterday's records and unfinished outcome at once.
     this.records.set([]);
+    this.walks.set([]);
     this.completedTrials.set([]);
     this.selectedActivityId.set(null);
     this.recordAnother.set(false);
@@ -374,12 +391,14 @@ export class MissionPage {
       const campaign = this.state.campaign();
       if (campaign) {
         // Today's chapter, its trial order, and the chapter's end all depend on saved trials.
-        const [records, trials] = await Promise.all([
+        const [records, trials, walks] = await Promise.all([
           this.history.forDate(date),
           loadCampaignTrials(this.trialHistory),
+          this.roadHistory.forDate(date),
         ]);
         if (sequence !== this.loadSequence || this.state.today() !== date) return;
         this.records.set(records);
+        this.walks.set(walks);
         this.completedTrials.set(trials);
         const choiceIds = new Set(this.activityChoices().map((choice) => choice.id));
         this.selectedActivityId.set(

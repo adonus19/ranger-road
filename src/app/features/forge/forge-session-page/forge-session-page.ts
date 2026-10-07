@@ -25,6 +25,7 @@ import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { WorkoutHistory } from '../../../core/state/workout-history';
 import { formatShortDate } from '../../../shared/format-date';
+import { MissionRecorder, type RecordedMission } from '../../../core/state/mission-recorder';
 import { Icon } from '../../../shared/icon/icon';
 import { REST_LENGTHS, RestClock, formatRest, restLengthLabel } from './rest-clock';
 
@@ -78,6 +79,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   protected readonly draft = signal<WorkoutDraft | null>(null);
   protected readonly otherDraft = signal<WorkoutDraft | null>(null);
   protected readonly savedSession = signal<WorkoutSession | null>(null);
+  protected readonly missionRecorded = signal<RecordedMission | null>(null);
+  private readonly recorder = inject(MissionRecorder);
   private readonly completedTrials = signal<TrialResult[]>([]);
   protected readonly panel = signal<Panel>(null);
   protected readonly recordingSet = signal(false);
@@ -563,6 +566,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       });
       const session = await this.history.complete(updated.id);
       this.savedSession.set(session);
+      await this.recordMission(session);
       this.draft.set(null);
     } catch (error) {
       this.showError(error);
@@ -579,11 +583,26 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     try {
       const session = await this.history.stop(draft.id);
       this.savedSession.set(session);
+      await this.recordMission(session);
       this.draft.set(null);
     } catch (error) {
       this.showError(error);
     } finally {
       this.saving.set(false);
+    }
+  }
+
+  /** The work is already saved; recording today's mission is a courtesy that can fail quietly. */
+  private async recordMission(session: WorkoutSession): Promise<void> {
+    try {
+      this.missionRecorded.set(
+        await this.recorder.recordToday(
+          { workoutId: session.workoutDefinitionId, restoration: this.isRestoration },
+          { reduced: session.outcome === 'stopped' || !!session.reduced },
+        ),
+      );
+    } catch {
+      this.missionRecorded.set(null);
     }
   }
 

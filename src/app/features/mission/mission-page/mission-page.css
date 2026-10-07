@@ -399,3 +399,24 @@ h1 {
     appearance: auto;
   }
 }
+
+.walks ul {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.walks li {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.walk-edit {
+  display: inline-flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  color: var(--action);
+  font-weight: 600;
+}

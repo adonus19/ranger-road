@@ -184,3 +184,10 @@ The installed app looks for a new version when it opens, returns to the foregrou
 ## Forge Rest Timer
 
 Between sets, the rest clock counts up from when the set was marked. It has Pause/Resume, Reset and Hide (a "Show rest timer" button brings it back), and an optional rest length from 0:30 to 5:00 that plays a soft chime when reached (remembered on the device). Rest time is never saved.
+
+## Walks and Mission Recording
+
+- A walk logged for today on a walk day is linked to that mission (`missionId`) and records the mission as Full, or Reduced on Yellow or when "This was a reduced walk" is ticked. If readiness has not been checked, the walk saves and a note asks for the check.
+- Ending a Forge session early records the mission as Reduced; finishing records Full (Reduced if sets were skipped or changed). The result can be changed on Today's Mission with "Record another attempt".
+- Today's Mission shows each walk logged today with "Edit or remove" and "Log another walk". Editing keeps an "Edited" note (`editedAt`); removing asks first. Neither changes the mission record already saved.
+- Only today is recorded this way. Earlier days are not made up from a walk.

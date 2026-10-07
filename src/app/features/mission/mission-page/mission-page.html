@@ -149,6 +149,52 @@
         }
       }
 
+      @if (isWalkMission()) {
+        @if (walks().length) {
+          <section class="recorded walks" aria-labelledby="walks-title">
+            <h2 id="walks-title">
+              {{ walks().length === 1 ? 'Walk logged today' : 'Walks logged today' }}
+            </h2>
+            <ul>
+              @for (walk of walks(); track walk.id) {
+                <li>
+                  <strong>{{ walkLines(walk) }}</strong>
+                  @if (walkPain(walk); as pain) {
+                    <span>{{ pain }}</span>
+                  }
+                  @if (walk.editedAt) {
+                    <span>Edited</span>
+                  }
+                  <a
+                    class="walk-edit"
+                    routerLink="/road/log"
+                    [queryParams]="{ edit: walk.id, from: 'mission' }"
+                    >Edit or remove</a
+                  >
+                </li>
+              }
+            </ul>
+            <a
+              class="walk-link"
+              routerLink="/road/log"
+              [queryParams]="{ from: 'mission', mission: mission.id }"
+            >
+              <app-icon name="footprints" />
+              Log another walk
+            </a>
+          </section>
+        } @else if (readiness() && readiness()?.status !== 'red' && !latestRecord()) {
+          <a
+            class="walk-link walk-link--primary"
+            routerLink="/road/log"
+            [queryParams]="{ from: 'mission', mission: mission.id }"
+          >
+            <app-icon name="footprints" />
+            Log your walk
+          </a>
+        }
+      }
+
       @if (needsReadiness() && !mission.plannedTrialId) {
         <p class="plan-note">Record what you did, including any changes for pain or energy.</p>
       }

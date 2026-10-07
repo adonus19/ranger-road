@@ -16,6 +16,10 @@ export class WalkSaved {
   readonly backPath = input.required<string>();
   readonly backLabel = input.required<string>();
   readonly another = output<void>();
+  readonly heading = input('Walk saved');
+  /** What happened to today's mission, shown beneath the walk. */
+  readonly note = input<string | null>(null);
+  readonly allowAnother = input(true);
 
   protected readonly date = computed(() => formatLongDate(this.session().date));
   /** Distance and time on one line, ground and effort on the next, so no line ends on a separator. */

@@ -261,6 +261,35 @@ describe('RoadDatabase', () => {
     reopened.close();
   });
 
+  it('corrects a walk keeping its save time and links, and removes it on request', async () => {
+    const db = await RoadDatabase.open(newName());
+    await db.addRoadSession({
+      id: 'road-1',
+      date: '2026-09-25',
+      distance: 2,
+      duration: 37,
+      terrain: 'Road',
+      rpe: 5,
+      missionId: 'mission-a',
+    });
+    const [first] = await db.getRoadSessionsForDate('2026-09-25');
+    await db.updateRoadSession({
+      ...first,
+      distance: 2.5,
+      editedAt: '2026-09-25T20:00:00.000Z',
+    });
+    const [edited] = await db.getRoadSessionsForDate('2026-09-25');
+    expect(edited).toMatchObject({
+      distance: 2.5,
+      missionId: 'mission-a',
+      editedAt: '2026-09-25T20:00:00.000Z',
+      createdAt: first.createdAt,
+    });
+    await db.deleteRoadSession('road-1');
+    expect(await db.getRoadSessionsForDate('2026-09-25')).toEqual([]);
+    db.close();
+  });
+
   it('keeps a legacy Road row without a save timestamp behind newer same-day rows', async () => {
     const db = await RoadDatabase.open(newName());
     const base = { date: '2026-09-25', distance: 1, duration: 20, terrain: 'Path', rpe: 3 };

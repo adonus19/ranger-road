@@ -4,14 +4,23 @@
     {{ backLabel }}
   </a>
 
-  <h1>Log a walk</h1>
+  <h1>{{ editing() ? 'Edit walk' : 'Log a walk' }}</h1>
 
-  @if (!saved()) {
+  @if (!saved() && !removed() && !editing()) {
     <app-interval-timer [editable]="true" />
   }
 
-  @if (saved(); as session) {
+  @if (removed()) {
+    <section class="saved" role="status">
+      <h2 tabindex="-1">Walk removed</h2>
+      <p>The walk is no longer in your history.</p>
+      <a class="primary-button" [routerLink]="backPath">{{ backLabel }}</a>
+    </section>
+  } @else if (saved(); as session) {
     <app-walk-saved
+      [heading]="editing() ? 'Walk updated' : 'Walk saved'"
+      [note]="missionNote()"
+      [allowAnother]="!editing()"
       [session]="session"
       [backPath]="backPath"
       [backLabel]="backLabel"
@@ -187,13 +196,47 @@
         </div>
       </section>
 
+      @if (showReducedChoice()) {
+        <label class="reduced-choice">
+          <input
+            type="checkbox"
+            [checked]="reducedWalk()"
+            (change)="reducedWalk.set($any($event.target).checked)"
+          />
+          <span>This was a reduced walk</span>
+        </label>
+        <p class="help">Saving also records today’s mission.</p>
+      }
+
+      @if (editing()) {
+        <p class="help">
+          Correcting this walk keeps a note that it was edited. Today’s mission record is not
+          changed.
+        </p>
+        @if (confirmRemove()) {
+          <div class="remove-confirm" role="alert">
+            <p>Remove this walk from your history?</p>
+            <button type="button" class="danger-button" [disabled]="saving()" (click)="remove()">
+              Yes, remove it
+            </button>
+            <button type="button" class="secondary-button" (click)="confirmRemove.set(false)">
+              Keep it
+            </button>
+          </div>
+        } @else {
+          <button type="button" class="secondary-button" (click)="confirmRemove.set(true)">
+            Remove this walk
+          </button>
+        }
+      }
+
       @if (saveError(); as message) {
         <p class="save-error" role="alert">{{ message }}</p>
       }
 
       <div class="dock">
         <button class="save-button" type="submit" [disabled]="saving()">
-          {{ saving() ? 'Saving walk…' : 'Save walk' }}
+          {{ saving() ? 'Saving walk…' : editing() ? 'Save changes' : 'Save walk' }}
         </button>
       </div>
     </form>

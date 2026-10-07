@@ -46,4 +46,31 @@ export class RoadHistory {
       database.close();
     }
   }
+
+  async update(session: SavedRoadSession): Promise<void> {
+    const database = await RoadDatabase.open();
+    try {
+      await database.updateRoadSession(session);
+    } finally {
+      database.close();
+    }
+  }
+
+  async remove(id: string): Promise<void> {
+    const database = await RoadDatabase.open();
+    try {
+      await database.deleteRoadSession(id);
+    } finally {
+      database.close();
+    }
+  }
+
+  async get(id: string): Promise<SavedRoadSession | undefined> {
+    const database = await RoadDatabase.open();
+    try {
+      return (await database.getAllHistorical('roadSessions')).find((session) => session.id === id);
+    } finally {
+      database.close();
+    }
+  }
 }

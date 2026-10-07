@@ -211,7 +211,7 @@ export class RoadDatabase {
     return this.addHistorical('missionInstances', record);
   }
 
-  /** Date lookup uses the v1 store; a saved session remains append-only. */
+  /** Date lookup uses the v1 store. */
   async getRoadSessionsForDate(date: LocalDate): Promise<SavedRoadSession[]> {
     const sessions = await this.getAllHistorical('roadSessions');
     return sessions.filter((session) => session.date === date).sort(compareRoadSessionsNewest);
@@ -221,6 +221,26 @@ export class RoadDatabase {
     await this.addHistorical('roadSessions', {
       ...createRoadSession(session),
       createdAt: new Date().toISOString(),
+    });
+  }
+
+  /** A walk can be corrected or removed; the correction keeps its first save time. */
+  async updateRoadSession(session: SavedRoadSession): Promise<void> {
+    await this.write('roadSessions', 'put', {
+      ...createRoadSession(session),
+      ...(session.createdAt ? { createdAt: session.createdAt } : {}),
+    });
+  }
+
+  deleteRoadSession(id: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction('roadSessions', 'readwrite');
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () =>
+        reject(transaction.error ?? new Error('Unable to remove the walk.'));
+      transaction.onabort = () =>
+        reject(transaction.error ?? new Error('Unable to remove the walk.'));
+      transaction.objectStore('roadSessions').delete(id);
     });
   }
 

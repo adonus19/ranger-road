@@ -301,6 +301,10 @@ export interface RoadSession {
   avgHeartRate?: number;
   painBefore?: number;
   painAfter?: number;
+  /** The planned mission this walk fulfilled; older walks and unlinked walks have none. */
+  missionId?: string;
+  /** Set when a saved walk is corrected, so the change is visible. */
+  editedAt?: IsoTimestamp;
 }
 
 export interface CarryResult {

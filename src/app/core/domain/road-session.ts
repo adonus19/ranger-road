@@ -54,6 +54,8 @@ export function createRoadSession(input: RoadSessionInput): RoadSession & { id: 
     ...(input.avgHeartRate !== undefined ? { avgHeartRate: input.avgHeartRate } : {}),
     ...(input.painBefore !== undefined ? { painBefore: input.painBefore } : {}),
     ...(input.painAfter !== undefined ? { painAfter: input.painAfter } : {}),
+    ...(input.missionId ? { missionId: input.missionId } : {}),
+    ...(input.editedAt ? { editedAt: input.editedAt } : {}),
   };
 }
 

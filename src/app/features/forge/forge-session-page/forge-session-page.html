@@ -14,7 +14,26 @@
             : 'Your sets and notes are kept in your history.'
         }}
       </p>
-      <a routerLink="/keep/mission">Record today’s mission outcome</a>
+      @if (missionRecorded(); as mission) {
+        @if (mission.recorded) {
+          <p>
+            Today’s mission is recorded as
+            <strong>{{
+              mission.outcome === 'full'
+                ? 'Full'
+                : mission.outcome === 'restoration'
+                  ? 'Restoration only'
+                  : 'Reduced'
+            }}</strong
+            >. You can change it on Today’s Mission with “Record another attempt.”
+          </p>
+          <a routerLink="/keep/mission">View Today’s Mission</a>
+        } @else {
+          <a routerLink="/keep/mission">Record today’s mission outcome</a>
+        }
+      } @else {
+        <a routerLink="/keep/mission">Record today’s mission outcome</a>
+      }
       <a class="secondary-link" routerLink="/forge">Return to Forge</a>
     </section>
   } @else if (otherDraft(); as active) {

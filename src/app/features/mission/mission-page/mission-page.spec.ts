@@ -13,6 +13,7 @@ import { getCampaignDay } from '../../../core/program/campaign';
 import { getChapterOneMissionsForDate } from '../../../core/program/chapter-one-missions';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MissionHistory } from '../../../core/state/mission-history';
+import { RoadHistory } from '../../../core/state/road-history';
 import { TrialHistory } from '../../../core/state/trial-history';
 import { MissionPage } from './mission-page';
 
@@ -49,7 +50,12 @@ function readiness(status: 'green' | 'yellow' | 'red', checkDate = date): Readin
   };
 }
 
-function setup(check: ReadinessCheck | null, today = date, initialRecords: MissionInstance[] = []) {
+function setup(
+  check: ReadinessCheck | null,
+  today = date,
+  initialRecords: MissionInstance[] = [],
+  walks: unknown[] = [],
+) {
   const state = {
     campaign: signal(campaign),
     readiness: signal(check),
@@ -78,6 +84,7 @@ function setup(check: ReadinessCheck | null, today = date, initialRecords: Missi
       },
       { provide: MissionHistory, useValue: { forDate, add } },
       { provide: TrialHistory, useValue: { forTrial } },
+      { provide: RoadHistory, useValue: { forDate: async () => walks } },
     ],
   });
 
@@ -414,6 +421,30 @@ describe('MissionPage', () => {
     await fixture.whenStable();
     await saveMission(root, fixture);
     expect(root.querySelector('.walk-link')).toBeNull();
+  });
+
+  it('shows the logged walk on a walk day with options to edit it or log another', async () => {
+    const walk = {
+      id: 'road-1',
+      date: friday,
+      distance: 1.5,
+      duration: 30,
+      terrain: 'Paved path',
+      rpe: 4,
+      editedAt: '2026-09-25T20:00:00.000Z',
+    };
+    const { fixture } = setup(readiness('green', friday), friday, [], [walk]);
+    const root = await ready(fixture);
+
+    choose(root, '20–25-minute easy walk');
+    await fixture.whenStable();
+    const section = root.querySelector('.walks')!;
+    expect(section.textContent).toContain('Walk logged today');
+    expect(section.textContent).toContain('1.5 mi · 30 min · Paved path · Effort 4');
+    expect(section.textContent).toContain('Edited');
+    expect(section.querySelector('.walk-edit')?.getAttribute('href')).toContain('edit=road-1');
+    expect(section.querySelector('.walk-link')?.textContent).toContain('Log another walk');
+    expect(root.textContent).not.toContain('Log your walk');
   });
 
   it('does not offer walk details after a rest day on a conditioning order', async () => {

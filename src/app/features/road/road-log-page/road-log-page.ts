@@ -18,10 +18,11 @@ import {
   validate,
   type FieldTree,
 } from '@angular/forms/signals';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import type { LocalDate } from '../../../core/domain/models';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import type { LocalDate, MissionDefinition } from '../../../core/domain/models';
 import { addDays, isLocalDate } from '../../../core/program/campaign';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { MissionRecorder, type RecordedMission } from '../../../core/state/mission-recorder';
 import { RoadHistory, type SavedRoadSession } from '../../../core/state/road-history';
 import { Icon } from '../../../shared/icon/icon';
 import { IntervalTimer } from '../../../shared/interval-timer/interval-timer';
@@ -56,6 +57,8 @@ export class RoadLogPage implements OnInit {
   private readonly state = inject(CampaignState);
   private readonly history = inject(RoadHistory);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly recorder = inject(MissionRecorder);
   private readonly injector = inject(Injector);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly walkDate = viewChild<ElementRef<HTMLInputElement>>('walkDate');
@@ -67,6 +70,16 @@ export class RoadLogPage implements OnInit {
   protected readonly fromMission = this.route.snapshot.queryParamMap.get('from') === 'mission';
   protected readonly backPath = this.fromMission ? '/keep/mission' : '/road';
   protected readonly backLabel = this.fromMission ? 'Back to Today’s Mission' : 'Back to Road';
+
+  /** A saved walk opened to correct or remove. */
+  private readonly editId = this.route.snapshot.queryParamMap.get('edit');
+  protected readonly editing = signal<SavedRoadSession | null>(null);
+  protected readonly confirmRemove = signal(false);
+  /** Today's walk mission, when a walk logged for today would fulfil it. */
+  protected readonly walkMission = signal<MissionDefinition | null>(null);
+  protected readonly reducedWalk = signal(false);
+  protected readonly missionResult = signal<RecordedMission | null>(null);
+  protected readonly removed = signal(false);
 
   protected readonly painOpen = signal(false);
   protected readonly saving = signal(false);
@@ -112,6 +125,24 @@ export class RoadLogPage implements OnInit {
     required(field.rpe, { message: 'Choose an effort from 1 to 10.' });
   });
 
+  /** A choice only for a new walk logged for today against today's walk mission. */
+  protected readonly showReducedChoice = computed(
+    () =>
+      !this.editing() &&
+      !!this.walkMission() &&
+      this.state.readiness()?.status === 'green' &&
+      this.sessionDate() === this.state.today(),
+  );
+
+  protected readonly missionNote = computed(() => {
+    const result = this.missionResult();
+    if (!result) return null;
+    if (result.recorded) {
+      return `Today’s mission is recorded as ${result.outcome === 'reduced' ? 'Reduced' : 'Full'}.`;
+    }
+    return result.reason === 'readiness' ? 'Check readiness to record today’s mission.' : null;
+  });
+
   /** The civil date the walk will be saved under. */
   protected readonly sessionDate = computed<LocalDate>(() => {
     const { dateChoice, otherDate } = this.entry();
@@ -134,7 +165,18 @@ export class RoadLogPage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.state.initialize().catch(() => undefined);
+    if (this.editId && (await this.loadEdit(this.editId))) return;
     this.applyRequestedDate(this.route.snapshot.queryParamMap.get('date'));
+    try {
+      this.walkMission.set(
+        await this.recorder.findToday({
+          definitionId: this.route.snapshot.queryParamMap.get('mission') ?? undefined,
+          missionType: 'conditioning',
+        }),
+      );
+    } catch {
+      // Without the plan, the walk still saves on its own.
+    }
     try {
       this.lastTerrain = (await this.history.recent(1))[0]?.terrain ?? '';
     } catch {
@@ -164,8 +206,12 @@ export class RoadLogPage implements OnInit {
       await submit(this.logForm, async () => {
         const values = this.entry();
         const date = this.sessionDate();
+        const editing = this.editing();
+        const mission = this.walkMission();
+        const forToday = !editing && date === this.state.today() && mission;
         const session: SavedRoadSession = {
-          id: `road-${date}-${crypto.randomUUID()}`,
+          ...(editing ?? {}),
+          id: editing?.id ?? `road-${date}-${crypto.randomUUID()}`,
           date,
           distance: Number(values.miles),
           duration: Number(values.minutes),
@@ -174,7 +220,16 @@ export class RoadLogPage implements OnInit {
           ...(values.painBefore !== '' ? { painBefore: Number(values.painBefore) } : {}),
           ...(values.painAfter !== '' ? { painAfter: Number(values.painAfter) } : {}),
         };
-        await this.history.add(session);
+        if (values.painBefore === '') delete session.painBefore;
+        if (values.painAfter === '') delete session.painAfter;
+        if (editing) {
+          session.editedAt = new Date().toISOString();
+          await this.history.update(session);
+        } else {
+          if (forToday) session.missionId = mission.id;
+          await this.history.add(session);
+          if (forToday) await this.recordMission(mission);
+        }
         this.lastTerrain = session.terrain;
         this.saved.set(session);
       });
@@ -198,11 +253,79 @@ export class RoadLogPage implements OnInit {
     return field().touched() && field().invalid();
   }
 
+  protected async remove(): Promise<void> {
+    const session = this.editing();
+    if (!session || this.saving()) return;
+    this.saving.set(true);
+    this.saveError.set(null);
+    try {
+      await this.history.remove(session.id);
+      this.removed.set(true);
+      this.confirmRemove.set(false);
+    } catch (error) {
+      this.saveError.set(
+        error instanceof Error ? error.message : 'The walk could not be removed. Try again.',
+      );
+    } finally {
+      this.saving.set(false);
+    }
+  }
+
+  protected goBack(): void {
+    void this.router.navigateByUrl(this.backPath);
+  }
+
+  /** The walk is already saved; recording the mission is a courtesy that can fail quietly. */
+  private async recordMission(mission: MissionDefinition): Promise<void> {
+    try {
+      this.missionResult.set(
+        await this.recorder.recordToday(
+          { definitionId: mission.id },
+          { reduced: this.reducedWalk() },
+        ),
+      );
+    } catch {
+      this.missionResult.set(null);
+    }
+  }
+
+  private async loadEdit(id: string): Promise<boolean> {
+    try {
+      const session = await this.history.get(id);
+      if (!session) return false;
+      this.editing.set(session);
+      const today = this.state.today();
+      this.entry.set({
+        dateChoice:
+          session.date === today
+            ? 'today'
+            : session.date === addDays(today, -1)
+              ? 'yesterday'
+              : 'other',
+        otherDate:
+          session.date === today || session.date === addDays(today, -1) ? '' : session.date,
+        miles: String(session.distance),
+        minutes: String(session.duration),
+        terrain: session.terrain,
+        rpe: String(session.rpe),
+        painBefore: session.painBefore !== undefined ? String(session.painBefore) : '',
+        painAfter: session.painAfter !== undefined ? String(session.painAfter) : '',
+      });
+      this.painOpen.set(session.painBefore !== undefined || session.painAfter !== undefined);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   protected logAnother(): void {
     this.logForm().reset(blankEntry(this.lastTerrain));
+    this.missionResult.set(null);
+    this.reducedWalk.set(false);
     this.painOpen.set(false);
     this.saveError.set(null);
     this.saved.set(null);
+    // A second walk joins the mission already recorded; nothing more to record.
   }
 
   /** Names only the answers that stopped the save. */
