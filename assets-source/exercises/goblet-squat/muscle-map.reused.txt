@@ -1,0 +1,1 @@
+Reused from goblet-squat-to-box: the catalog names the same targets, so no new map was generated.

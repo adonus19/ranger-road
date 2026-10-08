@@ -12,7 +12,7 @@ import type {
 } from '../../../core/domain/models';
 import { RECOVERY_AREAS, recoveryOpensAt, recoveryWord } from '../../../core/domain/post-mission-function';
 import type { RecordedTrialPainEvent } from '../../../core/domain/trial-draft';
-import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
+import { getExerciseGuide } from '../../../core/program/exercise-guides';
 import {
   addDays,
   getGateTrialTargetDate,
@@ -162,14 +162,14 @@ export class GateTrialPage implements OnInit {
   }
 
   protected movementLabel(movement: TrialCircuitMovement): string {
-    const name = getChapterOneExerciseGuide(movement.exerciseId)?.name ?? movement.exerciseId;
+    const name = getExerciseGuide(movement.exerciseId)?.name ?? movement.exerciseId;
     const dose =
       movement.reps !== undefined ? `${movement.reps} reps` : `${movement.durationSeconds} seconds`;
     return `${name} · ${dose}${movement.perSide ? ' per side' : ''}`;
   }
 
   protected recordedMovement(movement: TrialCircuitMovementResult): string {
-    const name = getChapterOneExerciseGuide(movement.exerciseId)?.name ?? movement.exerciseId;
+    const name = getExerciseGuide(movement.exerciseId)?.name ?? movement.exerciseId;
     const amount = movement.repsBySide
       ? `${movement.repsBySide.left} left / ${movement.repsBySide.right} right reps`
       : movement.durationSecondsBySide

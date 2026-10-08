@@ -8,7 +8,7 @@ import {
   getChapterOneDayContent,
   getChapterOneWeekContent,
 } from './chapter-one-daily.seed';
-import { listChapterOneExerciseGuides } from './chapter-one-exercise-guides';
+import { listExerciseGuides } from './exercise-guides';
 import { chapterOneForgeA, chapterOneForgeB, chapterOneRestoration } from './chapter-one-workouts';
 import {
   EXTRA_BOOK_SUGGESTIONS,
@@ -569,7 +569,7 @@ export function searchText(value: string): string {
 /** Every entry in the Field Manual, sorted A to Z for the Index. */
 export function getFieldManualIndex(): FieldManualEntry[] {
   const entries: FieldManualEntry[] = [];
-  for (const guide of listChapterOneExerciseGuides()) {
+  for (const guide of listExerciseGuides()) {
     entries.push(
       entry(
         `exercise-${guide.id}`,

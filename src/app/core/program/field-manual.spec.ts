@@ -197,7 +197,7 @@ describe('Index and Scripture', () => {
   it('lists every entry once, A to Z, filing articles and book numbers behind the name', () => {
     const index = getFieldManualIndex();
     expect(new Set(index.map((entry) => entry.id)).size).toBe(index.length);
-    expect(index.filter((entry) => entry.kind === 'exercise')).toHaveLength(18);
+    expect(index.filter((entry) => entry.kind === 'exercise')).toHaveLength(25);
     expect(index.filter((entry) => entry.kind === 'book')).toHaveLength(11);
     expect(index.find((entry) => entry.name === 'The Motive')?.letter).toBe('M');
     expect(index.find((entry) => entry.name === '1 Corinthians 9:24–27')?.letter).toBe('C');

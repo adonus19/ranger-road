@@ -1,0 +1,1 @@
+Reused from supported-split-squat: the catalog names the same targets, so no new map was generated.

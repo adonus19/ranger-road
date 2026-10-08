@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
+import { getExerciseGuide } from '../../../core/program/exercise-guides';
 import { chapterOneWorkoutWeekNote } from '../../../core/program/chapter-one-workouts';
 import { getChapterOneSessions } from '../../../core/program/field-manual';
 import { Icon } from '../../../shared/icon/icon';
@@ -19,7 +19,7 @@ export class ExercisesPage implements OnInit {
     ...session,
     movements: session.movements.map((movement) => ({
       ...movement,
-      name: getChapterOneExerciseGuide(movement.exerciseId)?.name ?? movement.exerciseId,
+      name: getExerciseGuide(movement.exerciseId)?.name ?? movement.exerciseId,
     })),
   }));
 

@@ -119,8 +119,5 @@ describe('Chapter II workout content', () => {
   });
 
   // Known gaps while Chapter II is built; the exercises still show by ID until these land.
-  it.todo(
-    'has a written guide, Quick Help steps, and pictures for every Chapter II exercise (Session 7)',
-  );
   it.todo('opens the Three-Mile Trial page and recording flow at its trial route (Session 8)');
 });

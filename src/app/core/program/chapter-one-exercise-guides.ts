@@ -16,6 +16,8 @@ export interface ExerciseGuideContent {
   safety?: string;
   rule?: string;
   stopOrSubstitute?: string;
+  /** The easier exercise this one steps up from. */
+  stepUpFrom?: string;
 }
 
 const chapterOneExerciseGuides: ExerciseGuideContent[] = [

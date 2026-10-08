@@ -24,6 +24,7 @@ const fieldLabels: Record<Exclude<keyof ExerciseGuideContent, 'id' | 'name'>, st
   safety: ['Safety'],
   rule: ['Rule'],
   stopOrSubstitute: ['Stop/substitute'],
+  stepUpFrom: ['Step-up from'],
 };
 
 describe('Chapter I exercise guides', () => {

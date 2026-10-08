@@ -481,6 +481,9 @@
           @if (guide.rule) {
             <p><strong>Rule:</strong> {{ guide.rule }}</p>
           }
+          @if (guide.stepUpFrom) {
+            <p><strong>Step-up from:</strong> {{ guide.stepUpFrom }}</p>
+          }
           <img
             src="images/exercises/box-squat/muscle-map.webp"
             [src]="helpMediaBase() + '/muscle-map.webp'"

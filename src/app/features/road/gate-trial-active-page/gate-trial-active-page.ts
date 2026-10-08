@@ -28,8 +28,7 @@ import {
   isGateTrialAttemptDay,
 } from '../../../core/program/campaign';
 import { getChapterOneTrialPass } from '../../../core/program/chapter-one-completion';
-import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
-import { getChapterOneQuickHelpSteps } from '../../../core/program/chapter-one-quick-help';
+import { getExerciseGuide, getQuickHelpSteps } from '../../../core/program/exercise-guides';
 import { gateTrialDefinition } from '../../../core/program/chapter-one-trial.seed';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory } from '../../../core/state/trial-history';
@@ -164,11 +163,11 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   });
   protected readonly guide = computed(() => {
     const movement = this.movement();
-    return movement ? getChapterOneExerciseGuide(movement.exerciseId) : undefined;
+    return movement ? getExerciseGuide(movement.exerciseId) : undefined;
   });
   protected readonly guideSteps = computed(() => {
     const movement = this.movement();
-    return movement ? getChapterOneQuickHelpSteps(movement.exerciseId) ?? [] : [];
+    return movement ? getQuickHelpSteps(movement.exerciseId) ?? [] : [];
   });
   protected readonly guideBase = computed(() => {
     const movement = this.movement();
@@ -455,7 +454,7 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   }
 
   protected stationName(movement: TrialCircuitMovement): string {
-    return getChapterOneExerciseGuide(movement.exerciseId)?.name ?? movement.exerciseId;
+    return getExerciseGuide(movement.exerciseId)?.name ?? movement.exerciseId;
   }
 
   protected stationDose(movement: TrialCircuitMovement): string {

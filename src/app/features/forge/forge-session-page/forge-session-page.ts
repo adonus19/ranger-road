@@ -11,8 +11,7 @@ import type {
   WorkoutStep,
 } from '../../../core/domain/models';
 import type { PreviousWorkoutLoad } from '../../../core/domain/workout';
-import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
-import { getChapterOneQuickHelpSteps } from '../../../core/program/chapter-one-quick-help';
+import { getExerciseGuide, getQuickHelpSteps } from '../../../core/program/exercise-guides';
 import { resolveCampaignPosition } from '../../../core/program/campaign-position';
 import { getWorkoutChoices, isWorkoutPlanned } from '../../../core/program/chapter-orders';
 import {
@@ -149,19 +148,15 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     return draft?.exerciseResults[draft.currentExerciseIndex]?.sets[draft.currentSetIndex] ?? null;
   });
   protected readonly currentName = computed(
-    () =>
-      getChapterOneExerciseGuide(this.currentPrescription()?.exerciseId ?? '')?.name ?? 'Movement',
+    () => getExerciseGuide(this.currentPrescription()?.exerciseId ?? '')?.name ?? 'Movement',
   );
   protected readonly helpGuide = computed(() =>
-    getChapterOneExerciseGuide(
-      this.helpExerciseId() ?? this.currentPrescription()?.exerciseId ?? '',
-    ),
+    getExerciseGuide(this.helpExerciseId() ?? this.currentPrescription()?.exerciseId ?? ''),
   );
   protected readonly helpSteps = computed(
     () =>
-      getChapterOneQuickHelpSteps(
-        this.helpExerciseId() ?? this.currentPrescription()?.exerciseId ?? '',
-      ) ?? [],
+      getQuickHelpSteps(this.helpExerciseId() ?? this.currentPrescription()?.exerciseId ?? '') ??
+      [],
   );
   protected readonly helpMediaBase = computed(() => {
     const id = this.helpExerciseId() ?? this.currentPrescription()?.exerciseId;
@@ -296,7 +291,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
 
   protected stepLabel(step: DeepReadonly<WorkoutStep>): string {
     if (step.kind === 'walk') return `${step.minutes} min easy walk`;
-    return `${getChapterOneExerciseGuide(step.prescription.exerciseId)?.name ?? step.prescription.exerciseId} · ${this.dose(step.prescription)}`;
+    return `${getExerciseGuide(step.prescription.exerciseId)?.name ?? step.prescription.exerciseId} · ${this.dose(step.prescription)}`;
   }
 
   protected dose(prescription: DeepReadonly<ExercisePrescription>): string {
@@ -317,7 +312,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   }
 
   protected getExerciseName(exerciseId: string): string {
-    return getChapterOneExerciseGuide(exerciseId)?.name ?? exerciseId;
+    return getExerciseGuide(exerciseId)?.name ?? exerciseId;
   }
 
   protected countMarked(draft: WorkoutDraft, exerciseIndex: number): number {

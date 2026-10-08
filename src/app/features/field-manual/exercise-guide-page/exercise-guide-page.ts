@@ -1,8 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
-import { getChapterOneQuickHelpSteps } from '../../../core/program/chapter-one-quick-help';
+import { getExerciseGuide, getQuickHelpSteps } from '../../../core/program/exercise-guides';
 import { getChapterOneSessions } from '../../../core/program/field-manual';
 import { ManualBackLink } from '../manual-back-link';
 
@@ -40,12 +39,12 @@ export class ExerciseGuidePage {
   private readonly params = toSignal(inject(ActivatedRoute).paramMap);
 
   protected readonly guide = computed(() =>
-    getChapterOneExerciseGuide(this.params()?.get('exerciseId') ?? ''),
+    getExerciseGuide(this.params()?.get('exerciseId') ?? ''),
   );
 
   protected readonly steps = computed(() => {
     const guide = this.guide();
-    return guide ? (getChapterOneQuickHelpSteps(guide.id) ?? [guide.how]) : [];
+    return guide ? (getQuickHelpSteps(guide.id) ?? [guide.how]) : [];
   });
 
   protected readonly media = computed(() => {
@@ -74,6 +73,7 @@ export class ExerciseGuidePage {
       { label: 'For pain', text: guide.painAwareOptions },
       { label: 'Progression', text: guide.progression },
       { label: 'Rule', text: guide.rule },
+      { label: 'Step-up from', text: guide.stepUpFrom },
     ].filter((note): note is { label: string; text: string } => !!note.text);
   });
 }

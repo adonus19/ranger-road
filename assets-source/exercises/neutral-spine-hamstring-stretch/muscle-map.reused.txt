@@ -1,0 +1,1 @@
+Reused from cat-camel: the catalog names the same targets (none), so no new map was generated.

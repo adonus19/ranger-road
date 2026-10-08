@@ -9,7 +9,7 @@ import {
   getGateTrialTargetDate,
   getNextGateTrialAttempt,
 } from '../../../core/program/campaign';
-import { getChapterOneExerciseGuide } from '../../../core/program/chapter-one-exercise-guides';
+import { getExerciseGuide } from '../../../core/program/exercise-guides';
 import {
   getChapterOneTrialPass,
   getChapterTwoStartDate,
@@ -52,7 +52,7 @@ export class RoadPage implements OnInit {
   protected readonly walkDate = formatShortDate;
 
   protected circuitMovementLabel(movement: TrialCircuitMovement): string {
-    const name = getChapterOneExerciseGuide(movement.exerciseId)?.name ?? movement.exerciseId;
+    const name = getExerciseGuide(movement.exerciseId)?.name ?? movement.exerciseId;
     const dose =
       movement.reps !== undefined ? `${movement.reps} reps` : `${movement.durationSeconds} seconds`;
     return `${name} · ${dose}${movement.perSide ? ' per side' : ''}`;
