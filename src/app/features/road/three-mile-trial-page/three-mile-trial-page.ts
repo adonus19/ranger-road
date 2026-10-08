@@ -21,6 +21,7 @@ import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate, formatMinutes, formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
+import { ChapterSummarySection } from '../../forge/chapter-summary/chapter-summary';
 
 const READINESS_GUIDANCE: Record<ReadinessStatus, string> = {
   green: 'Green · Ready. Complete the physical parts with steady effort and stable symptoms.',
@@ -30,7 +31,7 @@ const READINESS_GUIDANCE: Record<ReadinessStatus, string> = {
 
 /** The Three-Mile Trial's plan, today's status, and its recorded attempts. */
 @Component({
-  imports: [Icon, RouterLink],
+  imports: [ChapterSummarySection, Icon, RouterLink],
   selector: 'app-three-mile-trial-page',
   styleUrl: '../gate-trial-page/gate-trial-page.css',
   templateUrl: './three-mile-trial-page.html',

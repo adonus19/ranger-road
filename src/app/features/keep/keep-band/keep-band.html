@@ -52,6 +52,9 @@
               {{ program().trialName }} passed. Chapter {{ nextChapterNumeral() }} begins
               {{ shortDate(nextChapterStart() ?? passed) }}.
             }
+            <a [routerLink]="program().trialRoute" fragment="chapter-summary"
+              >What changed this chapter</a
+            >
           } @else if (isLeadIn()) {
             Lead-in through Sunday. Week 1 begins Monday.
           } @else {

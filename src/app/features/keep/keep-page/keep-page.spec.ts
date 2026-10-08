@@ -208,7 +208,7 @@ describe('KeepPage', () => {
     expect(text(element, '.main-order h3')).toBe('Rest and worship');
     expect(text(element, '.keep-band__counts div:last-child dd')).toBe('Done');
     expect(text(element, '.keep-band__note')).toBe(
-      'Gate Trial passed. Chapter II begins Mon, Nov 2.',
+      'Gate Trial passed. Chapter II begins Mon, Nov 2. What changed this chapter',
     );
     expect(element.querySelector('.mission-cta')).not.toBeNull();
     expect(element.querySelector('.chapter-complete')).toBeNull();
@@ -264,7 +264,10 @@ describe('KeepPage', () => {
     );
     expect(text(passed, '.keep-band__counts div:last-child dd')).toBe('Done');
     expect(text(passed, '.keep-band__note')).toBe(
-      'Gate Trial passed. Chapter II begins Tue, Nov 3.',
+      'Gate Trial passed. Chapter II begins Tue, Nov 3. What changed this chapter',
+    );
+    expect(passed.querySelector('.keep-band__note a')?.getAttribute('href')).toBe(
+      '/road/gate-trial#chapter-summary',
     );
     expect(passed.querySelector('.reminder')).toBeNull();
 

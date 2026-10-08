@@ -18,12 +18,14 @@ import {
 } from './progression';
 import {
   changeLabel,
+  compareLines,
   directionLabel,
   easierLine,
   hintCopy,
   lastTimeTitle,
   setLabel,
   sinceDayOneLine,
+  summaryLines,
 } from './progression-copy';
 import { STEP_UP_FROM, progressionKind } from './progression-kinds';
 
@@ -440,6 +442,43 @@ describe('after the session', () => {
     ]);
     expect(summary.carriesAndHolds.map((item) => changeLabel(item))).toEqual(['20 → 25 lb']);
     expect(summary.heldCount).toBe(1);
+    expect(summaryLines(summary)).toEqual({
+      lifts: [{ label: 'Box Squat', value: '75 → 90 lb' }],
+      carriesAndHolds: [{ label: 'Suitcase Carry', value: '20 → 25 lb' }],
+      held: '1 held steady',
+    });
+  });
+
+  it('lists what went up, then what held, then anything lighter', () => {
+    const carry = { exerciseId: 'suitcase-carry', sets: 3, durationSeconds: 40, perSide: true };
+    const before = session('2026-10-19', [
+      { id: 'box-squat', sets: sets(95, [6, 6, 6], 6) },
+      { id: 'bench-press', sets: sets(95, [6, 6, 6], 6) },
+      { id: 'suitcase-carry', sets: timed(25, [30, 30, 30], 6) },
+      { id: 'goblet-squat', sets: sets(30, [8, 8, 8], 6) },
+    ]);
+    const now = session(
+      '2026-11-09',
+      [
+        { id: 'goblet-squat', sets: sets(25, [8, 8, 8], 6) },
+        { id: 'box-squat', sets: sets(100, [6, 6, 6], 7) },
+        { id: 'bench-press', sets: sets(95, [6, 6, 6], 6) },
+        { id: 'suitcase-carry', sets: timed(25, [40, 40, 40], 6), prescription: carry },
+      ],
+      { reduced: true },
+    );
+    expect(compareLines(compareWithLastTime(now, [before, now]))).toEqual([
+      { label: 'Box Squat', value: '95 → 100 lb' },
+      { label: 'Suitcase Carry', value: '30 → 40 s per side' },
+      { label: '1 held steady' },
+      { label: 'Goblet Squat', value: '30 → 25 lb', note: 'Lighter today (reduced)' },
+    ]);
+    expect(compareLines([])).toEqual([]);
+  });
+
+  it('leaves untracked exercises out of the record', () => {
+    const ctx = context(session('2026-10-05', [{ id: 'bird-dog', sets: sets(undefined, [6, 6]) }]));
+    expect(exerciseRecord('bird-dog', ctx).rows).toEqual([]);
   });
 });
 

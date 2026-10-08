@@ -104,6 +104,17 @@
   line-height: 1.2;
 }
 
+/* The link sits on its own line; padding and a matching negative margin give it a 48px tap area. */
+.keep-band__note a {
+  display: block;
+  width: fit-content;
+  margin-block: -0.5rem;
+  padding-block: 0.9rem;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
 /* Wider screens: the scene stays edge to edge while the chapter content joins the page container. */
 @media (min-width: 700px) {
   .keep-band {

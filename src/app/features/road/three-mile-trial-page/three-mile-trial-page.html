@@ -64,6 +64,10 @@
     </p>
   </div>
 
+  @if (!historyLoading() && completedResults().length) {
+    <app-chapter-summary class="station-summary" [chapter]="2" />
+  }
+
   @if (historyError()) {
     <p class="station-history__error" role="alert">
       Trial history could not open from local storage.

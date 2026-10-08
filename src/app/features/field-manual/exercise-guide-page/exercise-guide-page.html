@@ -54,6 +54,21 @@
       </section>
     }
 
+    @if (recordRows(); as rows) {
+      <section class="manual-section" aria-labelledby="guide-record">
+        <h2 id="guide-record">Your record</h2>
+        @if (since(); as line) {
+          <p class="record-since">{{ line }}</p>
+        }
+        <app-progress-rows [rows]="rows" />
+        @if (hiddenRows() && !showAll()) {
+          <button type="button" class="record-more" (click)="showAll.set(true)">
+            Show all {{ hiddenRows() + rows.length }}
+          </button>
+        }
+      </section>
+    }
+
     <section class="manual-section" aria-labelledby="guide-map">
       <h2 id="guide-map">Muscle map</h2>
       <figure class="manual-figure muscle-map">

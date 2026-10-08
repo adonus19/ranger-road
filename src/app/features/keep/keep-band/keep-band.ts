@@ -1,4 +1,5 @@
 import { Component, computed, inject, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   addDays,
   getCampaignDay,
@@ -17,6 +18,7 @@ import { formatShortDate } from '../../../shared/format-date';
 /** The painted forest band at the top of Keep: the chapter, its theme, and the two counts. */
 @Component({
   selector: 'app-keep-band',
+  imports: [RouterLink],
   templateUrl: './keep-band.html',
   styleUrl: './keep-band.css',
 })

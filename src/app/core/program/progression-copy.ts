@@ -5,6 +5,7 @@ import type {
   BasisContext,
   BestSet,
   ChangeDirection,
+  ChapterSummary,
   ExerciseChange,
   ExerciseProgress,
   Exposure,
@@ -174,6 +175,13 @@ export function changeLabel(change: Pick<ExerciseChange, 'from' | 'to'>): string
   return `${bestSetLabel(from)} → ${bestSetLabel(to)}`;
 }
 
+/** A change as the lists read it: "95 → 100 lb", or "40 → 45 s per side" for work on each side. */
+export function changeText(change: ExerciseChange): string {
+  const label = changeLabel(change);
+  const perSide = change.perSide && /( s| reps)$/.test(label) ? ' per side' : '';
+  return `${label}${perSide}`;
+}
+
 export function directionLabel(direction: ChangeDirection, reduced: boolean): string | undefined {
   if (direction !== 'lighter') return undefined;
   return reduced ? 'Lighter today (reduced)' : 'Lighter today';
@@ -187,4 +195,58 @@ export function heldLine(count: number): string | undefined {
 /** "Since Day 1: 75 → 100 lb", from the first and latest best sets. */
 export function sinceDayOneLine(first: BestSet, latest: BestSet): string {
   return `Since Day 1: ${changeLabel({ from: first, to: latest })}`;
+}
+
+/** One row of a progression list: a name, what changed, and an optional quiet note. */
+export interface ProgressLine {
+  label: string;
+  value?: string;
+  note?: string;
+}
+
+function nameOf(exerciseId: string): string {
+  return getExerciseGuide(exerciseId)?.name ?? exerciseId;
+}
+
+/**
+ * "Compared with last time", in the order the design gives: what went up, one line counting
+ * what held, then anything lighter. No colors and no praise.
+ */
+export function compareLines(changes: readonly ExerciseChange[]): ProgressLine[] {
+  const ups = changes
+    .filter((item) => item.direction === 'up')
+    .map((item) => ({ label: nameOf(item.exerciseId), value: changeText(item) }));
+  const held = heldLine(changes.filter((item) => item.direction === 'held').length);
+  const lighter = changes
+    .filter((item) => item.direction === 'lighter')
+    .map((item) => ({
+      label: nameOf(item.exerciseId),
+      value: changeText(item),
+      note: directionLabel(item.direction, item.reduced),
+    }));
+  return [...ups, ...(held ? [{ label: held }] : []), ...lighter];
+}
+
+export interface SummaryLines {
+  lifts: ProgressLine[];
+  carriesAndHolds: ProgressLine[];
+  held?: string;
+}
+
+function summaryLine(item: ExerciseChange): ProgressLine {
+  return {
+    label: nameOf(item.exerciseId),
+    value: changeText(item),
+    ...(item.direction === 'lighter' ? { note: 'Lower than the first full session' } : {}),
+  };
+}
+
+/** "What changed this chapter": lifts, then carries and holds, then a count of the rest. */
+export function summaryLines(summary: ChapterSummary): SummaryLines {
+  const held = heldLine(summary.heldCount);
+  return {
+    lifts: summary.lifts.map(summaryLine),
+    carriesAndHolds: summary.carriesAndHolds.map(summaryLine),
+    ...(held ? { held } : {}),
+  };
 }

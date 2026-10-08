@@ -13,10 +13,16 @@ import type {
 import { getExerciseGuide, getQuickHelpSteps } from '../../../core/program/exercise-guides';
 import { resolveCampaignPosition } from '../../../core/program/campaign-position';
 import { getWorkoutChoices, isWorkoutPlanned } from '../../../core/program/chapter-orders';
-import { exerciseProgress, type ProgressionContext } from '../../../core/program/progression';
+import {
+  compareWithLastTime,
+  exerciseProgress,
+  type ProgressionContext,
+} from '../../../core/program/progression';
 import {
   FIRST_TIME_LINE,
   NO_LOAD_LINE,
+  type ProgressLine,
+  compareLines,
   easierLine,
   hintCopy,
   lastTimeTitle,
@@ -36,6 +42,7 @@ import { formatShortDate } from '../../../shared/format-date';
 import { ScheduleHistory } from '../../../core/state/schedule-history';
 import { MissionRecorder, type RecordedMission } from '../../../core/state/mission-recorder';
 import { Icon } from '../../../shared/icon/icon';
+import { ProgressRows } from '../../../shared/progress-rows/progress-rows';
 import { REST_LENGTHS, RestClock, formatRest, restLengthLabel } from './rest-clock';
 
 type Panel = 'help' | 'pain' | 'substitute' | null;
@@ -71,7 +78,7 @@ function readRestLength(): number {
 }
 
 @Component({
-  imports: [FormField, Icon, RouterLink],
+  imports: [FormField, Icon, ProgressRows, RouterLink],
   selector: 'app-forge-session-page',
   styleUrl: './forge-session-page.css',
   templateUrl: './forge-session-page.html',
@@ -113,6 +120,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     '7': '2–3 reps left',
     '10': 'nothing left',
   };
+  /** "Compared with last time" for the session just saved; empty until there is something to say. */
+  protected readonly comparison = signal<ProgressLine[]>([]);
   protected readonly noLoadLine = NO_LOAD_LINE;
   protected readonly firstTimeLine = FIRST_TIME_LINE;
   protected readonly shortDate = formatShortDate;
@@ -317,6 +326,18 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       this.error.set('This session could not open from local storage. Try again.');
     } finally {
       this.loading.set(false);
+    }
+  }
+
+  /** A stopped session is partial work, so only a finished one is set beside last time. */
+  private async loadComparison(session: WorkoutSession): Promise<void> {
+    this.comparison.set([]);
+    if (session.outcome === 'stopped') return;
+    try {
+      const context = await this.progressionHistory.load();
+      this.comparison.set(compareLines(compareWithLastTime(session, context.sessions)));
+    } catch {
+      // Reference only: the saved session stands without it.
     }
   }
 
@@ -633,6 +654,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       this.savedSession.set(session);
       await this.recordMission(session);
       this.draft.set(null);
+      void this.loadComparison(session);
     } catch (error) {
       this.showError(error);
     } finally {

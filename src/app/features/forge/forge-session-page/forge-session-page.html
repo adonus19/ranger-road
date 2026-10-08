@@ -14,6 +14,12 @@
             : 'Your sets and notes are kept in your history.'
         }}
       </p>
+      @if (comparison().length) {
+        <section class="compare" aria-labelledby="compare-title">
+          <h2 id="compare-title">Compared with last time</h2>
+          <app-progress-rows [rows]="comparison()" />
+        </section>
+      }
       @if (missionRecorded(); as mission) {
         @if (mission.recorded) {
           <p>

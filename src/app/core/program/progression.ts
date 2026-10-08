@@ -423,6 +423,8 @@ export interface ExerciseChange {
   to: BestSet;
   /** The newer session was reduced, so "lighter" reads "Lighter today (reduced)". */
   reduced: boolean;
+  /** A reps or seconds change reads "per side" when the exercise is done on each side. */
+  perSide: boolean;
 }
 
 function change(
@@ -440,6 +442,7 @@ function change(
     from,
     to,
     reduced: later.reduced,
+    perSide: !!later.prescription?.perSide,
   };
 }
 
@@ -480,6 +483,7 @@ export interface ExerciseRecord {
 
 /** "Your record" on an exercise's guide: its best working set per session, newest first. */
 export function exerciseRecord(exerciseId: string, context: ProgressionContext): ExerciseRecord {
+  if (progressionKind(exerciseId) === 'none') return { rows: [] };
   const rows = exposuresFor(context.sessions, exerciseId).flatMap((exposure): RecordRow[] => {
     const best = bestSet(exposure);
     if (!best) return [];
