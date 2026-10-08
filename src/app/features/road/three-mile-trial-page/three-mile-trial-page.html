@@ -1,0 +1,150 @@
+<section class="station-scene" aria-labelledby="trial-title">
+  <picture class="station-scene__image">
+    <source srcset="images/forest-band.webp" type="image/webp" />
+    <img src="images/forest-band.png" alt="" width="1728" height="960" decoding="async" />
+  </picture>
+  <div class="station-scene__content">
+    <h1 id="trial-title">The Three-Mile Trial</h1>
+    <p>The Road · Chapter II</p>
+  </div>
+</section>
+
+<div class="station-page">
+  <a class="station-back" routerLink="/road">
+    <app-icon name="arrow-left" />
+    Back to Road
+  </a>
+
+  <nav class="station-progress" aria-label="Three-Mile Trial parts">
+    <ol>
+      @for (phase of trial.phases; track phase.id; let index = $index) {
+        <li>
+          <a [href]="'#' + phase.id" [attr.aria-label]="'Part ' + (index + 1) + ': ' + phase.title">
+            <span class="visually-hidden">{{ phase.title }}</span>
+          </a>
+        </li>
+      }
+    </ol>
+  </nav>
+
+  <section class="station-walk" [id]="trial.phases[0].id" aria-labelledby="walk-title">
+    <h2 id="walk-title">{{ trial.phases[0].title }}</h2>
+    <p class="station-walk__guidance" [attr.role]="state.error() ? 'alert' : 'status'">
+      {{ guidance() }}
+    </p>
+    <p class="station-walk__distance">
+      <strong>{{ trial.phases[0].targetDistanceMiles }}</strong>
+      <span>miles</span>
+    </p>
+    <p class="station-walk__pace">Walk continuously. There is no time standard.</p>
+    <div class="station-walk__record" role="note" aria-label="Walk details to record">
+      <p class="station-walk__record-help">
+        Record your time, effort (RPE), knee and back discomfort, and recovery after 5 minutes.
+        Splits and average heart rate are optional. Your entries save on this device as you go.
+      </p>
+    </div>
+    <p class="station-walk__next">Next: {{ trial.phases[1].title }}</p>
+  </section>
+
+  <div class="station-parts">
+    @for (phase of trial.phases.slice(1); track phase.id) {
+      <section [id]="phase.id" [attr.aria-labelledby]="phase.id + '-title'">
+        <h2 [id]="phase.id + '-title'">{{ phase.title }}</h2>
+        @for (instruction of phase.instructions ?? []; track instruction) {
+          <p>{{ instruction }}</p>
+        }
+        @for (prompt of phase.reflectionPrompts ?? []; track prompt) {
+          <p>{{ prompt }}</p>
+        }
+      </section>
+    }
+    <p>
+      Passing means finishing every part as written on a Green day, with no pain at 3 or more and no
+      changed movement.
+    </p>
+  </div>
+
+  @if (historyError()) {
+    <p class="station-history__error" role="alert">
+      Trial history could not open from local storage.
+      <button type="button" (click)="retry()">Try again</button>
+    </p>
+  } @else if (!historyLoading() && (completedResults().length || stoppedAttempts().length)) {
+    <section class="station-history" aria-labelledby="station-history-title">
+      <h2 id="station-history-title">Recorded attempts</h2>
+      @for (result of completedResults(); track result.id) {
+        <details class="station-history__entry">
+          <summary>
+            <span>Completed · {{ shortDate(result.date) }}</span>
+            <span>View record</span>
+          </summary>
+          <div class="station-history__detail">
+            <h3>Walk</h3>
+            <p>
+              3 miles · {{ metric(result.phaseResults[0], 'durationMinutes') }} min · RPE
+              {{ metric(result.phaseResults[0], 'rpe') }}
+            </p>
+            <p>Knee: {{ response(result.phaseResults[0], 'knee') }}</p>
+            <p>Back: {{ response(result.phaseResults[0], 'back') }}</p>
+            <p>
+              After 5 minutes: {{ response(result.phaseResults[0], 'recoveryAfterFiveMinutes') }}
+            </p>
+            @if (result.phaseResults[0]?.responses?.['splits']; as splits) {
+              <p>Splits: {{ splits }}</p>
+            }
+            <h3>Carry</h3>
+            <p>
+              {{ metric(result.phaseResults[1], 'loadPounds') }} lb ·
+              {{ metric(result.phaseResults[1], 'rightSeconds') }} s right ·
+              {{ metric(result.phaseResults[1], 'leftSeconds') }} s left
+            </p>
+            <p>
+              Grip {{ response(result.phaseResults[1], 'grip') }} · core
+              {{ response(result.phaseResults[1], 'core') }} · posture
+              {{ response(result.phaseResults[1], 'posture') }}
+            </p>
+            <h3>Stairs</h3>
+            <p>
+              Three flights · breathlessness
+              {{ metric(result.phaseResults[2], 'breathlessness') }}/10
+            </p>
+            <h3>Leadership</h3>
+            <p>{{ response(result.phaseResults[3], 'attentive') }}</p>
+            <p>Behavior to change: {{ response(result.phaseResults[3], 'behavior') }}</p>
+            <h3>Prayer</h3>
+            <p>Psalm 121 and prayer for your family</p>
+          </div>
+        </details>
+      }
+      @for (attempt of stoppedAttempts(); track attempt.id) {
+        <details class="station-history__entry">
+          <summary>
+            <span>Stopped · {{ shortDate(attempt.date) }}</span>
+            <span>View record</span>
+          </summary>
+          <div class="station-history__detail">
+            <p>Reached {{ attemptPhase(attempt) }}. This attempt did not count as a pass.</p>
+            @if (attempt.phaseResults[0]?.metrics?.['durationMinutes']; as minutes) {
+              <p>Walk: {{ minutes }} min · RPE {{ metric(attempt.phaseResults[0], 'rpe') }}</p>
+            }
+            @for (pain of attempt.painEvents; track pain.id) {
+              <p>Pain: {{ pain.bodyArea }} · {{ pain.severity }}/10 · {{ pain.actionTaken }}</p>
+            }
+          </div>
+        </details>
+      }
+    </section>
+  }
+</div>
+
+<div class="station-dock">
+  @if (state.loading() || historyLoading()) {
+    <span class="station-dock__waiting" role="status">Opening campaign…</span>
+  } @else if (state.error() || historyError()) {
+    <button type="button" (click)="retry()">Try again</button>
+  } @else if (waitingMessage(); as message) {
+    <span class="station-dock__waiting" role="status">{{ message }}</span>
+  } @else {
+    <a [routerLink]="actionLink()">{{ actionLabel() }}</a>
+  }
+</div>

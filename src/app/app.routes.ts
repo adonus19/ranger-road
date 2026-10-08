@@ -54,6 +54,24 @@ export const routes: Routes = [
     data: { headerOverScene: true },
   },
   {
+    path: 'road/three-mile-trial/active',
+    loadComponent: () =>
+      import('./features/road/three-mile-trial-active-page/three-mile-trial-active-page').then(
+        (m) => m.ThreeMileTrialActivePage,
+      ),
+    title: 'Record the Three-Mile Trial | The Ranger’s Road',
+    data: { headerOverScene: true },
+  },
+  {
+    path: 'road/three-mile-trial',
+    loadComponent: () =>
+      import('./features/road/three-mile-trial-page/three-mile-trial-page').then(
+        (m) => m.ThreeMileTrialPage,
+      ),
+    title: 'The Three-Mile Trial | The Ranger’s Road',
+    data: { headerOverScene: true },
+  },
+  {
     path: 'road/log',
     loadComponent: () =>
       import('./features/road/road-log-page/road-log-page').then((m) => m.RoadLogPage),

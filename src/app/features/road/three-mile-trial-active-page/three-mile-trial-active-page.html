@@ -1,0 +1,638 @@
+<section class="trial-scene" aria-labelledby="trial-title">
+  <picture class="trial-scene__image">
+    <source srcset="images/forest-band.webp" type="image/webp" />
+    <img src="images/forest-band.png" alt="" width="1728" height="960" decoding="async" />
+  </picture>
+  <div class="trial-scene__content">
+    <h1 id="trial-title">The Three-Mile Trial</h1>
+    <p>The Road · Chapter II</p>
+  </div>
+</section>
+
+<div class="trial-page entry-form">
+  <a class="trial-back" routerLink="/road/three-mile-trial"
+    ><app-icon name="arrow-left" />Back to trial</a
+  >
+
+  @if (loading() || state.loading()) {
+    <p class="trial-notice" role="status">Opening the Three-Mile Trial from this device…</p>
+  } @else if (completed(); as result) {
+    <section class="trial-end" aria-labelledby="completed-title">
+      <h2 id="completed-title" tabindex="-1">Three-Mile Trial recorded</h2>
+      <p>Your five parts are saved in your campaign history on this device.</p>
+      <dl class="trial-summary">
+        <div>
+          <dt>Walk</dt>
+          <dd>3 miles · {{ result.phaseResults[0].metrics?.['durationMinutes'] }} min</dd>
+        </div>
+        <div>
+          <dt>Carry</dt>
+          <dd>{{ result.phaseResults[1].metrics?.['loadPounds'] }} lb · 60 s each hand</dd>
+        </div>
+        <div>
+          <dt>Stairs</dt>
+          <dd>Breathlessness {{ result.phaseResults[2].metrics?.['breathlessness'] }}/10</dd>
+        </div>
+        <div>
+          <dt>Leadership</dt>
+          <dd>Reflection recorded</dd>
+        </div>
+        <div>
+          <dt>Prayer</dt>
+          <dd>Psalm 121 and prayer for your family</dd>
+        </div>
+      </dl>
+      <a class="trial-link" routerLink="/road">Return to Road</a>
+    </section>
+  } @else if (stopped(); as attempt) {
+    <section class="trial-end" aria-labelledby="stopped-title">
+      <h2 id="stopped-title" tabindex="-1">Trial stopped</h2>
+      <p>
+        Your partial work and pain notes are kept in your campaign history. This attempt was not
+        marked complete.
+      </p>
+      <p class="trial-end__date">{{ shortDate(attempt.date) }}</p>
+      <p>You can begin a new attempt on another {{ greenWords }} attempt day.</p>
+      <a class="trial-link" routerLink="/road">Return to Road</a>
+    </section>
+  } @else if (draft(); as active) {
+    <nav class="trial-progress" aria-label="Three-Mile Trial parts">
+      <ol>
+        @for (part of trial.phases; track part.id; let index = $index) {
+          <li>
+            <button
+              type="button"
+              [class.is-current]="phaseIndex() === index"
+              [class.is-complete]="phaseComplete(index)"
+              [disabled]="index > active.currentPhaseIndex || saving()"
+              [attr.aria-current]="phaseIndex() === index ? 'step' : null"
+              [attr.aria-label]="
+                'Part ' +
+                (index + 1) +
+                ': ' +
+                part.title +
+                (phaseComplete(index) ? ', completed' : '')
+              "
+              (click)="selectPhase(index)"
+            >
+              <span class="visually-hidden">{{ part.title }}</span>
+            </button>
+          </li>
+        }
+      </ol>
+    </nav>
+
+    @if (reviewing()) {
+      <section class="trial-review" aria-labelledby="review-title">
+        <h2 id="review-title" tabindex="-1">Review the five parts</h2>
+        <p>Check the record before saving the completed Three-Mile Trial.</p>
+        <dl class="trial-summary">
+          <div>
+            <dt>Walk</dt>
+            <dd>
+              3 miles · {{ metric(active.phaseResults[0], 'durationMinutes') }} min · RPE
+              {{ metric(active.phaseResults[0], 'rpe') }}
+            </dd>
+            <dd>Knee: {{ response(active.phaseResults[0], 'knee') }}</dd>
+            <dd>Back: {{ response(active.phaseResults[0], 'back') }}</dd>
+            <dd>
+              After 5 minutes: {{ response(active.phaseResults[0], 'recoveryAfterFiveMinutes') }}
+            </dd>
+          </div>
+          <div>
+            <dt>Carry</dt>
+            <dd>
+              {{ metric(active.phaseResults[1], 'loadPounds') }} lb ·
+              {{ metric(active.phaseResults[1], 'rightSeconds') }} s right ·
+              {{ metric(active.phaseResults[1], 'leftSeconds') }} s left
+            </dd>
+            <dd>
+              Grip {{ response(active.phaseResults[1], 'grip') }} · core
+              {{ response(active.phaseResults[1], 'core') }} · posture
+              {{ response(active.phaseResults[1], 'posture') }}
+            </dd>
+          </div>
+          <div>
+            <dt>Stairs</dt>
+            <dd>
+              Three flights · breathlessness
+              {{ metric(active.phaseResults[2], 'breathlessness') }}/10
+            </dd>
+          </div>
+          <div>
+            <dt>Leadership</dt>
+            <dd>{{ response(active.phaseResults[3], 'attentive') }}</dd>
+            <dd>Behavior to change: {{ response(active.phaseResults[3], 'behavior') }}</dd>
+          </div>
+          <div>
+            <dt>Prayer</dt>
+            <dd>Psalm 121 and prayer for your family</dd>
+          </div>
+        </dl>
+        @if (!canStart() || painBlocks() || staleDate()) {
+          <p class="trial-hold" role="alert">
+            {{ holdMessage() }} This attempt can’t be marked complete as it stands.
+          </p>
+          @if (confirmingStop()) {
+            <ng-container [ngTemplateOutlet]="stopConfirm" />
+          } @else {
+            <button
+              type="button"
+              id="trial-stop-trigger"
+              class="trial-secondary"
+              [disabled]="saving()"
+              (click)="askStop()"
+            >
+              Stop and keep partial record
+            </button>
+          }
+        }
+        <button type="button" class="trial-secondary" (click)="editRecord()">
+          Edit this record
+        </button>
+        <div class="trial-dock">
+          <ng-container [ngTemplateOutlet]="dockMessage" />
+          <button
+            type="button"
+            class="trial-primary"
+            [disabled]="saving() || !canStart() || painBlocks() || staleDate()"
+            (click)="confirmCompletion()"
+          >
+            Save completed trial
+          </button>
+        </div>
+      </section>
+    } @else {
+      <section class="trial-phase" [attr.aria-labelledby]="phase().id + '-title'">
+        @switch (phaseIndex()) {
+          @case (0) {
+            <h2 id="three-mile-walk-title" tabindex="-1">3 continuous miles</h2>
+            <p class="trial-lead">
+              Walk 3 continuous miles at your own steady pace. There is no time standard.
+            </p>
+            @if (physicalBlocked()) {
+              <p class="trial-hold" role="alert">{{ holdMessage() }}</p>
+            }
+            <ng-container [ngTemplateOutlet]="painPanel" />
+            <label class="trial-check">
+              <input
+                id="trial-full-walk"
+                type="checkbox"
+                [formField]="fields.fullWalk"
+                [attr.aria-invalid]="invalid('trial-full-walk')"
+                (change)="queueAutosave()"
+              />
+              <span>I walked the full 3 continuous miles</span>
+            </label>
+            <div class="trial-timer">
+              <span>Walk timer</span><strong>{{ elapsed() }}</strong>
+              <button
+                type="button"
+                (click)="startTimer()"
+                [disabled]="saving() || physicalBlocked()"
+              >
+                Start timer
+              </button>
+              <button type="button" (click)="useElapsed()" [disabled]="walkStart() === null">
+                Use elapsed
+              </button>
+            </div>
+            <div class="trial-fields trial-fields--two">
+              <label
+                >Walk time <span>minutes</span>
+                <input
+                  id="trial-walk-minutes"
+                  type="number"
+                  step="0.1"
+                  inputmode="decimal"
+                  [formField]="fields.walkMinutes"
+                  [attr.aria-invalid]="invalid('trial-walk-minutes')"
+                  (input)="queueAutosave()"
+                />
+              </label>
+              <label
+                >Average heart rate <span>optional · bpm</span>
+                <input
+                  id="trial-heart-rate"
+                  type="number"
+                  step="1"
+                  inputmode="numeric"
+                  [formField]="fields.heartRate"
+                  [attr.aria-invalid]="invalid('trial-heart-rate')"
+                  (input)="queueAutosave()"
+                />
+              </label>
+            </div>
+            <label class="trial-field"
+              >Splits <span>optional · for example 17, 17, 18 min</span>
+              <input
+                id="trial-splits"
+                type="text"
+                [formField]="fields.splits"
+                (input)="queueAutosave()"
+              />
+            </label>
+            <fieldset class="scale trial-group">
+              <legend>Effort (RPE)</legend>
+              <div class="scale__options scale__options--effort">
+                @for (level of levels; track level) {
+                  <label class="scale__option">
+                    <input
+                      type="radio"
+                      [id]="'trial-rpe-' + level"
+                      [value]="level.toString()"
+                      [formField]="fields.walkRpe"
+                      [attr.aria-invalid]="invalid('trial-rpe-1')"
+                      (change)="queueAutosave()"
+                    />
+                    <span>{{ level }}</span>
+                  </label>
+                }
+              </div>
+              <small class="trial-help-line">1 is very easy. 10 is as hard as you can go.</small>
+            </fieldset>
+            <label class="trial-field"
+              >Knee discomfort
+              <textarea
+                id="trial-knee"
+                rows="2"
+                [formField]="fields.knee"
+                [attr.aria-invalid]="invalid('trial-knee')"
+                (input)="queueAutosave()"
+              ></textarea>
+            </label>
+            <label class="trial-field"
+              >Back discomfort
+              <textarea
+                id="trial-back"
+                rows="2"
+                [formField]="fields.back"
+                [attr.aria-invalid]="invalid('trial-back')"
+                (input)="queueAutosave()"
+              ></textarea>
+            </label>
+            <label class="trial-field"
+              >Recovery after 5 minutes
+              <textarea
+                id="trial-recovery"
+                rows="2"
+                [formField]="fields.recovery"
+                [attr.aria-invalid]="invalid('trial-recovery')"
+                (input)="queueAutosave()"
+              ></textarea>
+            </label>
+          }
+          @case (1) {
+            <h2 id="suitcase-carry-title" tabindex="-1">30-lb suitcase carry</h2>
+            <p class="trial-lead">
+              Carry 30 lb in one hand for {{ carrySeconds }} seconds, then the other hand for
+              {{ carrySeconds }} seconds. Stand tall and walk slowly without leaning or twisting.
+            </p>
+            @if (physicalBlocked()) {
+              <p class="trial-hold" role="alert">{{ holdMessage() }}</p>
+            }
+            <ng-container [ngTemplateOutlet]="painPanel" />
+            @if (carryGuide; as guide) {
+              <details class="trial-optional">
+                <summary>How to do the {{ guide.name }}</summary>
+                <ol>
+                  @for (step of carrySteps; track step) {
+                    <li>{{ step }}</li>
+                  }
+                </ol>
+                <img
+                  class="trial-sequence"
+                  src="images/exercises/suitcase-carry/sequence.webp"
+                  [alt]="'Movement sequence for ' + guide.name"
+                  width="2020"
+                  height="780"
+                  loading="lazy"
+                />
+              </details>
+            }
+            <div class="trial-fields trial-fields--two">
+              <label
+                >Weight carried <span>lb</span>
+                <input
+                  id="trial-carry-load"
+                  type="number"
+                  step="0.5"
+                  inputmode="decimal"
+                  [formField]="fields.load"
+                  [attr.aria-invalid]="invalid('trial-carry-load')"
+                  (input)="queueAutosave()"
+                />
+              </label>
+              <span></span>
+              <label
+                >Right hand <span>seconds</span>
+                <input
+                  id="trial-carry-right"
+                  type="number"
+                  step="1"
+                  inputmode="numeric"
+                  [formField]="fields.rightSeconds"
+                  [attr.aria-invalid]="invalid('trial-carry-right')"
+                  (input)="queueAutosave()"
+                />
+              </label>
+              <label
+                >Left hand <span>seconds</span>
+                <input
+                  id="trial-carry-left"
+                  type="number"
+                  step="1"
+                  inputmode="numeric"
+                  [formField]="fields.leftSeconds"
+                  [attr.aria-invalid]="invalid('trial-carry-left')"
+                  (input)="queueAutosave()"
+                />
+              </label>
+            </div>
+            @for (area of ['grip', 'core', 'posture']; track area) {
+              <fieldset class="segments trial-group">
+                <legend>
+                  {{ area === 'grip' ? 'Grip' : area === 'core' ? 'Core' : 'Posture' }} difficulty
+                </legend>
+                <div class="segments__options">
+                  @for (word of difficulties; track word) {
+                    <label class="segment">
+                      @if (area === 'grip') {
+                        <input
+                          type="radio"
+                          [id]="'trial-grip-' + word"
+                          [value]="word"
+                          [formField]="fields.grip"
+                          (change)="queueAutosave()"
+                        />
+                      } @else if (area === 'core') {
+                        <input
+                          type="radio"
+                          [id]="'trial-core-' + word"
+                          [value]="word"
+                          [formField]="fields.core"
+                          (change)="queueAutosave()"
+                        />
+                      } @else {
+                        <input
+                          type="radio"
+                          [id]="'trial-posture-' + word"
+                          [value]="word"
+                          [formField]="fields.posture"
+                          (change)="queueAutosave()"
+                        />
+                      }
+                      <span>{{
+                        word === 'easy' ? 'Easy' : word === 'moderate' ? 'Moderate' : 'Hard'
+                      }}</span>
+                    </label>
+                  }
+                </div>
+              </fieldset>
+            }
+          }
+          @case (2) {
+            <h2 id="stair-test-title" tabindex="-1">Three-flight stair test</h2>
+            <p class="trial-lead">
+              Climb three flights of stairs at a steady pace, if it is appropriate today. If it is
+              not, stop and keep this attempt.
+            </p>
+            @if (physicalBlocked()) {
+              <p class="trial-hold" role="alert">{{ holdMessage() }}</p>
+            }
+            <ng-container [ngTemplateOutlet]="painPanel" />
+            <label class="trial-check">
+              <input
+                id="trial-full-stairs"
+                type="checkbox"
+                [formField]="fields.fullStairs"
+                [attr.aria-invalid]="invalid('trial-full-stairs')"
+                (change)="queueAutosave()"
+              />
+              <span>I climbed three flights at a steady pace</span>
+            </label>
+            <fieldset class="scale trial-group">
+              <legend>Breathlessness at the top</legend>
+              <div class="scale__options scale__options--effort">
+                @for (level of levels; track level) {
+                  <label class="scale__option">
+                    <input
+                      type="radio"
+                      [id]="'trial-breath-' + level"
+                      [value]="level.toString()"
+                      [formField]="fields.breathlessness"
+                      [attr.aria-invalid]="invalid('trial-breath-1')"
+                      (change)="queueAutosave()"
+                    />
+                    <span>{{ level }}</span>
+                  </label>
+                }
+              </div>
+              <small class="trial-help-line"
+                >1 is barely breathing harder. 10 is unable to speak.</small
+              >
+            </fieldset>
+          }
+          @case (3) {
+            <h2 id="leadership-reflection-title" tabindex="-1">Leadership reflection</h2>
+            <label class="trial-field"
+              >When someone in my family speaks, do they experience me as attentive?
+              <textarea
+                id="trial-attentive"
+                rows="4"
+                [formField]="fields.attentive"
+                [attr.aria-invalid]="invalid('trial-attentive')"
+                (input)="queueAutosave()"
+              ></textarea>
+            </label>
+            <label class="trial-field"
+              >Name one behavior to change.
+              <textarea
+                id="trial-behavior"
+                rows="3"
+                [formField]="fields.behavior"
+                [attr.aria-invalid]="invalid('trial-behavior')"
+                (input)="queueAutosave()"
+              ></textarea>
+            </label>
+          }
+          @case (4) {
+            <h2 id="psalm-and-prayer-title" tabindex="-1">Psalm 121 + prayer</h2>
+            <p class="trial-lead">
+              Read Psalm 121. Pray specifically for your spouse, each child, your future family, and
+              your personal growth.
+            </p>
+            <label class="trial-check">
+              <input
+                id="trial-prayer"
+                type="checkbox"
+                [formField]="fields.prayer"
+                [attr.aria-invalid]="invalid('trial-prayer')"
+                (change)="queueAutosave()"
+              />
+              <span>I read Psalm 121 and prayed for my family</span>
+            </label>
+          }
+        }
+
+        @if (phaseIndex() >= 3) {
+          @if (confirmingStop()) {
+            <ng-container [ngTemplateOutlet]="stopConfirm" />
+          } @else {
+            <button
+              type="button"
+              id="trial-stop-trigger"
+              class="trial-stop"
+              (click)="askStop()"
+              [disabled]="saving()"
+            >
+              Stop trial and keep partial record
+            </button>
+          }
+        }
+        <div class="trial-dock">
+          @if (phaseIndex() < 3) {
+            <div class="trial-utility">
+              @if (confirmingStop()) {
+                <ng-container [ngTemplateOutlet]="stopConfirm" />
+              } @else {
+                <button
+                  type="button"
+                  id="trial-pain-trigger"
+                  class="trial-secondary"
+                  (click)="openPain()"
+                >
+                  Record pain
+                </button>
+                <button
+                  type="button"
+                  id="trial-stop-trigger"
+                  class="trial-secondary"
+                  (click)="askStop()"
+                  [disabled]="saving()"
+                >
+                  Stop trial
+                </button>
+              }
+            </div>
+          }
+          <ng-container [ngTemplateOutlet]="dockMessage" />
+          <button
+            type="button"
+            class="trial-primary"
+            [disabled]="saving() || (phaseIndex() < 3 && physicalBlocked())"
+            (click)="continuePhase($event)"
+          >
+            {{ phaseIndex() === 4 ? 'Review trial record' : 'Save and continue' }}
+          </button>
+        </div>
+      </section>
+    }
+  } @else {
+    <section class="trial-start" aria-labelledby="start-title">
+      <h2 id="start-title">Begin the Three-Mile Trial</h2>
+      <p>
+        Five parts, in order: the walk, the carry, the stairs, a leadership reflection, and prayer.
+        Your progress is saved on this device.
+      </p>
+      @if (state.error() || error()) {
+        <p class="trial-error" role="alert">{{ error() ?? state.error() }}</p>
+        <button type="button" class="trial-secondary" (click)="retry()">Try again</button>
+      } @else if (!state.campaign() || state.beforeDayOne()) {
+        <p class="trial-hold">Choose Day 1 in Keep before recording the trial.</p>
+        <a class="trial-link" routerLink="/keep">Go to Keep</a>
+      } @else if (otherDraft(); as other) {
+        <p class="trial-hold">Another trial is in progress. Finish or stop it first.</p>
+      } @else if (closedMessage(); as message) {
+        <p class="trial-hold">{{ message }}</p>
+        <a class="trial-link" routerLink="/road/three-mile-trial">Review the Three-Mile Trial</a>
+      } @else if (!canStart()) {
+        <p class="trial-hold">
+          The full Three-Mile Trial waits for a same-day {{ greenWords }} check.
+        </p>
+        <a class="trial-link" routerLink="/readiness">Check readiness</a>
+      } @else {
+        <p class="trial-ready">{{ greenWords }} · {{ shortDate(state.today()) }}</p>
+        <div class="trial-dock">
+          <button type="button" class="trial-primary" [disabled]="saving()" (click)="start()">
+            Begin Three-Mile Trial
+          </button>
+        </div>
+      }
+    </section>
+  }
+</div>
+
+<ng-template #dockMessage>
+  @if (error(); as message) {
+    <p class="trial-dock__message trial-dock__message--error" role="alert">{{ message }}</p>
+  }
+  <p class="trial-dock__message" role="status">{{ error() ? '' : (savedMessage() ?? '') }}</p>
+</ng-template>
+
+<ng-template #stopConfirm>
+  <div class="trial-confirm" role="group" aria-labelledby="trial-stop-question">
+    <p id="trial-stop-question">
+      Stop the Three-Mile Trial? Your entries and pain notes stay in your history, and this attempt
+      ends.
+    </p>
+    <button type="button" id="trial-stop-keep" class="trial-secondary" (click)="cancelStop()">
+      Keep going
+    </button>
+    <button type="button" class="trial-secondary" [disabled]="saving()" (click)="stop()">
+      Stop trial
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #painPanel>
+  @if (painOpen()) {
+    <section class="trial-pain" id="trial-pain" aria-labelledby="trial-pain-title">
+      <div class="trial-panel-top">
+        <h3 id="trial-pain-title" tabindex="-1">Record pain now</h3>
+        <button type="button" (click)="closePain()">Close</button>
+      </div>
+      <p>This note is saved immediately. Pain or a reduced response can defer the full trial.</p>
+      <form (submit)="recordPain($event)">
+        <fieldset class="segments trial-group">
+          <legend>Where did you feel it?</legend>
+          <div class="segments__options segments__options--four">
+            @for (area of painAreas; track area) {
+              <label class="segment">
+                <input type="radio" [value]="area" [formField]="painFields.bodyArea" />
+                <span>{{ area }}</span>
+              </label>
+            }
+          </div>
+          <label class="trial-field"
+            >Somewhere else
+            <input type="text" [formField]="painFields.otherArea" />
+          </label>
+        </fieldset>
+        <fieldset class="scale trial-group">
+          <legend>Pain level <span>0–10</span></legend>
+          <div class="scale__options scale__options--pain">
+            @for (level of painLevels; track level) {
+              <label class="scale__option">
+                <input type="radio" [value]="level.toString()" [formField]="painFields.severity" />
+                <span>{{ level }}</span>
+              </label>
+            }
+          </div>
+        </fieldset>
+        <fieldset class="segments trial-group">
+          <legend>What did you do?</legend>
+          <div class="segments__options segments__options--two">
+            @for (action of painActions; track action.id) {
+              <label class="segment">
+                <input type="radio" [value]="action.id" [formField]="painFields.actionTaken" />
+                <span>{{ action.label }}</span>
+              </label>
+            }
+          </div>
+        </fieldset>
+        <button type="submit" class="trial-primary" [disabled]="saving()">Save pain note</button>
+      </form>
+    </section>
+  }
+</ng-template>

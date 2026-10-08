@@ -7,12 +7,12 @@ import type {
   TrialResult,
 } from '../domain/models';
 import type { RecoveryInput } from '../domain/post-mission-function';
-import type { SavedGateTrialResult } from '../domain/trial';
+import type { SavedTrialResult } from '../domain/trial';
 import type { RecordedTrialPainEvent, TrialPainInput } from '../domain/trial-draft';
 import { RoadDatabase } from '../persistence/road-database';
 import { chapterPrograms } from '../program/program-catalog';
 
-/** Gate Trial history uses the existing versioned IndexedDB store and short-lived connections. */
+/** Trial history uses the existing versioned IndexedDB store and short-lived connections. */
 @Injectable({ providedIn: 'root' })
 export class TrialHistory {
   async forTrial(trialId: string): Promise<TrialResult[]> {
@@ -24,7 +24,7 @@ export class TrialHistory {
     }
   }
 
-  async add(result: SavedGateTrialResult): Promise<void> {
+  async add(result: SavedTrialResult): Promise<void> {
     const database = await RoadDatabase.open();
     try {
       await database.addTrialResult(result);
@@ -42,10 +42,10 @@ export class TrialHistory {
     }
   }
 
-  async startDraft(date: LocalDate): Promise<TrialDraft> {
+  async startDraft(date: LocalDate, trialId = 'gate-trial'): Promise<TrialDraft> {
     const database = await RoadDatabase.open();
     try {
-      return await database.startTrialDraft(date);
+      return await database.startTrialDraft(date, trialId);
     } finally {
       database.close();
     }
@@ -69,12 +69,12 @@ export class TrialHistory {
     }
   }
 
-  finishDraft(draftId: string, outcome: 'completed'): Promise<SavedGateTrialResult>;
+  finishDraft(draftId: string, outcome: 'completed'): Promise<SavedTrialResult>;
   finishDraft(draftId: string, outcome: 'stopped'): Promise<TrialAttempt>;
   async finishDraft(
     draftId: string,
     outcome: 'completed' | 'stopped',
-  ): Promise<SavedGateTrialResult | TrialAttempt> {
+  ): Promise<SavedTrialResult | TrialAttempt> {
     const database = await RoadDatabase.open();
     try {
       return outcome === 'completed'

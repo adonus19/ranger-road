@@ -25,13 +25,15 @@ import {
 import { createPostMissionFunction, type RecoveryInput } from '../domain/post-mission-function';
 import { classifyReadiness } from '../domain/readiness';
 import { createRoadSession } from '../domain/road-session';
-import { validateCompletedGateTrialResult, type SavedGateTrialResult } from '../domain/trial';
+import type { SavedTrialResult } from '../domain/trial';
 import {
-  completeGateTrialDraft,
-  createGateTrialDraft,
+  completeTrialDraft,
+  createTrialDraft,
   createRecordedTrialPain,
-  stopGateTrialDraft,
-  updateGateTrialDraft,
+  stopTrialDraft,
+  trialRulesFor,
+  updateTrialDraft,
+  validateCompletedTrialResult,
   type RecordedTrialPainEvent,
   type TrialPainInput,
 } from '../domain/trial-draft';
@@ -48,6 +50,7 @@ import {
   type WorkoutStart,
 } from '../domain/workout';
 import { addDays, getCampaignDay, isGateTrialAttemptDay } from '../program/campaign';
+import { resolveCampaignPosition } from '../program/campaign-position';
 import { checkInSaveError, testsHeldFor } from '../program/check-in-schedule';
 
 export const DATABASE_NAME = 'rangers-road';
@@ -521,7 +524,7 @@ export class RoadDatabase {
    * One write transaction checks the campaign, the attempt day, that the trial is not
    * already passed, the single-draft rule, and the latest Green check.
    */
-  startTrialDraft(date: LocalDate): Promise<TrialDraft> {
+  startTrialDraft(date: LocalDate, trialId = 'gate-trial'): Promise<TrialDraft> {
     return new Promise((resolve, reject) => {
       const transaction = this.database.transaction(
         ['campaigns', 'readinessChecks', 'trialDrafts', 'trialResults'],
@@ -542,21 +545,34 @@ export class RoadDatabase {
       const startWhenLoaded = () => {
         if (!campaignLoaded || !drafts || !checks || !results || started) return;
         try {
+          const name = trialRulesFor(trialId).name;
           if (!campaign || getCampaignDay(campaign.startDate, date) < 1) {
-            throw new Error('The Gate Trial cannot start before campaign Day 1.');
+            throw new Error(`The ${name} cannot start before campaign Day 1.`);
           }
-          if (results.some((result) => result.trialId === 'gate-trial')) {
-            throw new Error('The Gate Trial is already passed.');
+          if (results.some((result) => result.trialId === trialId)) {
+            throw new Error(`The ${name} is already passed.`);
           }
-          if (!isGateTrialAttemptDay(campaign.startDate, date)) {
-            throw new Error(
-              'The Gate Trial opens on the Monday after Week 4, then on Mondays and Thursdays until it is passed.',
-            );
+          if (trialId === 'gate-trial') {
+            if (!isGateTrialAttemptDay(campaign.startDate, date)) {
+              throw new Error(
+                'The Gate Trial opens on the Monday after Week 4, then on Mondays and Thursdays until it is passed.',
+              );
+            }
+          } else {
+            // A later trial opens on its own chapter's attempt days, found from Day 1 and passes.
+            const chapter = resolveCampaignPosition(campaign.startDate, date, results)?.chapter;
+            if (!chapter || chapter.program.trial.id !== trialId || !chapter.attemptDay) {
+              throw new Error(
+                `The ${name} opens on the Monday after its chapter's last week, then on Mondays and Thursdays until it is passed.`,
+              );
+            }
           }
           if (drafts.length) {
-            throw new Error('Finish or stop the active Gate Trial before starting another.');
+            throw new Error(
+              `Finish or stop the active ${trialRulesFor(drafts[0].trialId).name} before starting another.`,
+            );
           }
-          started = createGateTrialDraft(date, latestSameDayReadiness(checks, date));
+          started = createTrialDraft(trialId, date, latestSameDayReadiness(checks, date));
           transaction.objectStore('trialDrafts').add(started);
         } catch (error) {
           fail(error);
@@ -607,7 +623,7 @@ export class RoadDatabase {
       const saveWhenLoaded = () => {
         if (!stored || !checks || saved) return;
         try {
-          saved = updateGateTrialDraft(stored, edited, latestSameDayReadiness(checks, stored.date));
+          saved = updateTrialDraft(stored, edited, latestSameDayReadiness(checks, stored.date));
           transaction.objectStore('trialDrafts').put(saved);
         } catch (error) {
           fail(error);
@@ -666,18 +682,18 @@ export class RoadDatabase {
     });
   }
 
-  finishTrialDraft(draftId: string, outcome: 'completed'): Promise<SavedGateTrialResult>;
+  finishTrialDraft(draftId: string, outcome: 'completed'): Promise<SavedTrialResult>;
   finishTrialDraft(draftId: string, outcome: 'stopped'): Promise<TrialAttempt>;
   finishTrialDraft(
     draftId: string,
     outcome: 'completed' | 'stopped',
-  ): Promise<SavedGateTrialResult | TrialAttempt> {
+  ): Promise<SavedTrialResult | TrialAttempt> {
     return new Promise((resolve, reject) => {
       const transaction = this.database.transaction(
         ['campaigns', 'readinessChecks', 'trialDrafts', 'trialResults', 'trialAttempts'],
         'readwrite',
       );
-      let saved: SavedGateTrialResult | TrialAttempt | undefined;
+      let saved: SavedTrialResult | TrialAttempt | undefined;
       let failure: Error | undefined;
       const fail = (error: unknown) => {
         failure =
@@ -690,7 +706,7 @@ export class RoadDatabase {
           const draft = draftRequest.result as TrialDraft | undefined;
           if (!draft) throw new Error('The active Gate Trial was not found.');
           if (outcome === 'stopped') {
-            saved = stopGateTrialDraft(draft);
+            saved = stopTrialDraft(draft);
             transaction.objectStore('trialAttempts').add(saved);
             transaction.objectStore('trialDrafts').delete(draftId);
             return;
@@ -708,7 +724,7 @@ export class RoadDatabase {
                 .getAll(draft.date);
               checksRequest.onsuccess = () => {
                 try {
-                  saved = completeGateTrialDraft(
+                  saved = completeTrialDraft(
                     draft,
                     latestSameDayReadiness(checksRequest.result as ReadinessCheck[], draft.date),
                   );
@@ -733,8 +749,8 @@ export class RoadDatabase {
   }
 
   /** Check campaign Day 1 and latest same-day readiness in the write transaction. */
-  async addTrialResult(result: SavedGateTrialResult): Promise<void> {
-    const normalized = validateCompletedGateTrialResult(result);
+  async addTrialResult(result: SavedTrialResult): Promise<void> {
+    const normalized = validateCompletedTrialResult(result);
     return new Promise((resolve, reject) => {
       const transaction = this.database.transaction(
         ['campaigns', 'readinessChecks', 'trialResults'],

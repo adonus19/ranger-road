@@ -118,6 +118,4 @@ describe('Chapter II workout content', () => {
     expect(loadWorkout(chapterTwoForgeA.id)?.exercises[0].reps).toBe(6);
   });
 
-  // Known gaps while Chapter II is built; the exercises still show by ID until these land.
-  it.todo('opens the Three-Mile Trial page and recording flow at its trial route (Session 8)');
 });

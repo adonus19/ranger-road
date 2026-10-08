@@ -13,12 +13,14 @@ import { classifyReadiness } from './readiness';
 import { gateTrialDefinition, GATE_TRIAL_CONTENT_VERSION } from '../program/chapter-one-trial.seed';
 import { isLocalDate } from '../program/campaign';
 
-/** Fields new Gate Trial history always has; older v1 rows remain readable as TrialResult. */
-export type SavedGateTrialResult = TrialResult & {
+/** Fields new trial history always has; older v1 rows remain readable as TrialResult. */
+export type SavedTrialResult = TrialResult & {
   definitionSnapshot: DeepReadonly<TrialDefinition>;
   readinessId: string;
   recordedAt: IsoTimestamp;
 };
+
+export type SavedGateTrialResult = SavedTrialResult;
 
 export interface GateTrialResultInput {
   id: string;

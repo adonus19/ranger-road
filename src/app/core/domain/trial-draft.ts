@@ -9,16 +9,85 @@ import type {
   TrialDefinition,
   TrialDraft,
   TrialPhaseResult,
+  TrialResult,
 } from './models';
 import { classifyReadiness } from './readiness';
-import { validateCompletedGateTrialResult, type SavedGateTrialResult } from './trial';
+import {
+  threeMilePhaseComplete,
+  threeMileReflection,
+  validateCompletedThreeMileTrialResult,
+} from './three-mile-trial';
+import {
+  validateCompletedGateTrialResult,
+  type SavedGateTrialResult,
+  type SavedTrialResult,
+} from './trial';
 import { gateTrialDefinition } from '../program/chapter-one-trial.seed';
+import { threeMileTrialDefinition } from '../program/chapter-two-trial.seed';
 import { isLocalDate } from '../program/campaign';
+
+/** What differs between trials; drafts, pain, stopping and saving share everything else. */
+export interface TrialRules {
+  definition: TrialDefinition;
+  name: string;
+  /** Phases before this index are physical: they need Green readiness and allow pain notes. */
+  physicalPhases: number;
+  phaseComplete(phase: TrialPhaseResult, index: number): boolean;
+  validate(result: TrialResult): SavedTrialResult;
+  reflection(phases: readonly TrialPhaseResult[]): string;
+}
+
+const TRIAL_RULES: Record<string, TrialRules> = {
+  [gateTrialDefinition.id]: {
+    definition: gateTrialDefinition,
+    name: 'Gate Trial',
+    physicalPhases: 2,
+    phaseComplete: (phase, index) => gateTrialPhaseComplete(phase, index),
+    validate: (result) => validateCompletedGateTrialResult(result),
+    reflection: (phases) => {
+      const mind = phases[2]?.responses ?? {};
+      return [
+        `Body: ${mind['body']}`,
+        `Character: ${mind['character']}`,
+        `Family: ${mind['family']}`,
+      ].join('\n');
+    },
+  },
+  [threeMileTrialDefinition.id]: {
+    definition: threeMileTrialDefinition,
+    name: 'Three-Mile Trial',
+    physicalPhases: 3,
+    phaseComplete: threeMilePhaseComplete,
+    validate: validateCompletedThreeMileTrialResult,
+    reflection: threeMileReflection,
+  },
+};
+
+export function trialRulesFor(trialId: string): TrialRules {
+  const rules = TRIAL_RULES[trialId];
+  if (!rules) throw new Error('This trial is not in the app yet.');
+  return rules;
+}
+
+/** Revalidate any completed trial at the storage boundary. */
+export function validateCompletedTrialResult(result: TrialResult): SavedTrialResult {
+  return trialRulesFor(result.trialId).validate(result);
+}
+
+/** Whether one phase of any trial holds everything it needs. */
+export function trialPhaseComplete(
+  trialId: string,
+  phase: TrialPhaseResult,
+  index: number,
+): boolean {
+  return TRIAL_RULES[trialId]?.phaseComplete(phase, index) ?? false;
+}
 
 export type TrialPainAction = 'continue' | 'reduce' | 'substitute' | 'end-exercise';
 
 export interface TrialPainInput {
-  phaseId: 'brisk-walk' | 'controlled-circuit';
+  /** A physical phase of the trial, such as 'brisk-walk' or 'three-mile-walk'. */
+  phaseId: string;
   bodyArea: string;
   severity: number;
   actionTaken: TrialPainAction;
@@ -39,21 +108,33 @@ export function createGateTrialDraft(
   now: IsoTimestamp = new Date().toISOString(),
   id: string = `trial-${crypto.randomUUID()}`,
 ): TrialDraft {
-  if (!isLocalDate(date)) throw new RangeError('Enter a valid Gate Trial date.');
+  return createTrialDraft(gateTrialDefinition.id, date, readiness, now, id);
+}
+
+export function createTrialDraft(
+  trialId: string,
+  date: LocalDate,
+  readiness: ReadinessCheck | undefined,
+  now: IsoTimestamp = new Date().toISOString(),
+  id: string = `trial-${crypto.randomUUID()}`,
+): TrialDraft {
+  const rules = trialRulesFor(trialId);
+  const definition = rules.definition;
+  if (!isLocalDate(date)) throw new RangeError(`Enter a valid ${rules.name} date.`);
   assertTimestamp(now, 'Trial start time');
-  assertGreenReadiness(readiness, date, now);
+  assertGreenReadiness(readiness, date, now, rules.name);
   if (!id.trim()) throw new Error('A trial draft needs an identifier.');
   return {
     id,
-    trialId: gateTrialDefinition.id,
+    trialId: definition.id,
     date,
     readinessId: readiness!.id,
     startedAt: now,
     updatedAt: now,
     revision: 1,
     currentPhaseIndex: 0,
-    definitionSnapshot: structuredClone(gateTrialDefinition),
-    phaseResults: gateTrialDefinition.phases.map((phase) => ({ phaseId: phase.id })),
+    definitionSnapshot: structuredClone(definition),
+    phaseResults: definition.phases.map((phase) => ({ phaseId: phase.id })),
     painEvents: [],
   };
 }
@@ -68,6 +149,16 @@ export function updateGateTrialDraft(
   latestReadiness: ReadinessCheck | undefined,
   now: IsoTimestamp = new Date().toISOString(),
 ): TrialDraft {
+  return updateTrialDraft(stored, edited, latestReadiness, now);
+}
+
+export function updateTrialDraft(
+  stored: TrialDraft,
+  edited: TrialDraft,
+  latestReadiness: ReadinessCheck | undefined,
+  now: IsoTimestamp = new Date().toISOString(),
+): TrialDraft {
+  const rules = trialRulesFor(stored.trialId);
   assertTimestamp(now, 'Trial save time');
   if (Date.parse(now) < Date.parse(stored.updatedAt)) {
     throw new Error('Trial save time cannot move backward.');
@@ -86,10 +177,10 @@ export function updateGateTrialDraft(
   if (
     !Number.isInteger(edited.currentPhaseIndex) ||
     edited.currentPhaseIndex < 0 ||
-    edited.currentPhaseIndex >= gateTrialDefinition.phases.length ||
+    edited.currentPhaseIndex >= rules.definition.phases.length ||
     edited.currentPhaseIndex > stored.currentPhaseIndex + 1
   ) {
-    throw new RangeError('Move through the Gate Trial one phase at a time.');
+    throw new RangeError(`Move through the ${rules.name} one phase at a time.`);
   }
   const phaseResults = normalizePartialPhases(edited.phaseResults, stored.definitionSnapshot);
   if (edited.photoAsset !== undefined && !edited.photoAsset.trim()) {
@@ -97,11 +188,11 @@ export function updateGateTrialDraft(
   }
   if (edited.currentPhaseIndex > stored.currentPhaseIndex) {
     const previous = phaseResults[stored.currentPhaseIndex];
-    if (!gateTrialPhaseComplete(previous, stored.currentPhaseIndex)) {
-      throw new Error('Finish this Gate Trial phase before moving on.');
+    if (!rules.phaseComplete(previous, stored.currentPhaseIndex)) {
+      throw new Error(`Finish this ${rules.name} phase before moving on.`);
     }
-    if (stored.currentPhaseIndex < 2) {
-      assertGreenReadiness(latestReadiness, stored.date, now);
+    if (stored.currentPhaseIndex < rules.physicalPhases) {
+      assertGreenReadiness(latestReadiness, stored.date, now, rules.name);
       assertNoUnsafeTrialPain(stored.painEvents);
     }
   }
@@ -127,11 +218,13 @@ export function createRecordedTrialPain(
   if (Date.parse(now) < Date.parse(draft.updatedAt)) {
     throw new Error('Pain time cannot precede the last saved entry.');
   }
+  const rules = trialRulesFor(draft.trialId);
+  const physical = rules.definition.phases.slice(0, rules.physicalPhases).map((phase) => phase.id);
   if (
-    !['brisk-walk', 'controlled-circuit'].includes(input.phaseId) ||
+    !physical.includes(input.phaseId) ||
     !draft.phaseResults.some((phase) => phase.phaseId === input.phaseId)
   ) {
-    throw new Error('Choose a physical Gate Trial phase for this pain record.');
+    throw new Error(`Choose a physical ${rules.name} phase for this pain record.`);
   }
   if (!Number.isInteger(input.severity) || input.severity < 0 || input.severity > 10) {
     throw new RangeError('Pain severity must be a whole number from 0 to 10.');
@@ -141,12 +234,9 @@ export function createRecordedTrialPain(
     throw new Error('Choose what you did in response to the pain.');
   }
   if (input.exerciseId) {
-    const circuit = gateTrialDefinition.phases[1].circuit!;
-    if (
-      input.phaseId !== 'controlled-circuit' ||
-      !circuit.movements.some((movement) => movement.exerciseId === input.exerciseId)
-    ) {
-      throw new Error('Choose a station in the Gate Circuit for this pain record.');
+    const circuit = rules.definition.phases.find((phase) => phase.id === input.phaseId)?.circuit;
+    if (!circuit?.movements.some((movement) => movement.exerciseId === input.exerciseId)) {
+      throw new Error('Choose a station in the circuit for this pain record.');
     }
   }
   if (!id.trim()) throw new Error('A pain record needs an identifier.');
@@ -168,23 +258,33 @@ export function completeGateTrialDraft(
   latestReadiness: ReadinessCheck | undefined,
   now: IsoTimestamp = new Date().toISOString(),
 ): SavedGateTrialResult {
+  return completeTrialDraft(draft, latestReadiness, now);
+}
+
+export function completeTrialDraft(
+  draft: TrialDraft,
+  latestReadiness: ReadinessCheck | undefined,
+  now: IsoTimestamp = new Date().toISOString(),
+): SavedTrialResult {
+  const rules = trialRulesFor(draft.trialId);
   assertTimestamp(now, 'Trial completion time');
   if (Date.parse(now) < Date.parse(draft.updatedAt)) {
     throw new Error('Trial completion time cannot precede the last saved entry.');
   }
-  assertGreenReadiness(latestReadiness, draft.date, now);
+  assertGreenReadiness(latestReadiness, draft.date, now, rules.name);
   assertNoUnsafeTrialPain(draft.painEvents);
-  if (draft.currentPhaseIndex !== gateTrialDefinition.phases.length - 1) {
-    throw new Error('Complete the Gate Trial phases in order.');
+  if (draft.currentPhaseIndex !== rules.definition.phases.length - 1) {
+    throw new Error(`Complete the ${rules.name} phases in order.`);
   }
   const phases = normalizePartialPhases(draft.phaseResults, draft.definitionSnapshot);
   for (let index = 0; index < phases.length; index += 1) {
-    if (!gateTrialPhaseComplete(phases[index], index)) {
-      throw new Error(`Finish ${gateTrialDefinition.phases[index].title} before completing the Gate Trial.`);
+    if (!rules.phaseComplete(phases[index], index)) {
+      throw new Error(
+        `Finish ${rules.definition.phases[index].title} before completing the ${rules.name}.`,
+      );
     }
   }
-  const mind = phases[2].responses!;
-  return validateCompletedGateTrialResult({
+  return rules.validate({
     id: draft.id,
     trialId: draft.trialId,
     date: draft.date,
@@ -193,15 +293,18 @@ export function completeGateTrialDraft(
     definitionSnapshot: structuredClone(draft.definitionSnapshot),
     phaseResults: phases,
     ...(draft.photoAsset ? { photoAsset: draft.photoAsset } : {}),
-    reflection: [
-      `Body: ${mind['body']}`,
-      `Character: ${mind['character']}`,
-      `Family: ${mind['family']}`,
-    ].join('\n'),
+    reflection: rules.reflection(phases),
   });
 }
 
 /** Stopping keeps every partial phase and linked pain event without marking a pass. */
+export function stopTrialDraft(
+  draft: TrialDraft,
+  now: IsoTimestamp = new Date().toISOString(),
+): TrialAttempt {
+  return stopGateTrialDraft(draft, now);
+}
+
 export function stopGateTrialDraft(
   draft: TrialDraft,
   now: IsoTimestamp = new Date().toISOString(),
@@ -301,10 +404,11 @@ function normalizePartialPhases(
     if (phase.notes !== undefined && typeof phase.notes !== 'string') {
       throw new Error('Trial notes must be text.');
     }
+    const prescribed = snapshot.phases[index]?.circuit;
     const circuitRounds = phase.circuitRounds
-      ? normalizePartialRounds(phase.circuitRounds, index)
+      ? normalizePartialRounds(phase.circuitRounds, prescribed)
       : undefined;
-    if (index === 1 && circuitRounds) {
+    if (prescribed && circuitRounds) {
       (metrics ??= {})['roundsCompleted'] = circuitRounds.length;
     }
     return {
@@ -317,17 +421,19 @@ function normalizePartialPhases(
   });
 }
 
-function normalizePartialRounds(rounds: TrialCircuitRoundResult[], index: number): TrialCircuitRoundResult[] {
-  if (index !== 1 || !Array.isArray(rounds) || rounds.length > 3) {
-    throw new Error('Only the Gate Circuit can record up to three rounds.');
+function normalizePartialRounds(
+  rounds: TrialCircuitRoundResult[],
+  prescription: DeepReadonly<TrialDefinition>['phases'][number]['circuit'],
+): TrialCircuitRoundResult[] {
+  if (!prescription || !Array.isArray(rounds) || rounds.length > prescription.rounds) {
+    throw new Error('Only a circuit phase can record its rounds.');
   }
-  const prescription = gateTrialDefinition.phases[1].circuit!;
   const seenRounds = new Set<number>();
   return rounds.map((round) => {
     if (
       !Number.isInteger(round?.round) ||
       round.round < 1 ||
-      round.round > 3 ||
+      round.round > prescription.rounds ||
       seenRounds.has(round.round) ||
       !Array.isArray(round.movements) ||
       round.movements.length > prescription.movements.length
@@ -399,24 +505,27 @@ function assertGreenReadiness(
   readiness: ReadinessCheck | undefined,
   date: LocalDate,
   at: IsoTimestamp,
+  name = 'Gate Trial',
 ): void {
   if (!readiness || readiness.date !== date) {
-    throw new Error('Check readiness on the Gate Trial date before physical work.');
+    throw new Error(`Check readiness on the ${name} date before physical work.`);
   }
   if (readiness.status !== 'green' || classifyReadiness(readiness) !== 'green') {
-    throw new Error('The full Gate Trial waits for a Green readiness day.');
+    throw new Error(`The full ${name} waits for a Green readiness day.`);
   }
   if (
     !Number.isFinite(Date.parse(readiness.checkedAt)) ||
     Date.parse(readiness.checkedAt) > Date.parse(at)
   ) {
-    throw new Error('Check readiness before continuing the Gate Trial.');
+    throw new Error(`Check readiness before continuing the ${name}.`);
   }
 }
 
 function assertNoUnsafeTrialPain(events: PainEvent[]): void {
   if (events.some((event) => event.severity >= 3 || event.actionTaken !== 'continue')) {
-    throw new Error('This trial was reduced or pain rose. Stop it and try the full trial on a Green day.');
+    throw new Error(
+      'This trial was reduced or pain rose. Stop it and try the full trial on a Green day.',
+    );
   }
 }
 

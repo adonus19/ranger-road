@@ -211,3 +211,13 @@ When a Forge session is missed, the next morning's Keep, Today's Mission and For
 - In a three-Forge week, a missed carried session on Monday is dropped; Forge A can still move from Wednesday to Thursday, pushing Forge B to Saturday.
 
 (Planned) Light Activity (`/keep/activity`): opened from a link at the foot of Today's Mission, worded "Add a walk or light cardio, if you like" in a deload week and "Log light activity (optional)" otherwise. A required activity name; optional time (minutes), distance (miles), weight (lb), sets and reps. Today's entries are listed with Remove. It is never required, scored or used to set a target.
+
+## The Three-Mile Trial
+
+`/road/three-mile-trial` shows the plan, today's status and recorded attempts; `/road/three-mile-trial/active` records it in five parts, saving as it goes, with the same Green check, pain notes, stop-and-keep, and review-then-save as the Gate Trial. It opens only on its attempt days (the Monday after Week 8, then Mondays and Thursdays until passed). Recording choices settled in the build, each from "finishing every part as written":
+
+- Walk: a "full 3 continuous miles" confirmation, time, effort 1–10, knee and back discomfort, recovery after 5 minutes; splits (text) and average heart rate are optional. A walk timer is offered.
+- Carry: weight (prefilled 30 lb; at least 30 lb to pass), seconds in each hand (at least 60 each), and grip, core and posture difficulty as plain words: Easy, Moderate, Hard. The Suitcase Carry's Quick Help and pictures open from this part.
+- Stairs: a "three flights at a steady pace" confirmation and breathlessness 1–10. If the stairs are not appropriate that day, the attempt is stopped and kept, not passed.
+- Leadership reflection: both prompts answered. Prayer: a confirmation that Psalm 121 was read and the family prayed for.
+- Pain notes can be recorded during the walk, carry and stairs. The end of the stair test is saved as the end of physical effort, for the recovery check.
