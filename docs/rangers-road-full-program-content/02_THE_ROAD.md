@@ -51,6 +51,8 @@ Sunday: Rest/worship. Scripture: Matthew 6:25–34. Reflection: **What am I cons
 
 Mind practice: three 10-min phone-free reading sessions.
 
+Hearth mission (added 2026-10-08): plan Saturday night so the family gets to worship on Sunday without rushing: clothes set out, breakfast decided, time to leave early. You carry the logistics.
+
 # Week 6 — Listen
 Monday: Forge A. Scripture: James 1:19–20.  
 Tuesday: 35-min continuous walk. Scripture: Proverbs 18:2,13.  
@@ -82,6 +84,12 @@ Friday: easy recovery. Scripture: Hebrews 10:23–25.
 Saturday: 30-minute easy walk; then prepare for Monday's Three-Mile Trial (choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs). Scripture: Psalm 121.  
 Sunday: Isaiah 40:28–31. Reflection: **Where has consistent small effort begun changing me?**
 
+Hearth mission (added 2026-10-08), four parts across the week:
+- Ask your spouse, "This month, have I been more attentive when you talk? Where am I still rushing?" Listen without defending yourself.
+- Tell your spouse and your daughter one specific thing you've seen each of them do faithfully this month (Hebrews 10:24).
+- On Saturday, let your daughter help prepare for the trial: walk part of the route or count the stair flights. Ask the family to pray for you on Monday.
+- Choose one practice from this chapter, such as the phone-free hour or the listening question, and put it on the family calendar from now on.
+
 # Fieldcraft — Navigation I
 Across the month learn:
 - cardinal directions
@@ -92,9 +100,11 @@ Across the month learn:
 - landmarks
 - choosing turnaround points
 
-Field mission: before one Saturday walk, study the trail map and predict direction, landmark, distance to a turn, and location of start; confirm afterward.
+Field mission: before Week 6's Saturday walk (50–55 min, trail if practical), study the trail map and predict direction, landmark, distance to a turn, and location of start; confirm afterward.
 
-Daughter quest: let daughter navigate one simple marked portion.
+Daughter quest: on the same Week 6 Saturday walk, let daughter navigate one simple marked portion. It is optional, like other family quests.
+
+The Navigation I field card in `FIELD_MANUAL.md` holds the written skills. It has no pictures.
 
 # The Three-Mile Trial
 
