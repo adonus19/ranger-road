@@ -1,13 +1,8 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import type { TrialResult } from '../../core/domain/models';
-import {
-  getChapterOneTrialPass,
-  getChapterTwoStartDate,
-} from '../../core/program/chapter-one-completion';
-import { chapterOneDefinition } from '../../core/program/chapter-one.seed';
 import { getFieldManualWeek } from '../../core/program/field-manual';
 import { CampaignState } from '../../core/state/campaign-state';
-import { TrialHistory } from '../../core/state/trial-history';
+import { TrialHistory, loadCampaignTrials } from '../../core/state/trial-history';
 
 export type IndexFilter =
   'all' | 'this-week' | 'leadership' | 'fieldcraft' | 'reading' | 'scripture' | 'exercises';
@@ -27,22 +22,19 @@ export class FieldManualWeekState {
   readonly ready = computed(() => !this.state.loading() && this.trialsLoaded());
 
   readonly week = computed(() => {
-    const campaign = this.state.campaign();
-    const trials = this.completedTrials();
     return getFieldManualWeek({
-      startDate: campaign?.startDate,
+      startDate: this.state.campaign()?.startDate,
       today: this.state.today(),
-      trialPassedOn: getChapterOneTrialPass(campaign, trials)?.date,
-      chapterTwoStart: getChapterTwoStartDate(campaign, trials),
+      completedTrials: this.completedTrials(),
     });
   });
 
   async load(): Promise<void> {
     await this.state.initialize().catch(() => undefined);
     try {
-      this.completedTrials.set(await this.trialHistory.forTrial(chapterOneDefinition.trialId));
+      this.completedTrials.set(await loadCampaignTrials(this.trialHistory));
     } catch {
-      // Without trial history the manual still opens; it just can't tell whether Chapter I is done.
+      // Without trial history the manual still opens; it just can't tell which chapter is current.
     } finally {
       this.trialsLoaded.set(true);
     }

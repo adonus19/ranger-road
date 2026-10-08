@@ -4,6 +4,8 @@ import {
   getActivityChoices,
   getDayMissions,
   getDayOrders,
+  getHearthMission,
+  getHearthMissionParts,
   getWorkoutChoices,
 } from './chapter-orders';
 import { chapterTwoDailySeed, chapterTwoTrialAttempt } from './chapter-two-daily.seed';
@@ -96,6 +98,32 @@ describe('Chapter II daily content', () => {
       { trialId: 'gate-trial', date: '2026-11-02' },
     ])!.chapter;
     expect(getDayMissions(friday)[1].intervals?.briskSeconds).toBe(60);
+  });
+
+  it('gives every week a Hearth mission, with Week 8’s in four parts', () => {
+    // Gate Trial passed Monday, Nov 2: Week 5 runs from that Monday; Week 8 from Nov 23.
+    const trials = [{ trialId: 'gate-trial', date: '2026-11-02' }];
+    const at = (date: string) => resolveCampaignPosition('2026-10-05', date, trials)!.chapter;
+    expect(getHearthMission(at('2026-11-08'))).toContain('worship on Sunday without rushing');
+    expect(getHearthMissionParts(at('2026-11-08'))).toEqual([]);
+    expect(getHearthMission(at('2026-11-23'))).toBe(
+      'Ask how you’ve listened, name your family’s faithfulness, prepare for the trial together, and keep one rhythm.',
+    );
+    expect(getHearthMissionParts(at('2026-11-23')).map((part) => part.label)).toEqual([
+      'Ask how you’ve listened',
+      'Name their faithfulness',
+      'Prepare for the trial together',
+      'Keep one rhythm',
+    ]);
+  });
+
+  it('puts the Navigation I field mission and daughter quest on Week 6’s Saturday walk', () => {
+    const saturday = resolveCampaignPosition('2026-10-05', '2026-11-14', [
+      { trialId: 'gate-trial', date: '2026-11-02' },
+    ])!.chapter;
+    const [walk] = getActivityChoices(saturday);
+    expect(walk.activityDetails?.at(-1)).toContain('Navigation I field mission');
+    expect(walk.optionalFamilyQuest).toContain('Let your daughter lead');
   });
 
   it('keeps the weekly missions, reflections, reading, and Week 8 trial preparation', () => {

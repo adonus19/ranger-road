@@ -5,10 +5,12 @@ import {
   getFieldCard,
   getWeeklyFieldcraft,
   listFieldCards,
+  type FieldSkill,
 } from '../../../core/program/field-manual.seed';
-import { Icon } from '../../../shared/icon/icon';
+import { Icon, type IconName } from '../../../shared/icon/icon';
 import { FieldManualWeekState } from '../field-manual-week-state';
 import { ManualBackLink } from '../manual-back-link';
+import { SKILL_ICONS } from '../skill-icons';
 
 /** One practical skill: what it's for, the steps, and how to check it. */
 @Component({
@@ -45,6 +47,10 @@ export class FieldCardPage implements OnInit {
       ? listFieldCards().filter((other) => other.week === card.week && other.id !== card.id)
       : [];
   });
+
+  protected skillIcon(skill: FieldSkill): IconName {
+    return SKILL_ICONS[skill];
+  }
 
   ngOnInit(): void {
     void this.weekState.load();

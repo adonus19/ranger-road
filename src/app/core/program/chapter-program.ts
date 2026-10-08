@@ -69,6 +69,11 @@ export interface ChapterWeekContent {
   days: Record<Weekday, ChapterDayContent>;
   leadershipMission?: string;
   hearthMission?: string;
+  /**
+   * A Hearth mission in several parts; `hearthMission` then summarizes them in one line.
+   * Keep lists the short labels; the leadership lesson gives each part in full.
+   */
+  hearthMissionParts?: readonly { label: string; text: string }[];
   reading?: string;
   readingBookTitle?: string;
   fieldcraft?: string;

@@ -7,6 +7,7 @@ import {
   getActivityChoices,
   getDayOrders,
   getHearthMission,
+  getHearthMissionParts,
   type TodayOrder,
 } from '../../../core/program/chapter-orders';
 import { getLeadershipLessonForWeek } from '../../../core/program/field-manual.seed';
@@ -167,6 +168,10 @@ export class KeepPage implements OnInit {
   protected readonly hearthMission = computed(() => {
     const chapter = this.position()?.chapter;
     return chapter ? getHearthMission(chapter) : '';
+  });
+  protected readonly hearthParts = computed(() => {
+    const chapter = this.position()?.chapter;
+    return chapter ? getHearthMissionParts(chapter) : [];
   });
 
   /** The week's leadership lesson in the Field Manual, when it has one. */

@@ -31,9 +31,7 @@
               [routerLink]="['/field-manual/cards', card.id]"
               [queryParams]="{ from: 'practice' }"
             >
-              <span class="manual-medallion"
-                ><app-icon [name]="card.skill === 'knot' ? 'knot' : 'hatchet'"
-              /></span>
+              <span class="manual-medallion"><app-icon [name]="skillIcon(card.skill)" /></span>
               <span class="manual-row__text">
                 <strong>{{ card.title }}</strong>
                 <span>{{ card.summary }}</span>

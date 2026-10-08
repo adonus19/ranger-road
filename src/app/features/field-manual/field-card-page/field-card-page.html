@@ -54,11 +54,25 @@
     @for (section of card.sections ?? []; track section.heading) {
       <section class="manual-section manual-prose" [attr.aria-label]="section.heading">
         <h2>{{ section.heading }}</h2>
-        <ul>
-          @for (item of section.items; track $index) {
-            <li>{{ item }}</li>
-          }
-        </ul>
+        @if (section.intro; as intro) {
+          <p>{{ intro }}</p>
+        }
+        @if (section.ordered) {
+          <ol>
+            @for (item of section.items; track $index) {
+              <li>{{ item }}</li>
+            }
+          </ol>
+        } @else if (section.items.length) {
+          <ul>
+            @for (item of section.items; track $index) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        }
+        @if (section.outro; as outro) {
+          <p>{{ outro }}</p>
+        }
       </section>
     }
 
@@ -78,7 +92,7 @@
                 [queryParams]="{ from: 'practice' }"
               >
                 <span class="manual-medallion"
-                  ><app-icon [name]="other.skill === 'knot' ? 'knot' : 'hatchet'"
+                  ><app-icon [name]="skillIcon(other.skill)"
                 /></span>
                 <span class="manual-row__text">
                   <strong>{{ other.title }}</strong>

@@ -32,7 +32,7 @@ export const chapterTwoProgram: ChapterProgram = {
   trial: threeMileTrialDefinition,
   weeklyRhythm: chapterOneWeeklyRhythm,
   faithThemes: ['stillness', 'listening', 'presence', 'faithfulness'],
-  // Weeks 5 and 8 name no leadership mission, so Keep shows no Hearth row on those weeks.
+  // Each week names its own Hearth mission in the daily seed.
   leadership: [],
   fieldcraft: ['Navigation I'],
   trialName: 'Three-Mile Trial',

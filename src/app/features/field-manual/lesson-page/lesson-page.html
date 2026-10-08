@@ -16,10 +16,19 @@
       }
     </section>
 
-    @if (weekContent()?.leadershipMission; as mission) {
+    @if (hearthMission(); as mission) {
       <div class="manual-panel">
         <h2>Week {{ lesson.week }} Hearth mission</h2>
-        <p>{{ mission }}</p>
+        @if (weekContent()?.hearthMissionParts; as parts) {
+          <p>In {{ partCount(parts.length) }} parts across the week:</p>
+          <ol>
+            @for (part of parts; track part.label) {
+              <li>{{ part.text }}</li>
+            }
+          </ol>
+        } @else {
+          <p>{{ mission }}</p>
+        }
       </div>
     }
 

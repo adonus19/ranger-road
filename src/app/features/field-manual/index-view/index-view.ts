@@ -7,6 +7,7 @@ import {
   type FieldManualEntryKind,
 } from '../../../core/program/field-manual';
 import { Icon, type IconName } from '../../../shared/icon/icon';
+import { SKILL_ICONS } from '../skill-icons';
 import { FieldManualWeekState, type IndexFilter } from '../field-manual-week-state';
 
 const FILTERS: readonly { id: IndexFilter; label: string }[] = [
@@ -108,7 +109,7 @@ export class IndexView {
 
   /** Knot cards show a rope; the tool card keeps the hatchet. */
   protected icon(entry: FieldManualEntry): IconName {
-    return entry.skill === 'knot' ? 'knot' : KIND_ICONS[entry.kind];
+    return entry.skill ? SKILL_ICONS[entry.skill] : KIND_ICONS[entry.kind];
   }
 
   protected search(event: Event): void {

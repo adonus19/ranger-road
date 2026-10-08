@@ -3,11 +3,11 @@
   <h1>Reading</h1>
   <p class="manual-subline">One book at a time, in 10-minute blocks.</p>
 
-  <section class="manual-section" aria-labelledby="chapter-one-book">
-    <h2 id="chapter-one-book">Chapter I book</h2>
+  <section class="manual-section" aria-labelledby="chapter-book">
+    <h2 id="chapter-book">Chapter {{ book().numeral }} book</h2>
     <p class="reading-book">
-      <cite>{{ book.title }}</cite>
-      <span class="reading-book__author">by {{ book.author }}</span>
+      <cite>{{ book().title }}</cite>
+      <span class="reading-book__author">by {{ book().author }}</span>
     </p>
     <p class="manual-note">{{ readingLine() }}</p>
     @if (notice(); as notice) {

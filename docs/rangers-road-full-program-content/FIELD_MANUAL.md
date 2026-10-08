@@ -1,6 +1,6 @@
 # Field Manual Content
 
-**Status: Chapter I content approved 2026-09-29. Chapter II content is a draft for review (2026-10-08).** The lessons, principles, reading plan and field cards were reviewed and approved for release. The knot cards ship with written steps. Each knot's step pictures are added once they are checked against a tied knot: the square knot's were approved 2026-09-29; the bowline's and two half hitches' follow. Scripture is stored as references only.
+**Status: Chapter I content approved 2026-09-29. Chapter II content approved 2026-10-08.** The lessons, principles, reading plan and field cards were reviewed and approved for release. The knot cards ship with written steps. Each knot's step pictures are added once they are checked against a tied knot: the square knot's were approved 2026-09-29; the bowline's and two half hitches' follow. Scripture is stored as references only.
 
 This file holds the Field Manual's written content: the leadership principles, the weekly leadership lessons, the reading plan and the field cards. The chapter packs keep the day-by-day orders, and this file keeps the material those orders point to.
 
@@ -172,8 +172,6 @@ Micah 6:8 asks you to do justice, love mercy and walk humbly. Planning humbly me
 - For later: _The Ruthless Elimination of Hurry_ by John Mark Comer, on slowing down enough to be present. It leads into Chapter II.
 
 ## Chapter II leadership lessons
-
-**Draft for review (2026-10-08).** Not yet approved.
 
 Chapter II's leadership theme is listening. The pack named no Hearth mission for Weeks 5 and 8; the ones below were added on 2026-10-08 and are recorded in `02_THE_ROAD.md`.
 
@@ -381,7 +379,7 @@ None of these knots is for climbing or for lifting people.
 
 ## Chapter II field cards
 
-**Draft for review (2026-10-08).** Not yet approved. Written only; no pictures.
+Written only; no pictures.
 
 ### Navigation I
 

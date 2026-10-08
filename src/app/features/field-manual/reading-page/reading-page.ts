@@ -53,15 +53,19 @@ export class ReadingPage implements OnInit {
     id: slug(book.title),
     numeral: chapterNumeral(book.chapter),
   }));
-  protected readonly book = this.plan[0];
   protected readonly extras = listLeadershipLessons()
     .filter((lesson) => EXTRA_BOOK_SUGGESTIONS.includes(lesson.forLater.title))
     .map((lesson) => ({ ...lesson.forLater, week: lesson.week, lessonId: lesson.id }));
 
   protected readonly week = this.weekState.week;
+  /** The current chapter's book; before Day 1, Chapter I's. */
+  protected readonly book = computed(
+    () => this.plan.find((entry) => entry.chapter === this.week().chapter) ?? this.plan[0],
+  );
   protected readonly readingLine = computed(() => {
     const days = this.week().readingDays;
-    if (this.week().stage === 'complete') return 'Chapter I is complete.';
+    if (this.week().stage === 'complete')
+      return `Chapter ${chapterNumeral(this.week().chapter)} is complete.`;
     if (!days.length) return 'No reading blocks this week.';
     return `${this.week().stage === 'ahead' ? 'Week 1' : 'This week'}: ${joinWords(days)}, 10 minutes each.`;
   });

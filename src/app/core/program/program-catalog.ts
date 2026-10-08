@@ -1,5 +1,5 @@
 import type { ChapterDefinition, WorkoutDefinition } from '../domain/models';
-import type { ChapterProgram, ChapterSeed } from './chapter-program';
+import type { ChapterProgram, ChapterSeed, ChapterWeekContent } from './chapter-program';
 import { chapterOneProgram } from './chapter-one.program';
 import { chapterTwoProgram } from './chapter-two.program';
 
@@ -17,6 +17,12 @@ export function loadChapterSeed(chapterId: string): ChapterSeed | undefined {
 
 export function loadChapterProgram(chapterId: string): ChapterProgram | undefined {
   return chapterPrograms.find((program) => program.chapter.id === chapterId);
+}
+
+/** A campaign week's content by its number: Week 6 is Chapter II's second week. */
+export function getCampaignWeekContent(week: number): ChapterWeekContent | undefined {
+  const program = chapterPrograms.find((item) => item.chapter.weeks.includes(week));
+  return program?.weeks[week - program.chapter.weeks[0]];
 }
 
 /** A fresh definition can be snapped into history without exposing the seed to mutation. */

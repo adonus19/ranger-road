@@ -50,6 +50,10 @@ const ICONS = {
   'book-open': [
     { d: 'M12 6.6C10 5.1 7 4.6 3.4 4.9v13.6c3.6-.3 6.6.2 8.6 1.7 2-1.5 5-2 8.6-1.7V4.9C17 4.6 14 5.1 12 6.6Zm0 0v13.6', paint: 'stroke' },
   ],
+  compass: [
+    { d: 'M12 3.5a8.5 8.5 0 1 1 0 17 8.5 8.5 0 0 1 0-17Z', paint: 'stroke' },
+    { d: 'm15.4 8.6-2 5.4-5.4 2 2-5.4Z', paint: 'stroke' },
+  ],
   map: [{ d: 'm3.4 6.2 5.6-2.3 6 2.3 5.6-2.3v13.9L15 20.1l-6-2.3-5.6 2.3ZM9 3.9v13.9m6-11.6v13.9', paint: 'stroke' }],
   house: [{ d: 'M3.6 10.4 12 3.8l8.4 6.6v10.2h-5.6v-6.1H9.2v6.1H3.6Z', paint: 'stroke' }],
   /** A road running into the distance, with its center line. */

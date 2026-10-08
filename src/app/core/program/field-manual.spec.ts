@@ -25,10 +25,10 @@ const summary = (today: string, extra: Record<string, string> = {}) =>
   getFieldManualWeek({ startDate, today, ...extra }).rows.map((row) => [row.title, row.line]);
 
 describe('Field Manual content', () => {
-  it('has a lesson for each Chapter I week built on the documented principles', () => {
+  it('has a lesson for each week of Chapters I and II built on the documented principles', () => {
     const principles = new Set(listLeadershipPrinciples().map((principle) => principle.id));
     expect(principles.size).toBe(12);
-    expect(listLeadershipLessons().map((lesson) => lesson.week)).toEqual([1, 2, 3, 4]);
+    expect(listLeadershipLessons().map((lesson) => lesson.week)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
     for (const lesson of listLeadershipLessons()) {
       expect(lesson.principleIds.every((id) => principles.has(id))).toBe(true);
       expect(lesson.paragraphs.length).toBeGreaterThan(1);
@@ -112,6 +112,7 @@ describe('This week', () => {
     const cards = getFieldManualIndex().filter((entry) => entry.kind === 'card');
     expect(cards.map((entry) => [entry.name, entry.skill])).toEqual([
       ['Bowline', 'knot'],
+      ['Navigation I', 'navigation'],
       ['Square knot', 'knot'],
       ['Tool inspection', 'tool'],
       ['Two half hitches', 'knot'],
@@ -162,27 +163,87 @@ describe('This week', () => {
     ]);
     expect(trial.rows[1].fragment).toBe('gate-trial-attempts');
 
+    const gatePass = [{ trialId: 'gate-trial', date: '2026-11-05' }];
     const passed = getFieldManualWeek({
       startDate,
       today: '2026-11-06',
-      trialPassedOn: '2026-11-05',
-      chapterTwoStart: '2026-11-09',
+      completedTrials: gatePass,
     });
     expect(passed.heading).toBe('Gate Trial passed');
     expect(passed.subline).toBe('Chapter I · The Muster · Chapter II begins Mon, Nov 9');
     expect(passed.sessions.map((session) => session.id)).toEqual(['chapter-1-restoration']);
     expect(passed.rows.at(-1)?.title).toBe('Restoration');
+  });
+});
 
-    const complete = getFieldManualWeek({
-      startDate,
-      today: '2026-11-09',
-      trialPassedOn: '2026-11-05',
-      chapterTwoStart: '2026-11-09',
+describe('This week in Chapter II', () => {
+  // Gate Trial passed Thursday, Nov 5: Chapter II's Week 5 begins Monday, Nov 9.
+  const gatePass = [{ trialId: 'gate-trial', date: '2026-11-05' }];
+  const week = (today: string, trials = gatePass) =>
+    getFieldManualWeek({ startDate, today, completedTrials: trials });
+
+  it('lists Week 5’s lesson, Navigation I, the chapter’s book, Scripture and sessions', () => {
+    const five = week('2026-11-09');
+    expect(five.stage).toBe('week');
+    expect(five.chapter).toBe(2);
+    expect(five.heading).toBe('Week 5 · Be Still');
+    expect(five.subline).toBe('Chapter II · The Road');
+    expect(five.rows.map((row) => [row.title, row.line])).toEqual([
+      ['Stop hurrying', 'Leadership lesson · Read Monday, 3 minutes'],
+      ['Navigation I', 'Field card · learn it this month'],
+      ['The Ruthless Elimination of Hurry', 'Reading · Wednesday, 10 minutes'],
+      ['Psalm 46:1–11', 'Scripture today · six more this week'],
+      ['Forge and Restoration', 'Exercise guides · 22 movements this week'],
+    ]);
+    expect(five.rows[1]).toMatchObject({
+      link: ['/field-manual/cards', 'navigation-one'],
+      skill: 'navigation',
     });
-    expect(complete.stage).toBe('complete');
-    expect(complete.rows).toEqual([]);
+    expect(five.rows[3].fragment).toBe('week-5-day-1');
+    expect(five.sessions.map((session) => session.id)).toEqual([
+      'chapter-2-forge-a',
+      'chapter-2-forge-b',
+      'chapter-2-restoration',
+    ]);
   });
 
+  it('points Week 6 at Saturday’s field mission', () => {
+    expect(week('2026-11-16').rows[1].line).toBe('Field card · Saturday’s field mission');
+  });
+
+  it('reads the lesson on Chapter II’s first day when it begins on a Tuesday', () => {
+    const tuesday = week('2026-11-03', [{ trialId: 'gate-trial', date: '2026-11-02' }]);
+    expect(tuesday.heading).toBe('Week 5 · Be Still');
+    expect(tuesday.rows[0].line).toBe('Leadership lesson · Read Tuesday, 3 minutes');
+    expect(tuesday.rows.find((row) => row.kind === 'scripture')?.line).toBe(
+      'Scripture today · five more this week',
+    );
+  });
+
+  it('shows the Three-Mile Trial after Week 8, then Chapter II complete after a pass', () => {
+    const trial = week('2026-12-07');
+    expect(trial.stage).toBe('trial');
+    expect(trial.heading).toBe('The Three-Mile Trial');
+    expect(trial.rows.find((row) => row.kind === 'scripture')).toMatchObject({
+      title: 'Psalm 121',
+      fragment: 'three-mile-trial-attempts',
+    });
+    expect(trial.rows.some((row) => row.kind === 'fieldcraft')).toBe(false);
+    expect(trial.sessions.map((session) => session.id)).not.toContain('gate-circuit');
+
+    const trials = [...gatePass, { trialId: 'three-mile-trial', date: '2026-12-07' }];
+    expect(week('2026-12-07', trials).heading).toBe('Three-Mile Trial passed');
+    expect(week('2026-12-07', trials).subline).toBe(
+      'Chapter II · The Road · Chapter III begins Tue, Dec 8',
+    );
+    const complete = week('2026-12-08', trials);
+    expect(complete.stage).toBe('complete');
+    expect(complete.heading).toBe('Chapter II complete');
+    expect(complete.rows).toEqual([]);
+  });
+});
+
+describe('This week entries', () => {
   it('marks this week’s entries for the Index filter', () => {
     const week = getFieldManualWeek({ startDate, today: '2026-10-12' });
     const index = new Set(getFieldManualIndex().map((entry) => entry.id));
@@ -198,7 +259,7 @@ describe('Index and Scripture', () => {
     const index = getFieldManualIndex();
     expect(new Set(index.map((entry) => entry.id)).size).toBe(index.length);
     expect(index.filter((entry) => entry.kind === 'exercise')).toHaveLength(25);
-    expect(index.filter((entry) => entry.kind === 'book')).toHaveLength(11);
+    expect(index.filter((entry) => entry.kind === 'book')).toHaveLength(14);
     expect(index.find((entry) => entry.name === 'The Motive')?.letter).toBe('M');
     expect(index.find((entry) => entry.name === '1 Corinthians 9:24–27')?.letter).toBe('C');
     const keys = index.map((entry) => entry.sortKey);

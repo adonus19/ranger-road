@@ -21,7 +21,8 @@ export interface BookSuggestion {
  */
 export interface LeadershipLesson {
   id: string;
-  week: 1 | 2 | 3 | 4;
+  /** Campaign week: 1–4 for Chapter I, 5–8 for Chapter II. */
+  week: number;
   title: string;
   principleIds: readonly string[];
   scripture: readonly { reference: string; day: string }[];
@@ -40,18 +41,26 @@ export interface ReadingPlanEntry {
 
 export interface FieldCardSection {
   heading: string;
+  /** A sentence before the list, such as “Remember STOP:”. */
+  intro?: string;
+  /** Numbered steps rather than bullets. */
+  ordered?: boolean;
   items: readonly string[];
+  /** A sentence after the list. */
+  outro?: string;
 }
 
 /** A short card for one practical skill (READING_AND_FIELDCRAFT.md, Field Card Shape). */
 /** Which kind of practical skill a card teaches, so screens can pick a fitting pictogram. */
-export type FieldSkill = 'tool' | 'knot';
+export type FieldSkill = 'tool' | 'knot' | 'navigation';
 
 export interface FieldCard {
   id: string;
   title: string;
   skill: FieldSkill;
   week: number;
+  /** The last week a card spans, when it is learned across several weeks. */
+  lastWeek?: number;
   /** When the week's orders call for it. */
   when: string;
   summary: string;
@@ -272,6 +281,98 @@ const lessons: readonly LeadershipLesson[] = [
       note: 'On slowing down enough to be present. It leads into Chapter II.',
     },
   },
+  {
+    id: 'stop-hurrying',
+    week: 5,
+    title: 'Stop hurrying',
+    principleIds: ['stable-under-fatigue', 'lead-yourself-first'],
+    scripture: [
+      { reference: 'Psalm 46:1–11', day: 'Monday' },
+      { reference: 'Luke 10:38–42', day: 'Thursday' },
+    ],
+    paragraphs: [
+      'Chapter II builds the engine with longer walks and steadier breathing. It also asks you to slow down.',
+      'Psalm 46 says, “Be still, and know that I am God.” On Thursday you read about Martha, busy with much serving, and Mary, sitting at Jesus’ feet and listening. Jesus tells Martha she is anxious and troubled about many things.',
+      'Hurry makes you a poor listener. When you’re rushing, the people around you turn into interruptions. A child’s question or a spouse’s long story feels like something in the way.',
+      'Start with yourself. Read for ten minutes three times this week, with the phone in another room. Notice how long it takes before the urge to check something fades. That urge is hurry, and sitting through it is practice for listening.',
+      'Then take hurry off the family. Sunday is the day for rest and worship, and it often starts with the most rushing of the week. On Saturday night, set out clothes, decide breakfast and pick a time to leave that gives everyone room. Carry those details yourself, so on Sunday morning no one has to be hurried out the door.',
+    ],
+    fromReading:
+      'If you’ve finished Habits of the Household, begin The Ruthless Elimination of Hurry by John Mark Comer. If not, keep going; there’s no deadline. Comer builds the book around one piece of advice from Dallas Willard: ruthlessly eliminate hurry from your life. Notice where you agree with him and where you push back.',
+    forLater: {
+      title: 'Celebration of Discipline',
+      author: 'Richard J. Foster',
+      note: 'A classic on the spiritual disciplines, including solitude and simplicity.',
+    },
+  },
+  {
+    id: 'hear-the-whole-thing',
+    week: 6,
+    title: 'Hear the whole thing',
+    principleIds: ['listen-before-solving', 'model-what-you-ask'],
+    scripture: [
+      { reference: 'James 1:19–20', day: 'Monday' },
+      { reference: 'Proverbs 18:2, 13', day: 'Tuesday' },
+    ],
+    paragraphs: [
+      'James puts it plainly: be quick to hear, slow to speak, slow to anger. Proverbs is sharper. Answering before you’ve heard the whole thing is folly.',
+      'Most of us listen with a reply half-built. We catch the problem in the first sentence and start fixing it before the other person has finished, and they come away feeling unheard.',
+      'The Hearth mission slows that down. Ask your spouse how she is doing, and mean the question. Then, before you offer anything, ask what she wants from you: someone to listen, someone to think it through with, or someone to act. Do what she asks, even if a solution is on the tip of your tongue.',
+      'The same goes for your daughter. If you want your family to listen to you, they need to see you listen first.',
+    ],
+    fromReading:
+      'As you read, notice how hurry shows up in conversations, such as finishing someone’s sentence or checking the time while they talk.',
+    forLater: {
+      title: 'The Lost Art of Listening',
+      author: 'Michael P. Nichols',
+      note: 'A family therapist on why listening breaks down and how to repair it.',
+    },
+  },
+  {
+    id: 'be-where-you-are',
+    week: 7,
+    title: 'Be where you are',
+    principleIds: ['protect-family-time', 'teach-without-humiliating'],
+    scripture: [
+      { reference: 'Deuteronomy 6:4–9', day: 'Monday' },
+      { reference: 'Mark 10:13–16', day: 'Saturday' },
+    ],
+    paragraphs: [
+      'Deuteronomy 6 tells parents to talk about God’s words “when you sit in your house, and when you walk by the way, and when you lie down, and when you rise.” Faith gets passed on in ordinary hours like these, and you can spend all of them in the room without paying attention.',
+      'In Mark 10 the disciples try to keep the children away, as if Jesus had more important things to do. He takes the children in his arms and blesses them.',
+      'The Hearth mission is one full hour at home with your phone put away, in another room if you can. Let the hour be ordinary. Play what your daughter wants to play, or help with dinner. If she asks for help with something, show her once, calmly, and hand it back.',
+      'Watch for the moment you want to reach for the phone. Then stay where you are.',
+    ],
+    fromReading:
+      'Look for one habit or practice in the book that would protect an hour like this every week.',
+    forLater: {
+      title: 'The Tech-Wise Family',
+      author: 'Andy Crouch',
+      note: 'On putting technology in its proper place in family life.',
+    },
+  },
+  {
+    id: 'keep-showing-up',
+    week: 8,
+    title: 'Keep showing up',
+    principleIds: ['keep-promises', 'own-responsibilities'],
+    scripture: [
+      { reference: 'Micah 6:8', day: 'Monday' },
+      { reference: 'Hebrews 10:23–25', day: 'Friday' },
+    ],
+    paragraphs: [
+      'Chapter II closes this week. Training eases off so you come to the Three-Mile Trial rested. On Saturday you choose the route, set out the carry weight, and find your stairs.',
+      'Hebrews 10:23 says to hold fast “without wavering, for he who promised is faithful.” Most faithfulness is unremarkable: the walk you took on a gray Tuesday, the reading you did when you’d rather have scrolled, the question you asked your spouse before waiting for the whole answer.',
+      'The trial ends with a leadership question: when someone in your family speaks, do they experience you as attentive? Your spouse knows the answer better than you do, so the Hearth mission starts by asking. Take what you hear without arguing. It’s the most honest material you’ll have for Monday’s reflection.',
+      'Hebrews goes on to say “let us consider how to stir up one another to love and good works.” Faithfulness runs both ways in a family. Tell your spouse and your daughter what you’ve seen them keep doing this month, and be specific. On Saturday, let your daughter help you get ready for the trial, and ask the family to pray for you. Then choose one thing from this chapter to keep, and give it a place on the calendar so it lasts past Week 8.',
+    ],
+    fromReading: 'Pick one practice from the book to keep after this chapter ends.',
+    forLater: {
+      title: 'Just Do Something',
+      author: 'Kevin DeYoung',
+      note: 'On making decisions and seeking God’s will without freezing. It leads into Chapter III.',
+    },
+  },
 ];
 
 const readingPlan: readonly ReadingPlanEntry[] = [
@@ -487,6 +588,113 @@ const fieldCards: readonly FieldCard[] = [
     },
     relatedSkills: ['Square knot', 'Bowline'],
   },
+  {
+    id: 'navigation-one',
+    title: 'Navigation I',
+    skill: 'navigation',
+    week: 5,
+    lastWeek: 8,
+    when: 'Weeks 5–8: learn it across the month. Week 6: Saturday’s field mission and daughter quest.',
+    summary:
+      'Find your way on a marked trail with a map, the sun and your own pace before you reach for GPS. Keep your phone charged and with you as a backup.',
+    sections: [
+      {
+        heading: 'Before you go',
+        items: [
+          'Tell someone where you’re going, which trail, when you’ll be back and where you’ll park.',
+          'Carry water, a charged phone and, if you might finish near dusk, a light.',
+          'Your phone’s GPS usually works without cell signal, but the map may not load. Download the area’s map before you leave.',
+        ],
+      },
+      {
+        heading: 'Directions',
+        items: [
+          'The sun rises in the east and sets in the west. It’s exactly east and west only around the spring and fall equinoxes. In fall and winter it rises and sets toward the south, and in summer toward the north.',
+          'In the Northern Hemisphere, the midday sun is to the south.',
+          'A compass needle points to magnetic north, which can differ from the map’s north by a few degrees or more depending on where you live. On a marked trail that difference won’t lead you astray. Navigation II covers it.',
+          'Practice at home: stand in your yard, point north, then check with a compass or your phone’s compass app.',
+        ],
+      },
+      {
+        heading: 'Trail maps',
+        items: [
+          'Find the legend, the scale bar and the north arrow first. Most maps put north at the top, but check.',
+          'Match each trail’s name, number or color on the map to the blazes or signs on the ground.',
+          'Many maps mark the distance between junctions. Add them up to get your route’s length.',
+          'Find the trailhead, the parking and every junction you’ll pass.',
+          'Turn the map so its north points north. Then the trail on the map runs the same way as the trail in front of you. This is called orienting the map.',
+          'The lines that show hills and valleys come in Navigation II.',
+        ],
+      },
+      {
+        heading: 'Trail blazes',
+        items: [
+          'Blazes are painted marks, usually on trees, posts or rocks, that show the trail continues. On the Appalachian Trail they are white rectangles about 2 inches wide and 6 inches high. Other trails use other colors and shapes.',
+          'One blaze means keep going.',
+          'Two blazes, one above the other, mean pay attention: a turn, a junction or a change in route. On some trails the top blaze is offset toward the direction of the turn.',
+          'Side trails often use a different color. Check the trailhead sign or map for what each color means.',
+          'If you’ve gone a few hundred yards without seeing a blaze, stop. Go back until you find one, then look for a turn you missed.',
+        ],
+      },
+      {
+        heading: 'Distance',
+        items: [
+          'Count paces. A pace is two steps: count each time your right foot lands.',
+          'Measure yours once. Walk one lap of a 400-meter track in the inside lane, which is about a quarter mile, and count paces. Multiply by four for your paces per mile. Most adults land somewhere around 1,000 to 1,300 on flat ground.',
+          'Use time too. Your logged walks tell you your minutes per mile. Hills, roots and rocks slow you down, and so does fatigue on the way back.',
+        ],
+      },
+      {
+        heading: 'Landmarks',
+        items: [
+          'Choose landmarks that won’t change: a junction sign, a bridge, a stream crossing, a power line or a distinctive rock.',
+          'Don’t count on things that move or change, like a parked vehicle or a pile of cut logs.',
+          'A stream, fence or road that runs beside your route is a handrail. Follow it and you stay on course.',
+          'Pick something that tells you you’ve gone too far, such as “If I reach the road, I’ve passed the turn.”',
+        ],
+      },
+      {
+        heading: 'Turnaround points',
+        items: [
+          'Decide before you start where you’ll turn around and by what time. Turn at whichever comes first.',
+          'Leave more time for the way back than the way out. You’ll be more tired, and the return may climb.',
+          'Plan to be back before dark.',
+          'Also turn around if the weather turns, if you lose the trail, or if pain changes how you move.',
+        ],
+      },
+      {
+        heading: 'If you’re unsure where you are',
+        intro: 'Remember STOP:',
+        items: [
+          'Stop: stay calm and stay put.',
+          'Think: go back over how you got here. Where was the last blaze or landmark you’re sure of?',
+          'Observe: find north, and look at the map and your surroundings.',
+          'Plan: come up with a plan, often going back to the last place you were sure of.',
+        ],
+        outro:
+          'If you aren’t confident of the way, stay where you are and call for help. Staying put makes you easier to find. Stay in place if it’s getting dark, or if you’re hurt or near exhaustion.',
+      },
+      {
+        heading: 'Field mission (Week 6 Saturday)',
+        intro: 'Before the walk, study the trail map and write down four predictions:',
+        ordered: true,
+        items: [
+          'The direction you’ll head from the trailhead.',
+          'One landmark you’ll pass.',
+          'The distance to your first turn.',
+          'Where the start will be from your farthest point: point toward it before you look.',
+        ],
+        outro: 'Afterward, check each one. What did you get right, and what was off?',
+      },
+      {
+        heading: 'Daughter quest (Week 6 Saturday)',
+        intro:
+          'On the same walk, let your daughter lead along one simple marked stretch, such as between two junctions. She watches for the blazes and says which way to go at the junction. Stay right beside her. If she misses a turn, let her notice, then show her once and let her find the next one.',
+        items: [],
+      },
+    ],
+    relatedSkills: ['Navigation II (Chapter III)'],
+  },
 ];
 
 const weeklyFieldcraft: readonly WeeklyFieldcraft[] = [
@@ -508,10 +716,24 @@ const weeklyFieldcraft: readonly WeeklyFieldcraft[] = [
     equipment: 'a 6-foot piece of rope about 3/8 inch thick',
     safety: 'None of these knots is for climbing or for lifting people.',
   },
+  // Navigation I is learned across Chapter II; Week 6's Saturday walk carries its field mission.
+  ...[5, 6, 7, 8].map((week): WeeklyFieldcraft => ({
+    week,
+    title: 'Navigation I',
+    skill: 'navigation',
+    days: week === 6 ? 'Saturday’s field mission' : 'learn it this month',
+    cardIds: ['navigation-one'],
+  })),
 ];
 
 /** Books the weekly lessons suggest that are not on the reading plan. */
-export const EXTRA_BOOK_SUGGESTIONS: readonly string[] = ['The Common Rule', 'Extreme Ownership'];
+export const EXTRA_BOOK_SUGGESTIONS: readonly string[] = [
+  'The Common Rule',
+  'Extreme Ownership',
+  'Celebration of Discipline',
+  'The Lost Art of Listening',
+  'The Tech-Wise Family',
+];
 
 export function listLeadershipPrinciples(): LeadershipPrinciple[] {
   return structuredClone([...principles]);

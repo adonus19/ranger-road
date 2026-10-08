@@ -244,3 +244,8 @@ export function getHearthMission(day: ChapterDay): string {
   const week = getWeekContent(day);
   return week.hearthMission ?? week.leadershipMission ?? day.program.leadership[0] ?? '';
 }
+
+/** The parts of a Hearth mission written in several steps, such as Week 8's. */
+export function getHearthMissionParts(day: ChapterDay): readonly { label: string; text: string }[] {
+  return getWeekContent(day).hearthMissionParts ?? [];
+}

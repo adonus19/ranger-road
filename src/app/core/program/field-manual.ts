@@ -1,13 +1,11 @@
 import type { LocalDate, WorkoutDefinition } from '../domain/models';
-import { addDays, getChapterOneSchedule, getWeekday } from './campaign';
+import { addDays, getWeekday } from './campaign';
+import { resolveCampaignPosition, type ChapterDay, type TrialRecord } from './campaign-position';
 import { gateTrialDefinition } from './chapter-one-trial.seed';
-import { chapterOneDefinition, type Weekday } from './chapter-one.seed';
-import {
-  chapterOneDailySeed,
-  chapterOneGateTrialAttempt,
-  getChapterOneDayContent,
-  getChapterOneWeekContent,
-} from './chapter-one-daily.seed';
+import type { Weekday } from './chapter-one.seed';
+import { chapterOneDailySeed, chapterOneGateTrialAttempt } from './chapter-one-daily.seed';
+import { getDayContent, getWeekContent } from './chapter-orders';
+import type { ChapterProgram } from './chapter-program';
 import { listExerciseGuides } from './exercise-guides';
 import { chapterOneForgeA, chapterOneForgeB, chapterOneRestoration } from './chapter-one-workouts';
 import {
@@ -20,6 +18,12 @@ import {
   listReadingPlan,
   type FieldSkill,
 } from './field-manual.seed';
+
+const SKILL_KEYWORDS: Record<FieldSkill, string> = {
+  tool: 'tools axe maul pickaxe edge',
+  knot: 'knot rope',
+  navigation: 'navigation map compass trail blaze direction',
+};
 
 export const WEEKDAY_NAMES = [
   'Monday',
@@ -46,8 +50,8 @@ export interface FieldManualRow {
   skill?: FieldSkill;
 }
 
-export type FieldManualSessionId =
-  'chapter-1-forge-a' | 'chapter-1-forge-b' | 'gate-circuit' | 'chapter-1-restoration';
+/** A workout's ID, such as `chapter-2-forge-a`, or `gate-circuit` for the Gate Trial's circuit. */
+export type FieldManualSessionId = string;
 
 export interface FieldManualSession {
   id: FieldManualSessionId;
@@ -59,11 +63,15 @@ export interface FieldManualSession {
 
 export interface FieldManualWeek {
   /**
-   * `ahead` before Day 1 (or before one is chosen), `week` for the lead-in and Weeks 1–4,
-   * `trial` after Week 4 while Chapter I continues, `complete` once Chapter II has begun.
+   * `ahead` before Day 1 (or before one is chosen), `week` for a lead-in or a chapter's weeks,
+   * `trial` after the chapter's last week while its trial waits, and `complete` once the last
+   * chapter in the app is passed and the next chapter's first day arrives.
    */
   stage: 'ahead' | 'week' | 'trial' | 'complete';
-  contentWeek: 1 | 2 | 3 | 4;
+  /** The chapter's number: 1 for Chapter I. */
+  chapter: number;
+  /** The campaign week whose content applies: 1–4 in Chapter I, 5–8 in Chapter II. */
+  contentWeek: number;
   heading: string;
   subline: string;
   rows: FieldManualRow[];
@@ -77,15 +85,13 @@ export interface FieldManualWeek {
 export interface FieldManualWeekInput {
   startDate?: LocalDate;
   today: LocalDate;
-  trialPassedOn?: LocalDate;
-  chapterTwoStart?: LocalDate;
+  /** Completed trial results: they place each date in its chapter. */
+  completedTrials?: readonly TrialRecord[];
 }
 
 interface WeekDay {
   date: LocalDate;
-  weekday: Weekday;
-  contentWeek: 1 | 2 | 3 | 4;
-  attemptDay: boolean;
+  day: ChapterDay;
 }
 
 export function joinWords(words: readonly string[]): string {
@@ -102,37 +108,36 @@ function mondayOf(date: LocalDate): LocalDate {
   return addDays(date, 1 - getWeekday(date));
 }
 
+function weekdayName(day: WeekDay): string {
+  return WEEKDAY_NAMES[day.day.weekday - 1];
+}
+
 /**
- * The days of the week a date belongs to, clipped to Chapter I: the lead-in runs from Day 1
- * through Sunday, and full weeks run Monday through Sunday. Before Day 1, the first week.
+ * The Monday–Sunday week a date belongs to, clipped to that date's chapter: Chapter I's lead-in
+ * starts on Day 1, and a chapter that begins on a Tuesday after a Monday pass starts there.
  */
-function weekDays(startDate: LocalDate, today: LocalDate): WeekDay[] {
-  const anchor = today < startDate ? startDate : today;
+function weekDays(
+  startDate: LocalDate,
+  anchor: LocalDate,
+  trials: readonly TrialRecord[],
+): WeekDay[] {
+  const chapterId = resolveCampaignPosition(startDate, anchor, trials)?.chapter.program.chapter.id;
   const monday = mondayOf(anchor);
   const days: WeekDay[] = [];
   for (let offset = 0; offset < 7; offset += 1) {
     const date = addDays(monday, offset);
-    const schedule = getChapterOneSchedule(startDate, date);
-    if (!schedule) continue;
-    days.push({
-      date,
-      weekday: schedule.weekday,
-      contentWeek: schedule.contentWeek,
-      attemptDay: schedule.attemptDay,
-    });
+    const day = resolveCampaignPosition(startDate, date, trials)?.chapter;
+    if (day && day.program.chapter.id === chapterId) days.push({ date, day });
   }
   return days;
 }
 
 function readingDays(days: readonly WeekDay[]): { names: string[]; minutes: number } {
   const reading = days
-    .map((day) => ({
-      day,
-      content: getChapterOneDayContent(day.contentWeek, day.weekday, day.attemptDay),
-    }))
+    .map((day) => ({ day, content: getDayContent(day.day) }))
     .filter(({ content }) => content.readingMinutes);
   return {
-    names: reading.map(({ day }) => WEEKDAY_NAMES[day.weekday - 1]),
+    names: reading.map(({ day }) => weekdayName(day)),
     minutes: reading[0]?.content.readingMinutes ?? 0,
   };
 }
@@ -146,48 +151,47 @@ function exerciseIds(workout: WorkoutDefinition): { warmup: string[]; exercises:
   };
 }
 
-const gateCircuitIds =
-  gateTrialDefinition.phases
-    .find((phase) => phase.circuit)
-    ?.circuit?.movements.map((movement) => movement.exerciseId) ?? [];
+/** The Gate Trial's circuit keeps its own guides; the Three-Mile Trial has no circuit. */
+const GATE_CIRCUIT_ID = 'gate-circuit';
 
-const SESSION_WORKOUTS: Partial<Record<FieldManualSessionId, WorkoutDefinition>> = {
-  'chapter-1-forge-a': chapterOneForgeA,
-  'chapter-1-forge-b': chapterOneForgeB,
-  'chapter-1-restoration': chapterOneRestoration,
-};
+function trialCircuitIds(program: ChapterProgram): string[] {
+  return (
+    program.trial.phases
+      .find((phase) => phase.circuit)
+      ?.circuit?.movements.map((movement) => movement.exerciseId) ?? []
+  );
+}
 
-function isWorkoutSession(id: string | undefined): id is FieldManualSessionId {
-  return !!id && id in SESSION_WORKOUTS;
+/** The workout session a day's order calls for, if any. */
+function sessionIdFor(day: ChapterDay): string | undefined {
+  const program = day.program;
+  if (day.attemptDay) return trialCircuitIds(program).length ? GATE_CIRCUIT_ID : undefined;
+  const activity = getDayContent(day).activity;
+  if (activity.definitionId && program.workouts.some((w) => w.id === activity.definitionId)) {
+    return activity.definitionId;
+  }
+  // Chapter I's Friday easier option, and easy mobility or recovery, use the Restoration routine.
+  const restoration =
+    activity.missionType === 'restoration' ||
+    activity.alternatives?.some((alternative) =>
+      alternative.contentReferences.includes(program.restorationId),
+    );
+  return restoration ? program.restorationId : undefined;
 }
 
 /** The sessions a week's days call for, in training order, with the days they fall on. */
-function sessionsForDays(days: readonly WeekDay[]): FieldManualSession[] {
-  const used = new Map<FieldManualSessionId, string[]>();
-  const add = (id: FieldManualSessionId, day: WeekDay) => {
-    const names = used.get(id) ?? [];
-    names.push(WEEKDAY_NAMES[day.weekday - 1]);
-    used.set(id, names);
-  };
+function sessionsForDays(program: ChapterProgram, days: readonly WeekDay[]): FieldManualSession[] {
+  const used = new Map<string, string[]>();
   for (const day of days) {
-    const definitionId = getChapterOneDayContent(day.contentWeek, day.weekday, day.attemptDay)
-      .activity.definitionId;
-    if (day.attemptDay) add('gate-circuit', day);
-    else if (isWorkoutSession(definitionId)) add(definitionId, day);
-    // Friday's easier option (and Week 4's easy mobility) uses the Restoration routine.
-    else if (day.weekday === 5) add('chapter-1-restoration', day);
+    const id = sessionIdFor(day.day);
+    if (id) used.set(id, [...(used.get(id) ?? []), weekdayName(day)]);
   }
-
-  const order: readonly FieldManualSessionId[] = [
-    'chapter-1-forge-a',
-    'chapter-1-forge-b',
-    'gate-circuit',
-    'chapter-1-restoration',
-  ];
+  const [forgeA, forgeB] = program.workouts;
+  const order = [forgeA?.id, forgeB?.id, GATE_CIRCUIT_ID, program.restorationId];
   return order.flatMap((id): FieldManualSession[] => {
-    const names = used.get(id);
-    if (!names) return [];
-    const workout = SESSION_WORKOUTS[id];
+    const names = id ? used.get(id) : undefined;
+    if (!id || !names) return [];
+    const workout = program.workouts.find((item) => item.id === id);
     return [
       workout
         ? { id, title: workout.title, days: joinWords(names), ...exerciseIds(workout) }
@@ -196,20 +200,23 @@ function sessionsForDays(days: readonly WeekDay[]): FieldManualSession[] {
             title: 'Gate Circuit',
             days: joinWords(names),
             warmup: [],
-            exercises: gateCircuitIds,
+            exercises: trialCircuitIds(program),
           },
     ];
   });
 }
 
-function sessionsTitle(sessions: readonly FieldManualSession[]): string {
+function sessionsTitle(program: ChapterProgram, sessions: readonly FieldManualSession[]): string {
   const ids = sessions.map((session) => session.id);
+  const [forgeA, forgeB] = program.workouts;
   const names: string[] = [];
-  if (ids.includes('chapter-1-forge-a') && ids.includes('chapter-1-forge-b')) names.push('Forge');
-  else if (ids.includes('chapter-1-forge-a')) names.push('Forge A');
-  else if (ids.includes('chapter-1-forge-b')) names.push('Forge B');
-  if (ids.includes('gate-circuit')) names.push('Gate Circuit');
-  if (ids.includes('chapter-1-restoration')) names.push('Restoration');
+  const hasA = !!forgeA && ids.includes(forgeA.id);
+  const hasB = !!forgeB && ids.includes(forgeB.id);
+  if (hasA && hasB) names.push('Forge');
+  else if (hasA) names.push('Forge A');
+  else if (hasB) names.push('Forge B');
+  if (ids.includes(GATE_CIRCUIT_ID)) names.push('Gate Circuit');
+  if (ids.includes(program.restorationId)) names.push('Restoration');
   return joinWords(names);
 }
 
@@ -217,11 +224,27 @@ export function uniqueExerciseIds(sessions: readonly FieldManualSession[]): stri
   return [...new Set(sessions.flatMap((session) => [...session.warmup, ...session.exercises]))];
 }
 
-function lessonLine(stage: FieldManualWeek['stage'], days: readonly WeekDay[]): string {
-  if (stage === 'trial') return 'Leadership lesson · Week 4, 3 minutes';
-  return days[0]?.weekday === 1
-    ? 'Leadership lesson · Read Monday, 3 minutes'
-    : 'Leadership lesson · Read on Day 1, 3 minutes';
+function lessonLine(
+  stage: FieldManualWeek['stage'],
+  contentWeek: number,
+  days: readonly WeekDay[],
+  startDate: LocalDate,
+): string {
+  if (stage === 'trial') return `Leadership lesson · Week ${contentWeek}, 3 minutes`;
+  const first = days[0];
+  // A midweek Day 1 reads Week 1's lesson on Day 1; a later chapter reads it on its first day.
+  const when =
+    !first || first.day.weekday === 1
+      ? 'Monday'
+      : first.date === startDate
+        ? 'on Day 1'
+        : weekdayName(first);
+  return `Leadership lesson · Read ${when}, 3 minutes`;
+}
+
+/** Where a trial's attempt-day Scripture sits on the Scripture page. */
+export function trialAttemptsFragment(trialId: string): string {
+  return `${trialId}-attempts`;
 }
 
 function scriptureRow(
@@ -230,13 +253,8 @@ function scriptureRow(
   today: LocalDate,
 ): FieldManualRow | undefined {
   const index = stage === 'ahead' ? 0 : days.findIndex((day) => day.date === today);
-  const day = days[index];
+  const day = days[index]?.day;
   if (!day) return undefined;
-  const reference = getChapterOneDayContent(
-    day.contentWeek,
-    day.weekday,
-    day.attemptDay,
-  ).scriptureReference;
   const remaining = days.length - index - 1;
   const line =
     stage === 'ahead'
@@ -246,10 +264,12 @@ function scriptureRow(
         : 'Scripture today · the last of this week';
   return {
     kind: 'scripture',
-    title: reference,
+    title: getDayContent(day).scriptureReference,
     line,
     link: ['/field-manual/scripture'],
-    fragment: day.attemptDay ? 'gate-trial-attempts' : scriptureDayId(day.contentWeek, day.weekday),
+    fragment: day.attemptDay
+      ? trialAttemptsFragment(day.program.trial.id)
+      : scriptureDayId(day.contentWeek, day.weekday),
   };
 }
 
@@ -260,14 +280,25 @@ export function scriptureDayId(week: number, weekday: Weekday): string {
 
 /** What the Field Manual's This week view lists for a date. */
 export function getFieldManualWeek(input: FieldManualWeekInput): FieldManualWeek {
-  const { startDate, today, trialPassedOn, chapterTwoStart } = input;
-  const chapterLine = `Chapter I · ${chapterOneDefinition.name}`;
-  if (startDate && chapterTwoStart && today >= chapterTwoStart) {
+  const { startDate, today } = input;
+  const trials = input.completedTrials ?? [];
+  // Without a campaign, show the first full week as the week ahead.
+  const start = startDate ?? mondayOf(today);
+  const ahead = !startDate || today < start;
+  const anchor = ahead ? start : today;
+  const position = resolveCampaignPosition(start, anchor, ahead ? [] : trials)!;
+  const chapter = position.chapter;
+  const program = chapter.program;
+  const number = program.chapter.number;
+  const chapterLine = `Chapter ${chapterNumeral(number)} · ${program.chapter.name}`;
+
+  if (!ahead && position.awaitingNextChapter) {
     return {
       stage: 'complete',
-      contentWeek: 4,
-      heading: 'Chapter I complete',
-      subline: 'Chapter II’s pages will appear here once they are added.',
+      chapter: number,
+      contentWeek: chapter.contentWeek,
+      heading: `Chapter ${chapterNumeral(number)} complete`,
+      subline: `Chapter ${chapterNumeral(number + 1)}’s pages will appear here once they are added.`,
       rows: [],
       sessions: [],
       readingDays: [],
@@ -275,28 +306,23 @@ export function getFieldManualWeek(input: FieldManualWeekInput): FieldManualWeek
     };
   }
 
-  // Without a campaign, show the first full week as the week ahead.
-  const start = startDate ?? mondayOf(today);
-  const ahead = !startDate || today < start;
-  const days = weekDays(start, ahead ? start : today);
-  const first = days[0];
-  const afterTarget = !ahead && !!getChapterOneSchedule(start, today)?.afterTarget;
+  const days = weekDays(start, anchor, ahead ? [] : trials);
+  const afterTarget = !ahead && chapter.afterLastWeek;
   const stage: FieldManualWeek['stage'] = ahead ? 'ahead' : afterTarget ? 'trial' : 'week';
-  const contentWeek = afterTarget ? 4 : (first?.contentWeek ?? 1);
-  const schedule = getChapterOneSchedule(start, ahead ? start : today);
-  const leadIn = schedule?.week === 0;
-  const weekName = getChapterOneWeekContent(contentWeek).name;
+  const contentWeek = chapter.contentWeek;
+  const weekName = getWeekContent(chapter).name;
+  const pass = chapter.pass;
 
   const heading = ahead
     ? `Week ahead · ${weekName}`
     : afterTarget
-      ? trialPassedOn
-        ? 'Gate Trial passed'
-        : 'The Gate Trial'
-      : `${leadIn ? 'Lead-in' : `Week ${contentWeek}`} · ${weekName}`;
+      ? pass
+        ? `${program.trialName} passed`
+        : `The ${program.trialName}`
+      : `${chapter.leadIn ? 'Lead-in' : `Week ${contentWeek}`} · ${weekName}`;
   const subline =
-    afterTarget && trialPassedOn && chapterTwoStart
-      ? `${chapterLine} · Chapter II begins ${shortDate(chapterTwoStart)}`
+    afterTarget && pass && chapter.nextStart
+      ? `${chapterLine} · Chapter ${chapterNumeral(number + 1)} begins ${shortDate(chapter.nextStart)}`
       : chapterLine;
 
   const rows: FieldManualRow[] = [];
@@ -306,7 +332,7 @@ export function getFieldManualWeek(input: FieldManualWeekInput): FieldManualWeek
     rows.push({
       kind: 'lesson',
       title: lesson.title,
-      line: lessonLine(stage, days),
+      line: lessonLine(stage, contentWeek, days, start),
       link: ['/field-manual/lessons', lesson.id],
     });
     entryIds.push(`lesson-${lesson.id}`, ...lesson.principleIds.map((id) => `principle-${id}`));
@@ -330,7 +356,7 @@ export function getFieldManualWeek(input: FieldManualWeekInput): FieldManualWeek
   }
 
   const reading = readingDays(days);
-  const book = listReadingPlan()[0];
+  const book = listReadingPlan().find((entry) => entry.chapter === number);
   if (reading.names.length && book) {
     rows.push({
       kind: 'reading',
@@ -345,21 +371,19 @@ export function getFieldManualWeek(input: FieldManualWeekInput): FieldManualWeek
   if (scripture) {
     rows.push(scripture);
     for (const day of days) {
-      const reference = getChapterOneDayContent(
-        day.contentWeek,
-        day.weekday,
-        day.attemptDay,
-      ).scriptureReference;
-      entryIds.push(`scripture-${slug(reference)}`);
+      entryIds.push(`scripture-${slug(getDayContent(day.day).scriptureReference)}`);
     }
   }
 
-  const sessions = sessionsForDays(trialPassedOn ? days.filter((day) => !day.attemptDay) : days);
+  const sessions = sessionsForDays(
+    program,
+    pass ? days.filter((day) => !day.day.attemptDay) : days,
+  );
   if (sessions.length) {
     const count = uniqueExerciseIds(sessions).length;
     rows.push({
       kind: 'exercises',
-      title: sessionsTitle(sessions),
+      title: sessionsTitle(program, sessions),
       line: `Exercise guides · ${count} movements ${stage === 'ahead' ? 'that week' : 'this week'}`,
       link: ['/field-manual/exercises'],
     });
@@ -368,6 +392,7 @@ export function getFieldManualWeek(input: FieldManualWeekInput): FieldManualWeek
 
   return {
     stage,
+    chapter: number,
     contentWeek,
     heading,
     subline,
@@ -614,10 +639,10 @@ export function getFieldManualIndex(): FieldManualEntry[] {
         `card-${card.id}`,
         'card',
         card.title,
-        `Field card · Week ${card.week}`,
+        `Field card · ${card.lastWeek ? `Weeks ${card.week}–${card.lastWeek}` : `Week ${card.week}`}`,
         ['/field-manual/cards', card.id],
         undefined,
-        `${card.summary} ${card.skill === 'knot' ? 'knot rope' : 'tools axe maul pickaxe edge'}`,
+        `${card.summary} ${SKILL_KEYWORDS[card.skill]}`,
       ),
       skill: card.skill,
     });

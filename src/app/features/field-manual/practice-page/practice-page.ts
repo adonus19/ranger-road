@@ -5,10 +5,12 @@ import {
   getFieldCard,
   getWeeklyFieldcraft,
   type FieldCard,
+  type FieldSkill,
 } from '../../../core/program/field-manual.seed';
-import { Icon } from '../../../shared/icon/icon';
+import { Icon, type IconName } from '../../../shared/icon/icon';
 import { FieldManualWeekState } from '../field-manual-week-state';
 import { ManualBackLink } from '../manual-back-link';
+import { SKILL_ICONS } from '../skill-icons';
 
 /** A week's fieldcraft practice when it covers several cards, such as Week 3's knots. */
 @Component({
@@ -41,6 +43,10 @@ export class PracticePage implements OnInit {
   protected readonly currentLabel = computed(() =>
     this.weekState.week().stage === 'ahead' ? 'Week ahead' : 'This week',
   );
+
+  protected skillIcon(skill: FieldSkill): IconName {
+    return SKILL_ICONS[skill];
+  }
 
   ngOnInit(): void {
     void this.weekState.load();

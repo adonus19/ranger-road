@@ -111,7 +111,15 @@
             <app-icon class="hearth__icon" name="hearth" />
             <div class="hearth__text">
               <h2 class="order-label" id="hearth-title">Hearth mission</h2>
-              <p class="hearth__mission">{{ hearthMission() }}</p>
+              @if (hearthParts().length) {
+                <ol class="hearth__parts">
+                  @for (part of hearthParts(); track $index) {
+                    <li>{{ part.label }}</li>
+                  }
+                </ol>
+              } @else {
+                <p class="hearth__mission">{{ hearthMission() }}</p>
+              }
               @if (progress.isDone('hearth')) {
                 <app-done-mark class="order-mark" [done]="true" />
               }
@@ -124,7 +132,15 @@
             <app-icon class="hearth__icon" name="hearth" />
             <div class="hearth__text">
               <h2 class="order-label" id="hearth-title">Hearth mission</h2>
-              <p>{{ hearthMission() }}</p>
+              @if (hearthParts().length) {
+                <ol class="hearth__parts">
+                  @for (part of hearthParts(); track $index) {
+                    <li>{{ part.label }}</li>
+                  }
+                </ol>
+              } @else {
+                <p>{{ hearthMission() }}</p>
+              }
               @if (progress.isDone('hearth')) {
                 <app-done-mark class="order-mark" [done]="true" />
               }

@@ -1,8 +1,8 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { getChapterOneWeekContent } from '../../../core/program/chapter-one-daily.seed';
 import { slug } from '../../../core/program/field-manual';
+import { getCampaignWeekContent } from '../../../core/program/program-catalog';
 import {
   getLeadershipLesson,
   getLeadershipPrinciple,
@@ -28,7 +28,13 @@ export class LessonPage implements OnInit {
 
   protected readonly weekContent = computed(() => {
     const lesson = this.lesson();
-    return lesson ? getChapterOneWeekContent(lesson.week) : undefined;
+    return lesson ? getCampaignWeekContent(lesson.week) : undefined;
+  });
+
+  /** The week's Hearth mission: its practice at home. */
+  protected readonly hearthMission = computed(() => {
+    const week = this.weekContent();
+    return week?.hearthMission ?? week?.leadershipMission;
   });
 
   protected readonly principles = computed(() =>
@@ -52,6 +58,10 @@ export class LessonPage implements OnInit {
   protected readonly currentLabel = computed(() =>
     this.weekState.week().stage === 'ahead' ? 'Week ahead' : 'This week',
   );
+
+  protected partCount(count: number): string {
+    return ['two', 'three', 'four', 'five', 'six'][count - 2] ?? String(count);
+  }
 
   ngOnInit(): void {
     void this.weekState.load();

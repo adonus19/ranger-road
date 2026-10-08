@@ -89,6 +89,9 @@ export const chapterTwoDailySeed: readonly ChapterWeekContent[] = [
       },
     },
     reading: 'Three 10-minute phone-free reading sessions.',
+    // Added 2026-10-08; the content pack named none for Week 5 (see 02_THE_ROAD.md).
+    hearthMission:
+      'Plan Saturday night so the family gets to worship on Sunday without rushing: clothes set out, breakfast decided, time to leave early. You carry the logistics.',
   },
   {
     name: 'Listen',
@@ -111,7 +114,10 @@ export const chapterTwoDailySeed: readonly ChapterWeekContent[] = [
           title: '50–55-minute walk',
           missionType: 'conditioning',
           details: ['Trail, if practical.'],
+          fieldcraftPractice: true,
         },
+        optionalFamilyQuest:
+          'Let your daughter lead along one simple marked stretch, such as between two junctions, watching for the blazes. Stay right beside her.',
       },
       7: {
         scriptureReference: 'Psalm 25:4–5',
@@ -121,6 +127,8 @@ export const chapterTwoDailySeed: readonly ChapterWeekContent[] = [
     },
     leadershipMission:
       'Ask spouse how she is doing. Ask whether she wants listening, thinking together, or action before offering solutions.',
+    fieldcraft:
+      'Navigation I field mission: before the walk, study the trail map and predict the direction you’ll head first, one landmark you’ll pass, the distance to your first turn, and where the start will be from your farthest point. Afterward, check each one.',
   },
   {
     name: 'Be Present at Home',
@@ -195,6 +203,27 @@ export const chapterTwoDailySeed: readonly ChapterWeekContent[] = [
         reflectionPrompt: 'Where has consistent small effort begun changing me?',
       },
     },
+    // Added 2026-10-08; the content pack named none for Week 8 (see 02_THE_ROAD.md).
+    hearthMission:
+      'Ask how you’ve listened, name your family’s faithfulness, prepare for the trial together, and keep one rhythm.',
+    hearthMissionParts: [
+      {
+        label: 'Ask how you’ve listened',
+        text: 'Ask your spouse, “This month, have I been more attentive when you talk? Where am I still rushing?” Listen without defending yourself.',
+      },
+      {
+        label: 'Name their faithfulness',
+        text: 'Tell your spouse and your daughter one specific thing you’ve seen each of them do faithfully this month.',
+      },
+      {
+        label: 'Prepare for the trial together',
+        text: 'On Saturday, let your daughter help prepare for the trial: walk part of the route or count the stair flights. Ask the family to pray for you on Monday.',
+      },
+      {
+        label: 'Keep one rhythm',
+        text: 'Choose one practice from this chapter, such as the phone-free hour or the listening question, and put it on the family calendar from now on.',
+      },
+    ],
   },
 ];
 
