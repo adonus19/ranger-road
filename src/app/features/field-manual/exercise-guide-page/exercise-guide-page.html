@@ -38,9 +38,9 @@
 
     @if (usedIn().length) {
       <section class="manual-section" aria-labelledby="guide-used">
-        <h2 id="guide-used">In Chapter I</h2>
+        <h2 id="guide-used">In the program</h2>
         <ul class="manual-rows" role="list">
-          @for (use of usedIn(); track use.id) {
+          @for (use of usedIn(); track use.id + use.title) {
             <li>
               <a class="manual-row" routerLink="/field-manual/exercises" [fragment]="use.id">
                 <span class="manual-row__text">

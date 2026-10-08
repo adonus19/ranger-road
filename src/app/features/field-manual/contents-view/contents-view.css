@@ -27,6 +27,12 @@ h2 {
   line-height: 1.35;
 }
 
+.chapter + .chapter {
+  margin-top: 2.25rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--line);
+}
+
 .part {
   margin-top: 0.75rem;
   padding-top: 1rem;

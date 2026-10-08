@@ -3,10 +3,11 @@ import { addDays, getWeekday } from './campaign';
 import { resolveCampaignPosition, type ChapterDay, type TrialRecord } from './campaign-position';
 import { gateTrialDefinition } from './chapter-one-trial.seed';
 import type { Weekday } from './chapter-one.seed';
-import { chapterOneDailySeed, chapterOneGateTrialAttempt } from './chapter-one-daily.seed';
+import { chapterOneGateTrialAttempt } from './chapter-one-daily.seed';
 import { getDayContent, getWeekContent } from './chapter-orders';
 import type { ChapterProgram } from './chapter-program';
 import { listExerciseGuides } from './exercise-guides';
+import { chapterPrograms } from './program-catalog';
 import { chapterOneForgeA, chapterOneForgeB, chapterOneRestoration } from './chapter-one-workouts';
 import {
   EXTRA_BOOK_SUGGESTIONS,
@@ -429,15 +430,16 @@ export interface ScriptureDay {
 }
 
 export interface ScriptureWeek {
-  week: 1 | 2 | 3 | 4;
+  /** Campaign week: 1–4 in Chapter I, 5–8 in Chapter II. */
+  week: number;
   name: string;
   days: ScriptureDay[];
 }
 
-/** Chapter I's daily Scripture by week, from the daily seed. */
-export function getChapterOneScriptureByWeek(): ScriptureWeek[] {
-  return chapterOneDailySeed.map((week, index) => ({
-    week: (index + 1) as 1 | 2 | 3 | 4,
+/** A chapter's daily Scripture by week, from its daily seed. */
+export function getScriptureByWeek(program: ChapterProgram): ScriptureWeek[] {
+  return program.weeks.map((week, index) => ({
+    week: program.chapter.weeks[0] + index,
     name: week.name,
     days: WEEKDAY_NAMES.map((day, dayIndex) => {
       const weekday = (dayIndex + 1) as Weekday;
@@ -452,13 +454,31 @@ export function getChapterOneScriptureByWeek(): ScriptureWeek[] {
   }));
 }
 
+export function getChapterOneScriptureByWeek(): ScriptureWeek[] {
+  return getScriptureByWeek(chapterPrograms[0]);
+}
+
+/**
+ * The chapters in the app with the current one first, so each reading page opens on the
+ * chapter the campaign is in and keeps the rest below it in order.
+ */
+export function orderedPrograms(currentChapter: number): ChapterProgram[] {
+  return [
+    ...chapterPrograms.filter((program) => program.chapter.number === currentChapter),
+    ...chapterPrograms.filter((program) => program.chapter.number !== currentChapter),
+  ];
+}
+
 export interface SessionMovement {
   exerciseId: string;
   dose: string;
 }
 
 export interface SessionDetail {
-  id: FieldManualSessionId | 'warm-up';
+  /** A workout's ID, `gate-circuit`, or a chapter's warm-up (`warm-up` for Chapter I). */
+  id: FieldManualSessionId;
+  /** The chapter the session belongs to. */
+  chapter: number;
   title: string;
   when: string;
   movements: SessionMovement[];
@@ -481,49 +501,80 @@ export function doseText(prescription: DoseSource): string {
   return (prescription.sets ?? 1) > 1 ? `${prescription.sets} sets × ${each}` : each;
 }
 
-/** Every Chapter I session with its documented doses, for the exercise guides page. */
-export function getChapterOneSessions(): SessionDetail[] {
+/** The ID of a chapter's warm-up section: Chapter I keeps `warm-up`. */
+export function warmupId(program: ChapterProgram): string {
+  return program.chapter.number === 1 ? 'warm-up' : `chapter-${program.chapter.number}-warm-up`;
+}
+
+/** The weekdays a session falls on across the chapter's weeks, in week order. */
+function sessionWeekdays(program: ChapterProgram, id: string): string[] {
+  const days = new Set<number>();
+  for (const week of program.weeks) {
+    for (const [weekday, content] of Object.entries(week.days)) {
+      const activity = content.activity;
+      const uses =
+        activity.definitionId === id ||
+        (id === program.restorationId &&
+          (activity.missionType === 'restoration' ||
+            activity.alternatives?.some((choice) => choice.contentReferences.includes(id))));
+      if (uses) days.add(Number(weekday));
+    }
+  }
+  return [...days].sort((a, b) => a - b).map((weekday) => WEEKDAY_NAMES[weekday - 1]);
+}
+
+/** Every session in a chapter with its documented doses, for the exercise guides page. */
+export function getChapterSessions(program: ChapterProgram): SessionDetail[] {
+  const chapter = program.chapter.number;
   const work = (workout: WorkoutDefinition): SessionMovement[] =>
     workout.exercises.map((exercise) => ({
       exerciseId: exercise.exerciseId,
       dose: doseText(exercise),
     }));
-  const warmup: SessionMovement[] = (chapterOneForgeA.warmup ?? []).flatMap((step) =>
+  const [forgeA, forgeB] = program.workouts;
+  const warmup: SessionMovement[] = (forgeA?.warmup ?? []).flatMap((step) =>
     step.kind === 'exercise'
       ? [{ exerciseId: step.prescription.exerciseId, dose: doseText(step.prescription) }]
       : [],
   );
-  const circuit = gateTrialDefinition.phases.find((phase) => phase.circuit)?.circuit;
-  return [
-    { id: 'warm-up', title: 'Warm-up', when: 'Before Forge A and Forge B', movements: warmup },
+  const sessions: SessionDetail[] = [
     {
-      id: 'chapter-1-forge-a',
-      title: 'Forge A',
-      when: 'Monday',
-      movements: work(chapterOneForgeA),
+      id: warmupId(program),
+      chapter,
+      title: 'Warm-up',
+      when: 'Before Forge A and Forge B',
+      movements: warmup,
     },
-    {
-      id: 'chapter-1-forge-b',
-      title: 'Forge B',
-      when: 'Thursday',
-      movements: work(chapterOneForgeB),
-    },
-    {
-      id: 'chapter-1-restoration',
-      title: 'Restoration',
-      when: 'Wednesday, and Friday or as needed',
-      movements: work(chapterOneRestoration),
-    },
-    {
-      id: 'gate-circuit',
+    ...program.workouts.map((workout): SessionDetail => {
+      const days = joinWords(sessionWeekdays(program, workout.id));
+      return {
+        id: workout.id,
+        chapter,
+        title: workout.title,
+        when: workout.id === program.restorationId ? `${days}, or as needed` : days,
+        movements: work(workout),
+      };
+    }),
+  ];
+  const circuit = program.trial.phases.find((phase) => phase.circuit)?.circuit;
+  if (circuit) {
+    sessions.push({
+      id: GATE_CIRCUIT_ID,
+      chapter,
       title: 'Gate Circuit',
-      when: `The Gate Trial, ${circuit?.rounds ?? 3} controlled rounds`,
-      movements: (circuit?.movements ?? []).map((movement) => ({
+      when: `The ${program.trialName}, ${circuit.rounds} controlled rounds`,
+      movements: circuit.movements.map((movement) => ({
         exerciseId: movement.exerciseId,
         dose: doseText(movement),
       })),
-    },
-  ];
+    });
+  }
+  return sessions;
+}
+
+/** Every session in the app, chapter by chapter. */
+export function getAllSessions(): SessionDetail[] {
+  return chapterPrograms.flatMap((program) => getChapterSessions(program));
 }
 
 /** Read on each Gate Trial attempt day, and in the trial's Spirit part. */
@@ -531,6 +582,33 @@ export const GATE_TRIAL_SCRIPTURE = {
   attemptDays: chapterOneGateTrialAttempt.scriptureReference,
   spirit: 'Psalm 121',
 } as const;
+
+export interface TrialScriptureRow {
+  label: string;
+  reference: string;
+  /** The row's anchor on the Scripture page. */
+  id: string;
+}
+
+/** The Scripture a chapter's trial calls for, with anchors the This week rows link to. */
+export function getTrialScripture(program: ChapterProgram): TrialScriptureRow[] {
+  const attempts: TrialScriptureRow = {
+    label: 'Each attempt day',
+    reference: program.trialAttempt.scriptureReference,
+    id: trialAttemptsFragment(program.trial.id),
+  };
+  // The Gate Trial's Spirit part reads a second passage; other trials read the attempt-day one.
+  return program.trial.id === 'gate-trial'
+    ? [
+        attempts,
+        {
+          label: 'Part IV, Spirit',
+          reference: GATE_TRIAL_SCRIPTURE.spirit,
+          id: 'gate-trial-spirit',
+        },
+      ]
+    : [{ ...attempts, label: 'Each attempt day and the prayer' }];
+}
 
 export type FieldManualEntryKind =
   'exercise' | 'lesson' | 'principle' | 'card' | 'book' | 'scripture';
@@ -677,28 +755,25 @@ export function getFieldManualIndex(): FieldManualEntry[] {
   }
 
   const uses = new Map<string, { days: string[]; fragment: string }>();
-  for (const week of getChapterOneScriptureByWeek()) {
-    for (const day of week.days) {
-      const found = uses.get(day.reference);
-      if (found) found.days.push(`Week ${week.week} ${day.day}`);
-      else
-        uses.set(day.reference, {
-          days: [`Week ${week.week} ${day.day}`],
-          fragment: scriptureDayId(week.week, day.weekday),
-        });
+  const addUse = (reference: string, day: string, fragment: string) => {
+    const found = uses.get(reference);
+    if (found) found.days.push(day);
+    else uses.set(reference, { days: [day], fragment });
+  };
+  for (const program of chapterPrograms) {
+    for (const week of getScriptureByWeek(program)) {
+      for (const day of week.days) {
+        addUse(
+          day.reference,
+          `Week ${week.week} ${day.day}`,
+          scriptureDayId(week.week, day.weekday),
+        );
+      }
     }
+    const [attempts, spirit] = getTrialScripture(program);
+    addUse(attempts.reference, `${program.trialName} attempts`, attempts.id);
+    if (spirit) addUse(spirit.reference, `the ${program.trialName}`, spirit.id);
   }
-  const attemptReference = uses.get(GATE_TRIAL_SCRIPTURE.attemptDays);
-  if (attemptReference) attemptReference.days.push('Gate Trial attempts');
-  else
-    uses.set(GATE_TRIAL_SCRIPTURE.attemptDays, {
-      days: ['Gate Trial attempts'],
-      fragment: 'gate-trial-attempts',
-    });
-  uses.set(GATE_TRIAL_SCRIPTURE.spirit, {
-    days: ['the Gate Trial'],
-    fragment: 'gate-trial-spirit',
-  });
   for (const [reference, use] of uses) {
     entries.push(
       entry(

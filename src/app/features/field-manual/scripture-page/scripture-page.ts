@@ -1,16 +1,18 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
 import {
-  GATE_TRIAL_SCRIPTURE,
-  getChapterOneScriptureByWeek,
+  getScriptureByWeek,
+  getTrialScripture,
+  orderedPrograms,
   scriptureDayId,
 } from '../../../core/program/field-manual';
+import { formatChapterNumeral } from '../../../core/program/program-catalog';
 import { getWeekday } from '../../../core/program/campaign';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { Icon } from '../../../shared/icon/icon';
 import { FieldManualWeekState } from '../field-manual-week-state';
 import { ManualBackLink } from '../manual-back-link';
 
-/** Chapter I's daily Scripture references by week, stored as references only. */
+/** Each chapter's daily Scripture references by week, stored as references only. */
 @Component({
   selector: 'app-scripture-page',
   imports: [Icon, ManualBackLink],
@@ -53,21 +55,25 @@ import { ManualBackLink } from '../manual-back-link';
 export class ScripturePage implements OnInit {
   private readonly weekState = inject(FieldManualWeekState);
   private readonly campaignState = inject(CampaignState);
-  protected readonly weeks = getChapterOneScriptureByWeek().map((week) => ({
-    ...week,
-    days: week.days.map((day) => ({ ...day, id: scriptureDayId(week.week, day.weekday) })),
-  }));
-  /** 2 Timothy 4:7 is also Week 4 Saturday's reading, so the attempt-day row keeps its own ID. */
-  protected readonly gateTrial = [
-    {
-      label: 'Each attempt day',
-      reference: GATE_TRIAL_SCRIPTURE.attemptDays,
-      id: 'gate-trial-attempts',
-    },
-    { label: 'Part IV, Spirit', reference: GATE_TRIAL_SCRIPTURE.spirit, id: 'gate-trial-spirit' },
-  ];
-
   protected readonly week = this.weekState.week;
+
+  /** The chapter the campaign is in first, then the others in order. */
+  protected readonly chapters = computed(() =>
+    orderedPrograms(this.week().chapter).map((program) => ({
+      id: program.chapter.id,
+      number: program.chapter.number,
+      numeral: formatChapterNumeral(program.chapter.number),
+      name: program.chapter.name,
+      trialId: program.trial.id,
+      trialName: program.trialName,
+      weeks: getScriptureByWeek(program).map((week) => ({
+        ...week,
+        days: week.days.map((day) => ({ ...day, id: scriptureDayId(week.week, day.weekday) })),
+      })),
+      /** An attempt-day reference may also be a week's reading, so its row keeps its own ID. */
+      trial: getTrialScripture(program),
+    })),
+  );
 
   /** Today's weekday, marked only inside the week the campaign is on. */
   protected readonly todayWeekday = computed(() => {

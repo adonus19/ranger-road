@@ -1,36 +1,40 @@
 @if (!ready()) {
   <p class="view-state" role="status">Opening the contents…</p>
 } @else {
-  <section class="contents" aria-labelledby="contents-heading">
-    <h2 id="contents-heading">Chapter I · The Muster</h2>
-    <p class="contents__subline">Weeks 1–4 and the Gate Trial</p>
+  <section class="contents" aria-label="Contents">
+    @for (chapter of chapters(); track chapter.id) {
+      <div class="chapter">
+        <h2>{{ chapter.title }}</h2>
+        <p class="contents__subline">{{ chapter.subline }}</p>
 
-    @for (part of parts(); track part.id) {
-      <section class="part" [attr.aria-labelledby]="'part-' + part.id">
-        <div class="part__head">
-          <h3 [id]="'part-' + part.id">{{ part.title }}</h3>
-          <span class="part__note">{{ part.note }}</span>
-        </div>
-        <ul class="entries" role="list">
-          @for (item of part.entries; track item.title) {
-            <li>
-              <a
-                class="entry"
-                [routerLink]="item.link"
-                [fragment]="item.fragment"
-                [queryParams]="{ from: 'contents' }"
-              >
-                <span class="entry__title">{{ item.title }}</span>
-                <span class="entry__leader" aria-hidden="true"></span>
-                <span class="entry__note">{{ item.note }}</span>
-                @if (item.current) {
-                  <span class="tag"><app-icon name="pine" />{{ tagLabel() }}</span>
-                }
-              </a>
-            </li>
-          }
-        </ul>
-      </section>
+        @for (part of chapter.parts; track part.id) {
+          <section class="part" [attr.aria-labelledby]="chapter.id + '-' + part.id">
+            <div class="part__head">
+              <h3 [id]="chapter.id + '-' + part.id">{{ part.title }}</h3>
+              <span class="part__note">{{ part.note }}</span>
+            </div>
+            <ul class="entries" role="list">
+              @for (item of part.entries; track item.title) {
+                <li>
+                  <a
+                    class="entry"
+                    [routerLink]="item.link"
+                    [fragment]="item.fragment"
+                    [queryParams]="{ from: 'contents' }"
+                  >
+                    <span class="entry__title">{{ item.title }}</span>
+                    <span class="entry__leader" aria-hidden="true"></span>
+                    <span class="entry__note">{{ item.note }}</span>
+                    @if (item.current) {
+                      <span class="tag"><app-icon name="pine" />{{ tagLabel() }}</span>
+                    }
+                  </a>
+                </li>
+              }
+            </ul>
+          </section>
+        }
+      </div>
     }
   </section>
 }

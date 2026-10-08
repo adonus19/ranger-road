@@ -2,47 +2,52 @@
   <app-manual-back-link />
   <h1>Exercise guides</h1>
   <p class="manual-subline">
-    Chapter I’s standard sessions. Follow the current week’s note and your readiness adjustment in
-    Forge. Open any movement for its full guide.
+    Each chapter’s standard sessions. Follow the current week’s note and your readiness adjustment
+    in Forge. Open any movement for its full guide.
   </p>
 
-  @for (session of sessions; track session.id) {
-    <section
-      class="manual-section"
-      [id]="session.id"
-      [attr.aria-labelledby]="session.id + '-title'"
-    >
-      <h2 [id]="session.id + '-title'">
-        {{ session.title }}
-        @if (thisWeek().has(session.id)) {
-          <span class="manual-tag"
-            ><app-icon name="pine" />{{
-              week().stage === 'ahead' ? 'Week ahead' : 'This week'
-            }}</span
-          >
-        }
-      </h2>
-      <p class="manual-when">{{ session.when }}</p>
-      @if (weekNote(session.id); as note) {
-        <p class="manual-note">This week: {{ note }} The doses below are the standard plan.</p>
-      }
-      <ul class="manual-rows" role="list">
-        @for (movement of session.movements; track movement.exerciseId) {
-          <li>
-            <a
-              class="manual-row"
-              [routerLink]="['/field-manual/exercises', movement.exerciseId]"
-              [queryParams]="{ from: 'exercises' }"
+  @for (chapter of chapters(); track chapter.program.chapter.id) {
+    <h2 class="manual-chapter" [id]="chapter.program.chapter.id">
+      Chapter {{ chapter.numeral }} · {{ chapter.name }}
+    </h2>
+    @for (session of chapter.sessions; track session.id) {
+      <section
+        class="manual-section"
+        [id]="session.id"
+        [attr.aria-labelledby]="session.id + '-title'"
+      >
+        <h3 class="manual-title" [id]="session.id + '-title'">
+          {{ session.title }}
+          @if (current(chapter.program.chapter.number, session.id)) {
+            <span class="manual-tag"
+              ><app-icon name="pine" />{{
+                week().stage === 'ahead' ? 'Week ahead' : 'This week'
+              }}</span
             >
-              <span class="manual-row__text">
-                <strong>{{ movement.name }}</strong>
-                <span>{{ movement.dose }}</span>
-              </span>
-              <app-icon class="manual-row__arrow" name="arrow-right" />
-            </a>
-          </li>
+          }
+        </h3>
+        <p class="manual-when">{{ session.when }}</p>
+        @if (weekNote(chapter.program.chapter.number, session.id); as note) {
+          <p class="manual-note">This week: {{ note }} The doses below are the standard plan.</p>
         }
-      </ul>
-    </section>
+        <ul class="manual-rows" role="list">
+          @for (movement of session.movements; track movement.exerciseId) {
+            <li>
+              <a
+                class="manual-row"
+                [routerLink]="['/field-manual/exercises', movement.exerciseId]"
+                [queryParams]="{ from: 'exercises' }"
+              >
+                <span class="manual-row__text">
+                  <strong>{{ movement.name }}</strong>
+                  <span>{{ movement.dose }}</span>
+                </span>
+                <app-icon class="manual-row__arrow" name="arrow-right" />
+              </a>
+            </li>
+          }
+        </ul>
+      </section>
+    }
   }
 </article>

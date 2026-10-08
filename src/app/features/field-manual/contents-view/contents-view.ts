@@ -1,10 +1,13 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
-  getChapterOneScriptureByWeek,
-  getChapterOneSessions,
+  getChapterSessions,
+  getScriptureByWeek,
+  orderedPrograms,
+  warmupId,
   type FieldManualWeek,
 } from '../../../core/program/field-manual';
+import { formatChapterNumeral, type ChapterProgram } from '../../../core/program/program-catalog';
 import {
   listFieldCards,
   listLeadershipLessons,
@@ -20,6 +23,13 @@ interface ContentsEntry {
   link: readonly string[];
   fragment?: string;
   current: boolean;
+}
+
+interface ContentsChapter {
+  id: string;
+  title: string;
+  subline: string;
+  parts: ContentsPart[];
 }
 
 interface ContentsPart {
@@ -46,7 +56,7 @@ function shortDays(days: readonly string[]): string {
     : `${short.slice(0, -1).join(', ')} and ${short.at(-1)}`;
 }
 
-/** The chapter's contents: every entry with the week it belongs to, this week's marked. */
+/** Each chapter's contents: every entry with the week it belongs to, this week's marked. */
 @Component({
   selector: 'app-contents-view',
   imports: [Icon, RouterLink],
@@ -63,16 +73,40 @@ export class ContentsView {
     this.week().stage === 'ahead' ? 'Week ahead' : 'This week',
   );
 
-  protected readonly parts = computed<ContentsPart[]>(() => buildParts(this.week()));
+  /** The chapter the campaign is in first; the principles and reading plan sit under it. */
+  protected readonly chapters = computed<ContentsChapter[]>(() => {
+    const week = this.week();
+    return orderedPrograms(week.chapter).map((program, index) => ({
+      id: program.chapter.id,
+      title: `Chapter ${formatChapterNumeral(program.chapter.number)} · ${program.chapter.name}`,
+      subline: `Weeks ${program.chapter.weeks[0]}–${program.chapter.weeks.at(-1)} and the ${program.trialName}`,
+      parts: buildParts(program, week, index === 0),
+    }));
+  });
 }
 
-function buildParts(week: FieldManualWeek): ContentsPart[] {
+function buildParts(
+  program: ChapterProgram,
+  week: FieldManualWeek,
+  first: boolean,
+): ContentsPart[] {
+  const number = program.chapter.number;
+  const mine = week.chapter === number;
   const listed = new Set(week.entryIds);
   const sessions = new Set(week.sessions.map((session) => session.id));
   const principles = listLeadershipPrinciples();
-  const cards = listFieldCards();
-  const [book, ...laterBooks] = listReadingPlan();
-  const lessons = listLeadershipLessons();
+  const [firstWeek, lastWeek] = [program.chapter.weeks[0], program.chapter.weeks.at(-1)!];
+  const cards = listFieldCards().filter((card) => card.week >= firstWeek && card.week <= lastWeek);
+  const readingPlan = listReadingPlan();
+  const book = readingPlan.find((entry) => entry.chapter === number);
+  const lessons = listLeadershipLessons().filter(
+    (lesson) => lesson.week >= firstWeek && lesson.week <= lastWeek,
+  );
+  const [forgeA, forgeB] = program.workouts;
+  const chapterSessions = getChapterSessions(program);
+  const guideCount = new Set(
+    chapterSessions.flatMap((session) => session.movements.map((movement) => movement.exerciseId)),
+  ).size;
 
   return [
     {
@@ -86,21 +120,25 @@ function buildParts(week: FieldManualWeek): ContentsPart[] {
           link: ['/field-manual/lessons', lesson.id],
           current: listed.has(`lesson-${lesson.id}`),
         })),
-        {
-          title: `${principles.length === 12 ? 'Twelve' : principles.length} principles`,
-          note: 'Reference',
-          link: ['/field-manual/principles'],
-          current: false,
-        },
+        ...(first
+          ? [
+              {
+                title: `${principles.length === 12 ? 'Twelve' : principles.length} principles`,
+                note: 'Reference',
+                link: ['/field-manual/principles'],
+                current: false,
+              },
+            ]
+          : []),
       ],
     },
     {
       id: 'fieldcraft',
       title: 'Fieldcraft',
-      note: `${cards.length} cards`,
+      note: `${cards.length} ${cards.length === 1 ? 'card' : 'cards'}`,
       entries: cards.map((card) => ({
         title: card.title,
-        note: `Week ${card.week}`,
+        note: card.lastWeek ? `Weeks ${card.week}–${card.lastWeek}` : `Week ${card.week}`,
         link: ['/field-manual/cards', card.id],
         current: listed.has(`card-${card.id}`),
       })),
@@ -108,21 +146,32 @@ function buildParts(week: FieldManualWeek): ContentsPart[] {
     {
       id: 'reading',
       title: 'Reading',
-      note: 'Chapter I book',
+      note: `Chapter ${formatChapterNumeral(number)} book`,
       entries: [
-        {
-          title: book.title,
-          note: week.readingDays.length ? shortDays(week.readingDays) : 'Chapter I',
-          link: ['/field-manual/reading'],
-          current: week.readingDays.length > 0,
-        },
-        {
-          title: 'Reading plan',
-          note: `${laterBooks.length + 1} books`,
-          link: ['/field-manual/reading'],
-          fragment: 'reading-plan',
-          current: false,
-        },
+        ...(book
+          ? [
+              {
+                title: book.title,
+                note:
+                  mine && week.readingDays.length
+                    ? shortDays(week.readingDays)
+                    : `Chapter ${formatChapterNumeral(number)}`,
+                link: ['/field-manual/reading'],
+                current: mine && week.readingDays.length > 0,
+              },
+            ]
+          : []),
+        ...(first
+          ? [
+              {
+                title: 'Reading plan',
+                note: `${readingPlan.length} books`,
+                link: ['/field-manual/reading'],
+                fragment: 'reading-plan',
+                current: false,
+              },
+            ]
+          : []),
       ],
     },
     {
@@ -130,7 +179,7 @@ function buildParts(week: FieldManualWeek): ContentsPart[] {
       title: 'Scripture',
       note: 'By week',
       entries: [
-        ...getChapterOneScriptureByWeek().map((scripture) => ({
+        ...getScriptureByWeek(program).map((scripture) => ({
           title: `Week ${scripture.week} · ${scripture.name}`,
           note: `${scripture.days.length} readings`,
           link: ['/field-manual/scripture'],
@@ -140,27 +189,28 @@ function buildParts(week: FieldManualWeek): ContentsPart[] {
             week.contentWeek === scripture.week,
         })),
         {
-          title: 'The Gate Trial',
-          note: '2 readings',
+          title: `The ${program.trialName}`,
+          note: program.trial.id === 'gate-trial' ? '2 readings' : '1 reading',
           link: ['/field-manual/scripture'],
-          fragment: 'gate-trial',
-          current: week.stage === 'trial',
+          fragment: program.trial.id,
+          current: week.stage === 'trial' && mine,
         },
       ],
     },
     {
       id: 'exercises',
       title: 'Exercise guides',
-      note: '18 guides',
-      entries: getChapterOneSessions().map((session) => ({
+      note: `${guideCount} guides`,
+      entries: chapterSessions.map((session) => ({
         title: session.title,
-        note: session.id === 'gate-circuit' ? 'Gate Trial' : session.when.split(',')[0],
+        note: session.id === 'gate-circuit' ? program.trialName : session.when.split(',')[0],
         link: ['/field-manual/exercises'],
         fragment: session.id,
         current:
-          session.id === 'warm-up'
-            ? sessions.has('chapter-1-forge-a') || sessions.has('chapter-1-forge-b')
-            : sessions.has(session.id),
+          mine &&
+          (session.id === warmupId(program)
+            ? sessions.has(forgeA.id) || sessions.has(forgeB.id)
+            : sessions.has(session.id)),
       })),
     },
   ];

@@ -4,7 +4,7 @@ import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { describe, expect, it, vi } from 'vitest';
 import { routes } from '../../../app.routes';
-import type { Campaign } from '../../../core/domain/models';
+import type { Campaign, TrialResult } from '../../../core/domain/models';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory } from '../../../core/state/trial-history';
 
@@ -15,7 +15,7 @@ const campaign: Campaign = {
   status: 'active',
 };
 
-async function open(url: string) {
+async function open(url: string, trials: Record<string, TrialResult[]> = {}) {
   const state = {
     campaign: signal<Campaign | null>(campaign),
     today: signal('2026-10-12'),
@@ -26,7 +26,10 @@ async function open(url: string) {
     providers: [
       provideRouter(routes),
       { provide: CampaignState, useValue: state },
-      { provide: TrialHistory, useValue: { forTrial: vi.fn(async () => []) } },
+      {
+        provide: TrialHistory,
+        useValue: { forTrial: vi.fn(async (id: string) => trials[id] ?? []) },
+      },
     ],
   });
   const harness = await RouterTestingHarness.create();
@@ -140,5 +143,71 @@ describe('Field Manual routes', () => {
       'around 15 of 20 work sets',
     );
     expect(forgeB.querySelector('.manual-note')?.textContent).toContain('standard plan');
+  });
+
+  describe('in Chapter II', () => {
+    // Gate Trial passed Thursday, Nov 5: Chapter II's Week 5 begins Monday, Nov 9.
+    const gatePass: TrialResult = {
+      id: 'gate-1',
+      trialId: 'gate-trial',
+      date: '2026-11-05',
+      phaseResults: [],
+      reflection: '',
+    };
+    const openChapterTwo = async (url: string) => {
+      const opened = await open(url, { 'gate-trial': [gatePass] });
+      opened.state.today.set('2026-11-17');
+      opened.harness.detectChanges();
+      await vi.waitFor(() => {
+        opened.harness.detectChanges();
+        expect(opened.harness.routeNativeElement?.textContent).toContain('Chapter II');
+      });
+      return opened;
+    };
+
+    it('opens Contents on Chapter II, with Chapter I below it', async () => {
+      const { harness } = await openChapterTwo('/field-manual/contents');
+      const root = harness.routeNativeElement!;
+      expect([...root.querySelectorAll('.chapter > h2')].map((h) => h.textContent?.trim())).toEqual(
+        ['Chapter II · The Road', 'Chapter I · The Muster'],
+      );
+      expect(
+        root.querySelector('a[href="/field-manual/cards/navigation-one?from=contents"]'),
+      ).not.toBeNull();
+      expect(root.querySelectorAll('.tag')).not.toHaveLength(0);
+    });
+
+    it('lists Chapter II’s Scripture first, with the Three-Mile Trial’s own anchor', async () => {
+      const { harness } = await openChapterTwo('/field-manual/scripture');
+      const root = harness.routeNativeElement!;
+      await vi.waitFor(() => {
+        harness.detectChanges();
+        expect(root.querySelector('.manual-chapter')?.textContent?.trim()).toBe(
+          'Chapter II · The Road',
+        );
+      });
+      expect(root.querySelector('#week-6 .day__reference')?.textContent).toContain('James 1:19–20');
+      expect(root.querySelector('#three-mile-trial-attempts')?.textContent).toContain('Psalm 121');
+      expect(root.querySelector('#gate-trial-spirit')).not.toBeNull();
+    });
+
+    it('lists Chapter II’s sessions, with this week’s note beside Forge A', async () => {
+      const { harness } = await openChapterTwo('/field-manual/exercises');
+      const root = harness.routeNativeElement!;
+      await vi.waitFor(() => {
+        harness.detectChanges();
+        expect(root.querySelector('.manual-chapter')?.textContent?.trim()).toBe(
+          'Chapter II · The Road',
+        );
+      });
+      expect(root.querySelector('#chapter-2-forge-a')?.textContent).toContain('Split Squat');
+      expect(root.querySelector('#chapter-2-forge-a .manual-tag')).not.toBeNull();
+      expect(root.querySelector('#chapter-1-forge-a .manual-tag')).toBeNull();
+    });
+
+    it('shows where a Chapter II movement is used on its guide', async () => {
+      const { harness } = await openChapterTwo('/field-manual/exercises/split-squat');
+      expect(harness.routeNativeElement?.textContent).toContain('Chapter II · Forge A');
+    });
   });
 });

@@ -53,7 +53,8 @@
   scroll-margin-top: 1rem;
 }
 
-.manual-section h2 {
+.manual-section h2,
+.manual-section h3.manual-title {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -72,6 +73,20 @@
   font-size: 1.125rem;
   font-weight: 700;
   line-height: 1.25;
+}
+
+.manual-chapter {
+  margin: 2rem 0 0;
+  color: var(--text-label);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.manual-chapter:first-of-type {
+  margin-top: 1.5rem;
 }
 
 .manual-section .manual-when {
@@ -281,7 +296,8 @@ a.manual-row:hover strong {
     font-size: 2.4375rem;
   }
 
-  .manual-section h2 {
+  .manual-section h2,
+  .manual-section h3.manual-title {
     font-size: 1.5rem;
   }
 

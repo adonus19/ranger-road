@@ -2,12 +2,16 @@
 import { readFileSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
+  getChapterSessions,
   getChapterOneScriptureByWeek,
   getFieldManualIndex,
   getFieldManualWeek,
+  getScriptureByWeek,
+  getTrialScripture,
   joinWords,
   scriptureDayId,
 } from './field-manual';
+import { chapterPrograms } from './program-catalog';
 import {
   getFieldCard,
   getLeadershipLessonForWeek,
@@ -286,5 +290,58 @@ describe('Index and Scripture', () => {
     expect(joinWords(['Wednesday'])).toBe('Wednesday');
     expect(joinWords(['Wednesday', 'Friday'])).toBe('Wednesday and Friday');
     expect(joinWords(['Wednesday', 'Friday', 'Saturday'])).toBe('Wednesday, Friday and Saturday');
+  });
+});
+
+describe('Chapter II reference pages', () => {
+  const chapterTwo = chapterPrograms[1];
+
+  it('reads Chapter II’s Scripture by week from its daily seed', () => {
+    const weeks = getScriptureByWeek(chapterTwo);
+    expect(weeks.map((week) => week.week)).toEqual([5, 6, 7, 8]);
+    expect(weeks[1].days[0]).toMatchObject({ day: 'Monday', reference: 'James 1:19–20' });
+    expect(weeks[3].days[6].reflectionPrompt).toBe(
+      'Where has consistent small effort begun changing me?',
+    );
+  });
+
+  it('gives each trial its own Scripture anchors', () => {
+    expect(getTrialScripture(chapterPrograms[0]).map((row) => row.id)).toEqual([
+      'gate-trial-attempts',
+      'gate-trial-spirit',
+    ]);
+    expect(getTrialScripture(chapterTwo)).toEqual([
+      {
+        label: 'Each attempt day and the prayer',
+        reference: 'Psalm 121',
+        id: 'three-mile-trial-attempts',
+      },
+    ]);
+  });
+
+  it('lists the warm-up, both Forge days and Restoration with the days they fall on', () => {
+    expect(getChapterSessions(chapterTwo).map((session) => [session.id, session.when])).toEqual([
+      ['chapter-2-warm-up', 'Before Forge A and Forge B'],
+      ['chapter-2-forge-a', 'Monday'],
+      ['chapter-2-forge-b', 'Thursday'],
+      ['chapter-2-restoration', 'Wednesday and Friday, or as needed'],
+    ]);
+    expect(getChapterSessions(chapterTwo)[1].movements[3]).toEqual({
+      exerciseId: 'split-squat',
+      dose: '3 sets × 6 reps per side',
+    });
+  });
+
+  it('indexes Chapter II’s Scripture alongside Chapter I’s', () => {
+    const index = getFieldManualIndex();
+    expect(index.find((entry) => entry.name === 'James 1:19–20')?.detail).toBe(
+      'Scripture · Week 6 Monday',
+    );
+    expect(index.find((entry) => entry.name === 'Psalm 121')?.detail).toContain(
+      'Three-Mile Trial attempts',
+    );
+    expect(index.find((entry) => entry.name === 'Navigation I')?.detail).toBe(
+      'Field card · Weeks 5–8',
+    );
   });
 });
