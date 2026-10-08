@@ -127,7 +127,7 @@ Chapter I Forge A, Forge B, and restoration definitions use the exact sets, reps
 - reduced?, warmupComplete?, finishComplete?, optionalFinishComplete?
 - sessionInstructions? (a copy of dated source instructions, such as the Week 4 deload note)
 
-New completed and stopped sessions are immutable, append-only snapshots. A stopped session retains partial sets and pain history without counting as a completed exposure for previous-load context. Previous loads are displayed for reference only; the app does not calculate or apply the next load.
+New completed and stopped sessions are immutable, append-only snapshots. A stopped session retains partial sets and pain history without counting as a completed exposure for previous-load context. Last-time sets, the progression hint, the comparison on save, the exercise record and the chapter summary are all derived from these saved sessions and are never stored. They are displayed for reference only; the app does not apply or require the next load. A completed, non-substituted session including the exercise is an exposure, in any chapter; a session saved as `reduced` is not a full session. Why it was reduced is derived, not stored: Yellow readiness comes from the session's saved readiness check, pain from its pain events on that exercise, and a planned deload from the chapter's week plan for the session's date. Any other reduced session (an accepted make-up reduction, or sets the person skipped) is treated as reduced for a non-blocking reason.
 
 ### WorkoutDraft
 

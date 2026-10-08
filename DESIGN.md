@@ -274,10 +274,14 @@ The first thing below the band. A parchment-tinted strip holds a round medallion
 
 Quiet rows under the Hearth row, between soft rules, in the same form: gold icon, short vertical divider, serif title, one help line and a chevron. The check-in row uses a tape measure; the Sunday backup row uses the tray-and-arrow icon and opens Journal. The backup row has a plain "Not today" text link on its own line (48px tap area) that hides it until tomorrow. Neither row counts or names missed weeks.
 
+### Last Time and Progression Hint
+On the Current Set screen, under the load box: a spaced-caps label with the date, the last exposure's sets in Entered-numeral type with the current set in bold, and one plain-sans hint line. A small up arrow marks "may add"; "hold" has none and gives one reason. It uses Ink, Secondary Ink and Tertiary Ink only: no gold and no status colors, because the readiness set is reserved for readiness (The Words First Rule) and gold for identity. It takes about three lines so Quick Help, Pain and Substitute stay above the docked button. The same figures reappear in "Compared with last time" after saving, in a guide's "Your record" list, and in a trial page's chapter summary, always as plain rows between soft rules.
+
 ### Inputs / Fields
 
 - **Text and date fields:** paper background, 1px Rule border, 6px radius, 48px tall, 16px text. The border darkens to Stone on hover.
 - **Tap scales:** a row of equal buttons, one per value (1 to 5 for energy, 0 to 10 for pain in two rows of six on phones). Each is a real radio button. Selected: filled Pine with cream numerals. Values are set in the serif. Readiness draws them 48px tall. Form screens from the Road log on draw them 46px tall (effort 1 to 10 in two rows of five), with each radio's tap area extended to 48px.
+- **Final-set effort:** the same tap scale as the walk log (1 to 10, two rows of five, 46px, tap area 48px), with "easy", "2–3 reps left" and "nothing left" in label type under 1, 7 and 10.
 - **Segmented choices:** a row of equal bordered buttons for one short choice, such as Today, Yesterday or Pick a date. Each is a real radio button drawn 37px tall with its tap area extended to 48px. Unselected labels are Secondary Ink at 15px; the selected one fills Pine with cream text.
 - **Number fields:** miles and minutes are typed into 48px fields and set in the serif as Entered numerals.
 - **Errors:** a short line in the red status text, naming the problem and the fix. The field gains a red border, `aria-invalid` and a link to its error, and a failed save focuses the first field that needs attention.

@@ -130,6 +130,42 @@ Typical changes:
 - dumbbell: reps first, then load
 - pull-up: reduce band assistance when 3 clean sets at top range are achieved
 
+### Showing progression in Forge
+
+Forge shows the person what they did last time and what the rule allows today. It is information, never automation: the app does not fill in, raise or require a load, and progression is never scored.
+
+**Last exposure.** An exposure is a completed (not stopped) session that included the exercise without a substitution. The last exposure is the newest one in any chapter, so a lift carries its history across chapters. A step-up exercise's first time shows the easier version's last exposure (for example Supported Split Squat for Split Squat) as context and never suggests adding.
+
+**When the hint says "may add".** All of these hold for the last exposure and for today:
+- every set was done as prescribed: reps at the target (the top of a rep range) or seconds at the target;
+- the final set's effort was 7 or less, when it was recorded;
+- no pain note on this exercise in that session;
+- that session was not Yellow or reduced (see below);
+- today's readiness is Green, and today is not a deload week.
+
+Otherwise the hint says "Hold" with one plain reason (for example "final effort 8", "pain noted last time", "Yellow today", "deload week", "sets not all at target").
+
+**Reduced sessions.** A session reduced because of Yellow readiness or pain always holds the next hint. A session reduced for any other reason (a planned deload, an accepted make-up reduction, or sets the person skipped) does not block progress: the hint then judges the last full session and names the reason as context ("Week 4 was a deload; based on Week 3").
+
+**What "add" means by kind of exercise.**
+
+| Kind | Examples | Hint |
+|---|---|---|
+| Upper-body barbell | Bench Press | +5 lb |
+| Squat | Box Squat | +5 lb, or a lower box |
+| Dumbbell with a rep range | Goblet Squat, One-Arm DB Row | Reps up to the top of the range, then +5 lb and back to the bottom |
+| Loaded exercise with fixed reps | Step-Up, Split Squat, Calf Raise | +5 lb |
+| Carries | Suitcase Carry, Farmer Carry | +5 lb; the chapter's written time stays as prescribed |
+| Timed holds with a range | Side Plank | +5 seconds up to the top of the range |
+| Assisted Pull-Up | Assisted Pull-Up | Less band when 3 sets reach the top of the range |
+| Push-Ups, bodyweight exercises, Restoration and mobility | Push-Up, Glute Bridge, Bird Dog, Cat-Camel | No hint, no Last time |
+
+**Without a recorded load.** If last time's weight was not recorded, the hint uses reps or seconds only and a quiet line says "Add the weight to track it."
+
+**Effort on the final set.** The effort that the rule relies on is entered on each exercise's final set, optional, on a 1–10 tap scale. Without it the hint holds with "no final effort recorded".
+
+**After the session.** The saved session compares each exercise with its last exposure (up, held, or lighter because reduced) in plain numbers. No praise, no scores, no streaks. An exercise's guide lists the person's best working set from each session, newest first, across chapters. When a chapter's trial is passed, its page lists what changed over the chapter: the first and the last full session of each exercise, with unchanged exercises counted in one line.
+
 ## Conditioning
 
 Early chapters:

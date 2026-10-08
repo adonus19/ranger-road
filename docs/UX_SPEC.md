@@ -78,7 +78,29 @@ Workout player:
 - Pain button
 - Substitute button
 
-The Chapter I Forge opens the workout named in today's order. Restoration is also available as needed after a same-day readiness check. An in-progress session resumes at the saved exercise and set, with its prescription snapshot intact. The warm-up is shown before the work sets; the documented easy finish is required for Restoration and optional for Forge A. The Current Set screen keeps the dose, planned load, Quick Help, Pain, and Substitute visible together; Complete set opens a short confirmation of actual reps or seconds and optional effort before saving. Exact numeric targets may fill that confirmation for review, while ranges remain blank. Each work set is marked done or skipped before a completed session is saved. Skipped sets and described substitutions mark the session reduced. The rest timer shows elapsed time because Chapter I gives no fixed rest interval. Previous load is display-only; the app never fills in or increases the next load automatically.
+The Chapter I Forge opens the workout named in today's order. Restoration is also available as needed after a same-day readiness check. An in-progress session resumes at the saved exercise and set, with its prescription snapshot intact. The warm-up is shown before the work sets; the documented easy finish is required for Restoration and optional for Forge A. The Current Set screen keeps the dose, planned load, Quick Help, Pain, and Substitute visible together; Complete set opens a short confirmation of actual reps or seconds and optional effort before saving. Exact numeric targets may fill that confirmation for review, while ranges remain blank. Each work set is marked done or skipped before a completed session is saved. Skipped sets and described substitutions mark the session reduced. The rest timer shows elapsed time because Chapter I gives no fixed rest interval. The Current Set screen's Last time and hint (below) are display-only; the app never fills in or increases the next load automatically.
+
+### Progression in Forge
+
+The rules live in `RANGERS_ROAD_PROGRAM.md` (Strength Progression). This section covers how they appear. Gold and the readiness colors are never used for these elements; they are plain text and numerals on paper.
+
+**Current Set screen.** A **Last time** block replaces the old "Previous load" line, under the load box, so Quick Help, Pain and Substitute stay above the docked button on a 390 × 845 phone.
+
+- Line 1: a spaced-caps label with the date, "LAST TIME · MON, NOV 9".
+- Line 2: the sets of the last exposure in tabular serif figures, "95 × 6 · 95 × 6 · 95 × 6". The set the person is on is bold, so it answers what was done on this set. Timed work reads "25 lb · 40 s × 3 per side". The final effort follows when recorded.
+- Line 3: one hint in plain sans. "May add 5 lb → 100 lb · all sets at 6, final effort 6" has a small up arrow; "Hold at 95 lb · Yellow today" has none and gives its one reason. After a planned deload it adds the context, "Week 4 was a deload; based on Week 3".
+- First time on record: "First time on record". A step-up exercise adds "Last on Supported Split Squat: 20 lb × 8" and never says "add". If the prescription changed, the label names it, "Last time (Chapter I, 3 × 8)".
+- No weight recorded: the hint uses reps or seconds and a quiet line says "Add the weight to track it."
+- Exercises with no hint (push-ups, bodyweight, Restoration) show no Last time block.
+- The load box stays empty and the person types the weight. There is no "use this weight" button.
+
+**Final-set effort.** On each exercise's final set, effort is the first field in the Complete set confirmation: a 1–10 tap scale in two rows of five, like the walk log, with "easy", "2–3 reps left" and "nothing left" under 1, 7 and 10, and the line "Optional · decides next time's hint". On other sets effort stays the optional field it is today.
+
+**After saving.** A "Compared with last time" list, per exercise: what went up first ("Box Squat 95 → 100 lb", "Suitcase Carry 40 → 45 s per side"), then one line counting what held ("4 held steady"), then anything lighter ("Lighter today (reduced)"). No red, no praise words, no scores.
+
+**Exercise guide.** After "In the program", a "Your record" list: a summary line ("Since Day 1: 75 → 100 lb"), then the best working set of each session, newest first, with the date and chapter and a "deload" or "reduced" tag where it applies. It shows 8 rows, then "Show all". There is no chart. It is hidden until the exercise has a recorded session.
+
+**Chapter trial page after a pass.** A "What changed this chapter" section: first against last full session for each exercise, grouped as Lifts, then Carries and holds, with unchanged exercises counted in one line. Keep's "trial passed" note links to it.
 
 In Week 8 Forge B, show the same approximate 25% guide (around 17 of its 22 work sets, Hammer Curl included); Week 8 Forge A shows no reduction and no load increase. In Week 4 Forge B, show the documented approximate 25% deload as an around-15-of-20-work-set guide. The person chooses which roughly five sets to skip, and the active and finish screens show the number actually completed and skipped. Keep the base prescription and actual set marks in the saved snapshot; this guidance does not silently remove exercises or auto-progress load.
 
