@@ -34,14 +34,6 @@ export type RecordedWorkoutPainEvent = PainEvent & {
   workoutSessionId: string;
 };
 
-export interface PreviousWorkoutLoad {
-  load: number;
-  date: LocalDate;
-  sessionId: string;
-  reduced: boolean;
-  painTriggered: boolean;
-}
-
 /** This is the only Chapter I restoration definition in the current source pack. */
 function isRestorationWorkout(definitionId: string): boolean {
   return definitionId === 'chapter-1-restoration';
@@ -308,44 +300,6 @@ export function completeWorkoutDraft(
     notes: draft.notes,
     sessionInstructions: draft.sessionInstructions ? [...draft.sessionInstructions] : undefined,
   };
-}
-
-/** Display-only context. It never calculates or applies the next load. */
-export function previousWorkoutLoad(
-  sessions: WorkoutSession[],
-  exerciseId: string,
-): PreviousWorkoutLoad | undefined {
-  const newest = [...sessions]
-    .filter((session) => session.outcome !== 'stopped')
-    .sort(
-      (a, b) =>
-        b.date.localeCompare(a.date) ||
-        (b.completedAt ?? '').localeCompare(a.completedAt ?? '') ||
-        b.id.localeCompare(a.id),
-    );
-  for (const session of newest) {
-    const result = session.exerciseResults.find((item) => item.exerciseId === exerciseId);
-    if (!result || result.substitutionId) continue;
-    const set = [...result.sets]
-      .reverse()
-      .find(
-        (item) =>
-          item.completed !== false &&
-          item.load !== undefined &&
-          Number.isFinite(item.load) &&
-          item.load >= 0,
-      );
-    if (set?.load !== undefined) {
-      return {
-        load: set.load,
-        date: session.date,
-        sessionId: session.id,
-        reduced: Boolean(session.reduced),
-        painTriggered: session.exerciseResults.some((item) => item.painEvents.length > 0),
-      };
-    }
-  }
-  return undefined;
 }
 
 function validateCompletedSet(set: CompletedSet): CompletedSet {

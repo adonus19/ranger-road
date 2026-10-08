@@ -10,10 +10,18 @@ import type {
   WorkoutSession,
   WorkoutStep,
 } from '../../../core/domain/models';
-import type { PreviousWorkoutLoad } from '../../../core/domain/workout';
 import { getExerciseGuide, getQuickHelpSteps } from '../../../core/program/exercise-guides';
 import { resolveCampaignPosition } from '../../../core/program/campaign-position';
 import { getWorkoutChoices, isWorkoutPlanned } from '../../../core/program/chapter-orders';
+import { exerciseProgress, type ProgressionContext } from '../../../core/program/progression';
+import {
+  FIRST_TIME_LINE,
+  NO_LOAD_LINE,
+  easierLine,
+  hintCopy,
+  lastTimeTitle,
+  setLabel,
+} from '../../../core/program/progression-copy';
 import {
   chapterPrograms,
   formatChapterNumeral,
@@ -21,6 +29,7 @@ import {
   loadWorkout,
 } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
+import { ProgressionHistory } from '../../../core/state/progression-history';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { WorkoutHistory } from '../../../core/state/workout-history';
 import { formatShortDate } from '../../../shared/format-date';
@@ -95,7 +104,17 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   private readonly restClock = new RestClock();
   private restChimed = false;
   private audio: AudioContext | null = null;
-  protected readonly previousLoad = signal<PreviousWorkoutLoad | null>(null);
+  private readonly progressionHistory = inject(ProgressionHistory);
+  /** Saved sessions behind Last time and the hint; unset until loaded, and context only. */
+  private readonly progressionContext = signal<ProgressionContext | null>(null);
+  protected readonly effortLevels = Array.from({ length: 10 }, (_, index) => String(index + 1));
+  protected readonly effortNotes: Readonly<Record<string, string>> = {
+    '1': 'easy',
+    '7': '2–3 reps left',
+    '10': 'nothing left',
+  };
+  protected readonly noLoadLine = NO_LOAD_LINE;
+  protected readonly firstTimeLine = FIRST_TIME_LINE;
   protected readonly shortDate = formatShortDate;
   private restInterval?: ReturnType<typeof setInterval>;
   private panelTrigger: HTMLElement | null = null;
@@ -154,6 +173,34 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   protected readonly currentSet = computed(() => {
     const draft = this.draft();
     return draft?.exerciseResults[draft.currentExerciseIndex]?.sets[draft.currentSetIndex] ?? null;
+  });
+  /** The final set of an exercise asks for the effort that next time's hint relies on. */
+  protected readonly isFinalSet = computed(() => {
+    const draft = this.draft();
+    const result = this.currentResult();
+    return !!draft && !!result && draft.currentSetIndex === result.sets.length - 1;
+  });
+  /** Last time, a step-up's easier version, and the hint for the exercise on screen. */
+  protected readonly lastTime = computed(() => {
+    const context = this.progressionContext();
+    const prescription = this.currentPrescription();
+    if (!context || !prescription) return null;
+    const progress = exerciseProgress(
+      prescription,
+      { date: this.state.today(), readiness: this.readiness()?.status ?? null },
+      context,
+    );
+    if (progress.kind === 'none') return null;
+    const sets = (progress.last?.sets ?? []).map((set) => setLabel(set));
+    return {
+      title: lastTimeTitle(progress),
+      date: progress.last?.date,
+      sets,
+      effort: progress.last?.finalEffort,
+      easier: progress.easier ? easierLine(progress.easier) : undefined,
+      hint: progress.hint ? hintCopy(progress.hint) : undefined,
+      noLoad: progress.noLoadRecorded,
+    };
   });
   protected readonly currentName = computed(
     () => getExerciseGuide(this.currentPrescription()?.exerciseId ?? '')?.name ?? 'Movement',
@@ -259,6 +306,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
         this.schedule.refresh(),
       ]);
       this.completedTrials.set(completedTrials);
+      await this.loadProgression();
       if (active?.workoutDefinitionId === this.workoutId) {
         this.draft.set(active);
         this.syncForms(active);
@@ -269,6 +317,15 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       this.error.set('This session could not open from local storage. Try again.');
     } finally {
       this.loading.set(false);
+    }
+  }
+
+  /** Last time and the hint are reference only: a storage error leaves the screen without them. */
+  private async loadProgression(): Promise<void> {
+    try {
+      this.progressionContext.set(await this.progressionHistory.load());
+    } catch {
+      this.progressionContext.set(null);
     }
   }
 
@@ -409,6 +466,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     this.recordingSet.set(true);
     requestAnimationFrame(() => {
       document.getElementById('actual-set')?.scrollIntoView({ block: 'center', behavior: 'auto' });
+      // The final set opens on its effort scale, so a keyboard would only cover it.
+      if (this.isFinalSet()) return;
       document.getElementById('set-reps')?.focus({ preventScroll: true });
       document.getElementById('set-duration')?.focus({ preventScroll: true });
     });
@@ -676,22 +735,6 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       notes: draft.notes ?? '',
     });
     this.updateRest();
-    void this.loadPreviousLoad(draft.exerciseResults[draft.currentExerciseIndex]?.exerciseId);
-  }
-
-  private async loadPreviousLoad(exerciseId?: string): Promise<void> {
-    this.previousLoad.set(null);
-    if (!exerciseId) return;
-    try {
-      const load = await this.history.previousLoad(exerciseId);
-      if (
-        this.draft()?.exerciseResults[this.draft()!.currentExerciseIndex]?.exerciseId === exerciseId
-      ) {
-        this.previousLoad.set(load ?? null);
-      }
-    } catch {
-      // Prior load is context only. A storage error will surface on the next edit.
-    }
   }
 
   private updateRest(): void {

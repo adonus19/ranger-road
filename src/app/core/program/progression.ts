@@ -1,5 +1,6 @@
 import type {
   CompletedSet,
+  DeepReadonly,
   ExercisePrescription,
   LocalDate,
   ReadinessCheck,
@@ -131,11 +132,15 @@ export function parseRange(value: number | string | undefined): Range | undefine
   return { low: parts[0], high: parts.at(-1)! };
 }
 
-function repsRange(prescription: ExercisePrescription | undefined): Range | undefined {
+function repsRange(
+  prescription: DeepReadonly<ExercisePrescription> | undefined,
+): Range | undefined {
   return prescription ? parseRange(prescription.reps) : undefined;
 }
 
-function secondsRange(prescription: ExercisePrescription | undefined): Range | undefined {
+function secondsRange(
+  prescription: DeepReadonly<ExercisePrescription> | undefined,
+): Range | undefined {
   return prescription
     ? parseRange(prescription.durationSeconds ?? prescription.duration)
     : undefined;
@@ -198,7 +203,7 @@ function hadPain(context: ProgressionContext, exposure: Exposure): boolean {
     ?.painEvents.length;
 }
 
-function doseKey(prescription: ExercisePrescription | undefined): string {
+function doseKey(prescription: DeepReadonly<ExercisePrescription> | undefined): string {
   if (!prescription) return '';
   return [
     prescription.sets ?? 1,
@@ -213,7 +218,7 @@ function doseKey(prescription: ExercisePrescription | undefined): string {
  * version, and the hint. `prescription` is today's.
  */
 export function exerciseProgress(
-  prescription: ExercisePrescription,
+  prescription: DeepReadonly<ExercisePrescription>,
   today: Today,
   context: ProgressionContext,
 ): ExerciseProgress {
@@ -283,7 +288,7 @@ function findBasis(
 
 function progressionHint(
   kind: ProgressionKind,
-  prescription: ExercisePrescription,
+  prescription: DeepReadonly<ExercisePrescription>,
   exposures: readonly Exposure[],
   today: Today,
   context: ProgressionContext,

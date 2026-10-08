@@ -239,19 +239,50 @@
               [formField]="setForm.load"
             /><span>lb</span>
           </div>
-          <p class="previous-load">
-            Previous load:
-            @if (previousLoad(); as previous) {
-              {{ previous.load }} lb · {{ shortDate(previous.date)
-              }}{{
-                previous.reduced || previous.painTriggered
-                  ? ' · Reduced or pain noted; do not increase automatically.'
-                  : ''
-              }}
-            } @else {
-              —
-            }
-          </p>
+          @if (lastTime(); as last) {
+            <section class="last-time" aria-label="Last time and what to try">
+              <h3>
+                @if (last.date) {
+                  {{ last.title }} · {{ shortDate(last.date) }}
+                } @else {
+                  {{ firstTimeLine }}
+                }
+              </h3>
+              @if (last.sets.length) {
+                <p class="last-sets">
+                  @for (set of last.sets; track $index) {
+                    <span [class.is-current]="session.currentSetIndex === $index"
+                      >{{ set }}
+                      @if (session.currentSetIndex === $index) {
+                        <span class="visually-hidden"> (this set)</span>
+                      }
+                    </span>
+                  }
+                  @if (last.effort !== undefined) {
+                    <span class="last-effort">effort {{ last.effort }}</span>
+                  }
+                </p>
+              } @else if (last.easier) {
+                <p class="last-easier">{{ last.easier }}</p>
+              }
+              @if (last.hint; as hint) {
+                <p class="last-hint" [class.is-rising]="hint.rising">
+                  @if (hint.rising) {
+                    <app-icon name="arrow-up" />
+                  }
+                  <span
+                    >{{ hint.action }} · {{ hint.reason }}
+                    @if (hint.context) {
+                      <small>{{ hint.context }}</small>
+                    }
+                  </span>
+                </p>
+              }
+              @if (last.noLoad) {
+                <p class="last-note">{{ noLoadLine }}</p>
+              }
+            </section>
+          }
         </div>
 
         <div class="utility-actions">
@@ -269,6 +300,25 @@
           <div id="actual-set" class="actual-set">
             <h3>Confirm this set</h3>
             <p>Check what you completed, then save it.</p>
+            @if (isFinalSet()) {
+              <div class="entry-form">
+                <fieldset class="scale effort" aria-describedby="effort-help">
+                  <legend class="label">Effort on this last set</legend>
+                  <div class="scale__options scale__options--effort">
+                    @for (level of effortLevels; track level) {
+                      <label class="scale__option">
+                        <input type="radio" [value]="level" [formField]="setForm.rpe" />
+                        <span>{{ level }}</span>
+                        @if (effortNotes[level]; as note) {
+                          <small class="scale-note">{{ note }}</small>
+                        }
+                      </label>
+                    }
+                  </div>
+                  <small class="help" id="effort-help">Optional · decides next time’s hint</small>
+                </fieldset>
+              </div>
+            }
             @if (prescription.reps !== undefined) {
               <label for="set-reps"
                 >Reps completed{{ prescription.perSide ? ' per side' : '' }}</label
@@ -294,14 +344,16 @@
                 [formField]="setForm.duration"
               />
             }
-            <label for="set-rpe">Set effort (RPE 1–10) <span>optional</span></label>
-            <input
-              id="set-rpe"
-              type="number"
-              inputmode="numeric"
-              step="1"
-              [formField]="setForm.rpe"
-            />
+            @if (!isFinalSet()) {
+              <label for="set-rpe">Set effort (RPE 1–10) <span>optional</span></label>
+              <input
+                id="set-rpe"
+                type="number"
+                inputmode="numeric"
+                step="1"
+                [formField]="setForm.rpe"
+              />
+            }
           </div>
         }
         @if (currentResult()?.modificationNotes) {

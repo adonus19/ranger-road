@@ -42,9 +42,7 @@ import {
   createRecordedWorkoutPain,
   createWorkoutDraft,
   latestWorkoutReadiness,
-  previousWorkoutLoad,
   updateWorkoutDraft,
-  type PreviousWorkoutLoad,
   type RecordedWorkoutPainEvent,
   type WorkoutPainInput,
   type WorkoutStart,
@@ -479,11 +477,6 @@ export class RoadDatabase {
         (a, b) =>
           (b.completedAt ?? '').localeCompare(a.completedAt ?? '') || b.id.localeCompare(a.id),
       );
-  }
-
-  async getPreviousWorkoutLoad(exerciseId: string): Promise<PreviousWorkoutLoad | undefined> {
-    const sessions = await this.getAllHistorical('workoutSessions');
-    return previousWorkoutLoad(sessions, exerciseId);
   }
 
   async getTrialResultsForTrial(trialId: string): Promise<TrialResult[]> {

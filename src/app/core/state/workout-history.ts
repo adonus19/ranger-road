@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import type { LocalDate, WorkoutDraft, WorkoutSession } from '../domain/models';
-import type {
-  PreviousWorkoutLoad,
-  RecordedWorkoutPainEvent,
-  WorkoutPainInput,
-  WorkoutStart,
-} from '../domain/workout';
+import type { RecordedWorkoutPainEvent, WorkoutPainInput, WorkoutStart } from '../domain/workout';
 import { RoadDatabase } from '../persistence/road-database';
 
 /** Short-lived IndexedDB connections keep the workout player resumable offline. */
@@ -38,11 +33,6 @@ export class WorkoutHistory {
 
   async forDate(date: LocalDate): Promise<WorkoutSession[]> {
     return this.withDatabase((database) => database.getWorkoutSessionsForDate(date));
-  }
-
-  /** Display-only. The workout player never applies a load from history. */
-  async previousLoad(exerciseId: string): Promise<PreviousWorkoutLoad | undefined> {
-    return this.withDatabase((database) => database.getPreviousWorkoutLoad(exerciseId));
   }
 
   private async withDatabase<T>(work: (database: RoadDatabase) => Promise<T>): Promise<T> {

@@ -106,6 +106,7 @@ const ICONS = {
   minus: [{ d: 'M5 12h14', paint: 'stroke' }],
   'arrow-right': [{ d: 'M4 12h15m-5.5-5.5L19 12l-5.5 5.5', paint: 'stroke' }],
   'arrow-left': [{ d: 'M20 12H5m5.5-5.5L5 12l5.5 5.5', paint: 'stroke' }],
+  'arrow-up': [{ d: 'M12 20V5m-5.5 5.5L12 5l5.5 5.5', paint: 'stroke' }],
 } satisfies Record<string, IconPath[]>;
 
 export type IconName = keyof typeof ICONS;

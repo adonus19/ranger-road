@@ -99,13 +99,6 @@ describe('WorkoutHistory', () => {
     expect(completed.outcome).toBe('completed');
     expect(await history.active()).toBeUndefined();
     expect(await history.forDate(green.date)).toEqual([completed]);
-    expect(await history.previousLoad('box-squat')).toEqual({
-      load: 45,
-      date: green.date,
-      sessionId: draft.id,
-      reduced: true,
-      painTriggered: true,
-    });
     await expect(history.complete(draft.id)).rejects.toThrow('not found');
   });
 
@@ -151,7 +144,6 @@ describe('WorkoutHistory', () => {
     expect(stopped.exerciseResults[0].sets[0].load).toBe(35);
     expect(stopped.exerciseResults[0].painEvents).toEqual([pain]);
     expect(await history.active()).toBeUndefined();
-    expect(await history.previousLoad('box-squat')).toBeUndefined();
   });
 
   it('requires a newer non-Red check to be reviewed before completion', async () => {

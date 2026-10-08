@@ -4,7 +4,6 @@ import {
   completeWorkoutDraft,
   createRecordedWorkoutPain,
   createWorkoutDraft,
-  previousWorkoutLoad,
   updateWorkoutDraft,
 } from './workout';
 
@@ -163,44 +162,6 @@ describe('workout draft and completion', () => {
     const stopped = completeWorkoutDraft(reviewed, red, 'stopped', savedAt);
     expect(stopped.outcome).toBe('stopped');
     expect(stopped.exerciseResults[0].sets[0].load).toBe(45);
-  });
-
-  it('shows only a prior completed load, with reduced and pain context', () => {
-    const completedDraft = createWorkoutDraft(
-      { date: green.date, definition },
-      green,
-      startedAt,
-      'base',
-    );
-    for (const result of completedDraft.exerciseResults) {
-      result.sets = result.sets.map(() => ({ completed: true }));
-    }
-    const base = completeWorkoutDraft(completedDraft, green, 'completed', savedAt);
-    base.exerciseResults[0].sets[2] = { load: 45, reps: 6, completed: true };
-    base.exerciseResults[0].painEvents.push({
-      timestamp: savedAt,
-      bodyArea: 'Knee',
-      severity: 3,
-      exerciseId: 'box-squat',
-      actionTaken: 'Stopped',
-    });
-    base.reduced = true;
-    const stopped: WorkoutSession = {
-      ...structuredClone(base),
-      id: 'stopped',
-      date: '2026-09-29',
-      outcome: 'stopped',
-    };
-    stopped.exerciseResults[0].sets[2].load = 75;
-    expect(previousWorkoutLoad([base, stopped], 'box-squat')).toEqual({
-      load: 45,
-      date: green.date,
-      sessionId: 'base',
-      reduced: true,
-      painTriggered: true,
-    });
-    expect(previousWorkoutLoad([stopped], 'box-squat')).toBeUndefined();
-    expect(previousWorkoutLoad([base], 'bench-press')).toBeUndefined();
   });
 
   it('requires each set to be accounted for and stops strength after pain reaches 5', () => {

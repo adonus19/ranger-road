@@ -343,9 +343,79 @@ h2 {
 .unit-field input {
   padding-right: 3rem;
 }
-.previous-load {
-  margin: 0.1rem 0 0.35rem;
+/* Last time and the hint: Ink and its two secondary tones only, never gold or a readiness color. */
+.last-time {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.45rem 0 0.35rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line-soft);
+}
+.last-time h3 {
+  margin: 0;
+  color: var(--text-label);
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.last-time p {
+  margin: 0;
+}
+.last-sets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.last-sets > span + span::before {
+  content: '·';
+  margin-inline: 0.4rem;
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+.last-sets .is-current {
+  font-weight: 750;
+}
+.last-sets .last-effort {
   color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+}
+.last-easier {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+.last-hint {
+  display: flex;
+  gap: 0.4rem;
+  align-items: flex-start;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.last-hint app-icon {
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.12rem;
+  color: var(--text);
+}
+.last-hint.is-rising {
+  color: var(--text);
+}
+.last-hint small {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+}
+.last-note {
+  color: var(--text-tertiary);
   font-size: 0.84rem;
 }
 .utility-actions {
@@ -417,6 +487,29 @@ h2 {
   padding: 0.55rem 0.85rem;
   font-family: var(--font-display);
   font-size: 1.4rem;
+}
+/* Final-set effort uses the shared tap scale in src/styles/entry-form.css; only its captions live here. */
+.effort {
+  margin-bottom: 0.6rem;
+}
+/* The confirm panel spaces its labels apart; scale buttons sit on one grid. */
+.actual-set label.scale__option {
+  margin-top: 0;
+}
+.actual-set label.scale__option > span {
+  color: var(--text);
+  font-weight: 600;
+}
+.actual-set label.scale__option input:checked + span {
+  color: var(--on-action);
+}
+.scale-note {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  text-align: center;
 }
 .modification-note {
   padding: 0.65rem 0.85rem;
