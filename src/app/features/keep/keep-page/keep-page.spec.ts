@@ -1,12 +1,13 @@
 import { computed, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { Campaign, ReadinessCheck, TrialResult } from '../../../core/domain/models';
 import { getCampaignDay } from '../../../core/program/campaign';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { MissionHistory } from '../../../core/state/mission-history';
 import { MeasurementHistory } from '../../../core/state/measurement-history';
+import { ScheduleHistory } from '../../../core/state/schedule-history';
 import { TrialHistory } from '../../../core/state/trial-history';
 import { KeepPage } from './keep-page';
 
@@ -44,11 +45,17 @@ async function render(
   completedTrials: TrialResult[] = [],
   missions: unknown[] = [],
 ): Promise<HTMLElement> {
+  // Saved work is never read here, so each day shows its own dated orders. Without this the
+  // real service reads whatever IndexedDB the worker holds, and an empty one counts every
+  // earlier Forge day as missed.
+  const schedule = new ScheduleHistory();
+  schedule.refresh = async () => undefined;
   TestBed.configureTestingModule({
     imports: [KeepPage],
     providers: [
       provideRouter([]),
       { provide: CampaignState, useValue: state },
+      { provide: ScheduleHistory, useValue: schedule },
       { provide: MissionHistory, useValue: { forDate: async () => missions } },
       { provide: MeasurementHistory, useValue: { all: async () => measurements } },
       {
@@ -59,9 +66,13 @@ async function render(
   });
   const fixture = TestBed.createComponent(KeepPage);
   await fixture.whenStable();
-  await new Promise((resolve) => setTimeout(resolve));
-  fixture.detectChanges();
-  return fixture.nativeElement as HTMLElement;
+  const element = fixture.nativeElement as HTMLElement;
+  // Saved work loads asynchronously, and a slower machine takes longer than one tick.
+  await vi.waitFor(() => {
+    fixture.detectChanges();
+    expect(element.textContent).not.toContain('Opening your campaign');
+  });
+  return element;
 }
 
 const text = (element: HTMLElement, selector: string) =>
