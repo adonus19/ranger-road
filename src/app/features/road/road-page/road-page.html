@@ -8,7 +8,8 @@
       <h1 id="road-title">{{ seed.chapter.name }}</h1>
       <p class="road-band__theme">{{ seed.chapter.theme }}</p>
       <p class="road-band__meta">
-        {{ chapterLine() }} · {{ chapterComplete() ? 'Chapter I complete' : 'Current chapter' }}
+        {{ chapterLine() }} ·
+        {{ chapterComplete() ? 'Chapter ' + chapterNumeral() + ' complete' : 'Current chapter' }}
       </p>
 
       @if (state.loading()) {
@@ -22,6 +23,8 @@
           [leadInDays]="leadInDays()"
           [startLabel]="startLabel()"
           [targetDay]="targetDay()"
+          [firstWeek]="seed.chapter.weeks[0]"
+          [targetLabel]="seed.trialName"
         />
       } @else {
         <p class="road-band__message">
@@ -33,18 +36,20 @@
 
   <div class="page road-body">
     <section class="trial" aria-labelledby="trial-title">
-      <h2 id="trial-title">The Gate Trial</h2>
+      <h2 id="trial-title">The {{ seed.trialName }}</h2>
       @if (trialHistoryLoading()) {
-        <p class="trial__target" role="status">Checking your Gate Trial record…</p>
+        <p class="trial__target" role="status">Checking your {{ seed.trialName }} record…</p>
       } @else if (trialHistoryError()) {
         <p class="trial__target" role="alert">
-          Gate Trial history could not open from this device.
+          {{ seed.trialName }} history could not open from this device.
         </p>
         <button class="trial__retry" type="button" (click)="loadTrialHistory()">Try again</button>
       } @else {
         <p class="trial__target">{{ trialTarget() }}</p>
-        <a class="trial__open" routerLink="/road/gate-trial">{{
-          trialPass() ? 'View Gate Trial record' : 'Review the Gate Trial plan'
+        <a class="trial__open" [routerLink]="seed.trialRoute">{{
+          trialPass()
+            ? 'View ' + seed.trialName + ' record'
+            : 'Review the ' + seed.trialName + ' plan'
         }}</a>
       }
       <ol class="trial__phases">

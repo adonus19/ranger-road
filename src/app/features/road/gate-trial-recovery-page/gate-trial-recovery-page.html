@@ -5,7 +5,7 @@
   </picture>
   <div class="recovery-scene__content">
     <h1 id="recovery-title">Recovery check</h1>
-    <p>The Gate Trial · Chapter I</p>
+    <p>The {{ trialName }} · {{ chapterLine }}</p>
   </div>
 </section>
 
@@ -22,7 +22,7 @@
   } @else if (saved(); as entry) {
     <section class="recovery-saved" aria-labelledby="recovery-saved-title">
       <h2 id="recovery-saved-title" tabindex="-1">Recovery check saved</h2>
-      <p class="recovery-saved__when">{{ minutes(entry.minutesAfter) }} after the Gate Trial</p>
+      <p class="recovery-saved__when">{{ minutes(entry.minutesAfter) }} after the {{ trialName }}</p>
       <dl>
         @for (area of areas; track area.key) {
           <div>

@@ -74,9 +74,14 @@ export interface RecoveryInput extends RecoveryAnswers {
   note?: string;
 }
 
-/** The circuit-end marker is preferred; older results use their final save time. */
+/**
+ * The marker set when the last physical part ends (the Gate circuit, the Three-Mile stair test)
+ * is preferred; older results use their final save time.
+ */
 export function recoveryAnchorAt(result: Pick<TrialResult, 'recordedAt' | 'phaseResults'>): number | null {
-  const marker = result.phaseResults[1]?.metrics?.['effortEndedAt'];
+  const marker = result.phaseResults
+    .map((phase) => phase.metrics?.['effortEndedAt'])
+    .find((value) => typeof value === 'string');
   const marked = typeof marker === 'string' ? Date.parse(marker) : Number.NaN;
   if (Number.isFinite(marked)) return marked;
   const saved = result.recordedAt ? Date.parse(result.recordedAt) : Number.NaN;

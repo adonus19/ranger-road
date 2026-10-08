@@ -159,15 +159,58 @@ describe('RoadPage', () => {
     );
   });
 
-  it('shows Chapter I complete after the full four weeks and a completed Gate Trial', async () => {
-    const element = await render('2026-10-05', '2026-11-02', [], undefined, [completedTrial]);
+  it('moves to Chapter II’s route and Three-Mile Trial once its first day arrives', async () => {
+    // Gate Trial passed Saturday, Oct 31: Chapter II begins Monday, Nov 2 (weeks 5–8).
+    const element = await render('2026-10-05', '2026-11-04', [], undefined, [completedTrial]);
 
-    expect(element.querySelector('.road-band__meta')?.textContent).toContain('Chapter I complete');
+    expect(element.querySelector('#road-title')?.textContent?.trim()).toBe('The Road');
+    expect(element.querySelector('.road-band__meta')?.textContent).toContain(
+      'Chapter II · Weeks 5–8',
+    );
+    expect(element.querySelector('.road-body #trial-title')?.textContent?.trim()).toBe(
+      'The Three-Mile Trial',
+    );
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'Chapter I complete. You passed the Gate Trial on Saturday, October 31.',
+      'First attempt Monday, November 30, the Monday after Week 8. If it doesn’t go, try again that Thursday. Chapter III waits until you pass.',
+    );
+    expect(element.querySelector('.trial__open')?.getAttribute('href')).toBe(
+      '/road/three-mile-trial',
+    );
+    expect(
+      Array.from(element.querySelectorAll('.route__week'), (week) => week.textContent?.trim()),
+    ).toEqual(['Week 5', 'Week 6', 'Week 7', 'Week 8']);
+    expect(element.querySelector('.route__target-label')?.textContent?.trim()).toBe(
+      'Three-Mile Trial',
+    );
+    // Wednesday of the chapter's first week is day 3 of the route; the trial falls on day 29.
+    expect(element.querySelector('.route')?.getAttribute('aria-label')).toBe(
+      'Chapter route. Today is day 3. Three-Mile Trial target on day 29.',
+    );
+    expect(
+      Array.from(element.querySelectorAll('.trial__phases > li summary'), (summary) =>
+        summary.textContent?.trim(),
+      ),
+    ).toHaveLength(5);
+  });
+
+  it('shows Chapter II complete after the Three-Mile Trial is passed', async () => {
+    const threeMile: TrialResult = {
+      ...completedTrial,
+      id: 'three-mile-result-1',
+      trialId: 'three-mile-trial',
+      date: '2026-11-30',
+    };
+    const element = await render('2026-10-05', '2026-12-01', [], undefined, [
+      completedTrial,
+      threeMile,
+    ]);
+
+    expect(element.querySelector('.road-band__meta')?.textContent).toContain('Chapter II complete');
+    expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
+      'Chapter II complete. You passed the Three-Mile Trial on Monday, November 30.',
     );
     expect(element.querySelector('.trial__open')?.textContent?.trim()).toBe(
-      'View Gate Trial record',
+      'View Three-Mile Trial record',
     );
   });
 

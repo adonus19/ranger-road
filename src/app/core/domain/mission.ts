@@ -86,7 +86,7 @@ export function createMissionRecord(input: MissionRecordInput): MissionInstance 
     throw new Error('A mission record and definition need identifiers.');
   }
   if (definition.plannedTrialId) {
-    throw new Error('Record the Gate Trial through its trial flow.');
+    throw new Error('Record a trial through its trial flow.');
   }
 
   if (outcome === 'rest' && !input.notes?.trim()) {

@@ -22,12 +22,15 @@ import {
   type RecoveryAnswers,
   type RecoveryArea,
 } from '../../../core/domain/post-mission-function';
-import { gateTrialDefinition } from '../../../core/program/chapter-one-trial.seed';
+import { chapterPrograms, formatChapterNumeral } from '../../../core/program/program-catalog';
 import { TrialHistory } from '../../../core/state/trial-history';
 import { formatClockTime, formatMinutes } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
 
-/** Post-mission function, 60–120 minutes after a completed Gate Trial: one word per area. */
+/**
+ * Post-mission function, 60–120 minutes after a completed chapter trial: one word per area.
+ * The route's `trialId` data picks the trial; the Gate Trial is the default.
+ */
 @Component({
   imports: [FormField, Icon, RouterLink],
   selector: 'app-gate-trial-recovery-page',
@@ -46,7 +49,12 @@ export class GateTrialRecoveryPage implements OnInit, OnDestroy {
   protected readonly minutes = formatMinutes;
   protected readonly word = recoveryWord;
   protected readonly fromKeep = this.route.snapshot.queryParamMap.get('from') === 'keep';
-  protected readonly backPath = this.fromKeep ? '/keep' : '/road/gate-trial';
+  private readonly program =
+    chapterPrograms.find((item) => item.trial.id === this.route.snapshot.data['trialId']) ??
+    chapterPrograms[0];
+  protected readonly trialName = this.program.trialName;
+  protected readonly chapterLine = `Chapter ${formatChapterNumeral(this.program.chapter.number)}`;
+  protected readonly backPath = this.fromKeep ? '/keep' : this.program.trialRoute;
   protected readonly backLabel = this.fromKeep ? 'Back to Keep' : 'Back to trial';
 
   protected readonly loading = signal(true);
@@ -95,12 +103,12 @@ export class GateTrialRecoveryPage implements OnInit, OnDestroy {
     const resultId = this.route.snapshot.paramMap.get('resultId') ?? '';
     try {
       const [results, recoveries] = await Promise.all([
-        this.history.forTrial(gateTrialDefinition.id),
+        this.history.forTrial(this.program.trial.id),
         this.history.recoveries(),
       ]);
       const result = results.find((item) => item.id === resultId);
       if (!result) {
-        this.loadError.set('This Gate Trial record was not found on this device.');
+        this.loadError.set(`This ${this.trialName} record was not found on this device.`);
         return;
       }
       this.result.set(result);

@@ -36,6 +36,34 @@ const answers: RecoveryInput = {
 };
 
 describe('post-mission function', () => {
+  it('times the Three-Mile Trial’s check from the end of the stair test', () => {
+    const threeMile: TrialResult = {
+      id: 'three-mile-result',
+      trialId: 'three-mile-trial',
+      date: '2026-11-30',
+      recordedAt: '2026-11-30T16:00:00.000Z',
+      phaseResults: [
+        { phaseId: 'three-mile-walk' },
+        { phaseId: 'suitcase-carry' },
+        { phaseId: 'stairs', metrics: { effortEndedAt: '2026-11-30T14:00:00.000Z' } },
+        { phaseId: 'reflection' },
+        { phaseId: 'prayer' },
+      ],
+      reflection: '',
+    };
+    expect(recoveryOpensAt(threeMile)).toBe(Date.parse('2026-11-30T15:00:00.000Z'));
+    const saved = createPostMissionFunction(
+      threeMile,
+      { ...answers, trialResultId: threeMile.id },
+      '2026-11-30T15:10:00.000Z',
+    );
+    expect(saved).toMatchObject({
+      trialId: 'three-mile-trial',
+      effortEndedAt: '2026-11-30T14:00:00.000Z',
+      minutesAfter: 70,
+    });
+  });
+
   it('opens 60 minutes after the physical effort, including when the result was saved later', () => {
     expect(recoveryOpensAt(result)).toBe(Date.parse('2026-10-22T15:00:00.000Z'));
     expect(() => createPostMissionFunction(result, answers, '2026-10-22T14:59:59.999Z'))

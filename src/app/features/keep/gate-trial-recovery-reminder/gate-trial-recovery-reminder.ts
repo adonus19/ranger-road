@@ -2,12 +2,12 @@ import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular
 import { RouterLink } from '@angular/router';
 import type { PostMissionFunction, TrialResult } from '../../../core/domain/models';
 import { pendingRecovery, recoveryOpensAt } from '../../../core/domain/post-mission-function';
-import { gateTrialDefinition } from '../../../core/program/chapter-one-trial.seed';
-import { TrialHistory } from '../../../core/state/trial-history';
+import { chapterPrograms } from '../../../core/program/program-catalog';
+import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatClockTime } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
 
-/** A quiet timed prompt after a completed physical Gate Trial. */
+/** A quiet timed prompt after a completed physical chapter trial. */
 @Component({
   imports: [Icon, RouterLink],
   selector: 'app-gate-trial-recovery-reminder',
@@ -29,6 +29,15 @@ export class GateTrialRecoveryReminder implements OnInit, OnDestroy {
       this.now(),
     ),
   );
+  protected readonly trialName = computed(
+    () =>
+      chapterPrograms.find((program) => program.trial.id === this.pending()?.trialId)?.trialName ??
+      'Trial',
+  );
+  protected readonly recoveryLink = computed(() => {
+    const program = chapterPrograms.find((item) => item.trial.id === this.pending()?.trialId);
+    return [`${program?.trialRoute ?? '/road/gate-trial'}/recovery`, this.pending()?.id ?? ''];
+  });
   protected readonly opensAt = computed(() => {
     const result = this.pending();
     return result ? recoveryOpensAt(result) : null;
@@ -42,7 +51,7 @@ export class GateTrialRecoveryReminder implements OnInit, OnDestroy {
     this.ticker = setInterval(() => this.now.set(Date.now()), 30_000);
     try {
       const [results, recoveries] = await Promise.all([
-        this.history.forTrial(gateTrialDefinition.id),
+        loadCampaignTrials(this.history),
         this.history.recoveries(),
       ]);
       this.results.set(results);

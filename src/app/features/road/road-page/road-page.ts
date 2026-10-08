@@ -1,25 +1,21 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { TrialCircuitMovement, TrialResult } from '../../../core/domain/models';
+import { addDays, daysBetween } from '../../../core/program/calendar';
 import {
-  addDays,
-  getCampaignDay,
-  getChapterOneLeadInDays,
-  getGateTrialPlannedDay,
-  getGateTrialTargetDate,
-  getNextGateTrialAttempt,
-} from '../../../core/program/campaign';
+  getChapterDay,
+  getNextAttempt,
+  resolveCampaignPosition,
+} from '../../../core/program/campaign-position';
 import { getExerciseGuide } from '../../../core/program/exercise-guides';
 import {
-  getChapterOneTrialPass,
-  getChapterTwoStartDate,
-  isChapterOneComplete,
-} from '../../../core/program/chapter-one-completion';
-import { chapterOneDefinition } from '../../../core/program/chapter-one.seed';
-import { formatChapterLine, loadChapterSeed } from '../../../core/program/program-catalog';
+  chapterPrograms,
+  formatChapterLine,
+  formatChapterNumeral,
+} from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { RoadHistory, type SavedRoadSession } from '../../../core/state/road-history';
-import { TrialHistory } from '../../../core/state/trial-history';
+import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate, formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
 import { roadSessionParts } from '../road-session-summary';
@@ -42,12 +38,6 @@ export class RoadPage implements OnInit {
   protected readonly trialHistoryLoading = signal(true);
   protected readonly trialHistoryError = signal(false);
   private readonly completedTrials = signal<TrialResult[]>([]);
-  protected readonly chapterComplete = computed(() =>
-    isChapterOneComplete(this.state.campaign(), this.state.today(), this.completedTrials()),
-  );
-  protected readonly trialPass = computed(() =>
-    getChapterOneTrialPass(this.state.campaign(), this.completedTrials()),
-  );
   protected readonly walkParts = roadSessionParts;
   protected readonly walkDate = formatShortDate;
 
@@ -58,29 +48,57 @@ export class RoadPage implements OnInit {
     return `${name} · ${dose}${movement.perSide ? ' per side' : ''}`;
   }
 
-  protected readonly seed = computed(() =>
-    loadChapterSeed(this.state.campaign()?.currentChapterId ?? chapterOneDefinition.id),
-  );
-
-  protected readonly chapterLine = computed(() => {
-    const chapter = this.seed()?.chapter;
-    return chapter ? formatChapterLine(chapter) : '';
+  /** Today's place in the campaign, from Day 1 on; null before it or without a campaign. */
+  private readonly position = computed(() => {
+    const campaign = this.state.campaign();
+    return campaign
+      ? resolveCampaignPosition(campaign.startDate, this.state.today(), this.completedTrials())
+      : null;
   });
 
-  protected readonly campaignDay = computed(() => {
+  /** Today's chapter; before Day 1 the road still shows the first chapter, as planned. */
+  protected readonly chapterDay = computed(() => {
     const campaign = this.state.campaign();
-    return campaign ? getCampaignDay(campaign.startDate, this.state.today()) : 0;
+    return (
+      this.position()?.chapter ??
+      (campaign
+        ? getChapterDay(chapterPrograms[0], campaign.startDate, campaign.startDate, 1)
+        : null)
+    );
+  });
+  protected readonly program = computed(() => this.chapterDay()?.program ?? chapterPrograms[0]);
+  protected readonly seed = this.program;
+
+  protected readonly chapterLine = computed(() => formatChapterLine(this.program().chapter));
+  protected readonly chapterNumeral = computed(() =>
+    formatChapterNumeral(this.program().chapter.number),
+  );
+  protected readonly chapterComplete = computed(() => !!this.position()?.awaitingNextChapter);
+  protected readonly trialPass = computed(() => this.chapterDay()?.pass);
+
+  /** Chapter I leads in from Day 1; a later chapter's route begins on its first Monday. */
+  private readonly routeOrigin = computed(() => {
+    const chapter = this.chapterDay();
+    return chapter ? (chapter.program.leadsIn ? chapter.start : chapter.firstMonday) : null;
+  });
+
+  /** The chapter's day count along the route, or 0 before Day 1. */
+  protected readonly campaignDay = computed(() => {
+    const origin = this.routeOrigin();
+    if (!origin || !this.position()) return 0;
+    return daysBetween(origin, this.state.today()) + 1;
   });
 
   protected readonly leadInDays = computed(() => {
-    const campaign = this.state.campaign();
-    return campaign ? getChapterOneLeadInDays(campaign.startDate) : 0;
+    const chapter = this.chapterDay();
+    return chapter?.program.leadsIn ? daysBetween(chapter.start, chapter.firstMonday) : 0;
   });
 
-  /** The route ends at the first Gate Trial attempt, the Monday after Week 4. */
+  /** The route ends at the first trial attempt, the Monday after the chapter's last week. */
   protected readonly targetDay = computed(() => {
-    const campaign = this.state.campaign();
-    return campaign ? getGateTrialPlannedDay(campaign.startDate) : 29;
+    const origin = this.routeOrigin();
+    const chapter = this.chapterDay();
+    return origin && chapter ? daysBetween(origin, chapter.firstAttempt) + 1 : 29;
   });
 
   protected readonly startLabel = computed(() => {
@@ -88,32 +106,33 @@ export class RoadPage implements OnInit {
     return campaign ? `Day 1 · ${formatLongDate(campaign.startDate)}` : '';
   });
 
-  /** Where the Gate Trial stands: its first attempt, the next one, or the pass. */
+  /** Where the chapter's trial stands: its first attempt, the next one, or the pass. */
   protected readonly trialTarget = computed(() => {
-    const pass = this.trialPass();
+    const program = this.program();
+    const trial = program.trialName;
+    const nextChapter = `Chapter ${formatChapterNumeral(program.chapter.number + 1)}`;
+    const chapter = this.chapterDay();
+    const pass = chapter?.pass;
     if (pass && this.chapterComplete()) {
-      return `Chapter I complete. You passed the Gate Trial on ${formatLongDate(pass.date)}.`;
+      return `Chapter ${this.chapterNumeral()} complete. You passed the ${trial} on ${formatLongDate(pass.date)}.`;
     }
-    const campaign = this.state.campaign();
-    if (pass && campaign) {
-      const chapterTwo = getChapterTwoStartDate(campaign, this.completedTrials()) ?? pass.date;
-      return `Passed ${formatLongDate(pass.date)}. Chapter II begins ${formatLongDate(chapterTwo)}.`;
+    if (pass && chapter?.nextStart) {
+      return `Passed ${formatLongDate(pass.date)}. ${nextChapter} begins ${formatLongDate(chapter.nextStart)}.`;
     }
-    if (!campaign) {
-      return 'First attempt on the Monday after Week 4. Chapter II waits until you pass.';
+    if (!chapter) {
+      return `First attempt on the Monday after Week ${program.chapter.weeks.at(-1)}. ${nextChapter} waits until you pass.`;
     }
     const today = this.state.today();
-    const first = getGateTrialTargetDate(campaign.startDate);
     // Civil dates in YYYY-MM-DD form compare correctly as strings.
-    if (today < first) {
-      return `First attempt ${formatLongDate(first)}, the Monday after Week 4. If it doesn’t go, try again that Thursday. Chapter II waits until you pass.`;
+    if (today < chapter.firstAttempt) {
+      return `First attempt ${formatLongDate(chapter.firstAttempt)}, the Monday after Week ${program.chapter.weeks.at(-1)}. If it doesn’t go, try again that Thursday. ${nextChapter} waits until you pass.`;
     }
-    const next = getNextGateTrialAttempt(campaign.startDate, today);
+    const next = getNextAttempt(chapter, today);
     if (next === today) {
-      const after = getNextGateTrialAttempt(campaign.startDate, addDays(today, 1));
+      const after = getNextAttempt(chapter, addDays(today, 1));
       return `Today is an attempt day. If it doesn’t go, the next is ${formatLongDate(after)}.`;
     }
-    return `Next attempt ${formatLongDate(next)}. Chapter II waits until you pass.`;
+    return `Next attempt ${formatLongDate(next)}. ${nextChapter} waits until you pass.`;
   });
 
   ngOnInit(): void {
@@ -128,7 +147,7 @@ export class RoadPage implements OnInit {
     try {
       await this.state.initialize();
       if (!this.state.campaign()) return;
-      this.completedTrials.set(await this.trialHistory.forTrial(chapterOneDefinition.trialId));
+      this.completedTrials.set(await loadCampaignTrials(this.trialHistory));
     } catch {
       this.trialHistoryError.set(true);
     } finally {

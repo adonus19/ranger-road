@@ -54,6 +54,15 @@ export const routes: Routes = [
     data: { headerOverScene: true },
   },
   {
+    path: 'road/three-mile-trial/recovery/:resultId',
+    loadComponent: () =>
+      import('./features/road/gate-trial-recovery-page/gate-trial-recovery-page').then(
+        (m) => m.GateTrialRecoveryPage,
+      ),
+    data: { trialId: 'three-mile-trial', headerOverScene: true },
+    title: 'Recovery Check | The Ranger’s Road',
+  },
+  {
     path: 'road/three-mile-trial/active',
     loadComponent: () =>
       import('./features/road/three-mile-trial-active-page/three-mile-trial-active-page').then(

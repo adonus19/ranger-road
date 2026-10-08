@@ -113,6 +113,30 @@
             <p>Behavior to change: {{ response(result.phaseResults[3], 'behavior') }}</p>
             <h3>Prayer</h3>
             <p>Psalm 121 and prayer for your family</p>
+            @for (pain of painByAttempt()[result.id] ?? []; track pain.id) {
+              <p>Pain: {{ pain.bodyArea }} · {{ pain.severity }}/10 · {{ pain.actionTaken }}</p>
+            }
+            @if (recoveries()[result.id]; as recovery) {
+              <h3>After the effort</h3>
+              <p>Checked {{ minutes(recovery.minutesAfter) }} after physical work.</p>
+              <dl class="station-history__recovery">
+                @for (area of recoveryAreas; track area.key) {
+                  <div>
+                    <dt>{{ area.label }}</dt>
+                    <dd>{{ recoveryWord(area.key, recovery[area.key]) }}</dd>
+                  </div>
+                }
+              </dl>
+              @if (recovery.note) {
+                <p>{{ recovery.note }}</p>
+              }
+            } @else if (recoveryOpensAt(result)) {
+              <a
+                class="station-history__recovery-link"
+                [routerLink]="['/road/three-mile-trial/recovery', result.id]"
+                >Open recovery check</a
+              >
+            }
           </div>
         </details>
       }

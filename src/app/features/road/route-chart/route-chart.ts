@@ -43,6 +43,8 @@ export class RouteChart {
   readonly targetDay = input(28);
   readonly leadInDays = input(0);
   readonly weeks = input(4);
+  /** The campaign week number the route's first week carries: 5 for Chapter II. */
+  readonly firstWeek = input(1);
   readonly targetLabel = input('Gate Trial');
   /** Shown at the start of the route before Day 1, such as the chosen start date. */
   readonly startLabel = input('');
@@ -82,13 +84,18 @@ export class RouteChart {
       const span = this.targetDay() - 1;
       const t = (this.leadInDays() + week * 7) / span;
       const labelT = Math.min(1, (this.leadInDays() + week * 7 + 3.5) / span);
-      return { label: `Week ${week + 1}`, t, labelX: pointAt(labelT).x, ...pointAt(t) };
+      return {
+        label: `Week ${this.firstWeek() + week}`,
+        t,
+        labelX: pointAt(labelT).x,
+        ...pointAt(t),
+      };
     }),
   );
 
   protected readonly summary = computed(() => {
     const leadIn = this.leadInDays()
-      ? `A ${this.leadInDays()}-day lead-in ends before Week 1 begins on day ${this.leadInDays() + 1}. `
+      ? `A ${this.leadInDays()}-day lead-in ends before Week ${this.firstWeek()} begins on day ${this.leadInDays() + 1}. `
       : '';
     const trial = `${this.targetLabel()} target on day ${this.targetDay()}`;
     if (!this.started()) {

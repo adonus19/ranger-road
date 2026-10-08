@@ -45,13 +45,13 @@ Chapter I uses the dated orders in the [Muster content pack](rangers-road-full-p
 
 Visual 9-chapter campaign map.
 
-Current build: Chapter I only. Its four full weeks are drawn as a route after any short lead-in, with a Today mark and the Gate Trial at the end, on the first attempt day (the Monday after Week 4). Before Day 1 the route shows the start date. From the first attempt on, the Today mark rests on the trial. The Gate Trial section names the first attempt before it arrives, then the next attempt, and says Chapter II waits for a pass; once the trial is passed, it names the day and when Chapter II begins, and links to the record. Chapters II–IX join the map once their content is seeded.
+Current build: Chapters I and II. The current chapter's four full weeks are drawn as a route, with a Today mark and the chapter's trial at the end, on its first attempt day (the Monday after the chapter's last week). Chapter I's route begins on Day 1 and shows any short lead-in; Chapter II's begins on its first Monday and labels its weeks 5–8. Before Day 1 the route shows the start date. From the first attempt on, the Today mark rests on the trial. The trial section names the first attempt before it arrives, then the next attempt, and says the next chapter waits for a pass; once the trial is passed, it names the day and when the next chapter begins, and links to the record. Chapters III–IX join the map once their content is seeded.
 
 An older campaign may keep a separately chosen Gate Trial target date; attempts still follow the Monday and Thursday rule.
 
 While the Gate Trial is pending after Week 4, the days between attempts repeat Week 4's weekday orders. Pending attempts do not start Chapter II or add a progression step.
 
-From Chapter II's first day, Road labels Chapter I complete and links to the saved trial record. This derived acknowledgment does not change past records.
+From Chapter II's first day, Road shows Chapter II and its Three-Mile Trial; once that trial is passed and Chapter III's first day arrives (its orders are not in the app yet), Road labels Chapter II complete and links to the saved record. This derived acknowledgment does not change past records.
 
 Road opens a separate screen for manually logging a completed walk or trail session, and lists the most recent sessions below the Gate Trial. The Phase 1 form asks for session date, miles, minutes, terrain, and RPE (1–10), with optional pain before and after (0–10). It does not set a distance, pace, or ruck-load target. Saving a Road session does not record Today's Mission; the outcome is still recorded there. On a conditioning day, once a full or reduced outcome is saved, Today's Mission offers "Log walk details", which opens the log for that date. The readiness check remains a step before training; a retrospective log does not create a past readiness check.
 
@@ -221,3 +221,4 @@ When a Forge session is missed, the next morning's Keep, Today's Mission and For
 - Stairs: a "three flights at a steady pace" confirmation and breathlessness 1–10. If the stairs are not appropriate that day, the attempt is stopped and kept, not passed.
 - Leadership reflection: both prompts answered. Prayer: a confirmation that Psalm 121 was read and the family prayed for.
 - Pain notes can be recorded during the walk, carry and stairs. The end of the stair test is saved as the end of physical effort, for the recovery check.
+- The recovery check works as it does for the Gate Trial: it opens 60 minutes after the stair test ends (`/road/three-mile-trial/recovery/:resultId`), and the Keep reminder, which looks across every chapter's trial, links to the right one for 12 hours. The saved check and any pain notes appear in the trial's recorded attempts.

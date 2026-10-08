@@ -1,18 +1,25 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type {
+  PostMissionFunction,
   ReadinessStatus,
   TrialAttempt,
   TrialDraft,
   TrialPhaseResult,
   TrialResult,
 } from '../../../core/domain/models';
+import {
+  RECOVERY_AREAS,
+  recoveryOpensAt,
+  recoveryWord,
+} from '../../../core/domain/post-mission-function';
+import type { RecordedTrialPainEvent } from '../../../core/domain/trial-draft';
 import { addDays } from '../../../core/program/calendar';
 import { threeMileTrialDefinition } from '../../../core/program/chapter-two-trial.seed';
 import { getTrialWindow } from '../../../core/program/trial-window';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
-import { formatLongDate, formatShortDate } from '../../../shared/format-date';
+import { formatLongDate, formatMinutes, formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
 
 const READINESS_GUIDANCE: Record<ReadinessStatus, string> = {
@@ -33,11 +40,17 @@ export class ThreeMileTrialPage implements OnInit {
   private readonly history = inject(TrialHistory);
   protected readonly trial = threeMileTrialDefinition;
   protected readonly shortDate = formatShortDate;
+  protected readonly minutes = formatMinutes;
+  protected readonly recoveryWord = recoveryWord;
+  protected readonly recoveryOpensAt = recoveryOpensAt;
+  protected readonly recoveryAreas = RECOVERY_AREAS;
   protected readonly historyLoading = signal(true);
   protected readonly historyError = signal(false);
   protected readonly activeDraft = signal<TrialDraft | null>(null);
   protected readonly completedResults = signal<TrialResult[]>([]);
   protected readonly stoppedAttempts = signal<TrialAttempt[]>([]);
+  protected readonly recoveries = signal<Record<string, PostMissionFunction>>({});
+  protected readonly painByAttempt = signal<Record<string, RecordedTrialPainEvent[]>>({});
   private readonly campaignTrials = signal<TrialResult[]>([]);
 
   protected readonly readiness = computed(() => {
@@ -145,16 +158,26 @@ export class ThreeMileTrialPage implements OnInit {
       if (retry) await this.state.retry();
       else await this.state.initialize();
       if (this.state.error()) return;
-      const [draft, completed, stopped, trials] = await Promise.all([
+      const [draft, completed, stopped, trials, recoveries] = await Promise.all([
         this.history.activeDraft(),
         this.history.forTrial(this.trial.id),
         this.history.stoppedForTrial(this.trial.id),
         loadCampaignTrials(this.history),
+        this.history.recoveries(),
       ]);
       this.activeDraft.set(draft ?? null);
       this.completedResults.set(completed);
       this.stoppedAttempts.set(stopped);
       this.campaignTrials.set(trials);
+      this.recoveries.set(
+        Object.fromEntries(recoveries.map((entry) => [entry.trialResultId, entry])),
+      );
+      const painRows = await Promise.all(
+        completed.map(
+          async (result) => [result.id, await this.history.painForAttempt(result.id)] as const,
+        ),
+      );
+      this.painByAttempt.set(Object.fromEntries(painRows));
     } catch {
       this.historyError.set(true);
     } finally {

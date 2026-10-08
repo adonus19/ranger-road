@@ -1,8 +1,8 @@
 @if (pending(); as result) {
-  <a class="reminder" [routerLink]="['/road/gate-trial/recovery', result.id]" [queryParams]="{ from: 'keep' }">
+  <a class="reminder" [routerLink]="recoveryLink()" [queryParams]="{ from: 'keep' }">
     <app-icon class="reminder__icon" name="heart-pulse" />
     <span class="reminder__text">
-      <strong>Gate Trial recovery check</strong>
+      <strong>{{ trialName() }} recovery check</strong>
       <span>
         @if (ready()) {
           Check how you feel and function now.
