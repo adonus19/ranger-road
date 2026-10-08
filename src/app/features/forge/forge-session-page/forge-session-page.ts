@@ -120,6 +120,14 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       ? resolveCampaignPosition(campaign.startDate, this.state.today(), this.completedTrials())
       : null;
   });
+  /** Today's orders with any make-up applied, so a Forge session moved here can start. */
+  private readonly todayOrders = computed(() => {
+    const campaign = this.state.campaign();
+    const today = this.state.today();
+    return campaign
+      ? this.schedule.dayFor(campaign.startDate, today, today, this.completedTrials())
+      : null;
+  });
   /** The chapter day a saved draft was started on, or today. */
   private readonly sessionDay = computed(() => {
     const campaign = this.state.campaign();
@@ -167,7 +175,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     return check?.date === this.state.today() ? check : null;
   });
   protected readonly weekNote = computed(() => {
-    const chapter = this.position()?.chapter;
+    const chapter = this.todayOrders();
     return chapter?.program.workoutPlan(this.workoutId, chapter.contentWeek).note;
   });
   /** A deload week's set guide, from the week the session was started in. */
@@ -190,11 +198,11 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       ) ?? 0,
   );
   protected readonly planned = computed(() => {
-    const chapter = this.position()?.chapter;
+    const chapter = this.todayOrders();
     return chapter ? isWorkoutPlanned(chapter, this.workoutId) : false;
   });
   protected readonly allowed = computed(() => {
-    const chapter = this.position()?.chapter;
+    const chapter = this.todayOrders();
     return Boolean(
       chapter && !this.chapterComplete() && getWorkoutChoices(chapter).includes(this.workoutId),
     );
@@ -271,7 +279,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     try {
       await this.state.initialize();
       const definition = this.definition();
-      const chapter = this.position()?.chapter;
+      const chapter = this.todayOrders();
       if (!definition || !chapter || !this.allowed()) return;
       const { note, reduced } = chapter.program.workoutPlan(this.workoutId, chapter.contentWeek);
       const draft = await this.history.start({

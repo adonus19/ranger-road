@@ -6,7 +6,7 @@ export const chapterTwoExerciseGuides: readonly ExerciseGuideContent[] = [
     id: 'split-squat',
     name: 'Split Squat',
     purpose:
-      "Build single-leg strength and balance without holding a rack. Chapter II's step-up from Supported Split Squat.",
+      'Build single-leg strength and balance without holding a rack. Chapter II’s step-up from Supported Split Squat.',
     movementPattern: 'Lunge / split stance.',
     targets: 'Front-leg quads and glutes; hamstrings, adductors, and core secondarily.',
     how: 'Take a long split stance with feet hip-width apart, front foot flat and back heel lifted. Keep your torso tall and brace. Lower straight down under control until the back knee is just above the floor or as deep as feels comfortable. Push through the whole front foot to rise. Finish all reps on one side, then switch.',
@@ -21,7 +21,7 @@ export const chapterTwoExerciseGuides: readonly ExerciseGuideContent[] = [
     id: 'goblet-squat',
     name: 'Goblet Squat',
     purpose:
-      "Build squat strength with a front-loaded counterbalance and no box to rest on. Chapter II's step-up from Goblet Squat to Box.",
+      'Build squat strength with a front-loaded counterbalance and no box to rest on. Chapter II’s step-up from Goblet Squat to Box.',
     movementPattern: 'Squat.',
     targets: 'Quads, glutes, core.',
     how: 'Hold one dumbbell against your chest with both hands. Stand with feet about shoulder width. Brace, then sit down and back under control to a comfortable depth, keeping heels flat and chest tall. Drive through the whole foot to stand.',
@@ -57,7 +57,7 @@ export const chapterTwoExerciseGuides: readonly ExerciseGuideContent[] = [
     id: 'supported-deep-squat',
     name: 'Supported Deep Squat',
     purpose:
-      "Improve comfort in a deep squat position by holding it for time. Chapter II's step-up from Supported Squat Hold.",
+      'Improve comfort in a deep squat position by holding it for time. Chapter II’s step-up from Supported Squat Hold.',
     targets: 'Hips, ankles, and the whole lower body, with trunk position.',
     how: 'Hold a rack or stable support in front of you. Lower into the deepest squat that feels comfortable, with your whole foot on the floor and your chest up. Breathe slowly and stay relaxed for the hold, then stand up.',
     feel: 'Stretch through the hips, groin, and ankles; no sharp or pinching pain at the knee or hip.',

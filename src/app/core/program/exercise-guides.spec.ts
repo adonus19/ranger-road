@@ -45,7 +45,9 @@ describe('Exercise guides across chapters', () => {
       const section = catalog.slice(start, end < 0 ? undefined : end);
       for (const [key, value] of Object.entries(guide)) {
         if (key === 'id' || key === 'name') continue;
-        expect(section, `${guide.name}.${key}`).toContain(`**${labels[key]}:** ${value}`);
+        // The app sets apostrophes curly; the catalog keeps them straight.
+        const text = String(value).replace(/’/g, "'");
+        expect(section, `${guide.name}.${key}`).toContain(`**${labels[key]}:** ${text}`);
       }
     }
   });
