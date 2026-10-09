@@ -302,6 +302,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.restInterval) clearInterval(this.restInterval);
+    void this.audio?.close().catch(() => undefined);
   }
 
   protected async load(): Promise<void> {
@@ -700,6 +701,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   protected toggleRestPause(): void {
     if (this.restClock.paused) this.restClock.resume();
     else this.restClock.pause();
+    if (this.restLength()) this.prepareAudio();
     this.restPaused.set(this.restClock.paused);
     this.updateRest();
   }
@@ -707,6 +709,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   protected resetRest(): void {
     this.restClock.reset();
     this.restChimed = false;
+    if (this.restLength()) this.prepareAudio();
     this.updateRest();
   }
 
@@ -776,15 +779,21 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     }
   }
 
-  /** Audio can only start from a tap, so the context is made when a set is marked. */
+  /**
+   * Audio can only start from a tap, so the context is made when a set is marked. Phones
+   * suspend an idle context (screen lock, other audio, a quiet minute), so every rest tap
+   * wakes it again rather than only the first.
+   */
   private prepareAudio(): void {
-    if (this.audio) return;
     try {
-      const Context =
-        window.AudioContext ??
-        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-      this.audio = Context ? new Context() : null;
-      void this.audio?.resume();
+      if (!this.audio || this.audio.state === 'closed') {
+        const Context =
+          window.AudioContext ??
+          (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        this.audio = Context ? new Context() : null;
+      }
+      if (this.audio && this.audio.state !== 'running')
+        void this.audio.resume().catch(() => undefined);
     } catch {
       this.audio = null;
     }
@@ -793,7 +802,18 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   /** A soft two-note chime; the screen still shows when the rest length is reached. */
   private chime(): void {
     const context = this.audio;
-    if (!context) return;
+    if (!context || context.state === 'closed') return;
+    if (context.state !== 'running') {
+      context.resume().then(
+        () => this.playChime(context),
+        () => undefined,
+      );
+      return;
+    }
+    this.playChime(context);
+  }
+
+  private playChime(context: AudioContext): void {
     try {
       [523, 659].forEach((frequency, index) => {
         const start = context.currentTime + index * 0.25;
