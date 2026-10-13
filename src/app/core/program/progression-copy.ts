@@ -16,14 +16,43 @@ import type {
 
 /** The words Forge uses for progression, from UX_SPEC.md "Progression in Forge". */
 
-/** One saved set, as Last time shows it: "95 × 6", "— × 10", "25 lb × 40 s", "40 s". */
+/** Band help as it reads on its own: "40 lb assist", or "no band" at 0. */
+export function assistanceText(pounds: number): string {
+  return pounds === 0 ? 'no band' : `${pounds} lb assist`;
+}
+
+function bandLabel(set: CompletedSet, withUnit: boolean): string | undefined {
+  if (set.assistance === undefined || !Number.isFinite(set.assistance)) return undefined;
+  const help =
+    withUnit || set.assistance === 0 ? assistanceText(set.assistance) : `${set.assistance}`;
+  return set.reps !== undefined ? `${help} × ${set.reps}` : help;
+}
+
+/**
+ * One saved set, as Last time shows it: "95 × 6", "— × 10", "25 lb × 40 s", "40 s", and
+ * "40 lb assist × 8" for band help.
+ */
 export function setLabel(set: CompletedSet): string {
   if (set.completed === false) return 'skipped';
+  const band = bandLabel(set, true);
+  if (band) return band;
   const load = set.load !== undefined && Number.isFinite(set.load) ? set.load : undefined;
   if (set.reps !== undefined) return `${load ?? '—'} × ${set.reps}`;
   if (set.duration !== undefined)
     return load !== undefined ? `${load} lb × ${set.duration} s` : `${set.duration} s`;
   return load !== undefined ? `${load} lb` : '—';
+}
+
+/** Last time's sets in a row: band help names its unit once, "40 lb assist × 8 · 40 × 8". */
+export function lastTimeLabels(sets: readonly CompletedSet[]): string[] {
+  let named = false;
+  return sets.map((set) => {
+    if (set.completed === false) return setLabel(set);
+    const band = bandLabel(set, !named);
+    if (!band) return setLabel(set);
+    named = true;
+    return band;
+  });
 }
 
 function dose(exposure: Exposure): string | undefined {
@@ -126,6 +155,24 @@ export function hintCopy(hint: ProgressionHint): HintCopy {
         rising: true,
         ...extra,
       };
+    case 'less-band':
+      if (hint.from === 0) {
+        return {
+          action: 'Already at no band',
+          reason: evidenceText(hint.evidence),
+          rising: false,
+          ...extra,
+        };
+      }
+      return {
+        action:
+          hint.from !== undefined
+            ? `May use less band help, under ${hint.from} lb`
+            : 'May use less band help',
+        reason: evidenceText(hint.evidence),
+        rising: true,
+        ...extra,
+      };
     case 'add-seconds':
       return {
         action: `May hold longer, up to ${hint.aimFor} s`,
@@ -133,16 +180,16 @@ export function hintCopy(hint: ProgressionHint): HintCopy {
         rising: true,
         ...extra,
       };
-    case 'less-band':
-      return {
-        action: 'May use less band help',
-        reason: evidenceText(hint.evidence),
-        rising: true,
-        ...extra,
-      };
     case 'hold':
       return {
-        action: hint.at !== undefined ? `Hold at ${hint.at} lb` : 'Hold',
+        action:
+          hint.at === undefined
+            ? 'Hold'
+            : hint.assist
+              ? hint.at === 0
+                ? 'Hold with no band'
+                : `Hold at ${hint.at} lb assist`
+              : `Hold at ${hint.at} lb`,
         reason: HOLD_REASONS[hint.reason.code](hint.reason),
         rising: false,
         ...extra,
@@ -151,10 +198,15 @@ export function hintCopy(hint: ProgressionHint): HintCopy {
 }
 
 export const NO_LOAD_LINE = 'Add the weight to track it.';
+export const NO_ASSISTANCE_LINE = 'Add the band help to track it.';
 export const FIRST_TIME_LINE = 'First time on record';
 
 /** "100 × 6", "100 lb × 40 s", "8 reps", "40 s". */
 export function bestSetLabel(best: BestSet): string {
+  if (best.assistance !== undefined) {
+    const help = assistanceText(best.assistance);
+    return best.reps !== undefined ? `${help} × ${best.reps}` : help;
+  }
   if (best.reps !== undefined)
     return best.load !== undefined ? `${best.load} × ${best.reps}` : `${best.reps} reps`;
   if (best.seconds !== undefined) {
@@ -168,6 +220,15 @@ export function changeLabel(change: Pick<ExerciseChange, 'from' | 'to'>): string
   const { from, to } = change;
   if (from.load !== undefined && to.load !== undefined && from.load !== to.load) {
     return `${from.load} → ${to.load} lb`;
+  }
+  if (
+    from.assistance !== undefined &&
+    to.assistance !== undefined &&
+    from.assistance !== to.assistance
+  ) {
+    return from.assistance && to.assistance
+      ? `${from.assistance} → ${to.assistance} lb assist`
+      : `${assistanceText(from.assistance)} → ${assistanceText(to.assistance)}`;
   }
   if (from.reps !== undefined && to.reps !== undefined) return `${from.reps} → ${to.reps} reps`;
   if (from.seconds !== undefined && to.seconds !== undefined)

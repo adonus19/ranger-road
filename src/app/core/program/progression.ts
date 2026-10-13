@@ -49,6 +49,8 @@ export interface Exposure {
   prescription?: ExercisePrescription;
   /** The working load: the last completed set with a weight. */
   load?: number;
+  /** An assisted pull-up's band help: the last completed set that recorded it. */
+  assistance?: number;
   /** Effort on the final completed set. */
   finalEffort?: number;
   reduced: boolean;
@@ -97,8 +99,21 @@ export type ProgressionHint =
     }
   | { type: 'add-reps'; aimFor: number; evidence: HintEvidence; context?: BasisContext }
   | { type: 'add-seconds'; aimFor: number; evidence: HintEvidence; context?: BasisContext }
-  | { type: 'less-band'; evidence: HintEvidence; context?: BasisContext }
-  | { type: 'hold'; at?: number; reason: HoldReason; context?: BasisContext };
+  | {
+      type: 'less-band';
+      evidence: HintEvidence;
+      /** Last time's band help in pounds; the hint never picks the next amount. */
+      from?: number;
+      context?: BasisContext;
+    }
+  | {
+      type: 'hold';
+      /** Pounds of load, or of band help when `assist` is set. */
+      at?: number;
+      assist?: boolean;
+      reason: HoldReason;
+      context?: BasisContext;
+    };
 
 export interface ExerciseProgress {
   exerciseId: string;
@@ -113,7 +128,7 @@ export interface ExerciseProgress {
   lastChapter?: number;
   /** No hint for a first time on record. */
   hint?: ProgressionHint;
-  /** Last time's weight was not recorded on a loaded exercise. */
+  /** Last time's weight (or an assisted pull-up's band help) was not recorded. */
   noLoadRecorded: boolean;
 }
 
@@ -169,6 +184,9 @@ export function exposuresFor(sessions: readonly WorkoutSession[], exerciseId: st
       const done = result.sets.filter((set) => set.completed !== false);
       if (!done.length) return [];
       const withLoad = [...done].reverse().find((set) => finite(set.load) && set.load! >= 0);
+      const withAssistance = [...done]
+        .reverse()
+        .find((set) => finite(set.assistance) && set.assistance! >= 0);
       const prescription = session.definitionSnapshot?.exercises.find(
         (item) => item.exerciseId === exerciseId,
       ) as ExercisePrescription | undefined;
@@ -180,6 +198,7 @@ export function exposuresFor(sessions: readonly WorkoutSession[], exerciseId: st
           sets: result.sets,
           ...(prescription ? { prescription } : {}),
           ...(withLoad ? { load: withLoad.load } : {}),
+          ...(withAssistance ? { assistance: withAssistance.assistance } : {}),
           ...(finite(done.at(-1)?.rpe) ? { finalEffort: done.at(-1)!.rpe } : {}),
           reduced: Boolean(session.reduced),
         },
@@ -247,11 +266,11 @@ export function exerciseProgress(
     lastDoseChanged: !!last.prescription && doseKey(last.prescription) !== doseKey(prescription),
   };
   const hint = progressionHint(kind, prescription, exposures, today, context);
-  const loaded = kind !== 'hold' && kind !== 'assisted-pull-up';
+  const tracked = kind === 'assisted-pull-up' ? last.assistance : last.load;
   return {
     ...progress,
     hint,
-    noLoadRecorded: loaded && !finite(last.load),
+    noLoadRecorded: kind !== 'hold' && !finite(tracked),
   };
 }
 
@@ -294,10 +313,12 @@ function progressionHint(
   context: ProgressionContext,
 ): ProgressionHint {
   const found = findBasis(exposures, context);
-  const holdAt = (found.basis ?? exposures[0])?.load;
+  const assist = kind === 'assisted-pull-up';
+  const held = found.basis ?? exposures[0];
+  const holdAt = assist ? held?.assistance : held?.load;
   const hold = (reason: HoldReason, basisContext?: BasisContext): ProgressionHint => ({
     type: 'hold',
-    ...(finite(holdAt) ? { at: holdAt } : {}),
+    ...(finite(holdAt) ? { at: holdAt, ...(assist ? { assist } : {}) } : {}),
     reason,
     ...(basisContext ? { context: basisContext } : {}),
   });
@@ -374,16 +395,24 @@ function progressionHint(
     }
     case 'assisted-pull-up':
       return atTop
-        ? { type: 'less-band', ...withContext }
+        ? {
+            type: 'less-band',
+            ...(finite(basis.assistance) ? { from: basis.assistance } : {}),
+            ...withContext,
+          }
         : hold({ code: 'below-target', target: range.high, unit }, basisContext);
     default:
       return hold({ code: 'no-full-session' }, basisContext);
   }
 }
 
-/** The best working set of an exposure: the heaviest load, then the most reps or seconds. */
+/**
+ * The best working set of an exposure: the heaviest load, then the least band help, then the
+ * most reps or seconds.
+ */
 export interface BestSet {
   load?: number;
+  assistance?: number;
   reps?: number;
   seconds?: number;
 }
@@ -397,6 +426,7 @@ export function bestSet(exposure: Exposure): BestSet | undefined {
   if (!best) return undefined;
   return {
     ...(finite(best.load) ? { load: best.load } : {}),
+    ...(finite(best.assistance) ? { assistance: best.assistance } : {}),
     ...(finite(best.reps) ? { reps: best.reps } : {}),
     ...(finite(best.duration) ? { seconds: best.duration } : {}),
   };
@@ -406,12 +436,21 @@ function amount(set: Pick<CompletedSet, 'reps' | 'duration'>): number {
   return set.reps ?? set.duration ?? 0;
 }
 
+/** Less band help is the better set; unrecorded help on either side is not compared. */
+function lessAssistance(a: { assistance?: number }, b: { assistance?: number }): number {
+  return finite(a.assistance) && finite(b.assistance) ? b.assistance - a.assistance : 0;
+}
+
 function compareSets(a: CompletedSet, b: CompletedSet): number {
-  return (a.load ?? 0) - (b.load ?? 0) || amount(a) - amount(b);
+  return (a.load ?? 0) - (b.load ?? 0) || lessAssistance(a, b) || amount(a) - amount(b);
 }
 
 function compareBest(a: BestSet, b: BestSet): number {
-  return (a.load ?? 0) - (b.load ?? 0) || (a.reps ?? a.seconds ?? 0) - (b.reps ?? b.seconds ?? 0);
+  return (
+    (a.load ?? 0) - (b.load ?? 0) ||
+    lessAssistance(a, b) ||
+    (a.reps ?? a.seconds ?? 0) - (b.reps ?? b.seconds ?? 0)
+  );
 }
 
 export type ChangeDirection = 'up' | 'held' | 'lighter';

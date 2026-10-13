@@ -142,6 +142,8 @@ export interface CompletedSet {
   reps?: number;
   duration?: number;
   load?: number;
+  /** Pounds of band help on an assisted pull-up; 0 means no band. Separate from load. */
+  assistance?: number;
   rpe?: number;
   completed?: boolean;
 }

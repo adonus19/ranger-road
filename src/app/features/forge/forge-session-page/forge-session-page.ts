@@ -28,13 +28,14 @@ import {
 } from '../../../core/program/progression';
 import {
   FIRST_TIME_LINE,
+  NO_ASSISTANCE_LINE,
   NO_LOAD_LINE,
   type ProgressLine,
   compareLines,
   easierLine,
   hintCopy,
+  lastTimeLabels,
   lastTimeTitle,
-  setLabel,
 } from '../../../core/program/progression-copy';
 import {
   chapterPrograms,
@@ -42,6 +43,7 @@ import {
   isRestorationWorkout,
   loadWorkout,
 } from '../../../core/program/program-catalog';
+import { progressionKind } from '../../../core/program/progression-kinds';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { ProgressionHistory } from '../../../core/state/progression-history';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
@@ -122,13 +124,18 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   };
   /** "Compared with last time" for the session just saved; empty until there is something to say. */
   protected readonly comparison = signal<ProgressLine[]>([]);
-  protected readonly noLoadLine = NO_LOAD_LINE;
   protected readonly firstTimeLine = FIRST_TIME_LINE;
   protected readonly shortDate = formatShortDate;
   private restInterval?: ReturnType<typeof setInterval>;
   private panelTrigger: HTMLElement | null = null;
 
-  protected readonly setModel = signal({ reps: '', duration: '', load: '', rpe: '' });
+  protected readonly setModel = signal({
+    reps: '',
+    duration: '',
+    load: '',
+    assistance: '',
+    rpe: '',
+  });
   protected readonly setForm = form(this.setModel);
   protected readonly painModel = signal({ bodyArea: '', severity: '', actionTaken: '' });
   protected readonly painForm = form(this.painModel);
@@ -183,6 +190,10 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     const draft = this.draft();
     return draft?.exerciseResults[draft.currentExerciseIndex]?.sets[draft.currentSetIndex] ?? null;
   });
+  /** Assisted pull-ups record band help in place of a load. */
+  protected readonly isAssisted = computed(
+    () => progressionKind(this.currentPrescription()?.exerciseId ?? '') === 'assisted-pull-up',
+  );
   /** The final set of an exercise asks for the effort that next time's hint relies on. */
   protected readonly isFinalSet = computed(() => {
     const draft = this.draft();
@@ -200,7 +211,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       context,
     );
     if (progress.kind === 'none') return null;
-    const sets = (progress.last?.sets ?? []).map((set) => setLabel(set));
+    const sets = lastTimeLabels(progress.last?.sets ?? []);
     return {
       title: lastTimeTitle(progress),
       date: progress.last?.date,
@@ -208,7 +219,11 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       effort: progress.last?.finalEffort,
       easier: progress.easier ? easierLine(progress.easier) : undefined,
       hint: progress.hint ? hintCopy(progress.hint) : undefined,
-      noLoad: progress.noLoadRecorded,
+      noLoad: progress.noLoadRecorded
+        ? progress.kind === 'assisted-pull-up'
+          ? NO_ASSISTANCE_LINE
+          : NO_LOAD_LINE
+        : undefined,
     };
   });
   protected readonly currentName = computed(
@@ -377,6 +392,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   private async loadProgression(): Promise<void> {
     try {
       this.progressionContext.set(await this.progressionHistory.load());
+      this.fillAssistance();
     } catch {
       this.progressionContext.set(null);
     }
@@ -484,7 +500,11 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
             throw new Error('Enter the seconds you completed, or skip this set.');
           set.duration = duration;
         }
-        set.load = numericValue(values.load, 'load in pounds', false);
+        if (this.isAssisted()) {
+          set.assistance = numericValue(values.assistance, 'band assistance in pounds', false);
+        } else {
+          set.load = numericValue(values.load, 'load in pounds', false);
+        }
         set.rpe = numericValue(values.rpe, 'effort from 1 to 10', true, 1);
         if (set.rpe !== undefined && set.rpe > 10) throw new Error('Effort must be from 1 to 10.');
       }
@@ -797,13 +817,42 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       reps: set?.reps?.toString() ?? '',
       duration: set?.duration?.toString() ?? '',
       load: set?.load?.toString() ?? '',
+      assistance: set?.assistance?.toString() ?? '',
       rpe: set?.rpe?.toString() ?? '',
     });
+    this.fillAssistance();
     this.finishForm().reset({
       sessionRpe: draft.sessionRpe?.toString() ?? '',
       notes: draft.notes ?? '',
     });
     this.updateRest();
+  }
+
+  /**
+   * Band help starts from what the person used last: an earlier set today, else last time.
+   * It stays editable, and a value already on the set is never replaced.
+   */
+  private fillAssistance(): void {
+    const draft = this.draft();
+    if (!draft || !this.isAssisted() || this.setModel().assistance !== '') return;
+    const sets = draft.exerciseResults[draft.currentExerciseIndex]?.sets ?? [];
+    const earlier = sets
+      .slice(0, draft.currentSetIndex)
+      .reverse()
+      .find((set) => set.completed === true && set.assistance !== undefined)?.assistance;
+    const context = this.progressionContext();
+    const prescription = this.currentPrescription();
+    const last =
+      earlier ??
+      (context && prescription
+        ? exerciseProgress(
+            prescription,
+            { date: this.state.today(), readiness: this.readiness()?.status ?? null },
+            context,
+          ).last?.assistance
+        : undefined);
+    if (last !== undefined)
+      this.setModel.update((values) => ({ ...values, assistance: `${last}` }));
   }
 
   private updateRest(): void {

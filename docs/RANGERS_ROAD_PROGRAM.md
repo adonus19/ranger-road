@@ -160,7 +160,7 @@ Otherwise the hint says "Hold" with one plain reason (for example "final effort 
 | Assisted Pull-Up | Assisted Pull-Up | Less band help when 3 sets reach the top of the range. The hint names last time's assistance in pounds and never picks the next amount |
 | Push-Ups, bodyweight exercises, Restoration and mobility | Push-Up, Glute Bridge, Bird Dog, Cat-Camel | No hint, no Last time |
 
-**Band assistance.** Assisted pull-ups record the band's help in pounds on each set (0 for no band; stacked bands add). It is separate from load. When the assistance was not recorded, the quiet line says "Add the band help to track it." The best set of a session is the one with the least assistance, with more reps breaking a tie. The app never fills in or lowers the assistance automatically.
+**Band assistance.** Assisted pull-ups record the band's help in pounds on each set (0 for no band; stacked bands add). It is separate from load. When the assistance was not recorded, the quiet line says "Add the band help to track it." The best set of a session is the one with the least assistance, with more reps breaking a tie. A hold names the assistance ("Hold at 40 lb assist", or "Hold with no band"). When the sets reach the top with no band, the hint reads "Already at no band" and does not point upward. The app never fills in or lowers the assistance automatically.
 
 **Without a recorded load.** If last time's weight was not recorded, the hint uses reps or seconds only and a quiet line says "Add the weight to track it."
 

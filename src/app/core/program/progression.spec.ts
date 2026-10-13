@@ -21,7 +21,9 @@ import {
   compareLines,
   directionLabel,
   easierLine,
+  bestSetLabel,
   hintCopy,
+  lastTimeLabels,
   lastTimeTitle,
   setLabel,
   sinceDayOneLine,
@@ -336,6 +338,73 @@ describe('the progression hint', () => {
       );
     expect(hint(pullUp, at([8, 8, 8]))?.action).toBe('May use less band help');
     expect(hint(pullUp, at([8, 7, 8]))?.action).toBe('Hold');
+  });
+
+  describe('band assistance', () => {
+    const pullUp: ExercisePrescription = { exerciseId: 'assisted-pull-up', sets: 3, reps: '6–8' };
+    const banded = (assistance: number[], reps: number[], rpe?: number): CompletedSet[] =>
+      sets(undefined, reps, rpe).map((set, index) => ({ ...set, assistance: assistance[index] }));
+    const pullUpAt = (date: string, work: CompletedSet[], options = {}) =>
+      session(date, [{ id: 'assisted-pull-up', sets: work, prescription: pullUp }], options);
+
+    it('names last time’s band help in the hint, and never picks the next amount', () => {
+      const ctx = context(pullUpAt('2026-11-09', banded([40, 40, 40], [8, 8, 8], 6)));
+      expect(hint(pullUp, ctx)?.action).toBe('May use less band help, under 40 lb');
+      expect(hint(pullUp, ctx)?.reason).toBe('all sets at 8, final effort 6');
+    });
+
+    it('holds at the band help it used, or says so when there is no band left', () => {
+      const below = context(pullUpAt('2026-11-09', banded([40, 40, 40], [8, 7, 8], 6)));
+      expect(hint(pullUp, below)?.action).toBe('Hold at 40 lb assist');
+      const noBand = context(pullUpAt('2026-11-09', banded([0, 0, 0], [8, 8, 8], 6)));
+      expect(hint(pullUp, noBand)?.action).toBe('Already at no band');
+      expect(hint(pullUp, noBand)?.rising).toBe(false);
+      const noBandBelow = context(pullUpAt('2026-11-09', banded([0, 0, 0], [6, 6, 6], 6)));
+      expect(hint(pullUp, noBandBelow)?.action).toBe('Hold with no band');
+    });
+
+    it('shows Last time with the unit once, and asks for the band help when it was missing', () => {
+      const progress = exerciseProgress(
+        pullUp,
+        green,
+        context(pullUpAt('2026-11-09', banded([40, 40, 35], [8, 8, 7], 6))),
+      );
+      expect(lastTimeLabels(progress.last!.sets)).toEqual(['40 lb assist × 8', '40 × 8', '35 × 7']);
+      expect(progress.noLoadRecorded).toBe(false);
+      const unrecorded = exerciseProgress(
+        pullUp,
+        green,
+        context(pullUpAt('2026-11-09', sets(undefined, [8, 8, 8], 6))),
+      );
+      expect(unrecorded.noLoadRecorded).toBe(true);
+      expect(setLabel({ completed: true, reps: 6, assistance: 0 })).toBe('no band × 6');
+    });
+
+    it('counts less band help as the better set, with more reps breaking a tie', () => {
+      const record = exerciseRecord(
+        'assisted-pull-up',
+        context(
+          pullUpAt('2026-10-07', banded([60, 60, 60], [6, 6, 6], 6)),
+          pullUpAt('2026-11-09', banded([40, 30, 40], [8, 5, 8], 6)),
+        ),
+      );
+      expect(bestSetLabel(record.rows[0].best)).toBe('30 lb assist × 5');
+      expect(sinceDayOneLine(record.first!, record.latest!)).toBe('Since Day 1: 60 → 30 lb assist');
+      expect(
+        changeLabel({ from: { assistance: 20, reps: 8 }, to: { assistance: 0, reps: 6 } }),
+      ).toBe('20 lb assist → no band');
+      expect(
+        changeLabel({ from: { assistance: 40, reps: 6 }, to: { assistance: 40, reps: 8 } }),
+      ).toBe('6 → 8 reps');
+    });
+
+    it('compares a saved session as up when it used less band help', () => {
+      const before = pullUpAt('2026-11-04', banded([40, 40, 40], [8, 8, 8], 6));
+      const now = pullUpAt('2026-11-09', banded([30, 30, 30], [6, 6, 6], 7));
+      const [found] = compareWithLastTime(now, [before, now]);
+      expect(found.direction).toBe('up');
+      expect(compareLines([found])[0].value).toBe('40 → 30 lb assist');
+    });
   });
 
   it('hints on reps alone when no weight was recorded, and says to add it', () => {

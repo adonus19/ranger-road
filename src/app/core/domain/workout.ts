@@ -307,6 +307,8 @@ function validateCompletedSet(set: CompletedSet): CompletedSet {
   if (set.duration !== undefined)
     assertFiniteRange(set.duration, 0, Number.MAX_SAFE_INTEGER, 'Duration');
   if (set.load !== undefined) assertFiniteRange(set.load, 0, Number.MAX_SAFE_INTEGER, 'Load');
+  if (set.assistance !== undefined)
+    assertFiniteRange(set.assistance, 0, Number.MAX_SAFE_INTEGER, 'Band assistance');
   if (set.rpe !== undefined) assertRating(set.rpe, 1, 10, 'Set RPE');
   if (set.completed !== undefined && typeof set.completed !== 'boolean') {
     throw new Error('Set completion must be yes or no.');

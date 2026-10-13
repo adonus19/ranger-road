@@ -238,19 +238,35 @@
         }
 
         <div class="set-fields">
-          <label for="set-load"
-            >Planned load (lb) <span>optional · confirm before completing set</span></label
-          >
-          <div class="unit-field">
-            <input
-              id="set-load"
-              type="number"
-              inputmode="decimal"
-              step="any"
-              placeholder="—"
-              [formField]="setForm.load"
-            /><span>lb</span>
-          </div>
+          @if (isAssisted()) {
+            <label for="set-assistance"
+              >Band assistance (lb) <span>optional · 0 if no band</span></label
+            >
+            <div class="unit-field">
+              <input
+                id="set-assistance"
+                type="number"
+                inputmode="decimal"
+                step="any"
+                placeholder="—"
+                [formField]="setForm.assistance"
+              /><span>lb</span>
+            </div>
+          } @else {
+            <label for="set-load"
+              >Planned load (lb) <span>optional · confirm before completing set</span></label
+            >
+            <div class="unit-field">
+              <input
+                id="set-load"
+                type="number"
+                inputmode="decimal"
+                step="any"
+                placeholder="—"
+                [formField]="setForm.load"
+              /><span>lb</span>
+            </div>
+          }
           @if (lastTime(); as last) {
             <section class="last-time" aria-label="Last time and what to try">
               <h3>
@@ -290,8 +306,8 @@
                   </span>
                 </p>
               }
-              @if (last.noLoad) {
-                <p class="last-note">{{ noLoadLine }}</p>
+              @if (last.noLoad; as line) {
+                <p class="last-note">{{ line }}</p>
               }
             </section>
           }
