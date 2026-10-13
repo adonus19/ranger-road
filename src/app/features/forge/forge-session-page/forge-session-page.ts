@@ -1,4 +1,12 @@
-import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  afterRenderEffect,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { FormField, form } from '@angular/forms/signals';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import type {
@@ -43,6 +51,7 @@ import { ScheduleHistory } from '../../../core/state/schedule-history';
 import { MissionRecorder, type RecordedMission } from '../../../core/state/mission-recorder';
 import { Icon } from '../../../shared/icon/icon';
 import { ProgressRows } from '../../../shared/progress-rows/progress-rows';
+import { nextAfterMark, openSetFor } from './forge-navigation';
 import { REST_LENGTHS, RestClock, formatRest, restLengthLabel } from './rest-clock';
 
 type Panel = 'help' | 'pain' | 'substitute' | null;
@@ -54,16 +63,6 @@ function numericValue(value: string, label: string, integer: boolean, min = 0): 
     throw new Error(`Enter a valid ${label}.`);
   }
   return number;
-}
-
-function firstPending(draft: WorkoutDraft): { exercise: number; set: number } {
-  for (let exercise = 0; exercise < draft.exerciseResults.length; exercise++) {
-    const set = draft.exerciseResults[exercise].sets.findIndex(
-      (item) => item.completed === undefined,
-    );
-    if (set !== -1) return { exercise, set };
-  }
-  return { exercise: draft.exerciseResults.length, set: 0 };
 }
 
 const REST_LENGTH_KEY = 'rangers-road.rest-length';
@@ -295,6 +294,25 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     ),
   );
 
+  /** Where the person is, so the set numbers can be brought to the top when it changes. */
+  private readonly setPlace = computed(() => {
+    const draft = this.draft();
+    return draft ? `${draft.currentExerciseIndex}:${draft.currentSetIndex}` : null;
+  });
+  private scrolledTo: string | null = null;
+
+  private readonly scrollToSets = afterRenderEffect(() => {
+    const place = this.setPlace();
+    if (place === null || place === this.scrolledTo) return;
+    const first = this.scrolledTo === null;
+    this.scrolledTo = place;
+    if (first) return;
+    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? 'auto'
+      : 'smooth';
+    document.getElementById('set-numbers')?.scrollIntoView({ block: 'start', behavior });
+  });
+
   ngOnInit(): void {
     void this.load();
     this.restInterval = setInterval(() => this.updateRest(), 1000);
@@ -415,13 +433,20 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     });
   }
 
+  /** Moving around never touches the rest clock; only marking a set restarts it. */
   protected async selectSet(exercise: number, set: number): Promise<void> {
     if (this.blocked()) return;
     await this.save((draft) => {
       draft.currentExerciseIndex = exercise;
       draft.currentSetIndex = set;
-      draft.restStartedAt = undefined;
     });
+  }
+
+  protected async selectExercise(exercise: number): Promise<void> {
+    const draft = this.draft();
+    if (!draft) return;
+    const position = openSetFor(draft, exercise);
+    await this.selectSet(position.exercise, position.set);
   }
 
   protected async markSet(completed: boolean): Promise<void> {
@@ -453,7 +478,10 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       await this.save((next) => {
         next.exerciseResults[draft.currentExerciseIndex].sets[draft.currentSetIndex] = set;
         if (!completed) next.reduced = true;
-        const pending = firstPending(next);
+        const pending = nextAfterMark(next, {
+          exercise: draft.currentExerciseIndex,
+          set: draft.currentSetIndex,
+        });
         next.currentExerciseIndex = pending.exercise;
         next.currentSetIndex = pending.set;
         next.restStartedAt =
@@ -567,7 +595,10 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
           changed.exerciseResults[index].sets = changed.exerciseResults[index].sets.map((set) =>
             set.completed === undefined ? { completed: false } : set,
           );
-          const pending = firstPending(changed);
+          const pending = nextAfterMark(changed, {
+            exercise: index,
+            set: changed.exerciseResults[index].sets.length,
+          });
           changed.currentExerciseIndex = pending.exercise;
           changed.currentSetIndex = pending.set;
           changed.reduced = true;

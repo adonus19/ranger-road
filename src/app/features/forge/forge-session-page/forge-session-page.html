@@ -153,8 +153,9 @@
           </p>
         }
 
-        <div class="set-heading">
+        <div class="set-heading" id="set-numbers">
           <h2>Set {{ session.currentSetIndex + 1 }} of {{ prescription.sets ?? 1 }}</h2>
+          <p class="sets-hint"><strong>Sets</strong> · Tap a set to edit it.</p>
           <div class="set-chips" aria-label="Sets for {{ currentName() }}">
             @for (set of currentResult()?.sets; track $index) {
               <button
@@ -374,7 +375,7 @@
               let index = $index
             ) {
               <li>
-                <button type="button" (click)="selectSet(index, 0)">
+                <button type="button" (click)="selectExercise(index)">
                   {{ getExerciseName(exercise.exerciseId)
                   }}<span
                     >{{ countMarked(session, index) }} of {{ exercise.sets ?? 1 }} sets marked</span
@@ -477,7 +478,7 @@
               let index = $index
             ) {
               <li>
-                <button type="button" (click)="selectSet(index, 0)">
+                <button type="button" (click)="selectExercise(index)">
                   {{ getExerciseName(exercise.exerciseId)
                   }}<span
                     >{{ countMarked(session, index) }} of {{ exercise.sets ?? 1 }} sets marked</span

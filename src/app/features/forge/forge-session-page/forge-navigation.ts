@@ -1,0 +1,56 @@
+import type { WorkoutDraft } from '../../../core/domain/models';
+
+/** A place in the session: indices into the draft's exercises and that exercise's sets. */
+export interface SessionPosition {
+  exercise: number;
+  set: number;
+}
+
+type NavigableDraft = Pick<WorkoutDraft, 'exerciseResults'>;
+
+function firstUnmarked(draft: NavigableDraft, exercise: number, from = 0): number {
+  const sets = draft.exerciseResults[exercise]?.sets ?? [];
+  const after = sets.findIndex((set, index) => index >= from && set.completed === undefined);
+  return after !== -1 ? after : sets.findIndex((set) => set.completed === undefined);
+}
+
+/** Where the session ends up when every set is marked: the finish screen. */
+export function finishedPosition(draft: NavigableDraft): SessionPosition {
+  return { exercise: draft.exerciseResults.length, set: 0 };
+}
+
+/** Exercise indices in the order the person works them; the written order when none is chosen. */
+export function displayOrder(draft: NavigableDraft, order?: readonly number[]): number[] {
+  return order ? [...order] : draft.exerciseResults.map((_, index) => index);
+}
+
+/** Tapping an exercise opens its first unmarked set, or its last set when all are marked. */
+export function openSetFor(draft: NavigableDraft, exercise: number): SessionPosition {
+  const sets = draft.exerciseResults[exercise]?.sets ?? [];
+  const set = firstUnmarked(draft, exercise);
+  return { exercise, set: set !== -1 ? set : Math.max(0, sets.length - 1) };
+}
+
+/**
+ * Where to go after a set is marked. The person stays on the exercise until all its sets are
+ * marked, then moves to the next exercise in their order that has unmarked sets, wrapping to the
+ * top. With nothing left, the session is finished.
+ */
+export function nextAfterMark(
+  draft: NavigableDraft,
+  from: SessionPosition,
+  order?: readonly number[],
+): SessionPosition {
+  const sameExercise = firstUnmarked(draft, from.exercise, from.set + 1);
+  if (sameExercise !== -1) return { exercise: from.exercise, set: sameExercise };
+
+  const sequence = displayOrder(draft, order);
+  const start = sequence.indexOf(from.exercise);
+  for (let step = 1; step <= sequence.length; step++) {
+    const exercise = sequence[(start + step + sequence.length) % sequence.length];
+    if (exercise === from.exercise) continue;
+    const set = firstUnmarked(draft, exercise);
+    if (set !== -1) return { exercise, set };
+  }
+  return finishedPosition(draft);
+}
