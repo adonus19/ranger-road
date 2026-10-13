@@ -277,6 +277,9 @@ Quiet rows under the Hearth row, between soft rules, in the same form: gold icon
 ### Last Time and Progression Hint
 On the Current Set screen, under the load box: a spaced-caps label with the date, the last exposure's sets in Entered-numeral type with the current set in bold, and one plain-sans hint line. A small up arrow marks "may add"; "hold" has none and gives one reason. It uses Ink, Secondary Ink and Tertiary Ink only: no gold and no status colors, because the readiness set is reserved for readiness (The Words First Rule) and gold for identity. It takes about three lines so Quick Help, Pain and Substitute stay above the docked button. The same figures reappear in "Compared with last time" after saving, in a guide's "Your record" list, and in a trial page's chapter summary, always as plain rows between soft rules.
 
+### Exercise Chips and Order Editor
+On the Current Set screen, a horizontally scrolling row of exercise chips sits near the top, inside the 16px gutter. Each chip is at least 48px tall with the exercise name in sans and the marked count ("2/3") in serif figures; the current chip is filled Pine with cream text (Hearth Gold with Ink text in dark), the others are bordered on paper with a 6px radius. No shadows, no gold on light, no status colors. The set buttons carry a plain "Sets" label and a one-line hint. The order editor is a plain list between soft rules: each row has the exercise name and two 48px Move up / Move down buttons, with a disabled state at the ends; **Use written order** is a secondary button and **Done** the primary one.
+
 ### Inputs / Fields
 
 - **Text and date fields:** paper background, 1px Rule border, 6px radius, 48px tall, 16px text. The border darkens to Stone on hover.

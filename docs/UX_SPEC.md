@@ -80,6 +80,21 @@ Workout player:
 
 The Chapter I Forge opens the workout named in today's order. Restoration is also available as needed after a same-day readiness check. An in-progress session resumes at the saved exercise and set, with its prescription snapshot intact. The warm-up is shown before the work sets; the documented easy finish is required for Restoration and optional for Forge A. The Current Set screen keeps the dose, planned load, Quick Help, Pain, and Substitute visible together; Complete set opens a short confirmation of actual reps or seconds and optional effort before saving. Exact numeric targets may fill that confirmation for review, while ranges remain blank. Each work set is marked done or skipped before a completed session is saved. Skipped sets and described substitutions mark the session reduced. The rest timer shows elapsed time because Chapter I gives no fixed rest interval. The Current Set screen's Last time and hint (below) are display-only; the app never fills in or increases the next load automatically.
 
+### Moving between exercises in Forge
+
+The person may work the exercises in any order.
+
+- **Exercise chips.** A row of chips near the top of the Current Set screen, one per exercise in the displayed order, each with its marked count ("2/3"). Tapping one switches exercise. The current chip is marked; its aria label reads "Bench Press, 2 of 3 sets marked". The full list stays below.
+- **Where a tap lands.** An exercise opens on its first unmarked set, or its last set when all are marked.
+- **Sets.** The set buttons sit under a "Sets" label with the hint "Tap a set to edit it." Tapping a set number opens that set.
+- **After marking a set.** The person stays on that exercise until all its sets are marked, then moves to the next exercise below it in the displayed order that has unmarked sets, wrapping to the top. When nothing is left, the finish screen opens as before.
+- **Rest clock.** It keeps running when the person switches exercise or opens a marked set. Only marking a set restarts it.
+- **Scrolling.** Whenever the current exercise or set changes, the screen scrolls so the set numbers are at the top (a jump, not an animation, when the phone asks for reduced motion).
+
+### Changing the exercise order
+
+A "Change order" button on the warm-up screen and in the full exercise list opens a list of the exercises, each row with large Move up and Move down buttons (labelled for screen readers by exercise, "Move Box Squat up"), plus **Use written order** and **Done**. There is no dragging. It is available at any point in a session; exercises that already have marked sets keep them. The chips, the full list and the after-marking rule all follow the chosen order. The app gives no advice about muscle groups. The order is remembered for that workout and used the next time it starts, including on make-up and deload days. If the workout's exercises have changed since, the written order is used with the note "This workout's exercises changed, so it's back in the written order." The saved session keeps the written prescription and records the order the person worked in.
+
 ### Progression in Forge
 
 The rules live in `RANGERS_ROAD_PROGRAM.md` (Strength Progression). This section covers how they appear. Gold and the readiness colors are never used for these elements; they are plain text and numerals on paper.
@@ -91,6 +106,7 @@ The rules live in `RANGERS_ROAD_PROGRAM.md` (Strength Progression). This section
 - Line 3: one hint in plain sans. "May add 5 lb → 100 lb · all sets at 6, final effort 6" has a small up arrow; "Hold at 95 lb · Yellow today" has none and gives its one reason. After a planned deload it adds the context, "Week 4 was a deload; based on Week 3".
 - First time on record: "First time on record". A step-up exercise adds "Last on Supported Split Squat: 20 lb × 8" and never says "add". If the prescription changed, the label names it, "Last time (Chapter I, 3 × 8)".
 - No weight recorded: the hint uses reps or seconds and a quiet line says "Add the weight to track it."
+- Assisted Pull-Up: the load field becomes "Band assistance (lb)" with the helper "0 if no band", filled from last time and editable. Last time reads "40 lb assist × 8 · 40 × 8 · 40 × 7". The hint reads "May use less band help, under 40 lb" with the usual reason, and never suggests a step. When none was recorded the quiet line says "Add the band help to track it." Your record and the chapter summary read "Since Day 1: 60 → 40 lb assist", and 0 shows as "no band"; the exercise sits under Lifts.
 - Exercises with no hint (push-ups, bodyweight, Restoration) show no Last time block.
 - The load box stays empty and the person types the weight. There is no "use this weight" button.
 
@@ -128,7 +144,7 @@ Journal holds a Measurements section:
 - the check-in, marked Due now on Day 1 and every 28 days until it is saved, or Tests to add when a Red day held the tests; otherwise it says when the next one opens
 - Weight and waist, a short screen for logging either one on any day, with the latest values
 
-The check-in screen opens on The last 28 days: average sleep and back, shoulder, and neck pain from the readiness checks, read-only. Below it come Body (weight, waist, resting heart rate, optional blood pressure), Tests (push-ups, pull-up assistance, squat depth, toe reach), and How you feel (energy and capability, 1–5), with Save docked above the tabs on phones. On a Red readiness day the Tests part says the tests wait for another day. Before Day 1 there is no check-in to take; the first one is titled Day 1 check-in.
+The check-in screen opens on The last 28 days: average sleep and back, shoulder, and neck pain from the readiness checks, read-only. Below it come Body (weight, waist, resting heart rate, optional blood pressure), Tests (push-ups, pull-up assistance in pounds with an optional band note, squat depth, toe reach), and How you feel (energy and capability, 1–5), with Save docked above the tabs on phones. On a Red readiness day the Tests part says the tests wait for another day. Before Day 1 there is no check-in to take; the first one is titled Day 1 check-in.
 
 The Tests part links to a same-day readiness check when one has not been saved and keeps the test inputs hidden until then. Saving the body-only check-in finishes that window without tests. Held tests require a fresh same-day non-Red check before saving, including when the tests screen is opened directly.
 

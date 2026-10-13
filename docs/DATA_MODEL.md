@@ -125,6 +125,7 @@ Chapter I Forge A, Forge B, and restoration definitions use the exact sets, reps
 - definitionSnapshot? (keeps completed history independent of later content changes)
 - startedAt?, completedAt?, outcome? (`completed` or `stopped`; older local rows may lack these fields)
 - reduced?, warmupComplete?, finishComplete?, optionalFinishComplete?
+- exerciseOrder? (the order the person worked the exercises in, as indices into `definitionSnapshot.exercises`; older rows lack it and read as the written order)
 - sessionInstructions? (a copy of dated source instructions, such as the Week 4 deload note)
 
 New completed and stopped sessions are immutable, append-only snapshots. A stopped session retains partial sets and pain history without counting as a completed exposure for previous-load context. Last-time sets, the progression hint, the comparison on save, the exercise record and the chapter summary are all derived from these saved sessions and are never stored. They are displayed for reference only; the app does not apply or require the next load. A completed, non-substituted session including the exercise is an exposure, in any chapter; a session saved as `reduced` is not a full session. Why it was reduced is derived, not stored: Yellow readiness comes from the session's saved readiness check, pain from its pain events on that exercise, and a planned deload from the chapter's week plan for the session's date. Any other reduced session (an accepted make-up reduction, or sets the person skipped) is treated as reduced for a non-blocking reason.
@@ -134,7 +135,8 @@ New completed and stopped sessions are immutable, append-only snapshots. A stopp
 - id, date, workoutDefinitionId, readinessId
 - startedAt, updatedAt
 - reduced, warmupComplete, finishComplete, optionalFinishComplete
-- currentExerciseIndex, currentSetIndex, restStartedAt?
+- currentExerciseIndex, currentSetIndex, restStartedAt? (these stay indices into `definitionSnapshot.exercises`, whatever order is shown)
+- exerciseOrder? (the displayed order as indices into the snapshot; absent means the written order)
 - definitionSnapshot, exerciseResults[], sessionInstructions?, sessionRpe?, notes?
 
 Only one workout draft may be active. It is updated as sets are recorded, can resume at its current set after a reload, and is removed in the same transaction that appends its completed or stopped session. Starting and completing a workout validates the latest same-day readiness check. A newer Red check blocks further Forge sets and Forge completion, while ending as stopped preserves the partial record. The seeded Chapter I restoration remains available on Red when appropriate. Yellow or Red readiness marks a permitted draft reduced. Pain rated 5 or higher during Forge also blocks further set saves and completed outcome; the pain record itself can still be saved immediately, and the partial session can be stopped. A new check after the last draft save must be reviewed before completion. Each planned set must be explicitly marked done or skipped before a completed outcome; a stopped session may retain unmarked sets.
@@ -142,10 +144,12 @@ Only one workout draft may be active. It is updated as sets are recorded, can re
 ### ExerciseResult
 
 - exerciseId
-- sets[]
+- sets[] (each set: reps?, duration?, load?, rpe?, completed?, assistance?)
 - painEvents[]
 - substitutionId?
 - modificationNotes? (the person's own description of a change; it does not create a new prescribed substitution)
+
+Each set may carry `assistance?` (pounds of band help on an assisted pull-up, 0 for no band, stacked bands added together). It is separate from `load`. Sets saved before it existed simply lack it. For assisted pull-ups, less assistance is the better set, with more reps breaking a tie.
 
 ### ReadinessCheck
 
@@ -186,7 +190,9 @@ Gate Trial pain uses the same append-only store, with `trialAttemptId` and `tria
 - restingHeartRate (beats per minute; needed in a check-in)
 - bloodPressure? { systolic, diastolic } (mmHg)
 - pushups? (one set)
-- pullupAssistance? (the band used, or "none")
+- pullupAssistance? (older entries: the band used as text, or "none")
+- pullupAssistanceLb? (new entries: pounds of band help, 0 to 150, 0 for no band)
+- pullupBandNote? (optional note on the band, up to 60 characters)
 - squatDepth? above-parallel | parallel | below-parallel
 - toeReach? (inches from fingertips to floor; 0 when touching)
 - energy? (1–5)
@@ -373,3 +379,7 @@ Store `dailyChecks`: `{ id: "<date>:<item>", date, item: 'hearth' | 'reading' | 
 ## Make-up schedule and Light Activity (database version 6)
 
 The make-up schedule (`core/program/makeup-schedule.ts`, applied as `ChapterDay.makeup`) is derived from saved Forge sessions and mission records and is never stored; moved sessions keep their original mission ids so records still match. Light Activity is store `lightActivities`: `{ id, date, activity (required), weight? (lb), sets?, reps?, distance? (miles), time? (minutes), createdAt }`. It can be added or removed, is included in backups, and a backup made before version 6 restores with none.
+
+## Saved exercise order (database version 7)
+
+Store `exerciseOrders`: `{ id: <workoutDefinitionId>, exerciseIds: string[], updatedAt }`. One row per workout (for example a Chapter II Forge A), written when the person changes the order, removed by "Use written order". It is included in backups, and a backup made before version 7 restores with none. When a workout starts, the saved order applies only if its exercise IDs are exactly the workout's current exercise IDs; otherwise the row is ignored and the written order is used, with a one-line note. Make-ups and deload weeks use the saved order. The upgrade only adds the store and leaves every existing record unchanged.

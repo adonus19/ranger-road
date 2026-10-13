@@ -157,8 +157,10 @@ Otherwise the hint says "Hold" with one plain reason (for example "final effort 
 | Loaded exercise with fixed reps | Step-Up, Split Squat, Calf Raise | +5 lb |
 | Carries | Suitcase Carry, Farmer Carry | +5 lb; the chapter's written time stays as prescribed |
 | Timed holds with a range | Side Plank | +5 seconds up to the top of the range |
-| Assisted Pull-Up | Assisted Pull-Up | Less band when 3 sets reach the top of the range |
+| Assisted Pull-Up | Assisted Pull-Up | Less band help when 3 sets reach the top of the range. The hint names last time's assistance in pounds and never picks the next amount |
 | Push-Ups, bodyweight exercises, Restoration and mobility | Push-Up, Glute Bridge, Bird Dog, Cat-Camel | No hint, no Last time |
+
+**Band assistance.** Assisted pull-ups record the band's help in pounds on each set (0 for no band; stacked bands add). It is separate from load. When the assistance was not recorded, the quiet line says "Add the band help to track it." The best set of a session is the one with the least assistance, with more reps breaking a tie. The app never fills in or lowers the assistance automatically.
 
 **Without a recorded load.** If last time's weight was not recorded, the hint uses reps or seconds only and a quiet line says "Add the weight to track it."
 
@@ -260,7 +262,7 @@ How each measure is taken:
 - Resting heart rate: sit quietly for 5 minutes, then count for 60 seconds.
 - Blood pressure: from a home cuff, if one is available.
 - Push-ups: one set; stop at the first rep with broken form or rising pain.
-- Pull-up assistance: the band used for clean reps, or none.
+- Pull-up assistance: the pounds of band help used for clean reps (0 for no band), with an optional note naming the band.
 - Squat depth: in words (above parallel, parallel, below parallel); how low the person can sit back with good form and no pain.
 - Toe reach: stand tall with knees straight and reach down slowly; inches from fingertips to the floor, 0 when they touch it.
 - Stop any test at the first sign of rising pain.
