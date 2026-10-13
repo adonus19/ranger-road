@@ -120,7 +120,8 @@ describe('CheckInPage', () => {
     type(root, '#systolic', '128');
     type(root, '#diastolic', '82');
     type(root, '#pushups', '0');
-    type(root, '#pullup', ' Purple band ');
+    type(root, '#pullup', '40');
+    type(root, '#pullup-band', ' Purple band ');
     root.querySelector<HTMLInputElement>('.segments input[value="parallel"]')!.click();
     type(root, '#toe-reach', '3');
     root.querySelectorAll('.scale__options--five')[0].querySelector<HTMLInputElement>('input[value="3"]')!.click();
@@ -136,7 +137,8 @@ describe('CheckInPage', () => {
       restingHeartRate: 68,
       bloodPressure: { systolic: 128, diastolic: 82 },
       pushups: 0,
-      pullupAssistance: 'Purple band',
+      pullupAssistanceLb: 40,
+      pullupBandNote: 'Purple band',
       squatDepth: 'parallel',
       toeReach: 3,
       energy: 3,
@@ -151,7 +153,7 @@ describe('CheckInPage', () => {
       'Blood pressure 128/82',
       '0 push-ups · Toe reach 3 in',
       'Squat to parallel',
-      'Pull-up: Purple band',
+      'Pull-up: 40 lb assist (Purple band)',
       'Energy 3',
     ]);
   });

@@ -386,6 +386,8 @@ describe('RoadDatabase', () => {
     const testFields = [
       { pushups: 10 },
       { pullupAssistance: 'none' },
+      { pullupAssistanceLb: 0 },
+      { pullupBandNote: 'Purple band' },
       { squatDepth: 'parallel' as const },
       { toeReach: 3 },
     ];

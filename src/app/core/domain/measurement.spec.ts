@@ -56,6 +56,26 @@ describe('createMeasurementEntry', () => {
     expect(entry).not.toHaveProperty('energy');
   });
 
+  it('records pull-up assistance as pounds with a note, and still reads older text', () => {
+    const entry = createMeasurementEntry({
+      ...checkIn,
+      pullupAssistanceLb: 0,
+      pullupBandNote: '  Purple band ',
+    });
+    expect(entry).toMatchObject({ pullupAssistanceLb: 0, pullupBandNote: 'Purple band' });
+    expect(entry).not.toHaveProperty('pullupAssistance');
+    expect(createMeasurementEntry({ ...checkIn, pullupAssistance: 'Purple band' })).toMatchObject({
+      pullupAssistance: 'Purple band',
+    });
+    for (const bad of [-1, 151, Number.NaN]) {
+      expect(() => createMeasurementEntry({ ...checkIn, pullupAssistanceLb: bad })).toThrow(RangeError);
+    }
+    expect(() => createMeasurementEntry({ ...checkIn, pullupBandNote: 'x'.repeat(61) })).toThrow(RangeError);
+    expect(() =>
+      createMeasurementEntry({ ...checkIn, testsHeld: true, pullupAssistanceLb: 20 }),
+    ).toThrow('Tests held for a Red day cannot also be recorded.');
+  });
+
   it('needs weight, waist, and resting heart rate in a check-in', () => {
     expect(() => createMeasurementEntry({ ...checkIn, restingHeartRate: undefined })).toThrow(
       'A check-in needs weight, waist, and resting heart rate.',

@@ -183,22 +183,44 @@
           </div>
 
           <div class="field">
-            <label class="label" for="pullup">Pull-up assistance</label>
+            <label class="label" for="pullup">Pull-up assistance (lb)</label>
             <input
               id="pullup"
+              class="numeral"
               type="text"
+              inputmode="decimal"
               autocomplete="off"
-              placeholder="Purple band, or none"
-              [formField]="checkInForm.pullupAssistance"
-              [attr.aria-invalid]="showError(checkInForm.pullupAssistance)"
+              [formField]="checkInForm.pullupAssistanceLb"
+              [attr.aria-invalid]="showError(checkInForm.pullupAssistanceLb)"
               [attr.aria-describedby]="
-                showError(checkInForm.pullupAssistance) ? 'pullup-help pullup-error' : 'pullup-help'
+                showError(checkInForm.pullupAssistanceLb) ? 'pullup-help pullup-error' : 'pullup-help'
               "
             />
             <small class="help" id="pullup-help">{{ help.pullupAssistance }}</small>
-            @if (showError(checkInForm.pullupAssistance)) {
+            @if (showError(checkInForm.pullupAssistanceLb)) {
               <span class="field-error" id="pullup-error">{{
-                checkInForm.pullupAssistance().errors()[0]?.message
+                checkInForm.pullupAssistanceLb().errors()[0]?.message
+              }}</span>
+            }
+          </div>
+
+          <div class="field">
+            <label class="label" for="pullup-band">Band note (optional)</label>
+            <input
+              id="pullup-band"
+              type="text"
+              autocomplete="off"
+              placeholder="Purple band"
+              [formField]="checkInForm.pullupBandNote"
+              [attr.aria-invalid]="showError(checkInForm.pullupBandNote)"
+              [attr.aria-describedby]="
+                showError(checkInForm.pullupBandNote) ? 'pullup-band-help pullup-band-error' : 'pullup-band-help'
+              "
+            />
+            <small class="help" id="pullup-band-help">{{ help.pullupBandNote }}</small>
+            @if (showError(checkInForm.pullupBandNote)) {
+              <span class="field-error" id="pullup-band-error">{{
+                checkInForm.pullupBandNote().errors()[0]?.message
               }}</span>
             }
           </div>

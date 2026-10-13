@@ -277,8 +277,12 @@ export interface MeasurementEntry {
   bloodPressure?: { systolic: number; diastolic: number };
   /** One set, stopped at the first rep with broken form or rising pain. */
   pushups?: number;
-  /** The band used for clean reps, or "none". */
+  /** Older entries: the band used for clean reps as text, or "none". */
   pullupAssistance?: string;
+  /** Pounds of band help for clean reps, 0 to 150; 0 means no band. */
+  pullupAssistanceLb?: number;
+  /** An optional note naming the band. */
+  pullupBandNote?: string;
   squatDepth?: SquatDepth;
   /** Inches from fingertips to the floor; 0 when they touch it. */
   toeReach?: number;

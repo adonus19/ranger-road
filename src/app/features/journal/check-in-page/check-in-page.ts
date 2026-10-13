@@ -44,7 +44,8 @@ function blankEntry() {
     systolic: '',
     diastolic: '',
     pushups: '',
-    pullupAssistance: '',
+    pullupAssistanceLb: '',
+    pullupBandNote: '',
     squatDepth: '',
     toeReach: '',
     energy: '',
@@ -154,7 +155,12 @@ export class CheckInPage implements OnInit {
         : { kind: 'range', message: 'The first number is the higher one.' };
     });
     checkText(field.pushups, wholeIn(0, 500), 'Enter whole push-ups, 0 or more.');
-    checkText(field.pullupAssistance, (text) => text.length <= 60, 'Keep this under 60 characters.');
+    checkText(
+      field.pullupAssistanceLb,
+      (text) => /^\d{1,3}(?:\.\d)?$/.test(text) && Number(text) <= 150,
+      'Enter pounds from 0 to 150, or 0 if you used no band.',
+    );
+    checkText(field.pullupBandNote, (text) => text.length <= 60, 'Keep this under 60 characters.');
     checkText(field.toeReach, decimalUpTo(60), 'Enter inches, such as 3, or 0 if you touched the floor.');
   });
 
@@ -241,8 +247,10 @@ export class CheckInPage implements OnInit {
   }
 
   private hasTest(): boolean {
-    const { pushups, pullupAssistance, squatDepth, toeReach } = this.entry();
-    return [pushups, pullupAssistance, squatDepth, toeReach].some((value) => value.trim() !== '');
+    const { pushups, pullupAssistanceLb, pullupBandNote, squatDepth, toeReach } = this.entry();
+    return [pushups, pullupAssistanceLb, pullupBandNote, squatDepth, toeReach].some(
+      (value) => value.trim() !== '',
+    );
   }
 
   private saveRule(): string | null {
@@ -264,7 +272,8 @@ export class CheckInPage implements OnInit {
       ? {}
       : {
           pushups: number(values.pushups),
-          pullupAssistance: values.pullupAssistance.trim() || undefined,
+          pullupAssistanceLb: number(values.pullupAssistanceLb),
+          pullupBandNote: values.pullupBandNote.trim() || undefined,
           squatDepth: (values.squatDepth || undefined) as SquatDepth | undefined,
           toeReach: number(values.toeReach),
         };
@@ -300,7 +309,8 @@ export class CheckInPage implements OnInit {
       [this.checkInForm.restingHeartRate, 'resting heart rate'],
       [this.checkInForm.systolic, 'blood pressure'],
       [this.checkInForm.pushups, 'push-ups'],
-      [this.checkInForm.pullupAssistance, 'pull-up band'],
+      [this.checkInForm.pullupAssistanceLb, 'pull-up assistance'],
+      [this.checkInForm.pullupBandNote, 'band note'],
       [this.checkInForm.toeReach, 'toe reach'],
     ];
     const names = answers.filter(([field]) => field().invalid()).map(([, name]) => name);

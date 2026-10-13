@@ -57,10 +57,24 @@ export function measurementParts(entry: SavedMeasurement): MeasurementPart[][] {
       : [],
     counts,
     entry.squatDepth ? [{ before: 'Squat', value: SQUAT_VALUES[entry.squatDepth] }] : [],
-    entry.pullupAssistance ? [{ before: 'Pull-up:', value: entry.pullupAssistance }] : [],
+    pullupParts(entry),
     feel,
   ];
   return lines.filter((parts) => parts.length);
+}
+
+/** Pounds ("40 lb assist", "no band") with any note, or an older text answer. */
+function pullupParts(entry: SavedMeasurement): MeasurementPart[] {
+  const pounds = entry.pullupAssistanceLb;
+  const value =
+    pounds !== undefined
+      ? pounds === 0
+        ? 'no band'
+        : `${AMOUNT.format(pounds)} lb assist`
+      : entry.pullupAssistance;
+  const note = entry.pullupBandNote;
+  if (!value && !note) return [];
+  return [{ before: 'Pull-up:', value: [value, note && value ? `(${note})` : note].filter(Boolean).join(' ') }];
 }
 
 /** The same lines as plain text, such as "14 push-ups · Toe reach 3 in". */

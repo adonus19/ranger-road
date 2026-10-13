@@ -841,6 +841,8 @@ export class RoadDatabase {
           const hasTests =
             normalized.pushups !== undefined ||
             normalized.pullupAssistance !== undefined ||
+            normalized.pullupAssistanceLb !== undefined ||
+            normalized.pullupBandNote !== undefined ||
             normalized.squatDepth !== undefined ||
             normalized.toeReach !== undefined;
           const reason = checkInSaveError(

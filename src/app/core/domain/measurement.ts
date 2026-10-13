@@ -14,7 +14,14 @@ export const SQUAT_DEPTHS: readonly SquatDepth[] = ['above-parallel', 'parallel'
 
 const BODY_FIELDS = ['weight', 'waist'] as const;
 const CHECK_IN_ONLY_FIELDS = ['restingHeartRate', 'bloodPressure', 'energy', 'capabilityRating'] as const;
-const TEST_FIELDS = ['pushups', 'pullupAssistance', 'squatDepth', 'toeReach'] as const;
+const TEST_FIELDS = [
+  'pushups',
+  'pullupAssistance',
+  'pullupAssistanceLb',
+  'pullupBandNote',
+  'squatDepth',
+  'toeReach',
+] as const;
 
 /** Records what was measured as entered; it never sets or implies a target. */
 export function createMeasurementEntry(input: SavedMeasurement): SavedMeasurement {
@@ -47,6 +54,11 @@ export function createMeasurementEntry(input: SavedMeasurement): SavedMeasuremen
   requireOptionalRange(input.pushups, 0, 500, 'Push-ups', { whole: true });
   const pullupAssistance = input.pullupAssistance?.trim();
   if (input.pullupAssistance !== undefined && (!pullupAssistance || pullupAssistance.length > 60)) {
+    throw new RangeError('Describe the pull-up band in 60 characters or fewer.');
+  }
+  requireOptionalRange(input.pullupAssistanceLb, 0, 150, 'Pull-up assistance');
+  const pullupBandNote = input.pullupBandNote?.trim();
+  if (input.pullupBandNote !== undefined && (!pullupBandNote || pullupBandNote.length > 60)) {
     throw new RangeError('Describe the pull-up band in 60 characters or fewer.');
   }
   if (input.squatDepth !== undefined && !SQUAT_DEPTHS.includes(input.squatDepth)) {
@@ -92,6 +104,10 @@ export function createMeasurementEntry(input: SavedMeasurement): SavedMeasuremen
     ...(bloodPressure ? { bloodPressure: { ...bloodPressure } } : {}),
     ...(input.pushups !== undefined ? { pushups: input.pushups } : {}),
     ...(pullupAssistance ? { pullupAssistance } : {}),
+    ...(input.pullupAssistanceLb !== undefined
+      ? { pullupAssistanceLb: input.pullupAssistanceLb }
+      : {}),
+    ...(pullupBandNote ? { pullupBandNote } : {}),
     ...(input.squatDepth !== undefined ? { squatDepth: input.squatDepth } : {}),
     ...(input.toeReach !== undefined ? { toeReach: input.toeReach } : {}),
     ...(input.energy !== undefined ? { energy: input.energy } : {}),
