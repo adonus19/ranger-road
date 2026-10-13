@@ -108,7 +108,7 @@ export function createWorkoutDraft(
     warmupComplete: !snapshot.warmup?.length,
     finishComplete: !snapshot.finish?.length,
     optionalFinishComplete: false,
-    currentExerciseIndex: 0,
+    currentExerciseIndex: input.exerciseOrder?.[0] ?? 0,
     currentSetIndex: 0,
     definitionSnapshot: snapshot,
     exerciseResults: snapshot.exercises.map((exercise) => ({

@@ -5,6 +5,7 @@ import {
   finishedPosition,
   nextAfterMark,
   openSetFor,
+  positionAfterReorder,
 } from './forge-navigation';
 
 const done = { completed: true };
@@ -129,5 +130,33 @@ describe('applySavedOrder', () => {
     ]) {
       expect(applySavedOrder(workout, { exerciseIds })).toEqual({ changed: true });
     }
+  });
+});
+
+describe('positionAfterReorder', () => {
+  const at = (state: ReturnType<typeof draft>, exercise: number, set: number) => ({
+    ...state,
+    currentExerciseIndex: exercise,
+    currentSetIndex: set,
+  });
+
+  it('moves to the new first exercise before any set is marked', () => {
+    expect(positionAfterReorder(at(draft([open], [open], [open]), 0, 0), [2, 0, 1])).toEqual({
+      exercise: 2,
+      set: 0,
+    });
+    const chosen = { ...at(draft([open], [open]), 1, 0), exerciseOrder: [1, 0] };
+    expect(positionAfterReorder(chosen, undefined)).toEqual({ exercise: 0, set: 0 });
+    expect(positionAfterReorder(at(draft([open], [open]), 1, 0), undefined)).toEqual({
+      exercise: 0,
+      set: 0,
+    });
+  });
+
+  it('stays put once work has started', () => {
+    expect(positionAfterReorder(at(draft([done, open], [open]), 0, 1), [1, 0])).toEqual({
+      exercise: 0,
+      set: 1,
+    });
   });
 });

@@ -222,6 +222,7 @@ describe('exercise order', () => {
       'draft-1',
     );
     expect(draft.exerciseOrder).toEqual([1, 0]);
+    expect(draft.currentExerciseIndex).toBe(1);
     expect(() =>
       createWorkoutDraft({ date: green.date, definition, exerciseOrder: [0] }, green, startedAt),
     ).toThrow('every exercise once');

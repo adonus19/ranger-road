@@ -43,6 +43,23 @@ describe('OrderEditor', () => {
     ]);
   });
 
+  it('keeps focus on the moved exercise after the list re-renders', async () => {
+    const { fixture, button } = render();
+    fixture.componentInstance.reorder.subscribe((order) => {
+      const names: Record<number, string> = { 0: 'Box Squat', 1: 'Bench Press', 2: 'Row' };
+      fixture.componentRef.setInput(
+        'items',
+        order.map((index) => ({ index, name: names[index] })),
+      );
+    });
+    button('Move Box Squat up').focus();
+    button('Move Box Squat up').click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    // Box Squat is now first, so its up button is disabled and focus moves to its down button.
+    expect(document.activeElement?.getAttribute('aria-label')).toBe('Move Box Squat down');
+  });
+
   it('offers the written order, and Done closes the editor', () => {
     const { fixture } = render();
     let written = 0;

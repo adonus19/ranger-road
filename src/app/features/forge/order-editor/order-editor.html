@@ -9,7 +9,7 @@
     <p class="hint">Your sets and results stay where they are. Only the order changes.</p>
     <ol>
       @for (item of items(); track item.index; let position = $index; let last = $last) {
-        <li>
+        <li [attr.data-index]="item.index">
           <span class="name">{{ item.name }}</span>
           <button
             type="button"

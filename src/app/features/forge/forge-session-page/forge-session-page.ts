@@ -55,7 +55,13 @@ import { Icon } from '../../../shared/icon/icon';
 import { ProgressRows } from '../../../shared/progress-rows/progress-rows';
 import { ExerciseChips, type ExerciseChip } from '../exercise-chips/exercise-chips';
 import { OrderEditor, type OrderItem } from '../order-editor/order-editor';
-import { applySavedOrder, displayOrder, nextAfterMark, openSetFor } from './forge-navigation';
+import {
+  applySavedOrder,
+  displayOrder,
+  nextAfterMark,
+  openSetFor,
+  positionAfterReorder,
+} from './forge-navigation';
 import { REST_LENGTHS, RestClock, formatRest, restLengthLabel } from './rest-clock';
 
 type Panel = 'help' | 'pain' | 'substitute' | null;
@@ -496,7 +502,10 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   /** Changes this session's order and remembers it for the next time this workout starts. */
   protected async setOrder(order: number[] | undefined): Promise<void> {
     await this.save((draft) => {
+      const position = positionAfterReorder(draft, order);
       draft.exerciseOrder = order;
+      draft.currentExerciseIndex = position.exercise;
+      draft.currentSetIndex = position.set;
     });
     const draft = this.draft();
     if (this.error() || !draft) return;

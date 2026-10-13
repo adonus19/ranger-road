@@ -32,6 +32,22 @@ export function displayOrder(
   return order ? [...order] : draft.exerciseResults.map((_, index) => index);
 }
 
+/**
+ * Where to stand after the order changes. Before any set is marked, the person moves to the new
+ * first exercise; once work has started, they stay where they are.
+ */
+export function positionAfterReorder(
+  draft: NavigableDraft & Pick<WorkoutDraft, 'currentExerciseIndex' | 'currentSetIndex'>,
+  order: readonly number[] | undefined,
+): SessionPosition {
+  const started = draft.exerciseResults.some((result) =>
+    result.sets.some((set) => set.completed !== undefined),
+  );
+  if (started) return { exercise: draft.currentExerciseIndex, set: draft.currentSetIndex };
+  // Not displayOrder: an undefined order here means the written order, not the draft's own.
+  return { exercise: order?.[0] ?? 0, set: 0 };
+}
+
 /** Tapping an exercise opens its first unmarked set, or its last set when all are marked. */
 export function openSetFor(draft: NavigableDraft, exercise: number): SessionPosition {
   const sets = draft.exerciseResults[exercise]?.sets ?? [];

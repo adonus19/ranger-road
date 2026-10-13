@@ -1,4 +1,12 @@
-import { Component, input, output, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  afterRenderEffect,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 
 export interface OrderItem {
   /** Index into the session's exercises, whatever order the list is shown in. */
@@ -22,11 +30,31 @@ export class OrderEditor {
   readonly useWrittenOrder = output<void>();
   protected readonly open = signal(false);
 
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  /** The button last used, so focus can follow the exercise after the list re-renders. */
+  private refocus: { index: number; by: -1 | 1 } | null = null;
+
+  constructor() {
+    afterRenderEffect(() => {
+      this.items();
+      if (!this.refocus) return;
+      const { index, by } = this.refocus;
+      this.refocus = null;
+      const buttons = this.host.nativeElement.querySelectorAll<HTMLButtonElement>(
+        `[data-index="${index}"] button`,
+      );
+      // At the top or bottom the used button is disabled, so the other one takes focus.
+      const used = buttons[by === -1 ? 0 : 1];
+      (used && !used.disabled ? used : buttons[by === -1 ? 1 : 0])?.focus();
+    });
+  }
+
   protected move(position: number, by: -1 | 1): void {
     const order = this.items().map((item) => item.index);
     const target = position + by;
     if (target < 0 || target >= order.length) return;
     [order[position], order[target]] = [order[target], order[position]];
+    this.refocus = { index: order[target], by };
     this.reorder.emit(order);
   }
 }
