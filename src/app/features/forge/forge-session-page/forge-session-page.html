@@ -126,6 +126,11 @@
       </section>
     } @else if (currentPrescription(); as prescription) {
       <section class="current-set" aria-labelledby="exercise-title">
+        <app-exercise-chips
+          [chips]="chips()"
+          [current]="session.currentExerciseIndex"
+          (choose)="selectExercise($event)"
+        />
         <p class="eyebrow">
           {{ session.definitionSnapshot.title }} · Work {{ session.currentExerciseIndex + 1 }} of
           {{ session.definitionSnapshot.exercises.length }}

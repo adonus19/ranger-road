@@ -1,0 +1,19 @@
+<nav aria-label="Exercises">
+  <ul #row role="list">
+    @for (chip of chips(); track chip.index) {
+      <li>
+        <button
+          type="button"
+          [class.is-current]="chip.index === current()"
+          [class.is-finished]="chip.marked === chip.total"
+          [attr.aria-current]="chip.index === current() ? 'true' : null"
+          [attr.aria-label]="chip.name + ', ' + chip.marked + ' of ' + chip.total + ' sets marked'"
+          (click)="choose.emit(chip.index)"
+        >
+          <span class="name">{{ chip.name }}</span>
+          <span class="count" aria-hidden="true">{{ chip.marked }}/{{ chip.total }}</span>
+        </button>
+      </li>
+    }
+  </ul>
+</nav>

@@ -51,7 +51,8 @@ import { ScheduleHistory } from '../../../core/state/schedule-history';
 import { MissionRecorder, type RecordedMission } from '../../../core/state/mission-recorder';
 import { Icon } from '../../../shared/icon/icon';
 import { ProgressRows } from '../../../shared/progress-rows/progress-rows';
-import { nextAfterMark, openSetFor } from './forge-navigation';
+import { ExerciseChips, type ExerciseChip } from '../exercise-chips/exercise-chips';
+import { displayOrder, nextAfterMark, openSetFor } from './forge-navigation';
 import { REST_LENGTHS, RestClock, formatRest, restLengthLabel } from './rest-clock';
 
 type Panel = 'help' | 'pain' | 'substitute' | null;
@@ -77,7 +78,7 @@ function readRestLength(): number {
 }
 
 @Component({
-  imports: [FormField, Icon, ProgressRows, RouterLink],
+  imports: [ExerciseChips, FormField, Icon, ProgressRows, RouterLink],
   selector: 'app-forge-session-page',
   styleUrl: './forge-session-page.css',
   templateUrl: './forge-session-page.html',
@@ -293,6 +294,18 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       ),
     ),
   );
+
+  /** One chip per exercise, in the order the person works them. */
+  protected readonly chips = computed<ExerciseChip[]>(() => {
+    const draft = this.draft();
+    if (!draft) return [];
+    return displayOrder(draft).map((index) => ({
+      index,
+      name: this.getExerciseName(draft.definitionSnapshot.exercises[index].exerciseId),
+      marked: this.countMarked(draft, index),
+      total: draft.exerciseResults[index].sets.length,
+    }));
+  });
 
   /** Where the person is, so the set numbers can be brought to the top when it changes. */
   private readonly setPlace = computed(() => {
