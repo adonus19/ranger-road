@@ -107,6 +107,11 @@
             }
           </div>
         }
+        <app-order-editor
+          [items]="orderItems()"
+          (reorder)="setOrder($event)"
+          (useWrittenOrder)="setOrder(undefined)"
+        />
         @if (volumeGuide(); as guide) {
           <p class="volume-guide">
             Week {{ guide.week }} volume: <strong>{{ completedSets() }} completed</strong> of around
@@ -132,7 +137,7 @@
           (choose)="selectExercise($event)"
         />
         <p class="eyebrow">
-          {{ session.definitionSnapshot.title }} · Work {{ session.currentExerciseIndex + 1 }} of
+          {{ session.definitionSnapshot.title }} · Work {{ workPosition() }} of
           {{ session.definitionSnapshot.exercises.length }}
         </p>
         <h1 id="exercise-title">{{ currentName() }}</h1>
@@ -390,22 +395,20 @@
         <details class="exercise-list">
           <summary>All exercises</summary>
           <ol>
-            @for (
-              exercise of session.definitionSnapshot.exercises;
-              track exercise.exerciseId;
-              let index = $index
-            ) {
+            @for (chip of chips(); track chip.index) {
               <li>
-                <button type="button" (click)="selectExercise(index)">
-                  {{ getExerciseName(exercise.exerciseId)
-                  }}<span
-                    >{{ countMarked(session, index) }} of {{ exercise.sets ?? 1 }} sets marked</span
-                  >
+                <button type="button" (click)="selectExercise(chip.index)">
+                  {{ chip.name }}<span>{{ chip.marked }} of {{ chip.total }} sets marked</span>
                 </button>
               </li>
             }
           </ol>
         </details>
+        <app-order-editor
+          [items]="orderItems()"
+          (reorder)="setOrder($event)"
+          (useWrittenOrder)="setOrder(undefined)"
+        />
         <div class="action-dock">
           <button type="button" class="primary-action" (click)="prepareSet()" [disabled]="saving()">
             {{
@@ -493,22 +496,20 @@
         <details class="exercise-list">
           <summary>Review or edit sets</summary>
           <ol>
-            @for (
-              exercise of session.definitionSnapshot.exercises;
-              track exercise.exerciseId;
-              let index = $index
-            ) {
+            @for (chip of chips(); track chip.index) {
               <li>
-                <button type="button" (click)="selectExercise(index)">
-                  {{ getExerciseName(exercise.exerciseId)
-                  }}<span
-                    >{{ countMarked(session, index) }} of {{ exercise.sets ?? 1 }} sets marked</span
-                  >
+                <button type="button" (click)="selectExercise(chip.index)">
+                  {{ chip.name }}<span>{{ chip.marked }} of {{ chip.total }} sets marked</span>
                 </button>
               </li>
             }
           </ol>
         </details>
+        <app-order-editor
+          [items]="orderItems()"
+          (reorder)="setOrder($event)"
+          (useWrittenOrder)="setOrder(undefined)"
+        />
         <div class="action-dock">
           <button
             type="button"

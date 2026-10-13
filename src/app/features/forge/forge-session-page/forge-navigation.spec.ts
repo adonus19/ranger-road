@@ -74,4 +74,16 @@ describe('displayOrder', () => {
     expect(displayOrder(draft([open], [open], [open]))).toEqual([0, 1, 2]);
     expect(displayOrder(draft([open], [open]), [1, 0])).toEqual([1, 0]);
   });
+
+  it('uses the order stored on the draft', () => {
+    const state = { ...draft([open], [open], [open]), exerciseOrder: [2, 0, 1] };
+    expect(displayOrder(state)).toEqual([2, 0, 1]);
+  });
+
+  it('moves on in the stored order after a mark, wrapping to the top of it', () => {
+    const state = { ...draft([done], [open], [open]), exerciseOrder: [2, 0, 1] };
+    expect(nextAfterMark(state, { exercise: 0, set: 0 })).toEqual({ exercise: 1, set: 0 });
+    const wrap = { ...draft([open], [done], [done]), exerciseOrder: [1, 2, 0] };
+    expect(nextAfterMark(wrap, { exercise: 2, set: 0 })).toEqual({ exercise: 0, set: 0 });
+  });
 });

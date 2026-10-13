@@ -4,12 +4,12 @@
 
 **Blocked by:** 03
 
-**Status:** ready-for-agent
+**Status:** done
 
 **Model / effort:** Sonnet 5.5, medium
 
-- [ ] Move buttons are labelled per exercise ("Move Box Squat up") and are at least 48px
-- [ ] The written prescription and result indices stay unchanged
-- [ ] Reload mid-session keeps the chosen order
-- [ ] No drag-and-drop library added
-- [ ] Tests and build pass
+- [x] Move buttons are labelled per exercise ("Move Box Squat up") and are at least 48px
+- [x] The written prescription and result indices stay unchanged
+- [x] Reload mid-session keeps the chosen order
+- [x] No drag-and-drop library added
+- [x] Tests and build pass

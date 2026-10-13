@@ -6,7 +6,7 @@ export interface SessionPosition {
   set: number;
 }
 
-type NavigableDraft = Pick<WorkoutDraft, 'exerciseResults'>;
+type NavigableDraft = Pick<WorkoutDraft, 'exerciseResults' | 'exerciseOrder'>;
 
 function firstUnmarked(draft: NavigableDraft, exercise: number, from = 0): number {
   const sets = draft.exerciseResults[exercise]?.sets ?? [];
@@ -20,7 +20,10 @@ export function finishedPosition(draft: NavigableDraft): SessionPosition {
 }
 
 /** Exercise indices in the order the person works them; the written order when none is chosen. */
-export function displayOrder(draft: NavigableDraft, order?: readonly number[]): number[] {
+export function displayOrder(
+  draft: NavigableDraft,
+  order: readonly number[] | undefined = draft.exerciseOrder,
+): number[] {
   return order ? [...order] : draft.exerciseResults.map((_, index) => index);
 }
 

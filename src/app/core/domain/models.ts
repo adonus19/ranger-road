@@ -177,6 +177,8 @@ export interface WorkoutSession {
   optionalFinishComplete?: boolean;
   /** Week-specific source instructions, captured beside the prescription. */
   sessionInstructions?: string[];
+  /** Indices into definitionSnapshot.exercises in the order the person worked them; missing means written order. */
+  exerciseOrder?: number[];
 }
 
 /** The only editable workout record. Completed sessions are separate append-only rows. */
@@ -199,6 +201,8 @@ export interface WorkoutDraft {
   sessionRpe?: number;
   notes?: string;
   sessionInstructions?: string[];
+  /** Indices into definitionSnapshot.exercises in the order the person work them; missing means written order. */
+  exerciseOrder?: number[];
 }
 
 export type ReadinessStatus = 'green' | 'yellow' | 'red';

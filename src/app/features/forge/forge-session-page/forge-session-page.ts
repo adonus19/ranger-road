@@ -54,6 +54,7 @@ import { MissionRecorder, type RecordedMission } from '../../../core/state/missi
 import { Icon } from '../../../shared/icon/icon';
 import { ProgressRows } from '../../../shared/progress-rows/progress-rows';
 import { ExerciseChips, type ExerciseChip } from '../exercise-chips/exercise-chips';
+import { OrderEditor, type OrderItem } from '../order-editor/order-editor';
 import { displayOrder, nextAfterMark, openSetFor } from './forge-navigation';
 import { REST_LENGTHS, RestClock, formatRest, restLengthLabel } from './rest-clock';
 
@@ -80,7 +81,7 @@ function readRestLength(): number {
 }
 
 @Component({
-  imports: [ExerciseChips, FormField, Icon, ProgressRows, RouterLink],
+  imports: [ExerciseChips, FormField, Icon, OrderEditor, ProgressRows, RouterLink],
   selector: 'app-forge-session-page',
   styleUrl: './forge-session-page.css',
   templateUrl: './forge-session-page.html',
@@ -322,6 +323,16 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     }));
   });
 
+  protected readonly orderItems = computed<OrderItem[]>(() =>
+    this.chips().map(({ index, name }) => ({ index, name })),
+  );
+
+  /** Position of the current exercise in the order shown, counted from 1. */
+  protected readonly workPosition = computed(() => {
+    const draft = this.draft();
+    return draft ? displayOrder(draft).indexOf(draft.currentExerciseIndex) + 1 : 0;
+  });
+
   /** Where the person is, so the set numbers can be brought to the top when it changes. */
   private readonly setPlace = computed(() => {
     const draft = this.draft();
@@ -468,6 +479,12 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     await this.save((draft) => {
       draft.currentExerciseIndex = exercise;
       draft.currentSetIndex = set;
+    });
+  }
+
+  protected async setOrder(order: number[] | undefined): Promise<void> {
+    await this.save((draft) => {
+      draft.exerciseOrder = order;
     });
   }
 

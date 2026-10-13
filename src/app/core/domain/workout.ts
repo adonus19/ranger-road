@@ -189,6 +189,7 @@ export function updateWorkoutDraft(
   ) {
     throw new RangeError('The current set is outside this exercise.');
   }
+  if (edited.exerciseOrder) assertExerciseOrder(edited.exerciseOrder, prescriptions.length);
   if (edited.restStartedAt) assertTimestamp(edited.restStartedAt, 'Rest start time');
   if (edited.sessionRpe !== undefined) assertRating(edited.sessionRpe, 1, 10, 'Session RPE');
 
@@ -207,6 +208,7 @@ export function updateWorkoutDraft(
     currentExerciseIndex: edited.currentExerciseIndex,
     currentSetIndex: edited.currentSetIndex,
     restStartedAt: edited.restStartedAt,
+    exerciseOrder: edited.exerciseOrder ? [...edited.exerciseOrder] : undefined,
     exerciseResults: results,
     sessionRpe: edited.sessionRpe,
     notes: edited.notes,
@@ -299,7 +301,23 @@ export function completeWorkoutDraft(
     sessionRpe: draft.sessionRpe,
     notes: draft.notes,
     sessionInstructions: draft.sessionInstructions ? [...draft.sessionInstructions] : undefined,
+    exerciseOrder: draft.exerciseOrder ? [...draft.exerciseOrder] : undefined,
   };
+}
+
+/** An order is a permutation of 0..count-1, so every exercise appears exactly once. */
+export function isExerciseOrder(order: readonly number[], count: number): boolean {
+  return (
+    order.length === count &&
+    new Set(order).size === count &&
+    order.every((index) => Number.isInteger(index) && index >= 0 && index < count)
+  );
+}
+
+function assertExerciseOrder(order: readonly number[], count: number): void {
+  if (!isExerciseOrder(order, count)) {
+    throw new RangeError('The exercise order must list every exercise once.');
+  }
 }
 
 function validateCompletedSet(set: CompletedSet): CompletedSet {

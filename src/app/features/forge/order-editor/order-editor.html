@@ -1,0 +1,37 @@
+@if (!open()) {
+  <button type="button" class="open" (click)="open.set(true)">Change order</button>
+} @else {
+  <section aria-labelledby="order-title">
+    <h2 id="order-title">Change order</h2>
+    <p class="hint">Your sets and results stay where they are. Only the order changes.</p>
+    <ol>
+      @for (item of items(); track item.index; let position = $index; let last = $last) {
+        <li>
+          <span class="name">{{ item.name }}</span>
+          <button
+            type="button"
+            [disabled]="position === 0"
+            [attr.aria-label]="'Move ' + item.name + ' up'"
+            (click)="move(position, -1)"
+          >
+            <span aria-hidden="true">↑</span>
+          </button>
+          <button
+            type="button"
+            [disabled]="last"
+            [attr.aria-label]="'Move ' + item.name + ' down'"
+            (click)="move(position, 1)"
+          >
+            <span aria-hidden="true">↓</span>
+          </button>
+        </li>
+      }
+    </ol>
+    <div class="actions">
+      <button type="button" class="written" (click)="useWrittenOrder.emit()">
+        Use written order
+      </button>
+      <button type="button" class="done" (click)="open.set(false)">Done</button>
+    </div>
+  </section>
+}

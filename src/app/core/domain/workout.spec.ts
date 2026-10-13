@@ -184,3 +184,47 @@ describe('workout draft and completion', () => {
     expect(completeWorkoutDraft(draft, green, 'stopped', savedAt).outcome).toBe('stopped');
   });
 });
+
+describe('exercise order', () => {
+  it('keeps a chosen order on the draft, leaves results in written order, and saves it', () => {
+    const draft = createWorkoutDraft({ date: green.date, definition }, green, startedAt, 'draft-1');
+    expect(draft.exerciseOrder).toBeUndefined();
+    const edited = structuredClone(draft);
+    edited.exerciseOrder = [1, 0];
+    const saved = updateWorkoutDraft(draft, edited, green, savedAt);
+    expect(saved.exerciseOrder).toEqual([1, 0]);
+    expect(saved.exerciseResults.map((result) => result.exerciseId)).toEqual([
+      'box-squat',
+      'bench-press',
+    ]);
+
+    for (const result of saved.exerciseResults) {
+      result.sets = result.sets.map(() => ({ completed: true, reps: 6, rpe: 6 }));
+    }
+    saved.warmupComplete = true;
+    const session = completeWorkoutDraft(saved, green, 'completed', savedAt);
+    expect(session.exerciseOrder).toEqual([1, 0]);
+
+    const cleared = updateWorkoutDraft(
+      saved,
+      { ...saved, exerciseOrder: undefined },
+      green,
+      savedAt,
+    );
+    expect(cleared.exerciseOrder).toBeUndefined();
+  });
+
+  it('rejects an order that is not a permutation of the exercises', () => {
+    const draft = createWorkoutDraft({ date: green.date, definition }, green, startedAt, 'draft-1');
+    for (const order of [[0], [0, 0], [0, 2], [0, 1, 1], [-1, 0]]) {
+      expect(() =>
+        updateWorkoutDraft(
+          draft,
+          { ...structuredClone(draft), exerciseOrder: order },
+          green,
+          savedAt,
+        ),
+      ).toThrow('every exercise once');
+    }
+  });
+});
