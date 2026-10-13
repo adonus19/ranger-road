@@ -15,6 +15,8 @@ export interface OrderItem {
 export class OrderEditor {
   /** Exercises in the order they are currently shown. */
   readonly items = input.required<readonly OrderItem[]>();
+  /** A one-line note about the order, such as a remembered order being set aside. */
+  readonly note = input<string | null>(null);
   /** The full new order, as exercise indices, after one move. */
   readonly reorder = output<number[]>();
   readonly useWrittenOrder = output<void>();

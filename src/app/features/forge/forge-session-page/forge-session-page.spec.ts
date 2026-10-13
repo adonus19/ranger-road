@@ -1,3 +1,4 @@
+import type { WorkoutStart } from '../../../core/domain/workout';
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
@@ -49,7 +50,11 @@ const greenCheck = {
 async function render(
   workoutId: string,
   today: string,
-  options: { draft?: WorkoutDraft; sessions?: WorkoutSession[] } = {},
+  options: {
+    draft?: WorkoutDraft;
+    sessions?: WorkoutSession[];
+    history?: Partial<Record<keyof WorkoutHistory, unknown>>;
+  } = {},
 ) {
   const schedule = new ScheduleHistory();
   // Week 5's Forge B is saved; nothing on Monday, Nov 9, so its Forge A moves to Tuesday.
@@ -82,6 +87,7 @@ async function render(
         provide: WorkoutHistory,
         useValue: {
           active: vi.fn(async () => options.draft),
+          ...options.history,
         },
       },
       {
@@ -189,6 +195,54 @@ describe('ForgeSessionPage', () => {
   it('still refuses a session that is not in today’s orders', async () => {
     const element = await render('chapter-2-forge-b', '2026-11-10');
     expect(element.textContent).toContain('not part of today’s Chapter II plan');
+  });
+
+  describe('Remembered order', () => {
+    const today = '2026-11-10';
+
+    async function startWith(exerciseIds: string[]) {
+      const start = vi.fn(async (input: WorkoutStart) => ({
+        ...startedDraft(today),
+        exerciseOrder: input.exerciseOrder,
+      }));
+      const forgetOrder = vi.fn(async () => undefined);
+      const element = await render('chapter-2-forge-a', today, {
+        history: {
+          start,
+          forgetOrder,
+          savedOrder: vi.fn(async () => ({
+            id: 'chapter-2-forge-a',
+            exerciseIds,
+            updatedAt: `${today}T07:00:00.000Z`,
+          })),
+        },
+      });
+      const button = [...element.querySelectorAll('button')].find((b) =>
+        b.textContent?.includes('Start'),
+      )!;
+      button.click();
+      await vi.waitFor(() => expect(start).toHaveBeenCalled());
+      return { element, start, forgetOrder };
+    }
+
+    it('starts in the remembered order', async () => {
+      const ids = loadWorkout('chapter-2-forge-a')!.exercises.map((e) => e.exerciseId);
+      const order = ids.map((_, index) => index).reverse();
+      const { start, forgetOrder } = await startWith(order.map((index) => ids[index]));
+      expect(start.mock.calls[0][0].exerciseOrder).toEqual(order);
+      expect(forgetOrder).not.toHaveBeenCalled();
+    });
+
+    it('drops an order that no longer fits and says why', async () => {
+      const { element, start, forgetOrder } = await startWith(['box-squat', 'retired-exercise']);
+      expect(start.mock.calls[0][0].exerciseOrder).toBeUndefined();
+      expect(forgetOrder).toHaveBeenCalledWith('chapter-2-forge-a');
+      await vi.waitFor(() =>
+        expect(element.textContent).toContain(
+          'This workout’s exercises changed, so it’s back in the written order.',
+        ),
+      );
+    });
   });
 
   describe('Last time', () => {

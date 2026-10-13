@@ -1,3 +1,6 @@
+@if (note(); as message) {
+  <p class="note" role="status">{{ message }}</p>
+}
 @if (!open()) {
   <button type="button" class="open" (click)="open.set(true)">Change order</button>
 } @else {

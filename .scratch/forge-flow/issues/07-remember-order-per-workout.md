@@ -4,11 +4,11 @@
 
 **Blocked by:** 06
 
-**Status:** ready-for-agent
+**Status:** done
 
 **Model / effort:** Opus 5.5, medium
 
-- [ ] Upgrading from version 6 preserves every existing record
-- [ ] Backup and restore round-trip the saved orders; backups without them restore cleanly
-- [ ] Mismatch fallback and note covered by tests
-- [ ] Tests and build pass
+- [x] Upgrading from version 6 preserves every existing record
+- [x] Backup and restore round-trip the saved orders; backups without them restore cleanly
+- [x] Mismatch fallback and note covered by tests
+- [x] Tests and build pass

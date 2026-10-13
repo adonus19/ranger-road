@@ -29,7 +29,7 @@ export interface RecordsSummary {
   startDate?: LocalDate;
   /** The newest dated entry, such as a readiness check, workout or watch. */
   latestDate?: LocalDate;
-  /** Every saved row except the campaign itself. */
+  /** Every saved row except the campaign itself and saved exercise orders. */
   count: number;
 }
 
@@ -39,6 +39,9 @@ export const DAMAGED_RECORDS_COPY =
   'This copy can’t be read, so nothing changed. Try another copy.';
 export const NEWER_RECORDS_COPY =
   'This copy came from a newer version of the app. Close and reopen the app to update it, then try again.';
+
+/** Settings rather than entries: copied and restored, but not counted as records. */
+const UNCOUNTED_STORES: ReadonlySet<StoreName> = new Set(['campaigns', 'exerciseOrders']);
 
 export function createRecordsBackup(
   stores: StoreRecords,
@@ -111,7 +114,7 @@ export function summarizeRecords(stores: StoreRecords): RecordsSummary {
   let latestDate: LocalDate | undefined;
   let count = 0;
   for (const name of STORE_NAMES) {
-    if (name === 'campaigns') continue;
+    if (UNCOUNTED_STORES.has(name)) continue;
     for (const record of stores[name]) {
       count += 1;
       const date = record['date'];
@@ -131,7 +134,7 @@ export function summarizeRecords(stores: StoreRecords): RecordsSummary {
 export function recordsMissingFrom(current: StoreRecords, copy: StoreRecords): number {
   let missing = 0;
   for (const name of STORE_NAMES) {
-    if (name === 'campaigns') continue;
+    if (UNCOUNTED_STORES.has(name)) continue;
     const kept = new Set(copy[name].map((record) => record.id));
     missing += current[name].filter((record) => !kept.has(record.id)).length;
   }

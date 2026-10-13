@@ -109,6 +109,7 @@
         }
         <app-order-editor
           [items]="orderItems()"
+          [note]="orderNote()"
           (reorder)="setOrder($event)"
           (useWrittenOrder)="setOrder(undefined)"
         />
@@ -406,6 +407,7 @@
         </details>
         <app-order-editor
           [items]="orderItems()"
+          [note]="orderNote()"
           (reorder)="setOrder($event)"
           (useWrittenOrder)="setOrder(undefined)"
         />
@@ -507,6 +509,7 @@
         </details>
         <app-order-editor
           [items]="orderItems()"
+          [note]="orderNote()"
           (reorder)="setOrder($event)"
           (useWrittenOrder)="setOrder(undefined)"
         />

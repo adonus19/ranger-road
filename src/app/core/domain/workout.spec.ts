@@ -214,6 +214,19 @@ describe('exercise order', () => {
     expect(cleared.exerciseOrder).toBeUndefined();
   });
 
+  it('starts a draft in a remembered order and refuses one that does not fit', () => {
+    const draft = createWorkoutDraft(
+      { date: green.date, definition, exerciseOrder: [1, 0] },
+      green,
+      startedAt,
+      'draft-1',
+    );
+    expect(draft.exerciseOrder).toEqual([1, 0]);
+    expect(() =>
+      createWorkoutDraft({ date: green.date, definition, exerciseOrder: [0] }, green, startedAt),
+    ).toThrow('every exercise once');
+  });
+
   it('rejects an order that is not a permutation of the exercises', () => {
     const draft = createWorkoutDraft({ date: green.date, definition }, green, startedAt, 'draft-1');
     for (const order of [[0], [0, 0], [0, 2], [0, 1, 1], [-1, 0]]) {

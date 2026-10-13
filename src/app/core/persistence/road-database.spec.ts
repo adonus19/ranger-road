@@ -46,7 +46,7 @@ describe('RoadDatabase', () => {
   it('opens a versioned schema and explicitly updates campaign state', async () => {
     const name = newName();
     const db = await RoadDatabase.open(name);
-    expect(DATABASE_VERSION).toBe(6);
+    expect(DATABASE_VERSION).toBe(7);
     expect(await db.getCampaign('primary')).toBeUndefined();
 
     await db.putCampaign(campaign);
@@ -570,6 +570,64 @@ describe('RoadDatabase', () => {
     expect(await rawGet(upgraded, 'painEvents', 'old-pain')).toEqual(oldPain);
     expect(await rawGetByDate(upgraded, readiness.date)).toEqual([readiness]);
     upgraded.close();
+  });
+
+  it('upgrades version 6 by adding the saved-order store and keeps every record', async () => {
+    const name = newName();
+    const v6Stores = [
+      'campaigns',
+      'readinessChecks',
+      'missionInstances',
+      'workoutSessions',
+      'painEvents',
+      'measurementEntries',
+      'roadSessions',
+      'journalEntries',
+      'trialResults',
+      'workoutDrafts',
+      'trialDrafts',
+      'trialAttempts',
+      'postMissionFunctions',
+      'dailyChecks',
+      'lightActivities',
+    ];
+    const old = await openRaw(name, 6, (database, transaction) => {
+      for (const store of v6Stores) database.createObjectStore(store, { keyPath: 'id' });
+      transaction.objectStore('readinessChecks').createIndex('date', 'date', { unique: false });
+    });
+    const rows: Record<string, { id: string } & Record<string, unknown>> = {};
+    for (const store of v6Stores) {
+      rows[store] = { id: `${store}-1`, date: '2026-10-05', note: `kept from ${store}` };
+      await rawAdd(old, store, rows[store]);
+    }
+    old.close();
+
+    const upgraded = await RoadDatabase.open(name);
+    const records = await upgraded.exportRecords();
+    for (const store of v6Stores) {
+      expect(records[store as keyof typeof records]).toEqual([rows[store]]);
+    }
+    expect(records.exerciseOrders).toEqual([]);
+    upgraded.close();
+  });
+
+  it('remembers one order per workout, replaces it, and forgets it', async () => {
+    const db = await RoadDatabase.open(newName());
+    const order = {
+      id: 'chapter-2-forge-a',
+      exerciseIds: ['row', 'box-squat'],
+      updatedAt: '2026-11-10T08:00:00.000Z',
+    };
+    await db.putExerciseOrder(order);
+    await db.putExerciseOrder({ ...order, exerciseIds: ['box-squat', 'row'] });
+    expect((await db.getExerciseOrder('chapter-2-forge-a'))?.exerciseIds).toEqual([
+      'box-squat',
+      'row',
+    ]);
+    expect(await db.getExerciseOrder('chapter-2-forge-b')).toBeUndefined();
+    await db.deleteExerciseOrder('chapter-2-forge-a');
+    expect(await db.getExerciseOrder('chapter-2-forge-a')).toBeUndefined();
+    db.close();
   });
 
   it('upgrades an existing version 2 database without rewriting any history or workout drafts', async () => {

@@ -1,4 +1,9 @@
-import type { WorkoutDraft } from '../../../core/domain/models';
+import type {
+  DeepReadonly,
+  SavedExerciseOrder,
+  WorkoutDefinition,
+  WorkoutDraft,
+} from '../../../core/domain/models';
 
 /** A place in the session: indices into the draft's exercises and that exercise's sets. */
 export interface SessionPosition {
@@ -56,4 +61,32 @@ export function nextAfterMark(
     if (set !== -1) return { exercise, set };
   }
   return finishedPosition(draft);
+}
+
+export interface AppliedOrder {
+  /** Indices into the workout's exercises; missing means the written order. */
+  order?: number[];
+  /** A saved order no longer fits this workout, so it was set aside. */
+  changed: boolean;
+}
+
+/**
+ * Turns a remembered order of exercise IDs into indices for this workout. It applies only when
+ * its IDs are exactly the workout's exercise IDs; otherwise the written order is used.
+ */
+export function applySavedOrder(
+  definition: DeepReadonly<Pick<WorkoutDefinition, 'exercises'>>,
+  saved: Pick<SavedExerciseOrder, 'exerciseIds'> | undefined,
+): AppliedOrder {
+  if (!saved) return { changed: false };
+  const unused = definition.exercises.map((exercise) => exercise.exerciseId as string | undefined);
+  const order: number[] = [];
+  for (const id of saved.exerciseIds) {
+    const index = unused.indexOf(id);
+    if (index === -1) return { changed: true };
+    unused[index] = undefined;
+    order.push(index);
+  }
+  if (order.length !== definition.exercises.length) return { changed: true };
+  return { order, changed: false };
 }

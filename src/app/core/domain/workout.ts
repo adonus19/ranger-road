@@ -19,6 +19,8 @@ export interface WorkoutStart {
   reduced?: boolean;
   /** Source-backed, date-specific instructions shown before the first set. */
   sessionInstructions?: string[];
+  /** The remembered order, as indices into the definition's exercises. */
+  exerciseOrder?: number[];
 }
 
 export type WorkoutPainInput = Pick<
@@ -94,6 +96,7 @@ export function createWorkoutDraft(
   }
 
   const snapshot = structuredClone(input.definition);
+  if (input.exerciseOrder) assertExerciseOrder(input.exerciseOrder, snapshot.exercises.length);
   return {
     id,
     date: input.date,
@@ -114,6 +117,7 @@ export function createWorkoutDraft(
       painEvents: [],
     })),
     sessionInstructions: input.sessionInstructions ? [...input.sessionInstructions] : undefined,
+    exerciseOrder: input.exerciseOrder ? [...input.exerciseOrder] : undefined,
   };
 }
 

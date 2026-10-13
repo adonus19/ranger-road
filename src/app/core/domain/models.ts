@@ -181,6 +181,14 @@ export interface WorkoutSession {
   exerciseOrder?: number[];
 }
 
+/** A person's chosen exercise order for one workout, reused the next time it starts. */
+export interface SavedExerciseOrder {
+  /** The workout definition ID. */
+  id: string;
+  exerciseIds: string[];
+  updatedAt: IsoTimestamp;
+}
+
 /** The only editable workout record. Completed sessions are separate append-only rows. */
 export interface WorkoutDraft {
   id: string;

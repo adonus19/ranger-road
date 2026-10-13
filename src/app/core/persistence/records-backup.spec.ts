@@ -40,6 +40,13 @@ function sampleStores(): StoreRecords {
     postMissionFunctions: [
       { id: 'recovery-1', trialResultId: 'gate-1', recordedAt: '2026-10-31T15:00:00.000Z' },
     ],
+    exerciseOrders: [
+      {
+        id: 'chapter-2-forge-a',
+        exerciseIds: ['row', 'box-squat'],
+        updatedAt: '2026-11-10T08:00:00.000Z',
+      },
+    ],
   };
 }
 
@@ -59,12 +66,14 @@ describe('records backup file', () => {
   it('opens a copy from an older schema with the later stores empty', () => {
     const stores: Record<string, unknown> = { ...sampleStores() };
     delete stores['postMissionFunctions'];
+    delete stores['exerciseOrders'];
     const parsed = parseRecordsBackup(
       JSON.stringify({ ...createRecordsBackup(sampleStores()), databaseVersion: 3, stores }),
     );
 
     expect(parsed.databaseVersion).toBe(3);
     expect(parsed.stores.postMissionFunctions).toEqual([]);
+    expect(parsed.stores.exerciseOrders).toEqual([]);
     expect(parsed.stores.readinessChecks).toHaveLength(2);
   });
 

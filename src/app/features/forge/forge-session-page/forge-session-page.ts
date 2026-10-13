@@ -55,7 +55,7 @@ import { Icon } from '../../../shared/icon/icon';
 import { ProgressRows } from '../../../shared/progress-rows/progress-rows';
 import { ExerciseChips, type ExerciseChip } from '../exercise-chips/exercise-chips';
 import { OrderEditor, type OrderItem } from '../order-editor/order-editor';
-import { displayOrder, nextAfterMark, openSetFor } from './forge-navigation';
+import { applySavedOrder, displayOrder, nextAfterMark, openSetFor } from './forge-navigation';
 import { REST_LENGTHS, RestClock, formatRest, restLengthLabel } from './rest-clock';
 
 type Panel = 'help' | 'pain' | 'substitute' | null;
@@ -80,6 +80,9 @@ function readRestLength(): number {
   }
 }
 
+export const ORDER_CHANGED_NOTE =
+  'This workout’s exercises changed, so it’s back in the written order.';
+
 @Component({
   imports: [ExerciseChips, FormField, Icon, OrderEditor, ProgressRows, RouterLink],
   selector: 'app-forge-session-page',
@@ -95,6 +98,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   protected readonly loading = signal(true);
   protected readonly saving = signal(false);
   protected readonly error = signal<string | null>(null);
+  /** Shown once when a remembered order no longer fits this workout. */
+  protected readonly orderNote = signal<string | null>(null);
   protected readonly draft = signal<WorkoutDraft | null>(null);
   protected readonly otherDraft = signal<WorkoutDraft | null>(null);
   protected readonly savedSession = signal<WorkoutSession | null>(null);
@@ -419,11 +424,17 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       const chapter = this.todayOrders();
       if (!definition || !chapter || !this.allowed()) return;
       const { note, reduced } = chapter.program.workoutPlan(this.workoutId, chapter.contentWeek);
+      const saved = applySavedOrder(definition, await this.history.savedOrder(definition.id));
+      if (saved.changed) {
+        await this.history.forgetOrder(definition.id);
+        this.orderNote.set(ORDER_CHANGED_NOTE);
+      }
       const draft = await this.history.start({
         date: this.state.today(),
         definition,
         reduced,
         sessionInstructions: note ? [note] : undefined,
+        exerciseOrder: saved.order,
       });
       this.draft.set(draft);
       this.syncForms(draft);
@@ -482,10 +493,27 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     });
   }
 
+  /** Changes this session's order and remembers it for the next time this workout starts. */
   protected async setOrder(order: number[] | undefined): Promise<void> {
     await this.save((draft) => {
       draft.exerciseOrder = order;
     });
+    const draft = this.draft();
+    if (this.error() || !draft) return;
+    this.orderNote.set(null);
+    try {
+      if (order) {
+        const exercises = draft.definitionSnapshot.exercises;
+        await this.history.rememberOrder(
+          draft.workoutDefinitionId,
+          order.map((index) => exercises[index].exerciseId),
+        );
+      } else {
+        await this.history.forgetOrder(draft.workoutDefinitionId);
+      }
+    } catch (error) {
+      this.showError(error);
+    }
   }
 
   protected async selectExercise(exercise: number): Promise<void> {

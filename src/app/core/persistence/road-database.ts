@@ -11,6 +11,7 @@ import type {
   PostMissionFunction,
   ReadinessCheck,
   RoadSession,
+  SavedExerciseOrder,
   TrialAttempt,
   TrialDraft,
   TrialResult,
@@ -52,7 +53,7 @@ import { resolveCampaignPosition } from '../program/campaign-position';
 import { checkInSaveError, testsHeldFor } from '../program/check-in-schedule';
 
 export const DATABASE_NAME = 'rangers-road';
-export const DATABASE_VERSION = 6;
+export const DATABASE_VERSION = 7;
 
 export const STORE_NAMES = [
   'campaigns',
@@ -70,6 +71,7 @@ export const STORE_NAMES = [
   'postMissionFunctions',
   'dailyChecks',
   'lightActivities',
+  'exerciseOrders',
 ] as const;
 
 export type StoreName = (typeof STORE_NAMES)[number];
@@ -266,6 +268,19 @@ export class RoadDatabase {
 
   deleteDailyCheck(id: string): Promise<void> {
     return this.remove('dailyChecks', id);
+  }
+
+  getExerciseOrder(workoutDefinitionId: string): Promise<SavedExerciseOrder | undefined> {
+    return this.read<SavedExerciseOrder>('exerciseOrders', workoutDefinitionId);
+  }
+
+  /** A preference, not history: one row per workout, replaced whenever the order changes. */
+  putExerciseOrder(order: SavedExerciseOrder): Promise<void> {
+    return this.write('exerciseOrders', 'put', order);
+  }
+
+  deleteExerciseOrder(workoutDefinitionId: string): Promise<void> {
+    return this.remove('exerciseOrders', workoutDefinitionId);
   }
 
   /** Version 2 permits one resumable draft; all completed workout rows remain in the v1 store. */

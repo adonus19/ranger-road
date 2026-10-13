@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import type { LocalDate, WorkoutDraft, WorkoutSession } from '../domain/models';
+import type {
+  LocalDate,
+  SavedExerciseOrder,
+  WorkoutDraft,
+  WorkoutSession,
+} from '../domain/models';
 import type { RecordedWorkoutPainEvent, WorkoutPainInput, WorkoutStart } from '../domain/workout';
 import { RoadDatabase } from '../persistence/road-database';
 
@@ -33,6 +38,24 @@ export class WorkoutHistory {
 
   async forDate(date: LocalDate): Promise<WorkoutSession[]> {
     return this.withDatabase((database) => database.getWorkoutSessionsForDate(date));
+  }
+
+  async savedOrder(workoutDefinitionId: string): Promise<SavedExerciseOrder | undefined> {
+    return this.withDatabase((database) => database.getExerciseOrder(workoutDefinitionId));
+  }
+
+  async rememberOrder(workoutDefinitionId: string, exerciseIds: string[]): Promise<void> {
+    return this.withDatabase((database) =>
+      database.putExerciseOrder({
+        id: workoutDefinitionId,
+        exerciseIds,
+        updatedAt: new Date().toISOString(),
+      }),
+    );
+  }
+
+  async forgetOrder(workoutDefinitionId: string): Promise<void> {
+    return this.withDatabase((database) => database.deleteExerciseOrder(workoutDefinitionId));
   }
 
   private async withDatabase<T>(work: (database: RoadDatabase) => Promise<T>): Promise<T> {

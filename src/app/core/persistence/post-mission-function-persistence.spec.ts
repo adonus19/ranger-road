@@ -112,7 +112,7 @@ describe('post-mission function persistence', () => {
     await addRaw(old, 'painEvents', pain);
     old.close();
 
-    expect(DATABASE_VERSION).toBe(6);
+    expect(DATABASE_VERSION).toBe(7);
     const upgraded = await RoadDatabase.open(name);
     expect(await upgraded.getActiveTrialDraft()).toEqual(draft);
     expect(await upgraded.getStoppedTrialAttemptsForTrial('gate-trial')).toEqual([attempt]);
