@@ -166,3 +166,4 @@ Only Pallof press, chest-supported reverse fly, and these track steps get image 
 
 - 2026-10-16: Spec and 13 tickets written. Next: ticket 01.
 - 2026-10-16: Ticket 01 docs drafted (catalog, program, trials, UX, data model, design). Tests pass. Waiting on the person's review and the 8 questions in ticket 01's Comments before ticket 02.
+- 2026-10-16: Ticket 02 content drafted (chapters II–IX Forge A/B, Chapter I Forge C). Week 8 recount in docs says 21 of 28; the app text and spec in chapter-two-workouts.spec.ts still say 17 of 22 and change in ticket 05. Waiting on the person's review of the chapter tables.

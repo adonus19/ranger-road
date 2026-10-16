@@ -119,7 +119,7 @@ The rules live in `RANGERS_ROAD_PROGRAM.md` (Strength Progression). This section
 
 **Chapter trial page after a pass.** A "What changed this chapter" section: first against last full session for each exercise, grouped as Lifts, then Carries and holds, with unchanged exercises counted in one line. Keep's "trial passed" note links to it.
 
-In Week 8 Forge B, show the same approximate 25% guide (around 17 of its 22 work sets, Hammer Curl included); Week 8 Forge A shows no reduction and no load increase. In Week 4 Forge B, show the documented approximate 25% deload as an around-15-of-20-work-set guide. The person chooses which roughly five sets to skip, and the active and finish screens show the number actually completed and skipped. Keep the base prescription and actual set marks in the saved snapshot; this guidance does not silently remove exercises or auto-progress load.
+In Week 8 Forge B, show the same approximate 25% guide (around 21 of its 28 work sets, curl and chin-up included); Week 8 Forge A shows no reduction and no load increase. In Week 4 Forge B, show the documented approximate 25% deload as an around-15-of-20-work-set guide. The person chooses which roughly five sets to skip, and the active and finish screens show the number actually completed and skipped. Keep the base prescription and actual set marks in the saved snapshot; this guidance does not silently remove exercises or auto-progress load.
 
 After Chapter I is acknowledged complete, Forge stops offering the repeated Week 4 choices. A saved draft still opens so partial work can be ended and kept in history.
 
