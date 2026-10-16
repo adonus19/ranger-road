@@ -197,7 +197,7 @@ describe('This week in Chapter II', () => {
       ['Navigation I', 'Field card · learn it this month'],
       ['The Ruthless Elimination of Hurry', 'Reading · Wednesday, 10 minutes'],
       ['Psalm 46:1–11', 'Scripture today · six more this week'],
-      ['Forge and Restoration', 'Exercise guides · 22 movements this week'],
+      ['Forge and Restoration', 'Exercise guides · 29 movements this week'],
     ]);
     expect(five.rows[1]).toMatchObject({
       link: ['/field-manual/cards', 'navigation-one'],

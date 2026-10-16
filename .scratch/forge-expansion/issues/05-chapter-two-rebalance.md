@@ -4,7 +4,7 @@
 
 **Blocked by:** 02, 03
 
-**Status:** ready-for-agent
+**Status:** done (2026-10-16)
 
 **Deadline:** before 2026-11-02 (start of Chapter II)
 
@@ -12,8 +12,8 @@
 
 **Skills:** angular-developer
 
-- [ ] Prescriptions match 02_THE_ROAD.md exactly
-- [ ] Chapter I's warm-up and Forges unchanged
-- [ ] Old saved sessions and drafts still open and read correctly (migration check)
-- [ ] Saved exercise order from the forge-flow work is dropped with its note when the IDs change
-- [ ] Tests and build pass; deployed
+- [x] Prescriptions match 02_THE_ROAD.md exactly
+- [x] Chapter I's warm-up and Forges unchanged
+- [x] Old saved sessions and drafts still open and read correctly (migration check)
+- [x] Saved exercise order from the forge-flow work is dropped with its note when the IDs change
+- [x] Tests and build pass; deployed

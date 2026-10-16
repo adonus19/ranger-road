@@ -27,8 +27,11 @@ describe('Chapter II workout content', () => {
       'bench-press 3 6',
       'assisted-pull-up 3 6–8',
       'split-squat 3 6 per side',
-      'suitcase-carry 3 40 per side',
+      'seated-two-db-overhead-press 3 8',
+      'suitcase-carry 2 40 per side',
+      'two-hand-overhead-carry 2 20–30',
       'side-plank 2 30 per side',
+      'hammer-curl 2 10',
       'calf-raise 2 12',
     ]);
     expect(chapterTwoForgeB.exercises.map(line)).toEqual([
@@ -36,12 +39,14 @@ describe('Chapter II workout content', () => {
       'step-up 3 8 per side',
       'one-arm-db-row 3 8–10 per side',
       'push-up 3 8–12',
+      'one-arm-db-overhead-press 3 8 per side',
+      'farmer-carry 2 45–60',
+      'two-hand-overhead-carry 2 20–30',
+      'pallof-press 2 8 per side',
+      'db-biceps-curl 2 10–12',
       'glute-bridge 3 12',
-      'farmer-carry 3 45–60',
-      'bird-dog 2 8 per side',
-      'hammer-curl 2 10',
+      'chin-up 2 5–8',
     ]);
-    expect(chapterTwoForgeB.exercises.at(-1)?.notes).toContain('Optional');
   });
 
   it('steps up from Chapter I without reusing its exercise IDs', () => {
@@ -77,19 +82,23 @@ describe('Chapter II workout content', () => {
     ]);
   });
 
-  it('reuses Chapter I’s warm-up and finishes, as the pack says', () => {
-    expect(chapterTwoForgeA.warmup).toEqual(chapterOneForgeA.warmup);
-    expect(chapterTwoForgeB.warmup).toEqual(chapterOneForgeA.warmup);
+  it('adds only the band pull-apart to Chapter I’s warm-up and keeps its finishes', () => {
+    const bandPullApart = {
+      kind: 'exercise',
+      prescription: { exerciseId: 'band-pull-apart', sets: 1, reps: 12 },
+    };
+    expect(chapterTwoForgeA.warmup).toEqual([...chapterOneForgeA.warmup!, bandPullApart]);
+    expect(chapterTwoForgeB.warmup).toEqual([...chapterOneForgeB.warmup!, bandPullApart]);
     expect(chapterTwoForgeA.optionalFinish).toEqual([{ kind: 'walk', minutes: 5, pace: 'easy' }]);
     expect(chapterTwoRestoration.finish).toEqual([{ kind: 'walk', minutes: 1, pace: 'easy' }]);
   });
 
-  it('counts Hammer Curl in Forge B’s 22 sets for the Week 8 guide', () => {
+  it('counts all 28 of Forge B’s sets for the Week 8 guide', () => {
     expect(chapterTwoWeekEightVolumeGuide(chapterTwoForgeB.id, 8)).toEqual({
       week: 8,
-      plannedSets: 22,
-      aroundCompletedSets: 17,
-      aroundSkippedSets: 5,
+      plannedSets: 28,
+      aroundCompletedSets: 21,
+      aroundSkippedSets: 7,
     });
     expect(chapterTwoWeekEightVolumeGuide(chapterTwoForgeB.id, 7)).toBeUndefined();
     expect(chapterTwoWeekEightVolumeGuide(chapterTwoForgeA.id, 8)).toBeUndefined();
@@ -100,7 +109,7 @@ describe('Chapter II workout content', () => {
       'Do not chase progression: the written sets and reps, with no load increases.',
     );
     expect(chapterTwoWorkoutWeekNote(chapterTwoForgeB.id, 8)).toBe(
-      'Reduce volume about 25%: aim for around 17 of 22 work sets. Mark around 5 sets skipped. Choose which sets fit today; do not chase progression.',
+      'Reduce volume about 25%: aim for around 21 of 28 work sets. Mark around 7 sets skipped. Choose which sets fit today; do not chase progression.',
     );
     expect(chapterTwoWorkoutWeekNote(chapterTwoForgeB.id, 7)).toBeUndefined();
     const plan = (id: string, week: number) => chapterTwoProgram.workoutPlan(id, week);
