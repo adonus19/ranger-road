@@ -8,19 +8,30 @@ This is the campaign's most strength-focused block, but remains submaximal and p
 # Forge A — Strength
 - Squat variation — 4 x 5
 - Bench Press — 3 x 5
-- Assisted Pull-Up — 4 x 5
+- Assisted Pull-Up (pull track) — 4 x 5
 - Supported Split Squat — 3 x 8/side
-- Suitcase Carry — 3 x 60 sec/side
-- Side Plank — 3 x 30–45 sec/side
+- Barbell Overhead Press — 3 x 5
+- Suitcase Carry — 2 x 60 sec/side
+- Two-Hand Overhead Carry — 2 x 45–60 sec
+- Side Plank — 2 x 30–45 sec/side
+- Hammer Curl — 2 x 10 (light, required)
+- Handstand track (Wall Plank Hold to start) — 3 x 20–30 sec
 
 # Forge B — Strength
 - Goblet Squat — 3 x 10
 - Step-Up — 3 x 10/leg
 - One-Arm DB Row — 4 x 8/side
-- Push-Up — 3 submaximal sets
-- Farmer Carry — 4 x 60 sec
-- Elevated Light Hinge — 3 x 8 only if symptom-free
-- Single-Leg Balance — 2 x 30 sec/side
+- Push-Up (push track) — 3 submaximal sets
+- One-Arm DB Overhead Press — 3 x 8/side
+- Farmer Carry — 2 x 60 sec
+- Two-Hand Overhead Carry — 2 x 45–60 sec
+- Pallof Press — 2 x 8/side
+- Preacher Curl — 2 x 10–12/side
+- Single-Leg Balance — 2 x 30 sec/side (harder versions when it feels easy)
+- Chin-Up (band-assisted) — 2 x 5–8
+- Planche track (optional stretch) — 2 short sets, about 5 min; skippable, never counted as missed
+
+Press stance: same back-pain rule as Chapter IV. From this chapter on, Forge A always presses with the barbell. Wrist warm-up (Wrist Circles and Wrist Rocks, about 1 minute) goes in front of handstand and planche work. Press comes before the carries; the overhead carry is the last carry.
 
 # Saturday Work-Capacity Circuit
 Start Week 17 with 3 rounds; Weeks 18–19 use 4 rounds if recovery is good:

@@ -6,21 +6,29 @@
 # Forge A
 - Controlled Box Squat — 3 x 6
 - Bench Press — 3 x 6
-- Assisted Pull-Up — 3 x 6–8
+- Assisted Pull-Up (pull track) — 3 x 6–8
 - Step-Up — 3 x 8/leg
-- Suitcase Carry — 3 x 45 sec/side
-- Standing Calf Raise — 3 x 12
+- Two-DB Overhead Press — 3 x 8
+- Suitcase Carry — 2 x 45 sec/side
+- Two-Hand Overhead Carry — 2 x 30–45 sec (heavier)
 - Side Plank — 2 x 30–40 sec/side
+- Hammer Curl — 2 x 10 (light, required)
+- Standing Calf Raise — 2 x 12
 
 # Forge B
 - Goblet Squat — 3 x 8
 - Supported Reverse Lunge — 3 x 6/side
 - One-Arm DB Row — 3 x 10/side
-- Push-Up — 3 submaximal sets
+- Push-Up (push track) — 3 submaximal sets
+- One-Arm DB Overhead Press — 3 x 8/side
+- Farmer Carry — 2 x 60 sec
+- Two-Hand Overhead Carry — 2 x 30–45 sec (heavier)
+- Pallof Press — 2 x 8/side
+- Preacher Curl — 2 x 10–12/side
 - Glute Bridge — 3 x 12
-- Farmer Carry — 3 x 60 sec
-- Single-Leg Balance — 3 x 20–30 sec/side
-- Slow Step-Down — 2 x 5/side
+- Chin-Up (band-assisted) — 2 x 5–8
+
+Press stance: seated by default. Half-kneeling is offered for the one-arm press. Press comes before the carries; the overhead carry is the last carry.
 
 # Tuesday Climb Conditioning
 Week 9: 5 min easy + 6 x (1 min step-ups / 2 min easy walk).  

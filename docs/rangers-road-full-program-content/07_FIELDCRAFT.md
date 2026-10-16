@@ -6,18 +6,30 @@
 # Forge A
 - Squat variation — 3 x 5–6
 - Bench Press — 3 x 5–6
-- Pull-Up progression — 3 x 5–8
+- Pull-Up progression (pull track) — 3 x 5–8
 - Step-Up — 3 x 8/leg
-- Suitcase Carry — 3 x 60 sec/side
+- Barbell Overhead Press — 3 x 5–6
+- Suitcase Carry — 2 x 60 sec/side
+- Overhead Carry — 2 x 45–60 sec two-hand, or Waiter Carry 2 x 30–45 sec/side as the harder step
 - Side Plank — 2 x 45 sec/side
+- Hammer Curl — 2 x 10 (light, required)
+- Handstand track (current step) — 3 x 15–30 sec
 
 # Forge B
 - Goblet Squat — 3 x 8
 - Reverse Lunge — 3 x 8/side
 - One-Arm Row — 3 x 10
-- Push-Up — 3 submaximal sets
-- Farmer Carry — 4 x 60 sec
-- Single-Leg Balance — 3 x 30 sec/side
+- Push-Up (push track) — 3 submaximal sets
+- One-Arm DB Overhead Press — 3 x 8/side
+- Farmer Carry — 2 x 60 sec
+- Overhead Carry — 2 x 45–60 sec two-hand, or Waiter Carry 2 x 30–45 sec/side as the harder step
+- Pallof Press — 2 x 8/side
+- Preacher Curl — 2 x 10–12/side
+- Single-Leg Reach (three directions) — 2 x 5/side
+- Chin-Up (band-assisted) — 2 x 5–8
+- Planche track (optional stretch) — 2 short sets, about 5 min; skippable, never counted as missed
+
+Press stance: same back-pain rule as Chapter IV. Wrist warm-up (Wrist Circles and Wrist Rocks, about 1 minute) goes in front of handstand and planche work. Press comes before the carries; the overhead carry is the last carry.
 
 # Field Conditioning
 Typical session, 4 rounds:

@@ -6,21 +6,29 @@
 # Forge A — Carry Strength
 - Box Squat — 3 x 6
 - Bench Press — 3 x 5–6
-- Assisted Pull-Up — 3 x 6–8
-- Suitcase Carry — 4 x 45 sec/side
+- Assisted Pull-Up (pull track) — 3 x 6–8
 - Step-Up — 3 x 8/leg
-- Front-Hold Carry — 3 x 30–45 sec
+- Barbell Overhead Press — 3 x 6
+- Suitcase Carry — 2 x 45 sec/side
+- Front-Hold Carry — 2 x 30–45 sec (chapter extra, listed before the overhead carry so that carry stays last)
+- Two-Hand Overhead Carry — 2 x 30–45 sec (heavier)
 - Side Plank — 2 x 30–45 sec/side
+- Hammer Curl — 2 x 10 (light, required)
 
 # Forge B — Functional Strength
 - Goblet Squat — 3 x 8
 - Supported Reverse Lunge — 3 x 6–8/side
 - One-Arm DB Row — 3 x 10
-- Push-Up — 3 submaximal sets
-- Farmer Carry — 4 x 45–60 sec
-- Glute Bridge — 3 x 12
-- Bear-Hug Carry — 3 x 30–45 sec
+- Push-Up (push track) — 3 submaximal sets
+- One-Arm DB Overhead Press — 3 x 8/side
+- Farmer Carry — 2 x 45–60 sec
+- Two-Hand Overhead Carry — 2 x 30–45 sec (heavier)
+- Pallof Press — 2 x 8/side
+- DB Curl — 2 x 10–12
 - Elevated Light Hinge — 2–3 x 6–8 only if back tolerates
+- Chin-Up (band-assisted) — 2 x 5–8
+
+Press stance: standing is allowed. If today's readiness shows back pain of 2 or more, press seated or half-kneeling (your choice). For the barbell, that means the seated barbell press with a note to reduce the load, or a swap to dumbbells. Press comes before the carries; the overhead carry is the last carry.
 
 # Ruck Progression
 Week 13: 10 lb, 25–30 min.  

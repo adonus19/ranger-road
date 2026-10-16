@@ -6,19 +6,30 @@
 # Strength A
 - Squat variation — 3 x 5
 - Bench Press — 3 x 5
-- Pull-Up progression — 3 x 5–8
+- Pull-Up progression (pull track) — 3 x 5–8
 - Step-Up — 3 x 8/leg
-- Suitcase Carry — 3 x 60 sec/side
+- Barbell Overhead Press — 3 x 5
+- Suitcase Carry — 2 x 60 sec/side
+- Overhead Carry — 2 x 45–60 sec two-hand, or Waiter Carry 2 x 30–45 sec/side as the harder step
 - Side Plank — 2 x 45–60 sec
+- Hammer Curl — 2 x 10 (light, required)
+- Handstand track (current step) — 3 x 15–30 sec
 
 # Strength B
 - Goblet Squat — 3 x 8
 - Reverse Lunge — 3 x 8/side
 - One-Arm Row — 3 x 10
-- Push-Up — 3 submaximal sets
-- Farmer Carry — 3 x 60–90 sec
-- Single-Leg Balance — 3 x 30 sec/side
-- Calf Raise — 3 x 15
+- Push-Up (push track) — 3 submaximal sets
+- Two-DB Overhead Press — 3 x 8
+- Farmer Carry — 2 x 60–90 sec
+- Overhead Carry — 2 x 45–60 sec two-hand, or Waiter Carry 2 x 30–45 sec/side as the harder step
+- Pallof Press — 2 x 8/side
+- DB Curl — 2 x 10–12
+- Single-Leg Romanian Deadlift (Light) — 2 x 6/side, only if back tolerates (same gate as the light hinge)
+- Chin-Up (band-assisted) — 2 x 5–8
+- Planche track (optional stretch) — 2 short sets, about 5 min; skippable, never counted as missed
+
+Press stance: same back-pain rule as Chapter IV. Wrist warm-up (Wrist Circles and Wrist Rocks, about 1 minute) goes in front of handstand and planche work. Press comes before the carries; the overhead carry is the last carry.
 
 # Long Effort
 Week 29: 5 miles.  

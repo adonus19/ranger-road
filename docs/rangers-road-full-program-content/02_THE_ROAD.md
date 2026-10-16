@@ -5,26 +5,34 @@
 
 Names in the two Forge lists are the Chapter II step-ups, each with its own guide in `EXERCISE_CATALOG.md`: Split Squat steps up from Chapter I's Supported Split Squat, Goblet Squat from Goblet Squat to Box, and Supported Deep Squat from Supported Squat Hold. A step-up is a new exercise, not a rename; keep the Chapter I version available as the easier choice on a Yellow or pain-affected day.
 
-Warm-up for both Forge sessions, the optional 5-minute easy walk after Forge A, and the 1-minute easy walk after Restoration II are the same as in Chapter I (`01_THE_MUSTER.md`). Chapter II adds no warm-up of its own.
+Warm-up for both Forge sessions, the optional 5-minute easy walk after Forge A, and the 1-minute easy walk after Restoration II are the same as in Chapter I (`01_THE_MUSTER.md`). Chapter II adds one item to the warm-up: Band Pull-Apart — 12.
 
 # Forge A
 - Box Squat — 3 x 6
 - Bench Press — 3 x 6
-- Assisted Pull-Up — 3 x 6–8
+- Assisted Pull-Up (pull track) — 3 x 6–8
 - Split Squat — 3 x 6/side
-- Suitcase Carry — 3 x 40 sec/side
+- Seated Two-DB Overhead Press — 3 x 8
+- Suitcase Carry — 2 x 40 sec/side
+- Two-Hand Overhead Carry — 2 x 20–30 sec (light)
 - Side Plank — 2 x 30 sec/side
+- Hammer Curl — 2 x 10 (light, required)
 - Calf Raise — 2 x 12
 
 # Forge B
 - Goblet Squat — 3 x 8–10
 - Step-Up — 3 x 8/leg
 - One-Arm DB Row — 3 x 8–10
-- Push-Up — 3 submaximal sets
+- Push-Up (push track) — 3 submaximal sets
+- Seated One-Arm DB Overhead Press — 3 x 8/side
+- Farmer Carry — 2 x 45–60 sec
+- Two-Hand Overhead Carry — 2 x 20–30 sec (light)
+- Pallof Press — 2 x 8/side (takes the place of Bird Dog; Bird Dog stays in the warm-up)
+- DB Curl — 2 x 10–12
 - Glute Bridge — 3 x 12
-- Farmer Carry — 3 x 45–60 sec
-- Bird Dog — 2 x 8/side
-- Optional Hammer Curl — 2 x 10 (light; its 2 sets count toward Forge B's 22 work sets)
+- Chin-Up (band-assisted) — 2 x 5–8
+
+Press and carries: the press comes before the carries, and the overhead carry is the last carry. Chapters I and II always press seated.
 
 # Restoration II
 - cat-camel — 6
@@ -79,7 +87,7 @@ Hearth mission: one full hour at home with phone put away.
 Monday: Forge A, no aggressive progression: the written sets and reps, no load increases. Scripture: Micah 6:8.  
 Tuesday: 30-min easy walk. Scripture: Galatians 5:22–26.  
 Wednesday: Restoration. Scripture: Psalm 119:105.  
-Thursday: Forge B at reduced volume (about 25% less, around 17 of the 22 work sets, Hammer Curl included). Scripture: Proverbs 3:5–8.  
+Thursday: Forge B at reduced volume (about 25% less, around 21 of the 28 work sets, curl and chin-up included). Scripture: Proverbs 3:5–8.  
 Friday: easy recovery. Scripture: Hebrews 10:23–25.  
 Saturday: 30-minute easy walk; then prepare for Monday's Three-Mile Trial (choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs). Scripture: Psalm 121.  
 Sunday: Isaiah 40:28–31. Reflection: **Where has consistent small effort begun changing me?**

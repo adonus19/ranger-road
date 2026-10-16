@@ -39,6 +39,21 @@ Work:
 - Farmer Carry — 3 x 30–45 sec
 - Bird Dog — 2 x 6/side
 
+# Optional Forge C
+
+Offered at most once a week as the quiet "Optional Forge available" card (rules in `RANGERS_ROAD_PROGRAM.md`). It sits beside the day's walk or restoration and replaces nothing. About 20–25 minutes, standard warm-up first. Its sessions feed progression hints, since these exercises appear nowhere else in Chapter I.
+
+Work:
+- Seated Two-DB Overhead Press — 2 x 8
+- Two-Hand Overhead Carry — 2 x 20–30 sec
+- Band Pull-Apart — 2 x 12
+- Band Face Pull — 2 x 12
+- Chest-Supported DB Reverse Fly — 2 x 10
+- Pallof Press — 2 x 8/side
+- Curl — 2 x 10–12, rotating by week: Week 1 Hammer Curl, Week 2 DB Curl, Week 3 Preacher Curl, Week 4 Hammer Curl (light)
+
+In Week 4, keep it light.
+
 # Restoration
 Use Wednesday and Friday or as needed:
 - cat-camel — 6
