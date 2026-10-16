@@ -4,7 +4,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-human (docs drafted 2026-10-16; waiting on the person's review and the questions below)
+**Status:** ready-for-human (docs drafted 2026-10-16; the questions are answered; waiting on the person's review of the docs)
 
 **Model / effort:** Opus 5.5, medium
 
@@ -38,3 +38,5 @@ Open questions (gaps in spec.md):
 6. Do custom Forge sessions count toward passing a track step? Draft: no, same as hints.
 7. Does a stopped optional Forge session hide the card for the week? Draft: only a completed one does.
 8. I added Pike Hold as a text-only catalog entry because the readiness gates name it as a swap. A freestanding handstand push-up has no step entry; it is noted as a stretch goal past the push track.
+
+**2026-10-16, answers.** 1 one guide per combined step. 2 the dip uses the rack's two short bars, arms at the sides; the transition drill still uses a low barbell. 3 no optional Forge on a day with a moved Forge. 4 two wrist warm-ups (Wrist Circles, Wrist Rocks), about 1 minute, alternated; both are drafts. 5 use the latest dose in the content packs, else the catalog default. 6 custom sessions do not count toward a step. 7 only a completed session hides the card. 8 Pike Hold and the freestanding note are fine. All applied to the docs.
