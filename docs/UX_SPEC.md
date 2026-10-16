@@ -29,6 +29,7 @@ Must show:
 - current Hearth mission (shown only on weeks whose content pack names a leadership or Hearth mission; Chapter II's Weeks 5 and 8 name none, so Keep shows no row)
 - a quiet check-in reminder while the Day 1 or monthly check-in is due, or while tests held by a Red day wait (not shown on a Red day)
 - a quiet backup reminder on Sunday when no copy was saved that week (Monday through Sunday): one row opening Journal's Save a copy, with a "Not today" link that hides it until tomorrow; it never counts missed weeks
+- the optional Forge card on eligible days (see The Optional Forge below)
 - optional quick stats
 
 The trial countdown points at the next Gate Trial attempt: the Monday after Week 4, then each Thursday and Monday until the trial is passed (see Trial Timing in `CHAPTERS_AND_TRIALS.md`). The band's note says when the next attempt is, or that the trial is today if the person is Green. On an attempt day, and on the day of a pass, the check-in reminder waits until the next day so its tests never land on top of the trial. Once the trial is passed, the countdown reads Done, the day's order reads Gate Trial passed, and the note names the day Chapter II begins.
@@ -124,6 +125,37 @@ After Chapter I is acknowledged complete, Forge stops offering the repeated Week
 
 Pain can be recorded from the active workout using body area, a 0–10 level, and the documented response. It saves immediately. Pain at 5 or more ends strength work; stopping keeps partial sets and pain in history. On Red readiness, Forge A/B cannot run; Restoration remains available if appropriate. A saved workout remains separate from Today's Mission outcome, which the user records from the mission screen.
 
+## The Optional Forge
+
+Rules are in `RANGERS_ROAD_PROGRAM.md` (The Optional Forge). This section covers how it appears.
+
+**The card.** On an eligible day, Keep's Today's Orders and Today's Mission show a quiet card below the main order: "Optional Forge available", with one help line ("Forge C, about 20–25 minutes" in Chapter I; "Build your own session" from Chapter II). In a deload week the help line adds "Keep it light." It is not the main order, never takes the Begin Mission button, and has no Done ring in Today so far. Once an optional Forge session is saved that week, the card is gone until Monday. A card left alone says nothing and is never listed as missed.
+
+**Chapter I.** The card opens Forge C in the normal workout player, with the standard warm-up first. Its saved sessions feed Last time and the hint like Forge A and B.
+
+**Chapter II on: the builder.**
+
+1. **Pick.** The full exercise library, grouped by pattern under plain headings: Lower body, Push, Pull, Carry, Core, Arms, Mobility. Each row is a 48px toggle with the exercise name and its default dose. Tapping adds it and shows its number in tap order; tapping again removes it and the later numbers close up. Every track step is listed. A "Start from last time's list" button above the groups fills the picks from the last custom session, still editable. Each picked row has a sets stepper.
+2. **Order.** "Done picking" (docked, showing the count) opens the existing order editor with the picks in tap order.
+3. **Begin.** The standard warm-up comes first and has a Skip button. The workout player runs as usual: chips, Quick Help, Pain, Substitute, rest clock.
+
+Each exercise's dose comes from the current chapter's Forge A or B, or from its catalog default. The builder shows where it came from in the help line ("From Forge A", "Catalog default").
+
+**Repeat note.** If a picked exercise is one of today's or yesterday's Forge A or B main lifts, a quiet line under the picks names it ("Box Squat was in yesterday's Forge A."). It never blocks Begin.
+
+**In a custom session.** The Current Set screen shows no hint line. The saved session shows what was done, without "Compared with last time". The session appears in each exercise's Your record with a "custom" tag and is left out of the chapter's "What changed" summary.
+
+## Skill Tracks in Forge
+
+Rules are in `RANGERS_ROAD_PROGRAM.md` (Skill Tracks).
+
+- A track slot shows the person's current step by name, with that step's guide in Quick Help.
+- When the next step's criteria are met and its earliest chapter has come, a plain line under the exercise reads "Next step available: Pike Push-Up", with "Take this step" and "Not yet". Nothing changes until the person taps "Take this step", and "Not yet" only hides the line for that session.
+- A step not yet reached shows nothing: no "behind", no countdown, no list of what is left.
+- The planche item at the end of Forge B is marked "Optional · about 5 minutes" and can be skipped. A skipped planche item does not mark the session reduced and is never shown as missed.
+- Readiness swaps (see Readiness Gates) are offered on the exercise as a calm choice ("Shoulder pain is 3 today. Swap to Front-Hold Carry?"), with the swap and "Keep it" side by side. On back pain at 2 or more from Chapter IV, the press offers Seated and Half-kneeling; a seated barbell press shows "Reduce the load", with a link to swap to dumbbells.
+- Handstand and planche days show the short wrist warm-up inside the warm-up list.
+
 ## Exercise Quick Help
 
 - generated image loop
@@ -190,6 +222,10 @@ Trial should feel distinct:
 The Gate Trial preparation screen uses the Station composition to show the five documented parts, readiness guidance, and the full circuit. The trial opens only on an attempt day before it is passed; on other days the screen names the next attempt, or the day it was passed. On an attempt day, a same-day Green check opens the active trial, and a Yellow or Red check names the next attempt. Passing means a completed result: every part finished as written on a Green day. The active screen saves a resumable local draft through Road, Gate Circuit, Mind, Spirit, and Oath. It records actual results for each of the six circuit stations in each of three rounds, keeps exercise help and generated movement media on the circuit screen, and saves pain immediately. Stop trial asks once before it ends the attempt; stopping retains a partial attempt and its pain notes in history. A review precedes the completed result, which remains in local campaign history. If a later readiness check is Yellow or Red, or pain or a reduced response changes the attempt, the full trial waits for another Green day.
 
 Save a completed trial without forcing an early post-mission function answer. A separate recovery check opens 60 minutes after the circuit ends and suggests answering within 120 minutes. Completion, the Keep reminder, and recorded trial history link to it; the Keep reminder lasts 12 hours. The check captures one plain-language answer for energy, soreness, irritability, helping at home, and family life, plus an optional note. It is saved once as a linked local record without changing the completed trial. An older result without a circuit-end timestamp uses its final save time for the delay.
+
+### Skill parts in a trial
+
+When a chapter's trial includes a skill part (see Skill Parts in Trials in `CHAPTERS_AND_TRIALS.md`), it is its own part in the active trial, named by the step ("Wall Walk"). The person records one of: "Demonstrated", "Demonstrated the step below (Wall Plank Hold)", or, on a pain-gated day, "Set aside for pain". The step's Quick Help opens from the part.
 
 ## Pain Flow
 

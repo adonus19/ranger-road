@@ -13,6 +13,15 @@ A chapter's trial comes after its last full week, not inside it, so the person s
 - Each week of retries moves every later chapter back by a week. Monthly check-ins stay anchored to Day 1.
 - Longer trials may need different attempt days (Chapter III is a mountain hike; Chapters VI, VIII, and IX are long efforts). Each later chapter's attempt days are settled when that chapter is built; the rule that the next chapter waits for a pass does not change. Chapter II's Three-Mile Trial is settled: it follows the rule above on Mondays and Thursdays, like the Gate Trial. Until Chapters III–IX are built, their content packs still list each trial on its last Saturday.
 
+## Skill Parts in Trials
+
+Skill tracks are described in `RANGERS_ROAD_PROGRAM.md` (Skill Tracks). A track step adds a part to a trial only once the person has passed it.
+
+- A track step first passed during a chapter is added to that chapter's trial as a part. A step passed in an earlier chapter is not added again.
+- The part is passed by demonstrating that step or the step just below it. Doing the step below is not a changed movement for this rule.
+- On a pain-gated day (see Readiness Gates in `RANGERS_ROAD_PROGRAM.md`), the person may mark the skill part "Set aside for pain" without failing the trial. Neck or shoulder pain at 2 still allows a Green day. Pain at 3 or more makes the day Yellow, so the whole trial waits for a Green day as usual.
+- The rest of each trial is unchanged.
+
 
 ## I — The Muster (Weeks 1–4)
 

@@ -39,7 +39,7 @@ Chapter II's Three-Mile Trial follows the same rule on the Monday after Week 8 (
 
 For Week 4 Forge B, the documented reduction of about 25% means completing around 15 of the standard 20 work sets. Week 8 Forge B has 22 work sets, including the optional Hammer Curl's 2, so its 25% guide is around 17. The person chooses about five sets to skip and records those skips; the base Forge B prescription remains available as a historical snapshot. Do not automatically add load or make the deload harder on a Yellow or pain-affected day.
 
-Only 3 days should feel like major commitments.
+Only 3 days should feel like major commitments. An optional Forge the person chooses to do (see The Optional Forge) relaxes this; it is never expected.
 Two optional/support days should generally stay near 30 minutes.
 
 In Chapter I, Wednesday skill practice means nonexertional tool inspection or basic knots. It does not need a training readiness check. Restoration and any exertional skill work do require the check.
@@ -101,6 +101,8 @@ A missed Forge session is moved, not punished. The rule reschedules strength wor
 | The next week would be a deload week, or a trial week | No three-Forge week: the make-up is dropped and the program carries on |
 | A third miss of the same session | Dropped; carry on next week |
 
+The optional Forge is not offered in a three-Forge week.
+
 **Days a moved Forge lands on.** That day's walk becomes optional. The person may do it alongside the Forge, or in place of the sets of one leg exercise (squats, split squats, step-ups and similar; never an upper-body exercise). If two walks land on one day (the three-Forge week's Tuesday), keep the longer one. Saturday can take both a make-up and a shifted session. Sunday is always rest.
 
 **Full or reduced.** A make-up session, and every session of a three-Forge week, can be done at full volume or reduced (about 25% fewer work sets, a guide and never a hard limit). That week's Saturday walk can likewise be reduced or kept. Yellow and pain rules still apply: no load increase after a reduced or pain-affected session.
@@ -134,7 +136,7 @@ Typical changes:
 
 Forge shows the person what they did last time and what the rule allows today. It is information, never automation: the app does not fill in, raise or require a load, and progression is never scored.
 
-**Last exposure.** An exposure is a completed (not stopped) session that included the exercise without a substitution. The last exposure is the newest one in any chapter, so a lift carries its history across chapters. A step-up exercise's first time shows the easier version's last exposure (for example Supported Split Squat for Split Squat) as context and never suggests adding.
+**Last exposure.** An exposure is a completed (not stopped) session that included the exercise without a substitution. Chapter I's Forge C counts. A custom Forge session (see The Optional Forge) never counts: it is kept in history and listed in the exercise's record, but it does not feed the hint. The last exposure is the newest one in any chapter, so a lift carries its history across chapters. A step-up exercise's first time shows the easier version's last exposure (for example Supported Split Squat for Split Squat) as context and never suggests adding.
 
 **When the hint says "may add".** All of these hold for the last exposure and for today:
 - every set was done as prescribed: reps at the target (the top of a rep range) or seconds at the target;
@@ -157,8 +159,10 @@ Otherwise the hint says "Hold" with one plain reason (for example "final effort 
 | Loaded exercise with fixed reps | Step-Up, Split Squat, Calf Raise | +5 lb |
 | Carries | Suitcase Carry, Farmer Carry | +5 lb; the chapter's written time stays as prescribed |
 | Timed holds with a range | Side Plank | +5 seconds up to the top of the range |
-| Assisted Pull-Up | Assisted Pull-Up | Less band help when 3 sets reach the top of the range. The hint names last time's assistance in pounds and never picks the next amount |
-| Push-Ups, bodyweight exercises, Restoration and mobility | Push-Up, Glute Bridge, Bird Dog, Cat-Camel | No hint, no Last time |
+| Assisted Pull-Up | Assisted Pull-Up, Chin-Up (band-assisted) | Less band help when 3 sets reach the top of the range. The hint names last time's assistance in pounds and never picks the next amount |
+| Overhead carries | Two-Hand Overhead Carry, Waiter Carry | Time first, up to the top of the chapter's range; then +5 lb |
+| Push-Ups, bodyweight exercises, band exercises, Restoration and mobility | Push-Up, Glute Bridge, Bird Dog, Band Pull-Apart, Pallof Press, Cat-Camel | No hint, no Last time |
+| Skill track steps | Pike Push-Up, Wall Walk, Frog Stand | No load hint. The track shows "Next step available" instead (see Skill Tracks) |
 
 **Band assistance.** Assisted pull-ups record the band's help in pounds on each set (0 for no band; stacked bands add). It is separate from load. When the assistance was not recorded, the quiet line says "Add the band help to track it." The best set of a session is the one with the least assistance, with more reps breaking a tie. A hold names the assistance ("Hold at 40 lb assist", or "Hold with no band"). When the sets reach the top with no band, the hint reads "Already at no band" and does not point upward. The app never fills in or lowers the assistance automatically.
 
@@ -167,6 +171,125 @@ Otherwise the hint says "Hold" with one plain reason (for example "final effort 
 **Effort on the final set.** The effort that the rule relies on is entered on each exercise's final set, optional, on a 1–10 tap scale. Without it the hint holds with "no final effort recorded".
 
 **After the session.** The saved session compares each exercise with its last exposure (up, held, or lighter because reduced) in plain numbers. No praise, no scores, no streaks. An exercise's guide lists the person's best working set from each session, newest first, across chapters. When a chapter's trial is passed, its page lists what changed over the chapter: the first and the last full session of each exercise, with unchanged exercises counted in one line.
+
+## Forge from Chapter II
+
+Approved 2026-10-16 with the Forge expansion. Chapter I's Forge A and B do not change; Chapter I gains the optional Forge C (see The Optional Forge). The dated prescriptions for each chapter live in its content pack.
+
+From Chapter II, Forge A and B have about 10 items each, and Forge B has the band-assisted chin-up as an 11th. Carries and accessories are 2 sets. The warm-up is Chapter I's warm-up plus Band Pull-Apart.
+
+| Slot | Forge A | Forge B |
+|---|---|---|
+| 1 | Squat | Goblet squat |
+| 2 | Bench press | Single leg (step-up / lunge) |
+| 3 | Vertical pull (pull track) | One-arm DB row |
+| 4 | Single leg (split squat / step-up) | Push-up (push track) |
+| 5 | Overhead press, variant X | Overhead press, variant Y |
+| 6 | Suitcase carry | Farmer carry |
+| 7 | Overhead carry | Overhead carry |
+| 8 | Side plank | Pallof press (takes Bird Dog's main-set place; Bird Dog stays in the warm-up) |
+| 9 | Hammer curl | DB curl or preacher curl |
+| 10 | Chapter extra: calf raise or balance; handstand track from Chapter V | Glute bridge, or face pull / reverse fly, or balance work, by chapter |
+| 11 | | Chin-up (band-assisted) |
+| Stretch | | Planche track, optional, from Chapter V |
+
+In each session the press comes before the carries, and the overhead carry is the last carry.
+
+### Overhead press variants
+
+One variant per Forge; Forge A and B never use the same one in a chapter. From Chapter V, Forge A is always the barbell press.
+
+| Chapter | Forge A | Forge B |
+|---|---|---|
+| II | Seated two-DB | Seated one-arm DB |
+| III | Two-DB | One-arm DB |
+| IV | Barbell | One-arm DB |
+| V | Barbell | One-arm DB |
+| VI | Barbell | Two-DB |
+| VII | Barbell | One-arm DB |
+| VIII | Barbell | Two-DB |
+| IX | Barbell | One-arm DB (maintenance volume) |
+
+### Press stance
+
+- Chapters I and II: always seated.
+- Chapter III: a transition. Seated by default; the half-kneeling one-arm press is offered.
+- Chapter IV on: when today's readiness has back pain at 2 or more, the press is done seated or half-kneeling, as the person chooses. For the barbell press that means the seated barbell press with a "Reduce the load" note, or a swap to dumbbells if the person prefers. Otherwise standing is allowed.
+
+### Curls
+
+Hammer curl is required and light. Forge A has it in every chapter. Forge B has the DB biceps curl in Chapters II, IV, VI and VIII, and the preacher curl in III, V, VII and IX.
+
+### Overhead carry
+
+- Chapters I–II: two-hand, light, 20–30 seconds.
+- Chapters III–IV: 30–45 seconds, heavier.
+- Chapters V–VI: 45–60 seconds.
+- Chapters VII–VIII: the waiter carry joins as the harder step.
+- Chapter IX: maintenance.
+
+### Balance (Chapter V on)
+
+In Forge B's tenth slot when it is not the glute bridge: single-leg balance with harder versions (eyes closed, head turns, soft pad), the slow lateral step-down, the single-leg reach in three directions, and a light single-leg Romanian deadlift, which follows the same back-pain rule as the Elevated Light Hinge.
+
+## Readiness Gates
+
+These swaps are offered as a calm choice on the Forge screen. None is automatic, and none counts against the session beyond the usual rule that a substitution marks it reduced.
+
+- **Shoulder pain at 3 or more:** the overhead carry may swap to Front-Hold Carry, and the overhead press to Band Pull-Apart. The muscle-up steps of the pull track (straight-bar dip and transition drills, band-assisted muscle-up, muscle-up) follow this swap too.
+- **Neck or shoulder pain at 2 or more:** handstand holds, wall walks, handstand push-up work and planche work may swap to a Pike Hold or a regular Push-Up.
+- **Back pain at 2 or more (Chapter IV on):** the press stance rule above.
+- Handstand and planche days add a short wrist warm-up before the work.
+- The existing rules hold: a pain note holds progression, and there is no load increase after a reduced or pain-affected session.
+
+## Skill Tracks
+
+A track is one Forge slot whose exercise steps up over the campaign. Each step is its own exercise in the library, with its own guide. Each step's criteria and earliest chapter are in `EXERCISE_CATALOG.md` (drafts awaiting the person's approval).
+
+| Track | Slot | Steps |
+|---|---|---|
+| Pull to muscle-up | Forge A vertical pull | Assisted pull-up; band-light pull-up and slow negatives; bodyweight pull-up; explosive chest-to-bar pull-up; straight-bar dip and transition drills; band-assisted muscle-up; muscle-up |
+| Push to wall handstand push-up | Forge B push-up | Push-up; pike push-up; feet-elevated pike push-up; wall handstand push-up negatives; wall handstand push-up (freestanding is a stretch goal) |
+| Handstand balance | Forge A slot 10, from Chapter V | Wall plank hold; wall walk; chest-to-wall handstand hold; kick-up to wall; freestanding attempts |
+| Planche (stretch goal) | Optional stretch item at the end of Forge B, from Chapter V | Planche lean; frog stand; pseudo-planche push-up; tuck planche hold; advanced tuck hold; tuck planche push-up; straddle planche; planche push-up |
+
+- **Passed** means a step's criteria were met.
+- **Stepping up** is gated by the criteria and the step's earliest chapter. When both are met, the app shows "Next step available" as information. The person chooses when to take it. The app never moves the person up on its own.
+- A step not yet reached shows no "behind" message, and no track shows a schedule the person should be on.
+- The planche item is 2 short sets, about 5 minutes, skippable, and never shown as missed.
+- Every track step is available in the custom Forge.
+- A realistic expectation: 36 weeks will likely reach the tuck planche. The rest of that track stays open past the campaign.
+- A step first passed during a chapter becomes a part of that chapter's trial (see Skill parts in trials in `CHAPTERS_AND_TRIALS.md`).
+
+## The Optional Forge
+
+A third Forge the person may choose, at most once a week. It is never required, never counted, and never logged as missed.
+
+- **Where it shows.** A quiet card on the day's orders: "Optional Forge available." It sits alongside the day's walk or restoration and replaces nothing.
+- **Eligible days.** Tuesday, Wednesday, Friday and Saturday. Never on a trial attempt day. Not offered in a three-Forge make-up week. Deload weeks and trial weeks are allowed; in a deload week the card adds "Keep it light."
+- **Next to a Forge day.** Nothing blocks it. If the chosen exercises repeat that day's or yesterday's main lifts, a quiet note says so.
+- **Once done**, the card is gone for the rest of the week (Monday through Sunday). If it is not done, nothing is said.
+- **Readiness.** It is strength work, so the usual same-day readiness check and Yellow and Red rules apply.
+- **Chapter I** opens Forge C (below).
+- **Chapter II on** opens the custom Forge builder:
+  1. The full exercise library, grouped by pattern: lower body, push, pull, carry, core, arms, mobility. Tapping adds an exercise in tap order; tapping it again removes it.
+  2. "Start from last time's list" is a shortcut, and the list stays editable.
+  3. Done picking opens the existing order editor to reorder.
+  4. Begin. The standard warm-up comes first automatically and can be skipped.
+- **Prescriptions in the builder.** Each exercise's default is its prescription in the current chapter's Forge A or B, or its catalog default otherwise. The set count is editable in the builder.
+- **History.** Custom sessions are kept in history and shown on the exercise, but they do not feed progression hints.
+
+### Forge C (Chapter I)
+
+Optional, about 20–25 minutes, after the standard warm-up. Forge C sessions feed progression hints, because its exercises appear nowhere else in Chapter I.
+
+- Seated Two-DB Overhead Press: 2 × 8
+- Two-Hand Overhead Carry: 2 × 20–30 sec
+- Band Pull-Apart: 2 × 12
+- Band Face Pull: 2 × 12
+- Chest-Supported DB Reverse Fly: 2 × 10
+- Pallof Press: 2 × 8 per side
+- Curl: 2 × 10–12, rotating week by week through hammer curl, DB biceps curl and preacher curl
 
 ## Conditioning
 

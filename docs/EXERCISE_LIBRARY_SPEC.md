@@ -98,6 +98,7 @@ Adds:
 - ankle rock
 - hamstring stretch
 - supported squat hold
+- Forge expansion exercises (overhead presses and carries, curls, Pallof press, band and reverse-fly upper-back work, chin-up, every skill-track step, pike hold, and the Chapter V balance work): see Forge Expansion Exercises in [EXERCISE_CATALOG.md](rangers-road-full-program-content/EXERCISE_CATALOG.md). Only Pallof press, chest-supported reverse fly and the harder track and balance steps get image sequences; the rest are text only until pictures are added.
 
 ## Proposed Data Shape
 

@@ -280,7 +280,15 @@ On the Current Set screen, under the load box: a spaced-caps label with the date
 ### Exercise Chips and Order Editor
 On the Current Set screen, a horizontally scrolling row of exercise chips sits near the top, inside the 16px gutter. Each chip is at least 48px tall with the exercise name in sans and the marked count ("2/3") in serif figures; the current chip is filled Pine with cream text (Hearth Gold with Ink text in dark), the others are bordered on paper with a 6px radius. No shadows, no gold on light, no status colors. The set buttons carry a plain "Sets" label and a one-line hint. The order editor is a plain list between soft rules: each row has the exercise name and two 48px Move up / Move down buttons, with a disabled state at the ends; **Use written order** is a secondary button and **Done** the primary one.
 
-### Inputs / Fields
+### Optional Forge Card
+A quiet row below the main order card, in the reminder-row form: a gold anvil icon, a short vertical divider, a serif title ("Optional Forge available"), one help line and a chevron. It has no gold top edge, no medallion and no Done ring, so it never reads as a second main order. In a deload week the help line adds "Keep it light." It never names a missed week.
+
+### Custom Forge Builder
+A page with a serif page title ("Build your session") and plain group headings (Lower body, Push, Pull, Carry, Core, Arms, Mobility) between soft rules. Each exercise is a full-width toggle row at least 48px tall: the name in sans, the default dose and its source ("From Forge A", "Catalog default") as a help line. A picked row fills with Parchment Tint and shows its tap-order number in a small Pine circle with cream serif figures (Hearth Gold with Ink in dark), plus a 48px sets stepper. "Start from last time's list" is a secondary button above the groups. "Done picking (4)" is the primary button, docked above the tab bar like Begin Today's Mission. The repeat note is one line of Tertiary Ink above it. No status colors, no gold on light.
+
+### Track Step Line
+Under a track exercise on the Current Set screen, one plain-sans line in Secondary Ink: "Next step available: Pike Push-Up", followed by a secondary "Take this step" button and a "Not yet" text link with a 48px tap area. No arrow, no gold, no status colors, and nothing when no step is available. Readiness swap offers use the same form: one line and two buttons side by side.
+
 
 - **Text and date fields:** paper background, 1px Rule border, 6px radius, 48px tall, 16px text. The border darkens to Stone on hover.
 - **Tap scales:** a row of equal buttons, one per value (1 to 5 for energy, 0 to 10 for pain in two rows of six on phones). Each is a real radio button. Selected: filled Pine with cream numerals. Values are set in the serif. Readiness draws them 48px tall. Form screens from the Road log on draw them 46px tall (effort 1 to 10 in two rows of five), with each radio's tap area extended to 48px.

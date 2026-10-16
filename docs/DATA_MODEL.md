@@ -383,3 +383,56 @@ The make-up schedule (`core/program/makeup-schedule.ts`, applied as `ChapterDay.
 ## Saved exercise order (database version 7)
 
 Store `exerciseOrders`: `{ id: <workoutDefinitionId>, exerciseIds: string[], updatedAt }`. One row per workout (for example a Chapter II Forge A), written when the person changes the order, removed by "Use written order". It is included in backups, and a backup made before version 7 restores with none. Like the campaign row, saved orders are left out of the record counts shown before saving or restoring a copy. When a workout starts, the saved order applies only if its exercise IDs are exactly the workout's current exercise IDs; otherwise the row is ignored and the written order is used, with a one-line note. Make-ups and deload weeks use the saved order. The upgrade only adds the store and leaves every existing record unchanged.
+
+## Forge expansion (planned)
+
+Approved 2026-10-16; rules in `RANGERS_ROAD_PROGRAM.md` (Forge from Chapter II, Readiness Gates, Skill Tracks, The Optional Forge). This section is the planned shape. The database version is set when the tickets are built, and every upgrade only adds stores or optional fields, leaving existing records unchanged.
+
+### Exercise definitions (seed content)
+
+Each new exercise is a seeded ExerciseDefinition with its guide text from `EXERCISE_CATALOG.md`. Additions:
+
+- `builderGroup`: lower body | push | pull | carry | core | arms | mobility (the custom Forge builder's grouping)
+- `defaultDose?`: the catalog default the builder uses when the chapter's Forge A and B do not prescribe the exercise
+- `images`: `sequence` or `text-only`. A sequence shows only once its pictures are verified; until then the text guide shows.
+
+### SkillTrack (seed content, not stored)
+
+- id (`pull`, `push`, `handstand`, `planche`)
+- slot (the workout and slot it fills, such as Forge A vertical pull)
+- firstChapter (handstand and planche: V)
+- optional? (the planche stretch item)
+- steps[]: { exerciseId, earliestChapter, criteria }
+
+A chapter's prescription names the track for a slot, not a fixed exercise; the session's definition snapshot records the step actually done.
+
+### TrackStep store
+
+Store `trackSteps`, append-only: `{ id, trackId, exerciseId, takenAt }`, written when the person taps "Take this step". A track's current step is its newest row, or step 1 when there is none. Rows are never rewritten. Included in backups; a backup made before this store restores with every track at step 1.
+
+Whether a step is **passed** and whether the next step is **available** are derived from saved sessions and the campaign position, never stored. Only completed Forge A, B and C sessions count; custom Forge sessions do not (draft, for the person's approval).
+
+### Custom Forge sessions
+
+A custom session is a WorkoutSession with `workoutDefinitionId` `custom-forge` and `kind: 'custom'`. Its `definitionSnapshot` is built from the picks: the exercises, their doses and set counts, and the warm-up. `exerciseOrder` records the order worked in, as for any session. A `warmupSkipped?` flag records a skipped warm-up.
+
+- A custom session is never an exposure: Last time, hints, "Compared with last time" and the chapter summary ignore it. An exercise's record lists it with a "custom" tag.
+- "Start from last time's list" reads the newest custom session's snapshot and order. Nothing new is stored for it.
+- Whether the optional Forge was done this week is derived from completed Forge C or custom sessions dated Monday through Sunday of that week.
+
+Forge C is a seeded WorkoutDefinition for Chapter I (`chapter-1-forge-c`) whose sessions are ordinary exposures.
+
+### Readiness swaps
+
+A swap taken on a readiness gate is saved as the ExerciseResult's `substitutionId`, with `substitutionReason?: 'readiness'`, so the session is reduced for a pain reason and holds the next hint. A press stance choice on a back-pain day is saved as `stance?: 'seated' | 'half-kneeling' | 'standing'` on the ExerciseResult.
+
+### Skill parts in trials
+
+When a trial attempt starts, the steps first passed during that chapter are copied into the attempt's `definitionSnapshot` as skill parts, so later passes never change a saved trial. Each skill part's result:
+
+- trackId, stepExerciseId
+- outcome: `demonstrated` | `step-below` | `set-aside-for-pain`
+- exerciseIdDone (the step or the one below)
+- sets? (reps or seconds, as for a Forge set)
+
+A completed trial result needs every skill part to have an outcome. `set-aside-for-pain` requires a same-day readiness check that meets that step's pain gate.
