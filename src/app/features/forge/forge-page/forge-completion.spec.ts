@@ -92,8 +92,10 @@ describe('Forge across chapters', () => {
     expect(root.textContent).toContain('Chapter II');
     expect(root.textContent).not.toContain('Chapter I complete');
     // Tuesday's walk has no workout; Chapter II's restoration stays open as needed.
-    expect(root.textContent).toContain('Restoration');
-    expect(root.textContent).not.toContain('Forge B');
+    // The optional Forge from Chapter II is the custom Forge builder.
+    const titles = [...root.querySelectorAll('.choice h3')].map((h) => h.textContent?.trim());
+    expect(titles).toContain('Restoration');
+    expect(titles).not.toContain('Forge B');
   });
 
   it('offers no workout once the last chapter in the app is complete', async () => {
