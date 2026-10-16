@@ -1,4 +1,6 @@
-import type { ChapterDefinition, WorkoutDefinition } from '../domain/models';
+import type { ChapterDefinition, LocalDate, WorkoutDefinition } from '../domain/models';
+import { daysBetween } from './calendar';
+import type { ChapterDay } from './campaign-position';
 import type { ChapterProgram, ChapterSeed, ChapterWeekContent } from './chapter-program';
 import { chapterOneProgram } from './chapter-one.program';
 import { chapterTwoProgram } from './chapter-two.program';
@@ -32,6 +34,22 @@ export function loadWorkout(id: string): WorkoutDefinition | undefined {
     if (definition) return structuredClone(definition);
   }
   return undefined;
+}
+
+/**
+ * A workout as written for a date's week: Forge C takes that week's curl. Without a chapter
+ * day it is the definition as written.
+ */
+export function loadWorkoutOn(
+  id: string,
+  day: Pick<ChapterDay, 'program' | 'firstMonday'> | null,
+  date: LocalDate,
+): WorkoutDefinition | undefined {
+  const definition = loadWorkout(id);
+  if (!definition || !day?.program.workoutForWeek) return definition;
+  if (!day.program.workouts.some((workout) => workout.id === id)) return definition;
+  const weekIndex = Math.floor(daysBetween(day.firstMonday, date) / 7);
+  return structuredClone(day.program.workoutForWeek(definition, weekIndex));
 }
 
 /** Restoration stays open as needed, and on a Red day. */

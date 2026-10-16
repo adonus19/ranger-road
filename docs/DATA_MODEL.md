@@ -420,7 +420,7 @@ A custom session is a WorkoutSession with `workoutDefinitionId` `custom-forge` a
 - "Start from last time's list" reads the newest custom session's snapshot and order. Nothing new is stored for it.
 - Whether the optional Forge was done this week is derived from completed Forge C or custom sessions dated Monday through Sunday of that week. A stopped session does not count.
 
-Forge C is a seeded WorkoutDefinition for Chapter I (`chapter-1-forge-c`) whose sessions are ordinary exposures.
+Forge C is a seeded WorkoutDefinition for Chapter I (`chapter-1-forge-c`) whose sessions are ordinary exposures. Its curl is chosen for the week when the session starts, and the session's `definitionSnapshot` records the curl actually done. No store or field was added for it. Whether the card shows is worked out each time from the dated orders, the make-up planner's three-Forge week and the saved sessions (`optional-forge.ts`).
 
 ### Readiness swaps
 

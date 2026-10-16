@@ -20,7 +20,10 @@
           <app-progress-rows [rows]="comparison()" />
         </section>
       }
-      @if (missionRecorded(); as mission) {
+      @if (optional) {
+        <p>This was extra work. Today’s own order is still there to record.</p>
+        <a routerLink="/keep">Back to Keep</a>
+      } @else if (missionRecorded(); as mission) {
         @if (mission.recorded) {
           <p>
             Today’s mission is recorded as
@@ -706,14 +709,17 @@
   } @else {
     <section class="preflight" aria-labelledby="preflight-title">
       <p class="eyebrow">
-        Chapter {{ chapterNumeral() }} · {{ planned() ? 'Today’s order' : 'As needed' }}
+        Chapter {{ chapterNumeral() }} ·
+        {{ optional ? 'Optional' : planned() ? 'Today’s order' : 'As needed' }}
       </p>
       <h1 id="preflight-title">{{ definition()?.title }}</h1>
       <p class="section-intro">
         {{
           isRestoration
             ? 'A gentle restoration sequence with an easy one-minute finish.'
-            : 'Warm up, work through the planned sets, and record what you actually do.'
+            : optional
+              ? 'About 20–25 minutes after the standard warm-up. It adds to today and replaces nothing.'
+              : 'Warm up, work through the planned sets, and record what you actually do.'
         }}
       </p>
       @if (weekNote(); as note) {

@@ -1,8 +1,9 @@
 import { Injectable, signal } from '@angular/core';
-import type { LocalDate } from '../domain/models';
+import type { LocalDate, ReadinessStatus } from '../domain/models';
 import type { ChapterDay } from '../program/campaign-position';
 import { resolveCampaignPosition, type TrialRecord } from '../program/campaign-position';
 import { withMakeup, type MakeupHistory } from '../program/makeup-schedule';
+import { getOptionalForge, type OptionalForgeOffer } from '../program/optional-forge';
 import { RoadDatabase } from '../persistence/road-database';
 
 /**
@@ -25,9 +26,10 @@ export class ScheduleHistory {
         ]);
         this.history.set({
           records: records.map(({ date, definitionId }) => ({ date, definitionId })),
-          sessions: sessions.map(({ date, workoutDefinitionId }) => ({
+          sessions: sessions.map(({ date, workoutDefinitionId, outcome }) => ({
             date,
             workoutDefinitionId,
+            ...(outcome ? { outcome } : {}),
           })),
           redDates: new Set(
             latestByDate(checks)
@@ -43,6 +45,21 @@ export class ScheduleHistory {
     }
   }
 
+  /**
+   * Today's optional Forge card, or null. Without saved history (not read yet, or unreadable)
+   * the card stays away, since this week's session might already be done.
+   */
+  optionalForge(
+    startDate: LocalDate,
+    today: LocalDate,
+    trials: readonly TrialRecord[],
+    readiness: ReadinessStatus | null,
+  ): OptionalForgeOffer | null {
+    const history = this.history();
+    if (!history) return null;
+    return getOptionalForge(today, today, chapterResolver(startDate, trials), history, readiness);
+  }
+
   /** A date's chapter day with any make-up applied. */
   dayFor(
     startDate: LocalDate,
@@ -50,10 +67,7 @@ export class ScheduleHistory {
     today: LocalDate,
     trials: readonly TrialRecord[],
   ): ChapterDay | null {
-    const resolve = (on: LocalDate) => {
-      const position = resolveCampaignPosition(startDate, on, trials);
-      return position && !position.awaitingNextChapter ? position.chapter : null;
-    };
+    const resolve = chapterResolver(startDate, trials);
     const position = resolveCampaignPosition(startDate, date, trials);
     if (!position) return null;
     // Once a chapter is complete and the next is not in the app, nothing is moved.
@@ -61,6 +75,14 @@ export class ScheduleHistory {
     if (position.awaitingNextChapter || !history) return position.chapter;
     return withMakeup(position.chapter, date, today, resolve, history);
   }
+}
+
+/** A date's plain chapter day; null once the chapter is complete and the next is not in the app. */
+function chapterResolver(startDate: LocalDate, trials: readonly TrialRecord[]) {
+  return (on: LocalDate) => {
+    const position = resolveCampaignPosition(startDate, on, trials);
+    return position && !position.awaitingNextChapter ? position.chapter : null;
+  };
 }
 
 /** The last check of each day decides whether that day was Red. */

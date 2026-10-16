@@ -39,6 +39,7 @@ import { formatLongDate } from '../../../shared/format-date';
 import { DoneMark } from '../../../shared/done-mark/done-mark';
 import { Icon, type IconName } from '../../../shared/icon/icon';
 import { IntervalTimer } from '../../../shared/interval-timer/interval-timer';
+import { OptionalForgeCard } from '../../forge/optional-forge-card/optional-forge-card';
 import { ActivityChoice } from '../activity-choice/activity-choice';
 import { ReadinessStrip } from '../readiness-strip/readiness-strip';
 
@@ -63,7 +64,16 @@ const OUTCOME_OPTIONS: ReadonlyArray<{ value: MissionOutcome; label: string }> =
 ];
 
 @Component({
-  imports: [ActivityChoice, DoneMark, FormField, Icon, IntervalTimer, ReadinessStrip, RouterLink],
+  imports: [
+    ActivityChoice,
+    DoneMark,
+    FormField,
+    Icon,
+    IntervalTimer,
+    OptionalForgeCard,
+    ReadinessStrip,
+    RouterLink,
+  ],
   selector: 'app-mission-page',
   styleUrl: './mission-page.css',
   templateUrl: './mission-page.html',
@@ -276,6 +286,18 @@ export class MissionPage {
   protected readonly readiness = computed(() => {
     const check = this.state.readiness();
     return check?.date === this.state.today() ? check : null;
+  });
+
+  /** The quiet optional Forge row, on the days it is offered. Never part of today's record. */
+  protected readonly optionalForge = computed(() => {
+    const campaign = this.state.campaign();
+    if (!campaign || !this.position() || this.chapterComplete()) return null;
+    return this.schedule.optionalForge(
+      campaign.startDate,
+      this.state.today(),
+      this.completedTrials(),
+      this.readiness()?.status ?? null,
+    );
   });
 
   protected readonly allowedOutcomes = computed(() => {

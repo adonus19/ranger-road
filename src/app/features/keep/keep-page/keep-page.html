@@ -78,6 +78,10 @@
         </article>
       }
 
+      @if (optionalForge(); as offer) {
+        <app-optional-forge-card class="optional-forge" [offer]="offer" />
+      }
+
       <ul class="watches" role="list">
         @for (watch of watches(); track watch.id) {
           <li class="watch watch--{{ watch.id }}">

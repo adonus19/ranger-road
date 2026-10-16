@@ -69,6 +69,48 @@ export const chapterOneRestoration: WorkoutDefinition = {
   finish: [{ kind: 'walk', minutes: 1, pace: 'easy' }],
 };
 
+/** Forge C's curl, by calendar week from the chapter's first Monday (01_THE_MUSTER.md). */
+export const CHAPTER_ONE_FORGE_C_CURLS = [
+  'hammer-curl',
+  'db-biceps-curl',
+  'preacher-curl',
+] as const;
+
+/** The optional Forge C, offered once a week by the optional Forge card. Week 1's curl is written here. */
+export const chapterOneForgeC: WorkoutDefinition = {
+  id: 'chapter-1-forge-c',
+  title: 'Forge C',
+  contentVersion: CHAPTER_ONE_WORKOUT_CONTENT_VERSION,
+  warmup: forgeWarmup,
+  exercises: [
+    { exerciseId: 'seated-two-db-overhead-press', sets: 2, reps: 8 },
+    { exerciseId: 'two-hand-overhead-carry', sets: 2, durationSeconds: '20–30' },
+    { exerciseId: 'band-pull-apart', sets: 2, reps: 12 },
+    { exerciseId: 'band-face-pull', sets: 2, reps: 12 },
+    { exerciseId: 'chest-supported-db-reverse-fly', sets: 2, reps: 10 },
+    { exerciseId: 'pallof-press', sets: 2, reps: 8, perSide: true },
+    {
+      exerciseId: CHAPTER_ONE_FORGE_C_CURLS[0],
+      sets: 2,
+      reps: '10–12',
+      notes: 'The curl rotates each week: hammer curl, DB curl, preacher curl.',
+    },
+  ],
+};
+
+/** Forge C with this week's curl. Weeks before the first Monday use Week 1's. */
+export function chapterOneForgeCForWeek(weekIndex: number): WorkoutDefinition {
+  const curl = CHAPTER_ONE_FORGE_C_CURLS[Math.max(0, weekIndex) % CHAPTER_ONE_FORGE_C_CURLS.length];
+  return {
+    ...chapterOneForgeC,
+    exercises: chapterOneForgeC.exercises.map((exercise) =>
+      CHAPTER_ONE_FORGE_C_CURLS.some((id) => id === exercise.exerciseId)
+        ? { ...exercise, exerciseId: curl }
+        : exercise,
+    ),
+  };
+}
+
 /** Week 4 uses the documented approximate volume reduction without choosing skipped sets. */
 export function chapterOneWeekFourVolumeGuide(
   id: string,
@@ -87,6 +129,9 @@ export function chapterOneWeekFourVolumeGuide(
 export function chapterOneWorkoutWeekNote(id: string, week: number): string | undefined {
   if (id === chapterOneForgeA.id && week === 2) {
     return 'Progress only if Week 1 was clean.';
+  }
+  if (week === 4 && id === chapterOneForgeC.id) {
+    return 'Keep it light.';
   }
   if (week === 4 && id === chapterOneForgeA.id) {
     return 'Reduced effort. Do not chase progression.';

@@ -123,4 +123,11 @@ export interface ChapterProgram extends ChapterSeed {
   /** Also open as needed, outside the dated order. */
   restorationId: string;
   workoutPlan(workoutId: string, week: number): WorkoutWeekPlan;
+  /** The session the optional Forge card opens, such as Chapter I's Forge C. */
+  optionalForgeId?: string;
+  /**
+   * A workout whose exercises change week by week, such as Forge C's curl rotation.
+   * `weekIndex` counts calendar weeks from the chapter's first Monday, from 0.
+   */
+  workoutForWeek?(workout: WorkoutDefinition, weekIndex: number): WorkoutDefinition;
 }

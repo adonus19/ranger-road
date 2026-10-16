@@ -90,16 +90,20 @@
       <h2 id="today-workouts">Today in the Forge</h2>
       <div class="choice-list">
         @for (choice of choices(); track choice.id) {
-          <article class="choice" [class.choice--planned]="choice.planned">
+          <article class="choice" [class.choice--planned]="choice.kind === 'planned'">
             <div>
-              <p class="choice__kind">{{ choice.planned ? 'Today’s order' : 'As needed' }}</p>
+              <p class="choice__kind">{{ kindLabel[choice.kind] }}</p>
               <h3>{{ choice.title }}</h3>
               <p>
-                {{
-                  isRestoration(choice.id)
-                    ? 'Gentle mobility and an easy finish.'
-                    : 'Warm up, work through the sets, and record what happened.'
-                }}
+                @if (isRestoration(choice.id)) {
+                  Gentle mobility and an easy finish.
+                } @else if (choice.kind === 'optional') {
+                  About 20–25 minutes. It adds to today and replaces nothing.{{
+                    choice.light ? ' Keep it light.' : ''
+                  }}
+                } @else {
+                  Warm up, work through the sets, and record what happened.
+                }
               </p>
             </div>
             @if (active()) {

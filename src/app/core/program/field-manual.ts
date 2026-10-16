@@ -551,7 +551,12 @@ export function getChapterSessions(program: ChapterProgram): SessionDetail[] {
         id: workout.id,
         chapter,
         title: workout.title,
-        when: workout.id === program.restorationId ? `${days}, or as needed` : days,
+        when:
+          workout.id === program.optionalForgeId
+            ? 'Optional, at most once a week'
+            : workout.id === program.restorationId
+              ? `${days}, or as needed`
+              : days,
         movements: work(workout),
       };
     }),

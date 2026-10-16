@@ -129,9 +129,9 @@ Pain can be recorded from the active workout using body area, a 0–10 level, an
 
 Rules are in `RANGERS_ROAD_PROGRAM.md` (The Optional Forge). This section covers how it appears.
 
-**The card.** On an eligible day, Keep's Today's Orders and Today's Mission show a quiet card below the main order: "Optional Forge available", with one help line ("Forge C, about 20–25 minutes" in Chapter I; "Build your own session" from Chapter II). In a deload week the help line adds "Keep it light." It is not the main order, never takes the Begin Mission button, and has no Done ring in Today so far. Once an optional Forge session is completed that week, the card is gone until Monday; a stopped session leaves it. It does not show on a day that holds a moved Forge. A card left alone says nothing and is never listed as missed.
+**The card.** On an eligible day, Keep's Today's Orders shows a quiet card below the main order card, and Today's Mission shows the same card after the outcome form, just above "Log light activity". The card reads "Optional Forge available", with one help line ("Forge C, about 20–25 minutes" in Chapter I; "Build your own session" from Chapter II). In a deload week the help line adds "Keep it light." It is not the main order, never takes the Begin Mission button, and has no Done ring in Today so far. Once an optional Forge session is completed that week, the card is gone until Monday; a stopped session leaves it. It does not show on a day that holds a moved Forge, or on a Red day. A card left alone says nothing and is never listed as missed. On the same days the Forge page lists the session under "Optional".
 
-**Chapter I.** The card opens Forge C in the normal workout player, with the standard warm-up first. Its saved sessions feed Last time and the hint like Forge A and B.
+**Chapter I.** The card opens Forge C in the normal workout player, with the standard warm-up first and that week's curl. Its saved sessions feed Last time and the hint like Forge A and B. The finish screen says the session was extra work and links back to Keep; it does not record Today's Mission.
 
 **Chapter II on: the builder.**
 

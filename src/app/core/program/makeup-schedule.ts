@@ -6,7 +6,11 @@ import { getActivityChoices, getDayContent } from './chapter-orders';
 /** Saved work the schedule reads. Nothing about the schedule itself is stored. */
 export interface MakeupHistory {
   records: readonly { date: LocalDate; definitionId: string }[];
-  sessions: readonly { date: LocalDate; workoutDefinitionId: string }[];
+  sessions: readonly {
+    date: LocalDate;
+    workoutDefinitionId: string;
+    outcome?: 'completed' | 'stopped';
+  }[];
   /** Dates with a Red readiness check: a Forge planned then moves rather than counting as done. */
   redDates: ReadonlySet<LocalDate>;
 }
@@ -24,6 +28,8 @@ interface WeekPlan {
   days: Map<number, { primary: LocalDate; optional: LocalDate[]; note: string }>;
   /** Forge B's date when it could not be done this week and may open a three-Forge week. */
   carryOut?: LocalDate;
+  /** Last week's Forge B is carried in: this week holds three Forge sessions. */
+  threeForge?: boolean;
 }
 
 /**
@@ -50,6 +56,19 @@ export function withMakeup(
     note: slot.note,
   };
   return { ...day, makeup };
+}
+
+/**
+ * Whether the make-up rule turns the week holding `date` into a three-Forge week. Read from
+ * the same planner that moves sessions, so the two can never disagree.
+ */
+export function isThreeForgeWeek(
+  date: LocalDate,
+  today: LocalDate,
+  resolve: DayResolver,
+  history: MakeupHistory,
+): boolean {
+  return !!new Planner(today, resolve, history).week(mondayOnOrBefore(date)).threeForge;
 }
 
 class Planner {
@@ -139,7 +158,7 @@ class Planner {
       if (primary === own && !optional.length) continue;
       days.set(weekday, { primary, optional, note: notes.join(' ') });
     }
-    return { days, ...(carryOut ? { carryOut } : {}) };
+    return { days, ...(carryOut ? { carryOut } : {}), ...(carry ? { threeForge: true } : {}) };
   }
 
   /**

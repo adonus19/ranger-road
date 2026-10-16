@@ -480,3 +480,8 @@ h1 {
   color: var(--action);
   font-weight: 600;
 }
+
+.optional-forge {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--line-soft);
+}

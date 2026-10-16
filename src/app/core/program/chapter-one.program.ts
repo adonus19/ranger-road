@@ -4,6 +4,8 @@ import { chapterOneDailySeed, chapterOneGateTrialAttempt } from './chapter-one-d
 import {
   chapterOneForgeA,
   chapterOneForgeB,
+  chapterOneForgeC,
+  chapterOneForgeCForWeek,
   chapterOneRestoration,
   chapterOneWeekFourVolumeGuide,
   chapterOneWorkoutWeekNote,
@@ -17,8 +19,11 @@ export const chapterOneProgram: ChapterProgram = {
   leadsIn: true,
   weeks: chapterOneDailySeed,
   trialAttempt: chapterOneGateTrialAttempt,
-  workouts: [chapterOneForgeA, chapterOneForgeB, chapterOneRestoration],
+  workouts: [chapterOneForgeA, chapterOneForgeB, chapterOneRestoration, chapterOneForgeC],
   restorationId: chapterOneRestoration.id,
+  optionalForgeId: chapterOneForgeC.id,
+  workoutForWeek: (workout, weekIndex) =>
+    workout.id === chapterOneForgeC.id ? chapterOneForgeCForWeek(weekIndex) : workout,
   workoutPlan: (workoutId, week) => {
     const note = chapterOneWorkoutWeekNote(workoutId, week);
     const volumeGuide = chapterOneWeekFourVolumeGuide(workoutId, week);

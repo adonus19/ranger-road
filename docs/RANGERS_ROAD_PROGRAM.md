@@ -270,7 +270,7 @@ A third Forge the person may choose, at most once a week. It is never required, 
 - **Moved Forge.** Not offered on a day that already holds a moved (make-up) Forge, since two Forge sessions never stack on one day.
 - **Next to a Forge day.** Nothing blocks it. If the chosen exercises repeat that day's or yesterday's main lifts, a quiet note says so.
 - **Once done**, the card is gone for the rest of the week (Monday through Sunday). Only a completed session counts; a stopped one leaves the card in place. If it is not done, nothing is said.
-- **Readiness.** It is strength work, so the usual same-day readiness check and Yellow and Red rules apply.
+- **Readiness.** It is strength work, so the usual same-day readiness check and Yellow and Red rules apply. On a Red day the card is not shown.
 - **Chapter I** opens Forge C (below).
 - **Chapter II on** opens the custom Forge builder:
   1. The full exercise library, grouped by pattern: lower body, push, pull, carry, core, arms, mobility. Tapping adds an exercise in tap order; tapping it again removes it.
@@ -290,7 +290,9 @@ Optional, about 20–25 minutes, after the standard warm-up. Forge C sessions fe
 - Band Face Pull: 2 × 12
 - Chest-Supported DB Reverse Fly: 2 × 10
 - Pallof Press: 2 × 8 per side
-- Curl: 2 × 10–12, rotating week by week through hammer curl, DB biceps curl and preacher curl
+- Curl: 2 × 10–12, rotating week by week through hammer curl, DB biceps curl and preacher curl. The rotation counts calendar weeks from Week 1's Monday, so it carries on while the Gate Trial waits (Week 4 hammer, then DB curl, then preacher curl).
+
+Week 4 is the deload, so Forge C there is saved as reduced with the note "Keep it light." The days while the Gate Trial waits repeat Week 4, so they get the same note. A Forge C session does not record the day's own order; that is still recorded on Today's Mission.
 
 ## Conditioning
 

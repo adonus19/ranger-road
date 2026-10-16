@@ -23,6 +23,7 @@ import { Icon, type IconName } from '../../../shared/icon/icon';
 import { BackupReminder } from '../backup-reminder/backup-reminder';
 import { CheckInReminder } from '../check-in-reminder/check-in-reminder';
 import { GateTrialRecoveryReminder } from '../gate-trial-recovery-reminder/gate-trial-recovery-reminder';
+import { OptionalForgeCard } from '../../forge/optional-forge-card/optional-forge-card';
 import { KeepBand } from '../keep-band/keep-band';
 import { StartDay } from '../start-day/start-day';
 
@@ -63,6 +64,7 @@ const READINESS_COPY: Readonly<Record<ReadinessStatus | 'pending', ReadinessCopy
     GateTrialRecoveryReminder,
     Icon,
     KeepBand,
+    OptionalForgeCard,
     RouterLink,
     StartDay,
   ],
@@ -107,6 +109,19 @@ export class KeepPage implements OnInit {
     return campaign && this.position()
       ? this.schedule.dayFor(campaign.startDate, today, today, this.completedTrials())
       : null;
+  });
+
+  /** The quiet optional Forge row, on the days it is offered. */
+  protected readonly optionalForge = computed(() => {
+    const campaign = this.state.campaign();
+    if (!campaign || !this.position() || this.chapterComplete()) return null;
+    const check = this.state.readiness();
+    return this.schedule.optionalForge(
+      campaign.startDate,
+      this.state.today(),
+      this.completedTrials(),
+      check?.date === this.state.today() ? check.status : null,
+    );
   });
 
   private readonly orders = computed<TodayOrder[]>(() => {

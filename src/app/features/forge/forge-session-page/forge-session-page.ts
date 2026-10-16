@@ -41,8 +41,9 @@ import {
   chapterPrograms,
   formatChapterNumeral,
   isRestorationWorkout,
-  loadWorkout,
+  loadWorkoutOn,
 } from '../../../core/program/program-catalog';
+import { isOptionalForge } from '../../../core/program/optional-forge';
 import { progressionKind } from '../../../core/program/progression-kinds';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { ProgressionHistory } from '../../../core/state/progression-history';
@@ -159,7 +160,10 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   protected readonly finishModel = signal({ sessionRpe: '', notes: '' });
   protected readonly finishForm = form(this.finishModel);
 
-  protected readonly definition = computed(() => loadWorkout(this.workoutId));
+  /** As written for the session's week: Forge C takes that week's curl. */
+  protected readonly definition = computed(() =>
+    loadWorkoutOn(this.workoutId, this.sessionDay(), this.draft()?.date ?? this.state.today()),
+  );
   /** Today's chapter and week, from Day 1 and the saved trial passes. */
   private readonly position = computed(() => {
     const campaign = this.state.campaign();
@@ -284,10 +288,24 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     const chapter = this.todayOrders();
     return chapter ? isWorkoutPlanned(chapter, this.workoutId) : false;
   });
+  /** The optional Forge is open on the days its card shows. */
+  protected readonly optional = isOptionalForge(this.workoutId);
+  private readonly optionalOffer = computed(() => {
+    const campaign = this.state.campaign();
+    if (!campaign || !this.optional) return null;
+    return this.schedule.optionalForge(
+      campaign.startDate,
+      this.state.today(),
+      this.completedTrials(),
+      this.readiness()?.status ?? null,
+    );
+  });
   protected readonly allowed = computed(() => {
     const chapter = this.todayOrders();
-    return Boolean(
-      chapter && !this.chapterComplete() && getWorkoutChoices(chapter).includes(this.workoutId),
+    if (!chapter || this.chapterComplete()) return false;
+    return (
+      getWorkoutChoices(chapter).includes(this.workoutId) ||
+      this.optionalOffer()?.workoutId === this.workoutId
     );
   });
   protected readonly chapterComplete = computed(() => !!this.position()?.awaitingNextChapter);
@@ -800,6 +818,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
 
   /** The work is already saved; recording today's mission is a courtesy that can fail quietly. */
   private async recordMission(session: WorkoutSession): Promise<void> {
+    // The optional Forge stands beside today's order and never records it.
+    if (this.optional) return;
     try {
       this.missionRecorded.set(
         await this.recorder.recordToday(

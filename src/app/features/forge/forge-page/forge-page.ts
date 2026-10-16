@@ -15,6 +15,15 @@ import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-hist
 import { WorkoutHistory } from '../../../core/state/workout-history';
 import { formatShortDate } from '../../../shared/format-date';
 
+interface ForgeChoice {
+  id: string;
+  title: string;
+  /** Today's order, open as needed (restoration), or the optional Forge. */
+  kind: 'planned' | 'as-needed' | 'optional';
+  /** The optional Forge in a deload week. */
+  light: boolean;
+}
+
 @Component({
   selector: 'app-forge-page',
   imports: [RouterLink],
@@ -46,6 +55,11 @@ export class ForgePage implements OnInit {
   protected readonly numeral = formatChapterNumeral;
   protected readonly shortDate = formatShortDate;
   protected readonly isRestoration = isRestorationWorkout;
+  protected readonly kindLabel: Readonly<Record<ForgeChoice['kind'], string>> = {
+    planned: 'Today’s order',
+    'as-needed': 'As needed',
+    optional: 'Optional',
+  };
 
   protected readonly choices = computed(() => {
     const campaign = this.state.campaign();
@@ -56,11 +70,29 @@ export class ForgePage implements OnInit {
         ? this.schedule.dayFor(campaign.startDate, today, today, this.completedTrials())
         : null;
     if (!chapter) return [];
-    return getWorkoutChoices(chapter).map((id) => ({
+    const choices: ForgeChoice[] = getWorkoutChoices(chapter).map((id) => ({
       id,
       title: loadWorkout(id)?.title ?? id,
-      planned: isWorkoutPlanned(chapter, id),
+      kind: isWorkoutPlanned(chapter, id) ? 'planned' : 'as-needed',
+      light: false,
     }));
+    const offer = campaign
+      ? this.schedule.optionalForge(
+          campaign.startDate,
+          today,
+          this.completedTrials(),
+          this.status(),
+        )
+      : null;
+    if (offer) {
+      choices.push({
+        id: offer.workoutId,
+        title: loadWorkout(offer.workoutId)?.title ?? offer.workoutId,
+        kind: 'optional',
+        light: offer.light,
+      });
+    }
+    return choices;
   });
 
   protected readonly status = computed(() => {

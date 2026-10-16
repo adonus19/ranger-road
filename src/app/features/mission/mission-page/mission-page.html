@@ -384,6 +384,10 @@
       </section>
     }
 
+    @if (optionalForge(); as offer) {
+      <app-optional-forge-card class="optional-forge" [offer]="offer" />
+    }
+
     <a class="light-activity-link" routerLink="/keep/activity">
       {{
         inDeloadWeek() ? 'Add a walk or light cardio, if you like' : 'Log light activity (optional)'
