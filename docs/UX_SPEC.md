@@ -129,7 +129,7 @@ Pain can be recorded from the active workout using body area, a 0–10 level, an
 
 Rules are in `RANGERS_ROAD_PROGRAM.md` (The Optional Forge). This section covers how it appears.
 
-**The card.** On an eligible day, Keep's Today's Orders and Today's Mission show a quiet card below the main order: "Optional Forge available", with one help line ("Forge C, about 20–25 minutes" in Chapter I; "Build your own session" from Chapter II). In a deload week the help line adds "Keep it light." It is not the main order, never takes the Begin Mission button, and has no Done ring in Today so far. Once an optional Forge session is saved that week, the card is gone until Monday. A card left alone says nothing and is never listed as missed.
+**The card.** On an eligible day, Keep's Today's Orders and Today's Mission show a quiet card below the main order: "Optional Forge available", with one help line ("Forge C, about 20–25 minutes" in Chapter I; "Build your own session" from Chapter II). In a deload week the help line adds "Keep it light." It is not the main order, never takes the Begin Mission button, and has no Done ring in Today so far. Once an optional Forge session is completed that week, the card is gone until Monday; a stopped session leaves it. It does not show on a day that holds a moved Forge. A card left alone says nothing and is never listed as missed.
 
 **Chapter I.** The card opens Forge C in the normal workout player, with the standard warm-up first. Its saved sessions feed Last time and the hint like Forge A and B.
 
@@ -154,7 +154,7 @@ Rules are in `RANGERS_ROAD_PROGRAM.md` (Skill Tracks).
 - A step not yet reached shows nothing: no "behind", no countdown, no list of what is left.
 - The planche item at the end of Forge B is marked "Optional · about 5 minutes" and can be skipped. A skipped planche item does not mark the session reduced and is never shown as missed.
 - Readiness swaps (see Readiness Gates) are offered on the exercise as a calm choice ("Shoulder pain is 3 today. Swap to Front-Hold Carry?"), with the swap and "Keep it" side by side. On back pain at 2 or more from Chapter IV, the press offers Seated and Half-kneeling; a seated barbell press shows "Reduce the load", with a link to swap to dumbbells.
-- Handstand and planche days show the short wrist warm-up inside the warm-up list.
+- Handstand and planche days show a wrist warm-up of about 1 minute inside the warm-up list, alternating Wrist Circles and Wrist Rocks between sessions.
 
 ## Exercise Quick Help
 

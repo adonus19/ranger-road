@@ -239,7 +239,7 @@ These swaps are offered as a calm choice on the Forge screen. None is automatic,
 - **Shoulder pain at 3 or more:** the overhead carry may swap to Front-Hold Carry, and the overhead press to Band Pull-Apart. The muscle-up steps of the pull track (straight-bar dip and transition drills, band-assisted muscle-up, muscle-up) follow this swap too.
 - **Neck or shoulder pain at 2 or more:** handstand holds, wall walks, handstand push-up work and planche work may swap to a Pike Hold or a regular Push-Up.
 - **Back pain at 2 or more (Chapter IV on):** the press stance rule above.
-- Handstand and planche days add a short wrist warm-up before the work.
+- Handstand and planche days add a wrist warm-up of about 1 minute before the work, alternating Wrist Circles and Wrist Rocks from one session to the next.
 - The existing rules hold: a pain note holds progression, and there is no load increase after a reduced or pain-affected session.
 
 ## Skill Tracks
@@ -257,7 +257,7 @@ A track is one Forge slot whose exercise steps up over the campaign. Each step i
 - **Stepping up** is gated by the criteria and the step's earliest chapter. When both are met, the app shows "Next step available" as information. The person chooses when to take it. The app never moves the person up on its own.
 - A step not yet reached shows no "behind" message, and no track shows a schedule the person should be on.
 - The planche item is 2 short sets, about 5 minutes, skippable, and never shown as missed.
-- Every track step is available in the custom Forge.
+- Every track step is available in the custom Forge, but custom sessions do not count toward passing a step.
 - A realistic expectation: 36 weeks will likely reach the tuck planche. The rest of that track stays open past the campaign.
 - A step first passed during a chapter becomes a part of that chapter's trial (see Skill parts in trials in `CHAPTERS_AND_TRIALS.md`).
 
@@ -267,8 +267,9 @@ A third Forge the person may choose, at most once a week. It is never required, 
 
 - **Where it shows.** A quiet card on the day's orders: "Optional Forge available." It sits alongside the day's walk or restoration and replaces nothing.
 - **Eligible days.** Tuesday, Wednesday, Friday and Saturday. Never on a trial attempt day. Not offered in a three-Forge make-up week. Deload weeks and trial weeks are allowed; in a deload week the card adds "Keep it light."
+- **Moved Forge.** Not offered on a day that already holds a moved (make-up) Forge, since two Forge sessions never stack on one day.
 - **Next to a Forge day.** Nothing blocks it. If the chosen exercises repeat that day's or yesterday's main lifts, a quiet note says so.
-- **Once done**, the card is gone for the rest of the week (Monday through Sunday). If it is not done, nothing is said.
+- **Once done**, the card is gone for the rest of the week (Monday through Sunday). Only a completed session counts; a stopped one leaves the card in place. If it is not done, nothing is said.
 - **Readiness.** It is strength work, so the usual same-day readiness check and Yellow and Red rules apply.
 - **Chapter I** opens Forge C (below).
 - **Chapter II on** opens the custom Forge builder:
@@ -276,7 +277,7 @@ A third Forge the person may choose, at most once a week. It is never required, 
   2. "Start from last time's list" is a shortcut, and the list stays editable.
   3. Done picking opens the existing order editor to reorder.
   4. Begin. The standard warm-up comes first automatically and can be skipped.
-- **Prescriptions in the builder.** Each exercise's default is its prescription in the current chapter's Forge A or B, or its catalog default otherwise. The set count is editable in the builder.
+- **Prescriptions in the builder.** Each exercise's default is its prescription in the current chapter's Forge A or B. Otherwise it is the latest dose written for that exercise in the content packs up to the current chapter, or its catalog default when no pack names it. The set count is editable in the builder.
 - **History.** Custom sessions are kept in history and shown on the exercise, but they do not feed progression hints.
 
 ### Forge C (Chapter I)

@@ -932,7 +932,7 @@ Forge A's vertical-pull slot from Chapter II. Step 1 is the existing **Assisted 
 
 **Targets:** Triceps, chest and shoulders (dip); lats, forearms and shoulders (transition).
 
-**How:** Straight-bar dip: set a barbell in the rack at about hip height, jump or press up to hold yourself over it with straight arms, lower until the bar is near the bottom of your chest, and press back up. Transition drill: with the bar low enough to keep your feet on the floor, grip it with a false grip (wrists over the bar), lean back, then pull your chest to the bar and turn your elbows forward so you finish on top in the dip position. Let your feet help as much as needed.
+**How:** Dip: use the rack's two short bars that extend out, set a little wider than your body. Step between them, hold one in each hand with straight arms and your arms at your sides, then lower until your upper arms are about parallel with the floor and press back up. Transition drill: set a barbell in the rack low enough to keep your feet on the floor, grip it with a false grip (wrists over the bar), lean back, then pull your chest to the bar and turn your elbows forward so you finish on top in the dip position. Let your feet help as much as needed.
 
 **Feel:** Triceps and chest in the dip; lats, forearms and shoulders in the turn.
 
@@ -940,9 +940,9 @@ Forge A's vertical-pull slot from Chapter II. Step 1 is the existing **Assisted 
 
 **Pain-aware options:** Shorter dip range, more foot help in the transition. Shoulder pain at 3 or more swaps this step (see Readiness gates).
 
-**Equipment:** Barbell and rack (draft: bar on the hooks or safeties at about hip height).
+**Equipment:** The rack's two short dip bars; a barbell and rack for the transition drill.
 
-**Images:** Straight-bar dip text only; transition drill gets a generated image sequence.
+**Images:** The dip is text only; the transition drill gets a generated image sequence.
 
 **Earliest chapter (draft):** VI.
 
@@ -1533,6 +1533,54 @@ An optional stretch item at the end of Forge B from Chapter V: 2 short sets, abo
 **Passed when (draft):** 2 × 1.
 
 **Custom Forge default:** 2 × 1.
+
+---
+
+# Wrist Warm-Up
+
+Handstand and planche days add about 1 minute of wrist work before the work sets. Alternate Wrist Circles and Wrist Rocks from one session to the next. Both are drafts for the person's approval.
+
+## Wrist Circles
+
+**Purpose:** Warm the wrists before weight goes through the hands.
+
+**Movement pattern:** Mobility.
+
+**Targets:** Wrists and forearms.
+
+**How:** Kneel on hands and knees, fingers pointing forward. Keep the hands flat and slowly shift your weight in a circle, as if drawing a circle with your body, 5 times one way and 5 times the other. Then rotate each wrist in loose circles in the air for a few turns.
+
+**Feel:** Gentle stretch across the wrists.
+
+**Avoid:** Forcing range, sharp pain, rushing.
+
+**Pain-aware options:** Smaller circles, or make fists and circle the wrists in the air.
+
+**Equipment:** None.
+
+**Images:** Text only.
+
+---
+
+## Wrist Rocks
+
+**Purpose:** Warm the wrists before weight goes through the hands.
+
+**Movement pattern:** Mobility.
+
+**Targets:** Wrists and forearms.
+
+**How:** Kneel on hands and knees with the fingers pointing forward. Rock your weight slowly forward and back 10 times. Turn the fingers to point out to the sides and rock 10 times, then point them back toward your knees and rock 5 times, going only as far as is comfortable.
+
+**Feel:** Gentle stretch across the wrists and forearms.
+
+**Avoid:** Forcing range, sharp pain, rocking fast.
+
+**Pain-aware options:** Rock less, or skip the hands-back position.
+
+**Equipment:** None.
+
+**Images:** Text only.
 
 ---
 

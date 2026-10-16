@@ -410,7 +410,7 @@ A chapter's prescription names the track for a slot, not a fixed exercise; the s
 
 Store `trackSteps`, append-only: `{ id, trackId, exerciseId, takenAt }`, written when the person taps "Take this step". A track's current step is its newest row, or step 1 when there is none. Rows are never rewritten. Included in backups; a backup made before this store restores with every track at step 1.
 
-Whether a step is **passed** and whether the next step is **available** are derived from saved sessions and the campaign position, never stored. Only completed Forge A, B and C sessions count; custom Forge sessions do not (draft, for the person's approval).
+Whether a step is **passed** and whether the next step is **available** are derived from saved sessions and the campaign position, never stored. Only completed Forge A, B and C sessions count; custom Forge sessions do not (decided 2026-10-16).
 
 ### Custom Forge sessions
 
@@ -418,7 +418,7 @@ A custom session is a WorkoutSession with `workoutDefinitionId` `custom-forge` a
 
 - A custom session is never an exposure: Last time, hints, "Compared with last time" and the chapter summary ignore it. An exercise's record lists it with a "custom" tag.
 - "Start from last time's list" reads the newest custom session's snapshot and order. Nothing new is stored for it.
-- Whether the optional Forge was done this week is derived from completed Forge C or custom sessions dated Monday through Sunday of that week.
+- Whether the optional Forge was done this week is derived from completed Forge C or custom sessions dated Monday through Sunday of that week. A stopped session does not count.
 
 Forge C is a seeded WorkoutDefinition for Chapter I (`chapter-1-forge-c`) whose sessions are ordinary exposures.
 
