@@ -10,7 +10,7 @@ import type {
   WorkoutDefinition,
   WorkoutSession,
 } from '../domain/models';
-import { DATABASE_VERSION, migrateRoadDatabase, RoadDatabase } from './road-database';
+import { DATABASE_VERSION, migrateRoadDatabase, RoadDatabase, STORE_NAMES } from './road-database';
 
 let databaseCounter = 0;
 const newName = (): string => `rangers-road-test-${++databaseCounter}`;
@@ -46,7 +46,7 @@ describe('RoadDatabase', () => {
   it('opens a versioned schema and explicitly updates campaign state', async () => {
     const name = newName();
     const db = await RoadDatabase.open(name);
-    expect(DATABASE_VERSION).toBe(7);
+    expect(DATABASE_VERSION).toBe(8);
     expect(await db.getCampaign('primary')).toBeUndefined();
 
     await db.putCampaign(campaign);
@@ -609,6 +609,65 @@ describe('RoadDatabase', () => {
     }
     expect(records.exerciseOrders).toEqual([]);
     upgraded.close();
+  });
+
+  it('upgrades version 7 to 8 without a new store, keeping every session as it was', async () => {
+    const name = newName();
+    const v7Stores = [...STORE_NAMES];
+    const old = await openRaw(name, 7, (database, transaction) => {
+      for (const store of v7Stores) database.createObjectStore(store, { keyPath: 'id' });
+      transaction.objectStore('readinessChecks').createIndex('date', 'date', { unique: false });
+    });
+    const forge = {
+      id: 'forge-a-v7',
+      date: '2026-11-09',
+      workoutDefinitionId: 'chapter-2-forge-a',
+      readinessId: 'r1',
+      outcome: 'completed',
+      exerciseResults: [
+        { exerciseId: 'box-squat', sets: [{ completed: true, reps: 6 }], painEvents: [] },
+      ],
+    };
+    await rawAdd(old, 'workoutSessions', forge);
+    old.close();
+
+    const upgraded = await RoadDatabase.open(name);
+    const records = await upgraded.exportRecords();
+    expect(records.workoutSessions).toEqual([forge]);
+    expect(Object.keys(records).sort()).toEqual([...STORE_NAMES].sort());
+    upgraded.close();
+  });
+
+  it('starts and saves a custom Forge with its kind, snapshot and skipped warm-up', async () => {
+    const db = await RoadDatabase.open(newName());
+    await db.putCampaign(campaign);
+    await db.addReadinessCheck(readiness);
+    const definition = {
+      id: 'custom-forge',
+      title: 'Custom Forge',
+      warmup: [{ kind: 'walk' as const, minutes: 2, pace: 'easy' as const }],
+      exercises: [{ exerciseId: 'pallof-press', sets: 1, reps: 8, perSide: true }],
+    };
+    const draft = await db.startWorkoutDraft({ date: readiness.date, definition, kind: 'custom' });
+    expect(draft.kind).toBe('custom');
+    const skipped = await db.saveWorkoutDraft({
+      ...draft,
+      warmupComplete: true,
+      warmupSkipped: true,
+    });
+    expect(skipped.warmupSkipped).toBe(true);
+    await db.saveWorkoutDraft({
+      ...skipped,
+      exerciseResults: [{ ...skipped.exerciseResults[0], sets: [{ completed: true, reps: 8 }] }],
+    });
+    const session = await db.finishWorkoutDraft(draft.id, 'completed');
+    expect(session).toMatchObject({
+      kind: 'custom',
+      warmupSkipped: true,
+      definitionSnapshot: definition,
+    });
+    expect(await db.getAllHistorical('workoutSessions')).toEqual([session]);
+    db.close();
   });
 
   it('remembers one order per workout, replaces it, and forgets it', async () => {

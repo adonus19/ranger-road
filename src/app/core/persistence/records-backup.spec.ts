@@ -77,6 +77,40 @@ describe('records backup file', () => {
     expect(parsed.stores.readinessChecks).toHaveLength(2);
   });
 
+  it('keeps custom Forge sessions in a copy, and opens a version 7 copy without any', () => {
+    const custom = {
+      id: 'custom-1',
+      date: '2026-11-10',
+      workoutDefinitionId: 'custom-forge',
+      kind: 'custom',
+      warmupSkipped: true,
+      readinessId: 'readiness-1',
+      outcome: 'completed',
+      definitionSnapshot: {
+        id: 'custom-forge',
+        title: 'Custom Forge',
+        exercises: [{ exerciseId: 'pallof-press', sets: 2, reps: 8, perSide: true }],
+      },
+      exerciseResults: [],
+    };
+    const stores = { ...sampleStores(), workoutSessions: [custom] };
+    const backup = createRecordsBackup(stores, '2026-11-10T20:00:00.000Z');
+    expect(parseRecordsBackup(JSON.stringify(backup)).stores.workoutSessions).toEqual([custom]);
+    expect(summarizeRecords(stores).latestDate).toBe('2026-11-10');
+
+    const forge = { ...custom, id: 'forge-1', workoutDefinitionId: 'chapter-2-forge-a' };
+    delete (forge as Record<string, unknown>)['kind'];
+    delete (forge as Record<string, unknown>)['warmupSkipped'];
+    const older = parseRecordsBackup(
+      JSON.stringify({
+        ...createRecordsBackup({ ...sampleStores(), workoutSessions: [forge] }),
+        databaseVersion: 7,
+      }),
+    );
+    expect(older.databaseVersion).toBe(7);
+    expect(older.stores.workoutSessions).toEqual([forge]);
+  });
+
   it('refuses files that are not a copy of these records', () => {
     expect(() => parseRecordsBackup('not json')).toThrow(NOT_A_RECORDS_COPY);
     expect(() => parseRecordsBackup('[]')).toThrow(NOT_A_RECORDS_COPY);

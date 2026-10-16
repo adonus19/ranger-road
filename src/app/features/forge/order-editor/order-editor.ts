@@ -4,8 +4,8 @@ import {
   afterRenderEffect,
   inject,
   input,
+  linkedSignal,
   output,
-  signal,
 } from '@angular/core';
 
 export interface OrderItem {
@@ -28,7 +28,15 @@ export class OrderEditor {
   /** The full new order, as exercise indices, after one move. */
   readonly reorder = output<number[]>();
   readonly useWrittenOrder = output<void>();
-  protected readonly open = signal(false);
+  /** Starts open, as the custom Forge builder's order step does. */
+  readonly expanded = input(false);
+  /** Hides the editor's own Done, when the page has its next step below it. */
+  readonly closable = input(true);
+  /** Null when the page's own heading names the step. */
+  readonly heading = input<string | null>('Change order');
+  readonly hint = input('Your sets and results stay where they are. Only the order changes.');
+  readonly resetLabel = input('Use written order');
+  protected readonly open = linkedSignal(() => this.expanded());
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   /** The button last used, so focus can follow the exercise after the list re-renders. */

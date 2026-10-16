@@ -277,7 +277,7 @@ A third Forge the person may choose, at most once a week. It is never required, 
   2. "Start from last time's list" is a shortcut, and the list stays editable.
   3. Done picking opens the existing order editor to reorder.
   4. Begin. The standard warm-up comes first automatically and can be skipped.
-- **Prescriptions in the builder.** Each exercise's default is its prescription in the current chapter's Forge A or B. Otherwise it is the latest dose written for that exercise in the content packs up to the current chapter, or its catalog default when no pack names it. The set count is editable in the builder.
+- **Prescriptions in the builder.** Each exercise's default is its prescription in the current chapter's Forge A or B. Otherwise it is the latest dose written for that exercise in the content packs up to the current chapter, or its catalog default when no pack names it. An exercise with neither is not offered until a chapter or the catalog writes a dose for it. The set count is editable in the builder.
 - **History.** Custom sessions are kept in history and shown on the exercise, but they do not feed progression hints.
 
 ### Forge C (Chapter I)

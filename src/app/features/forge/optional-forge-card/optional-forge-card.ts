@@ -1,5 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { CUSTOM_FORGE_ID, optionalForgeLink } from '../../../core/program/custom-forge';
 import type { OptionalForgeOffer } from '../../../core/program/optional-forge';
 import { loadWorkout } from '../../../core/program/program-catalog';
 import { Icon } from '../../../shared/icon/icon';
@@ -17,9 +18,13 @@ import { Icon } from '../../../shared/icon/icon';
 export class OptionalForgeCard {
   readonly offer = input.required<OptionalForgeOffer>();
 
+  protected readonly link = computed(() => optionalForgeLink(this.offer().workoutId));
+
   protected readonly help = computed(() => {
     const offer = this.offer();
+    const light = offer.light ? ' Keep it light.' : '';
+    if (offer.workoutId === CUSTOM_FORGE_ID) return `Build your own session.${light}`;
     const title = loadWorkout(offer.workoutId)?.title ?? 'Optional Forge';
-    return `${title}, about 20–25 minutes.${offer.light ? ' Keep it light.' : ''}`;
+    return `${title}, about 20–25 minutes.${light}`;
   });
 }

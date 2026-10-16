@@ -610,6 +610,10 @@ h2 {
   text-decoration: underline;
   cursor: pointer;
 }
+.skip-warmup {
+  min-height: var(--touch-target);
+  padding-inline: 1rem;
+}
 .finish-step {
   margin: 1rem 0;
   padding: 0.9rem 1rem;

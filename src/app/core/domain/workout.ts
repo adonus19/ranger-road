@@ -21,6 +21,18 @@ export interface WorkoutStart {
   sessionInstructions?: string[];
   /** The remembered order, as indices into the definition's exercises. */
   exerciseOrder?: number[];
+  /** A custom Forge built from the library: kept in history, never fed to progression. */
+  kind?: 'custom';
+}
+
+/** The custom Forge's workout ID; its prescription lives only in each session's snapshot. */
+export const CUSTOM_FORGE_ID = 'custom-forge';
+
+/** A custom Forge session (older rows may carry only the ID). Never an exposure. */
+export function isCustomSession(
+  session: Pick<WorkoutSession, 'kind' | 'workoutDefinitionId'>,
+): boolean {
+  return session.kind === 'custom' || session.workoutDefinitionId === CUSTOM_FORGE_ID;
 }
 
 export type WorkoutPainInput = Pick<
@@ -91,6 +103,9 @@ export function createWorkoutDraft(
   if (ids.some((exerciseId) => !exerciseId.trim()) || new Set(ids).size !== ids.length) {
     throw new Error('The workout prescription needs distinct named exercises.');
   }
+  if ((input.kind === 'custom') !== (input.definition.id === CUSTOM_FORGE_ID)) {
+    throw new Error('A custom Forge needs its own definition.');
+  }
   if (input.sessionInstructions?.some((instruction) => !instruction.trim())) {
     throw new Error('Session instructions cannot be blank.');
   }
@@ -118,6 +133,7 @@ export function createWorkoutDraft(
     })),
     sessionInstructions: input.sessionInstructions ? [...input.sessionInstructions] : undefined,
     exerciseOrder: input.exerciseOrder ? [...input.exerciseOrder] : undefined,
+    ...(input.kind === 'custom' ? { kind: 'custom' as const } : {}),
   };
 }
 
@@ -207,6 +223,11 @@ export function updateWorkoutDraft(
       status !== 'green' ||
       results.some((result) => result.sets.some((set) => set.completed === false)),
     warmupComplete: stored.warmupComplete || edited.warmupComplete,
+    // Only a custom Forge's warm-up can be skipped, and only before it is done.
+    ...(stored.kind === 'custom' &&
+    (stored.warmupSkipped || (edited.warmupSkipped && !stored.warmupComplete))
+      ? { warmupSkipped: true }
+      : {}),
     finishComplete: stored.finishComplete || edited.finishComplete,
     optionalFinishComplete: stored.optionalFinishComplete || edited.optionalFinishComplete,
     currentExerciseIndex: edited.currentExerciseIndex,
@@ -306,6 +327,8 @@ export function completeWorkoutDraft(
     notes: draft.notes,
     sessionInstructions: draft.sessionInstructions ? [...draft.sessionInstructions] : undefined,
     exerciseOrder: draft.exerciseOrder ? [...draft.exerciseOrder] : undefined,
+    ...(draft.kind === 'custom' ? { kind: 'custom' as const } : {}),
+    ...(draft.kind === 'custom' && draft.warmupSkipped ? { warmupSkipped: true } : {}),
   };
 }
 

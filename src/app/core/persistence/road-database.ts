@@ -53,7 +53,11 @@ import { resolveCampaignPosition } from '../program/campaign-position';
 import { checkInSaveError, testsHeldFor } from '../program/check-in-schedule';
 
 export const DATABASE_NAME = 'rangers-road';
-export const DATABASE_VERSION = 7;
+/**
+ * Version 8 marks custom Forge sessions (`kind: 'custom'` on a workout session). It adds no
+ * store: older rows have no kind and read exactly as before.
+ */
+export const DATABASE_VERSION = 8;
 
 export const STORE_NAMES = [
   'campaigns',

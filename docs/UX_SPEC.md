@@ -135,15 +135,17 @@ Rules are in `RANGERS_ROAD_PROGRAM.md` (The Optional Forge). This section covers
 
 **Chapter II on: the builder.**
 
-1. **Pick.** The full exercise library, grouped by pattern under plain headings: Lower body, Push, Pull, Carry, Core, Arms, Mobility. Each row is a 48px toggle with the exercise name and its default dose. Tapping adds it and shows its number in tap order; tapping again removes it and the later numbers close up. Every track step is listed. A "Start from last time's list" button above the groups fills the picks from the last custom session, still editable. Each picked row has a sets stepper.
-2. **Order.** "Done picking" (docked, showing the count) opens the existing order editor with the picks in tap order.
-3. **Begin.** The standard warm-up comes first and has a Skip button. The workout player runs as usual: chips, Quick Help, Pain, Substitute, rest clock.
+The card opens the builder at `/forge/custom`. It needs today's readiness check first, like any strength session.
+
+1. **Pick.** "Build your session". The full exercise library, grouped by pattern under plain headings: Lower body, Push, Pull, Carry, Core, Arms, Mobility. Each row is a 48px toggle with the exercise name and its default dose. Tapping adds it and shows its number in tap order; tapping again removes it and the later numbers close up. Every track step is listed. An exercise with no written dose yet (no chapter so far prescribes it and the catalog has no default) is not listed. A "Start from last time's list" button above the groups fills the picks from the last custom session, in the order it was worked, still editable. Each picked row has a sets stepper (1 to 6 sets).
+2. **Order.** "Done picking" (docked, showing the count) opens the existing order editor, already open, with the picks in tap order and "Use tap order" to undo the moves. "Back to picks" keeps the order.
+3. **Begin.** The standard warm-up comes first, with "Skip the warm-up" under its Warm-up complete button. The workout player runs as usual: chips, Quick Help, Pain, Substitute, rest clock. Opening the session link without a started custom session points back to the builder.
 
 Each exercise's dose comes from the current chapter's Forge A or B, or from its catalog default. The builder shows where it came from in the help line ("From Forge A", "Catalog default").
 
 **Repeat note.** If a picked exercise is one of today's or yesterday's Forge A or B main lifts, a quiet line under the picks names it ("Box Squat was in yesterday's Forge A."). It never blocks Begin.
 
-**In a custom session.** The Current Set screen shows no hint line. The saved session shows what was done, without "Compared with last time". The session appears in each exercise's Your record with a "custom" tag and is left out of the chapter's "What changed" summary.
+**In a custom session.** The Current Set screen shows Last time from Forge sessions for reference, but no hint line. The in-session order editor's reset reads "Use starting order", and the order is not remembered for next time. The saved session shows what was done, without "Compared with last time". The session appears in each exercise's Your record with a "custom" tag and is left out of the chapter's "What changed" summary.
 
 ## Skill Tracks in Forge
 

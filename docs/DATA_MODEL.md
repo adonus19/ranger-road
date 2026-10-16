@@ -394,6 +394,8 @@ Each new exercise is a seeded ExerciseDefinition with its guide text from `EXERC
 
 - `builderGroup`: lower body | push | pull | carry | core | arms | mobility (the custom Forge builder's grouping)
 - `defaultDose?`: the catalog default the builder uses when the chapter's Forge A and B do not prescribe the exercise
+
+Built in ticket 06 as `CUSTOM_FORGE_LIBRARY` in `core/program/custom-forge-library.ts`, keyed by exercise ID beside the guides, rather than as fields on each guide. A test checks that every guide has a group.
 - `images`: `sequence` or `text-only`. A sequence shows only once its pictures are verified; until then the text guide shows.
 
 ### SkillTrack (seed content, not stored)
@@ -412,12 +414,15 @@ Store `trackSteps`, append-only: `{ id, trackId, exerciseId, takenAt }`, written
 
 Whether a step is **passed** and whether the next step is **available** are derived from saved sessions and the campaign position, never stored. Only completed Forge A, B and C sessions count; custom Forge sessions do not (decided 2026-10-16).
 
-### Custom Forge sessions
+### Custom Forge sessions (database version 8, built 2026-10-16)
 
-A custom session is a WorkoutSession with `workoutDefinitionId` `custom-forge` and `kind: 'custom'`. Its `definitionSnapshot` is built from the picks: the exercises, their doses and set counts, and the warm-up. `exerciseOrder` records the order worked in, as for any session. A `warmupSkipped?` flag records a skipped warm-up.
+A custom session is a WorkoutSession with `workoutDefinitionId` `custom-forge` and `kind: 'custom'`. Its `definitionSnapshot` is built from the picks: the exercises in the order set in the builder, their doses and set counts, and the chapter's standard warm-up. Later changes to the library never change a saved session. `exerciseOrder` records any reordering during the session, as for any session. A `warmupSkipped?` flag records a skipped warm-up. Version 8 adds no store; it marks the copies that can hold `kind`, and older rows read exactly as before. A backup made before version 8 restores with no custom sessions.
 
-- A custom session is never an exposure: Last time, hints, "Compared with last time" and the chapter summary ignore it. An exercise's record lists it with a "custom" tag.
-- "Start from last time's list" reads the newest custom session's snapshot and order. Nothing new is stored for it.
+- A custom session is never an exposure: Last time, hints, "Compared with last time" and the chapter summary ignore it (a row with the `custom-forge` ID and no `kind` is treated the same way). An exercise's record lists it with a "custom" tag, and "Since Day 1" leaves it out.
+- "Start from last time's list" reads the newest custom session's snapshot and order, with its set counts. An exercise the builder no longer lists is dropped from the list, not from the saved session. Nothing new is stored for it.
+- The builder's groups and the catalog defaults are content in `core/program/custom-forge-library.ts`. An exercise that no chapter in the app prescribes and the catalog gives no default is left out of the builder until one does, so no dose is made up.
+- A custom session never remembers a saved order (`exerciseOrders`): its order is its own snapshot.
+- In a deload week (and the trial days that repeat it) a custom session is saved as reduced with the instruction "Keep it light."
 - Whether the optional Forge was done this week is derived from completed Forge C or custom sessions dated Monday through Sunday of that week. A stopped session does not count.
 
 Forge C is a seeded WorkoutDefinition for Chapter I (`chapter-1-forge-c`) whose sessions are ordinary exposures. Its curl is chosen for the week when the session starts, and the session's `definitionSnapshot` records the curl actually done. No store or field was added for it. Whether the card shows is worked out each time from the dated orders, the make-up planner's three-Forge week and the saved sessions (`optional-forge.ts`).

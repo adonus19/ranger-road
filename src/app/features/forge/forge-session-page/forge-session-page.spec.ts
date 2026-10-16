@@ -280,6 +280,66 @@ describe('ForgeSessionPage', () => {
     });
   });
 
+  describe('Custom Forge', () => {
+    const today = '2026-11-10';
+    function customDraft(warmupComplete: boolean): WorkoutDraft {
+      const written = startedDraft(today);
+      return {
+        ...written,
+        workoutDefinitionId: 'custom-forge',
+        kind: 'custom',
+        warmupComplete,
+        definitionSnapshot: {
+          ...written.definitionSnapshot,
+          id: 'custom-forge',
+          title: 'Custom Forge',
+        },
+      } as WorkoutDraft;
+    }
+
+    it('shows Last time for reference but no hint line', async () => {
+      const element = await render('custom-forge', today, {
+        draft: customDraft(true),
+        sessions: [boxSquatWeekTwo()],
+      });
+      const block = element.querySelector('.last-time');
+      expect(block?.querySelector('h3')?.textContent).toContain('Last time');
+      expect(block?.querySelector('.last-hint')).toBeNull();
+    });
+
+    it('offers to skip the warm-up and records that it was skipped', async () => {
+      const saveDraft = vi.fn(async (draft: WorkoutDraft) => draft);
+      const element = await render('custom-forge', today, {
+        draft: customDraft(false),
+        history: { saveDraft },
+      });
+      expect(element.querySelector('#warmup-title')).toBeTruthy();
+      const skip = [...element.querySelectorAll('button')].find((b) =>
+        b.textContent?.includes('Skip the warm-up'),
+      )!;
+      skip.click();
+      await vi.waitFor(() => expect(saveDraft).toHaveBeenCalled());
+      expect(saveDraft.mock.calls[0][0]).toMatchObject({
+        warmupComplete: true,
+        warmupSkipped: true,
+      });
+    });
+
+    it('keeps the skip out of a written Forge’s warm-up', async () => {
+      const element = await render('chapter-2-forge-a', today, {
+        draft: { ...startedDraft(today), warmupComplete: false },
+      });
+      expect(element.querySelector('#warmup-title')).toBeTruthy();
+      expect(element.textContent).not.toContain('Skip the warm-up');
+    });
+
+    it('sends a custom session without a draft to the builder', async () => {
+      const element = await render('custom-forge', today);
+      expect(element.textContent).toContain('Build your session first');
+      expect(element.querySelector('a[href="/forge/custom"]')).toBeTruthy();
+    });
+  });
+
   describe('Final-set effort', () => {
     async function openConfirm(set: number) {
       const element = await render('chapter-2-forge-a', '2026-11-10', {

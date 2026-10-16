@@ -4,6 +4,11 @@ import type { TrialResult, WorkoutDraft, WorkoutSession } from '../../../core/do
 import { resolveCampaignPosition } from '../../../core/program/campaign-position';
 import { getWorkoutChoices, isWorkoutPlanned } from '../../../core/program/chapter-orders';
 import {
+  CUSTOM_FORGE_ID,
+  CUSTOM_FORGE_TITLE,
+  optionalForgeLink,
+} from '../../../core/program/custom-forge';
+import {
   chapterPrograms,
   formatChapterNumeral,
   isRestorationWorkout,
@@ -55,6 +60,12 @@ export class ForgePage implements OnInit {
   protected readonly numeral = formatChapterNumeral;
   protected readonly shortDate = formatShortDate;
   protected readonly isRestoration = isRestorationWorkout;
+  protected readonly customForgeId = CUSTOM_FORGE_ID;
+
+  /** The builder for the custom Forge; every other choice opens its session. */
+  protected choiceLink(id: string): string[] {
+    return optionalForgeLink(id);
+  }
   protected readonly kindLabel: Readonly<Record<ForgeChoice['kind'], string>> = {
     planned: 'Today’s order',
     'as-needed': 'As needed',
@@ -87,7 +98,10 @@ export class ForgePage implements OnInit {
     if (offer) {
       choices.push({
         id: offer.workoutId,
-        title: loadWorkout(offer.workoutId)?.title ?? offer.workoutId,
+        title:
+          offer.workoutId === CUSTOM_FORGE_ID
+            ? CUSTOM_FORGE_TITLE
+            : (loadWorkout(offer.workoutId)?.title ?? offer.workoutId),
         kind: 'optional',
         light: offer.light,
       });

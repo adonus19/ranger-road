@@ -97,6 +97,10 @@
               <p>
                 @if (isRestoration(choice.id)) {
                   Gentle mobility and an easy finish.
+                } @else if (choice.id === customForgeId) {
+                  Build your own session from the library. It adds to today and replaces nothing.{{
+                    choice.light ? ' Keep it light.' : ''
+                  }}
                 } @else if (choice.kind === 'optional') {
                   About 20–25 minutes. It adds to today and replaces nothing.{{
                     choice.light ? ' Keep it light.' : ''
@@ -109,7 +113,9 @@
             @if (active()) {
               <span class="choice__blocked">Finish or stop your active session first.</span>
             } @else if (canOpen(choice.id)) {
-              <a [routerLink]="['/forge/session', choice.id]">Open {{ choice.title }}</a>
+              <a [routerLink]="choiceLink(choice.id)">{{
+                choice.id === customForgeId ? 'Build your session' : 'Open ' + choice.title
+              }}</a>
             } @else {
               <span class="choice__blocked">{{
                 status() ? 'Strength is unavailable on Red.' : 'Check readiness first.'

@@ -81,6 +81,29 @@ describe('records backup persistence', () => {
     database.close();
   });
 
+  it('restores a copy that holds a custom Forge, and an older copy without one', async () => {
+    const database = await RoadDatabase.open(`records-${crypto.randomUUID()}`);
+    const custom = {
+      id: 'custom-1',
+      date: '2026-10-06',
+      workoutDefinitionId: 'custom-forge',
+      kind: 'custom',
+      readinessId: check.id,
+      outcome: 'completed',
+      exerciseResults: [],
+    };
+    await database.replaceRecords({
+      ...emptyStores(),
+      campaigns: [{ ...campaign }],
+      workoutSessions: [custom],
+    });
+    expect(await database.getAllHistorical('workoutSessions')).toEqual([custom]);
+
+    await database.replaceRecords({ ...emptyStores(), campaigns: [{ ...campaign }] });
+    expect(await database.getAllHistorical('workoutSessions')).toEqual([]);
+    database.close();
+  });
+
   it('leaves this device unchanged when any row in the copy cannot be stored', async () => {
     const database = await RoadDatabase.open(`records-${crypto.randomUUID()}`);
     await database.putCampaign(campaign);

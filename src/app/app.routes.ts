@@ -92,6 +92,12 @@ export const routes: Routes = [
     title: 'Forge | The Ranger’s Road',
   },
   {
+    path: 'forge/custom',
+    loadComponent: () =>
+      import('./features/forge/custom-forge-page/custom-forge-page').then((m) => m.CustomForgePage),
+    title: 'Build Your Session | The Ranger’s Road',
+  },
+  {
     path: 'forge/session/:workoutId',
     loadComponent: () =>
       import('./features/forge/forge-session-page/forge-session-page').then(

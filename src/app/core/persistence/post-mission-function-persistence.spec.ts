@@ -61,14 +61,18 @@ describe('post-mission function persistence', () => {
     await firstTab.addReadinessCheck(green);
     const original = completeResult();
     await firstTab.addTrialResult(original as ReturnType<typeof createGateTrialResult>);
-    await expect(firstTab.addPostMissionFunction(answers, '2026-10-22T14:59:59.999Z'))
-      .rejects.toThrow(/60 minutes/);
+    await expect(
+      firstTab.addPostMissionFunction(answers, '2026-10-22T14:59:59.999Z'),
+    ).rejects.toThrow(/60 minutes/);
     expect(await firstTab.getPostMissionFunctions()).toEqual([]);
 
     const secondTab = await RoadDatabase.open(name);
     const writes = await Promise.allSettled([
       firstTab.addPostMissionFunction(answers, '2026-10-22T15:00:00.000Z'),
-      secondTab.addPostMissionFunction({ ...answers, id: 'recovery-2' }, '2026-10-22T15:01:00.000Z'),
+      secondTab.addPostMissionFunction(
+        { ...answers, id: 'recovery-2' },
+        '2026-10-22T15:01:00.000Z',
+      ),
     ]);
     expect(writes.filter((write) => write.status === 'fulfilled')).toHaveLength(1);
     expect(writes.filter((write) => write.status === 'rejected')).toHaveLength(1);
@@ -78,12 +82,20 @@ describe('post-mission function persistence', () => {
     const reopened = await RoadDatabase.open(name);
     const recoveries = await reopened.getPostMissionFunctions();
     expect(recoveries).toHaveLength(1);
-    expect(recoveries[0]).toMatchObject({ trialResultId: original.id, effortEndedAt: '2026-10-22T14:00:00.000Z' });
+    expect(recoveries[0]).toMatchObject({
+      trialResultId: original.id,
+      effortEndedAt: '2026-10-22T14:00:00.000Z',
+    });
     expect(await reopened.getTrialResultsForTrial('gate-trial')).toEqual([original]);
-    await expect(reopened.addPostMissionFunction({ ...answers, id: 'recovery-3' }, '2026-10-22T16:00:00.000Z'))
-      .rejects.toThrow(/already has/);
-    await expect(reopened.addPostMissionFunction({ ...answers, id: 'missing', trialResultId: 'missing' }, '2026-10-22T16:00:00.000Z'))
-      .rejects.toThrow(/not found/);
+    await expect(
+      reopened.addPostMissionFunction({ ...answers, id: 'recovery-3' }, '2026-10-22T16:00:00.000Z'),
+    ).rejects.toThrow(/already has/);
+    await expect(
+      reopened.addPostMissionFunction(
+        { ...answers, id: 'missing', trialResultId: 'missing' },
+        '2026-10-22T16:00:00.000Z',
+      ),
+    ).rejects.toThrow(/not found/);
     expect(await reopened.getPostMissionFunctions()).toEqual(recoveries);
     reopened.close();
   });
@@ -91,7 +103,12 @@ describe('post-mission function persistence', () => {
   it('upgrades v3 in place and preserves a draft, stopped attempt, completed result, and pain', async () => {
     const name = `recovery-upgrade-${crypto.randomUUID()}`;
     const old = await openRawV3(name);
-    const draft = createGateTrialDraft(green.date, green, '2026-10-22T12:00:00.000Z', 'active-draft');
+    const draft = createGateTrialDraft(
+      green.date,
+      green,
+      '2026-10-22T12:00:00.000Z',
+      'active-draft',
+    );
     const attempt = stopGateTrialDraft(
       { ...draft, id: 'stopped-attempt' },
       '2026-10-22T13:00:00.000Z',
@@ -112,7 +129,7 @@ describe('post-mission function persistence', () => {
     await addRaw(old, 'painEvents', pain);
     old.close();
 
-    expect(DATABASE_VERSION).toBe(7);
+    expect(DATABASE_VERSION).toBe(8);
     const upgraded = await RoadDatabase.open(name);
     expect(await upgraded.getActiveTrialDraft()).toEqual(draft);
     expect(await upgraded.getStoppedTrialAttemptsForTrial('gate-trial')).toEqual([attempt]);

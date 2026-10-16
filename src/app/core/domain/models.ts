@@ -179,6 +179,13 @@ export interface WorkoutSession {
   sessionInstructions?: string[];
   /** Indices into definitionSnapshot.exercises in the order the person worked them; missing means written order. */
   exerciseOrder?: number[];
+  /**
+   * A custom Forge the person built from the library. Kept in history, but never an exposure:
+   * it does not feed Last time, hints or chapter summaries. Older sessions have no kind.
+   */
+  kind?: 'custom';
+  /** The warm-up was skipped (custom Forge only). */
+  warmupSkipped?: boolean;
 }
 
 /** A person's chosen exercise order for one workout, reused the next time it starts. */
@@ -211,6 +218,8 @@ export interface WorkoutDraft {
   sessionInstructions?: string[];
   /** Indices into definitionSnapshot.exercises in the order the person work them; missing means written order. */
   exerciseOrder?: number[];
+  kind?: 'custom';
+  warmupSkipped?: boolean;
 }
 
 export type ReadinessStatus = 'green' | 'yellow' | 'red';

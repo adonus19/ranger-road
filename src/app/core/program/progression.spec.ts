@@ -620,6 +620,74 @@ describe('after the session', () => {
   });
 });
 
+describe('custom Forge sessions', () => {
+  const custom = (date: string, work: Work[], kind = true) => {
+    const saved = session(date, work);
+    return {
+      ...saved,
+      workoutDefinitionId: 'custom-forge',
+      ...(kind ? { kind: 'custom' as const } : {}),
+      definitionSnapshot: { ...saved.definitionSnapshot!, id: 'custom-forge', title: 'Custom' },
+    };
+  };
+  const forge = session('2026-11-09', [
+    { id: 'bench-press', sets: sets(95, [6, 6, 6], 6), prescription: bench },
+  ]);
+  const extra = custom('2026-11-11', [
+    { id: 'bench-press', sets: sets(120, [6, 6, 6], 5), prescription: bench },
+  ]);
+
+  it('never feed Last time or the hint, even when newer', () => {
+    const progress = exerciseProgress(
+      bench,
+      { ...green, date: '2026-11-12' },
+      context(forge, extra),
+    );
+    expect(progress.last?.sessionId).toBe(forge.id);
+    expect(progress.last?.load).toBe(95);
+    expect(hintCopy(progress.hint!).action).toBe('May add 5 lb → 100 lb');
+    // A custom session alone leaves the exercise with no Last time.
+    expect(exerciseProgress(bench, green, context(extra)).last).toBeUndefined();
+  });
+
+  it('are left out by the session ID alone, for rows saved without a kind', () => {
+    const untagged = custom(
+      '2026-11-11',
+      [{ id: 'bench-press', sets: sets(120, [6, 6, 6], 5) }],
+      false,
+    );
+    expect(exerciseProgress(bench, green, context(forge, untagged)).last?.sessionId).toBe(forge.id);
+  });
+
+  it('have no "Compared with last time", and the next Forge compares past them', () => {
+    expect(compareWithLastTime(extra, [forge, extra])).toEqual([]);
+    const next = session('2026-11-16', [{ id: 'bench-press', sets: sets(100, [6, 6, 6], 6) }]);
+    expect(compareWithLastTime(next, [forge, extra, next]).map(changeLabel)).toEqual([
+      '95 → 100 lb',
+    ]);
+  });
+
+  it('are listed in Your record with a custom tag, but left out of Since Day 1', () => {
+    const record = exerciseRecord('bench-press', context(forge, extra));
+    expect(record.rows.map((row) => [row.date, row.tag])).toEqual([
+      ['2026-11-11', 'custom'],
+      ['2026-11-09', undefined],
+    ]);
+    expect(record.first).toEqual(record.latest);
+    expect(record.latest?.load).toBe(95);
+    expect(exerciseRecord('bench-press', context(extra))).toMatchObject({
+      rows: [{ tag: 'custom' }],
+    });
+    expect(exerciseRecord('bench-press', context(extra)).first).toBeUndefined();
+  });
+
+  it('are left out of the chapter summary', () => {
+    const first = session('2026-11-05', [{ id: 'bench-press', sets: sets(90, [6, 6, 6], 6) }]);
+    const summary = chapterSummary(2, context(first, forge, extra));
+    expect(summary.lifts.map(changeLabel)).toEqual(['90 → 95 lb']);
+  });
+});
+
 describe('campaign days', () => {
   it('places dates in their chapter and week, with Weeks 4 and 8 as deloads', () => {
     expect(dayOf('2026-10-19')).toEqual({ chapter: 1, week: 3, deload: false });

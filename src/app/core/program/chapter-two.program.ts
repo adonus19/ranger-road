@@ -1,4 +1,5 @@
 import type { ChapterDefinition } from '../domain/models';
+import { CUSTOM_FORGE_ID } from '../domain/workout';
 import { chapterOneWeeklyRhythm } from './chapter-one.seed';
 import type { ChapterProgram } from './chapter-program';
 import { chapterTwoDailySeed, chapterTwoTrialAttempt } from './chapter-two-daily.seed';
@@ -42,6 +43,8 @@ export const chapterTwoProgram: ChapterProgram = {
   trialAttempt: chapterTwoTrialAttempt,
   workouts: [chapterTwoForgeA, chapterTwoForgeB, chapterTwoRestoration],
   restorationId: chapterTwoRestoration.id,
+  // From Chapter II the optional Forge card opens the custom Forge builder.
+  optionalForgeId: CUSTOM_FORGE_ID,
   workoutPlan: (workoutId, week) => {
     const note = chapterTwoWorkoutWeekNote(workoutId, week);
     const volumeGuide = chapterTwoWeekEightVolumeGuide(workoutId, week);

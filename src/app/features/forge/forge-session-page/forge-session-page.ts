@@ -44,6 +44,7 @@ import {
   loadWorkoutOn,
 } from '../../../core/program/program-catalog';
 import { isOptionalForge } from '../../../core/program/optional-forge';
+import { CUSTOM_FORGE_ID } from '../../../core/program/custom-forge';
 import { progressionKind } from '../../../core/program/progression-kinds';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { ProgressionHistory } from '../../../core/state/progression-history';
@@ -234,7 +235,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       sets,
       effort: progress.last?.finalEffort,
       easier: progress.easier ? easierLine(progress.easier) : undefined,
-      hint: progress.hint ? hintCopy(progress.hint) : undefined,
+      // A custom Forge shows Last time for reference, but no hint line.
+      hint: progress.hint && !this.custom ? hintCopy(progress.hint) : undefined,
       noLoad: progress.noLoadRecorded
         ? progress.kind === 'assisted-pull-up'
           ? NO_ASSISTANCE_LINE
@@ -290,6 +292,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   });
   /** The optional Forge is open on the days its card shows. */
   protected readonly optional = isOptionalForge(this.workoutId);
+  /** A session built from the library: it starts in the builder and never feeds a hint. */
+  protected readonly custom = this.workoutId === CUSTOM_FORGE_ID;
   private readonly optionalOffer = computed(() => {
     const campaign = this.state.campaign();
     if (!campaign || !this.optional) return null;
@@ -419,7 +423,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   /** A stopped session is partial work, so only a finished one is set beside last time. */
   private async loadComparison(session: WorkoutSession): Promise<void> {
     this.comparison.set([]);
-    if (session.outcome === 'stopped') return;
+    // A custom Forge is kept in history but never set beside last time.
+    if (session.outcome === 'stopped' || this.custom) return;
     try {
       const context = await this.progressionHistory.load();
       this.comparison.set(compareLines(compareWithLastTime(session, context.sessions)));
@@ -508,6 +513,15 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     });
   }
 
+  /** Only a custom Forge's warm-up can be skipped; the session keeps a note that it was. */
+  protected async skipWarmup(): Promise<void> {
+    if (!this.custom) return;
+    await this.save((draft) => {
+      draft.warmupSkipped = true;
+      draft.warmupComplete = true;
+    });
+  }
+
   /** Moving around never touches the rest clock; only marking a set restarts it. */
   protected async selectSet(exercise: number, set: number): Promise<void> {
     if (this.blocked()) return;
@@ -528,6 +542,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     const draft = this.draft();
     if (this.error() || !draft) return;
     this.orderNote.set(null);
+    // A custom Forge's order lives in its own snapshot; there is no written order to remember.
+    if (this.custom) return;
     try {
       if (order) {
         const exercises = draft.definitionSnapshot.exercises;

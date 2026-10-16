@@ -144,9 +144,16 @@ describe('Optional Forge eligibility', () => {
     }
   });
 
-  it('leaves Chapter II without Forge C', () => {
+  it('opens the custom Forge builder from Chapter II, gone for the week once one is done', () => {
     const trials = [{ trialId: 'gate-trial', date: '2026-11-02' }];
-    expect(offer('2026-11-03', history(), { trials })).toBeNull();
+    const custom = { workoutId: 'custom-forge', light: false };
+    expect(offer('2026-11-03', history(), { trials })).toEqual(custom);
+    expect(isOptionalForge('custom-forge')).toBe(true);
+    // A stopped custom session leaves the card; a completed one settles the week.
+    const stopped = history([], [['2026-11-03', 'custom-forge', 'stopped']]);
+    expect(offer('2026-11-04', stopped, { trials })).toEqual(custom);
+    const done = history([], [['2026-11-03', 'custom-forge', 'completed']]);
+    expect(offer('2026-11-04', done, { trials })).toBeNull();
   });
 
   it('is not offered on a Red day; Yellow and an unchecked day still show it', () => {

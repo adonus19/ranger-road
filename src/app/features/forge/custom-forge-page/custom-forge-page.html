@@ -1,0 +1,174 @@
+<div class="builder-page">
+  @if (step() === 'order' && offer() && readiness() && !active()) {
+    <button type="button" class="back-link" (click)="backToPicks()">
+      <app-icon name="arrow-left" />Back to picks
+    </button>
+  } @else {
+    <a class="back-link" routerLink="/forge"><app-icon name="arrow-left" />Back to Forge</a>
+  }
+
+  @if (loading() || state.loading()) {
+    <p class="notice" role="status">Opening the builder…</p>
+  } @else if (error() && !offer()) {
+    <section class="notice" role="alert">
+      <h1>Builder unavailable</h1>
+      <p>{{ error() }}</p>
+      <button type="button" (click)="load()">Try again</button>
+    </section>
+  } @else if (active(); as draft) {
+    <section class="notice" aria-labelledby="builder-title">
+      @if (draft.workoutDefinitionId === 'custom-forge') {
+        <h1 id="builder-title">Your session is underway</h1>
+        <p>Pick up where you left off. The list is set once a session starts.</p>
+        <a [routerLink]="['/forge/session', draft.workoutDefinitionId]">Resume your session</a>
+      } @else {
+        <h1 id="builder-title">Another session is in progress</h1>
+        <p>Finish or stop {{ draft.definitionSnapshot.title }} before building another one.</p>
+        <a [routerLink]="['/forge/session', draft.workoutDefinitionId]"
+          >Resume {{ draft.definitionSnapshot.title }}</a
+        >
+      }
+    </section>
+  } @else if (!offer()) {
+    <section class="notice" aria-labelledby="builder-title">
+      <h1 id="builder-title">No optional Forge today</h1>
+      <p>
+        The builder opens on the days the optional Forge is offered: Tuesday, Wednesday, Friday or
+        Saturday, once a week, from Chapter II.
+      </p>
+      <a routerLink="/forge">View today in the Forge</a>
+    </section>
+  } @else if (!readiness()) {
+    <section class="notice" aria-labelledby="builder-title">
+      <h1 id="builder-title">Check readiness first</h1>
+      <p>This is strength work, so it needs today’s readiness check before you build it.</p>
+      <a routerLink="/readiness">Check readiness</a>
+    </section>
+  } @else if (step() === 'pick') {
+    <section class="pick" aria-labelledby="builder-title">
+      <h1 id="builder-title" tabindex="-1">Build your session</h1>
+      <p class="intro">
+        Tap exercises in the order you want to do them. Tap one again to take it out.
+      </p>
+      @if (offer()?.light) {
+        <p class="light-note">Keep it light this week.</p>
+      } @else if (readiness()?.status === 'yellow') {
+        <p class="light-note">Yellow · Reduce. Keep volume and load down today.</p>
+      }
+
+      @if (lastList().length) {
+        <button type="button" class="last-list" (click)="useLastList()">
+          <app-icon name="renew" />Start from last time’s list
+        </button>
+      }
+
+      @for (section of sections(); track section.group) {
+        <section class="group" [attr.aria-labelledby]="'group-' + section.group">
+          <h2 [id]="'group-' + section.group">{{ section.title }}</h2>
+          <ul>
+            @for (exercise of section.exercises; track exercise.exerciseId) {
+              @let place = positions().get(exercise.exerciseId);
+              <li class="row" [class.is-picked]="place">
+                <button
+                  type="button"
+                  class="toggle"
+                  [attr.aria-pressed]="!!place"
+                  (click)="toggle(exercise)"
+                >
+                  <span class="mark" aria-hidden="true">
+                    @if (place) {
+                      {{ place }}
+                    } @else {
+                      <app-icon name="plus" />
+                    }
+                  </span>
+                  <span class="text">
+                    <span class="name">{{ exercise.name }}</span>
+                    <span class="dose"
+                      >{{
+                        doseLabel(exercise.dose, place ? setsOf(exercise.exerciseId) : undefined)
+                      }}
+                      · {{ exercise.source }}</span
+                    >
+                  </span>
+                  @if (place) {
+                    <span class="visually-hidden">, number {{ place }}</span>
+                  }
+                </button>
+                @if (place) {
+                  <div class="stepper" role="group" [attr.aria-label]="'Sets of ' + exercise.name">
+                    <button
+                      type="button"
+                      [disabled]="setsOf(exercise.exerciseId) <= setsMin"
+                      [attr.aria-label]="'One fewer set of ' + exercise.name"
+                      (click)="changeSets(exercise.exerciseId, -1)"
+                    >
+                      <app-icon name="minus" />
+                    </button>
+                    <span class="count" aria-live="polite"
+                      ><strong>{{ setsOf(exercise.exerciseId) }}</strong>
+                      {{ setsOf(exercise.exerciseId) === 1 ? 'set' : 'sets' }}</span
+                    >
+                    <button
+                      type="button"
+                      [disabled]="setsOf(exercise.exerciseId) >= setsMax"
+                      [attr.aria-label]="'One more set of ' + exercise.name"
+                      (click)="changeSets(exercise.exerciseId, 1)"
+                    >
+                      <app-icon name="plus" />
+                    </button>
+                  </div>
+                }
+              </li>
+            }
+          </ul>
+        </section>
+      }
+
+      <div class="action-dock">
+        @if (repeat(); as note) {
+          <p class="repeat-note" role="status">{{ note }}</p>
+        }
+        <button
+          type="button"
+          class="primary-action"
+          [disabled]="!picks().length"
+          (click)="donePicking()"
+        >
+          Done picking{{ picks().length ? ' (' + picks().length + ')' : '' }}
+        </button>
+      </div>
+    </section>
+  } @else {
+    <section class="order" aria-labelledby="builder-title">
+      <h1 id="builder-title" tabindex="-1">Set the order</h1>
+      <p class="intro">
+        {{ picks().length }} {{ picks().length === 1 ? 'exercise' : 'exercises' }},
+        {{ totalSets() }} {{ totalSets() === 1 ? 'set' : 'sets' }}. The standard warm-up comes
+        first, and you can skip it.
+      </p>
+      <app-order-editor
+        [items]="orderItems()"
+        [expanded]="true"
+        [closable]="false"
+        [heading]="null"
+        hint="Move an exercise up or down. Your sets stay as you set them."
+        resetLabel="Use tap order"
+        (reorder)="reorder($event)"
+        (useWrittenOrder)="useTapOrder()"
+      />
+      @if (error(); as message) {
+        <p class="inline-error" role="alert">{{ message }}</p>
+      }
+      <p class="privacy-note">Your training record stays on this device.</p>
+      <div class="action-dock">
+        @if (repeat(); as note) {
+          <p class="repeat-note">{{ note }}</p>
+        }
+        <button type="button" class="primary-action" [disabled]="saving()" (click)="begin()">
+          Begin
+        </button>
+      </div>
+    </section>
+  }
+</div>

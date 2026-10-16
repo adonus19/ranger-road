@@ -67,6 +67,12 @@
       <p>Your four full weeks and completed {{ program().trialName }} are on record.</p>
       <a routerLink="/forge">Return to Forge</a>
     </section>
+  } @else if (custom && !draft()) {
+    <section class="notice" aria-labelledby="session-build-title">
+      <h1 id="session-build-title">Build your session first</h1>
+      <p>A custom Forge starts in the builder, where you pick the exercises and their order.</p>
+      <a routerLink="/forge/custom">Build your session</a>
+    </section>
   } @else if ((!definition() || !allowed()) && !draft()) {
     <section class="notice">
       <h1>Session unavailable</h1>
@@ -114,6 +120,7 @@
           [items]="orderItems()"
           [note]="orderNote()"
           (reorder)="setOrder($event)"
+          [resetLabel]="custom ? 'Use starting order' : 'Use written order'"
           (useWrittenOrder)="setOrder(undefined)"
         />
         @if (volumeGuide(); as guide) {
@@ -131,6 +138,16 @@
           >
             Warm-up complete
           </button>
+          @if (custom) {
+            <button
+              type="button"
+              class="skip-action skip-warmup"
+              (click)="skipWarmup()"
+              [disabled]="saving()"
+            >
+              Skip the warm-up
+            </button>
+          }
         </div>
       </section>
     } @else if (currentPrescription(); as prescription) {
@@ -412,6 +429,7 @@
           [items]="orderItems()"
           [note]="orderNote()"
           (reorder)="setOrder($event)"
+          [resetLabel]="custom ? 'Use starting order' : 'Use written order'"
           (useWrittenOrder)="setOrder(undefined)"
         />
         <div class="action-dock">
@@ -514,6 +532,7 @@
           [items]="orderItems()"
           [note]="orderNote()"
           (reorder)="setOrder($event)"
+          [resetLabel]="custom ? 'Use starting order' : 'Use written order'"
           (useWrittenOrder)="setOrder(undefined)"
         />
         <div class="action-dock">

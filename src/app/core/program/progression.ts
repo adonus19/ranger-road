@@ -7,7 +7,7 @@ import type {
   ReadinessStatus,
   WorkoutSession,
 } from '../domain/models';
-import { effectiveReadinessStatus } from '../domain/workout';
+import { effectiveReadinessStatus, isCustomSession } from '../domain/workout';
 import { STEP_UP_FROM, progressionKind, type ProgressionKind } from './progression-kinds';
 
 /**
@@ -173,8 +173,18 @@ function newestFirst(a: WorkoutSession, b: WorkoutSession): number {
   );
 }
 
-/** Completed sessions (older rows without an outcome count) that did this exercise as written. */
+/**
+ * Completed sessions (older rows without an outcome count) that did this exercise as written.
+ * A custom Forge is never an exposure: it stays out of Last time, hints and summaries.
+ */
 export function exposuresFor(sessions: readonly WorkoutSession[], exerciseId: string): Exposure[] {
+  return exposuresIncluding(
+    sessions.filter((session) => !isCustomSession(session)),
+    exerciseId,
+  );
+}
+
+function exposuresIncluding(sessions: readonly WorkoutSession[], exerciseId: string): Exposure[] {
   return [...sessions]
     .filter((session) => session.outcome !== 'stopped')
     .sort(newestFirst)
@@ -517,7 +527,7 @@ export interface RecordRow {
   date: LocalDate;
   chapter?: number;
   best: BestSet;
-  tag?: 'deload' | 'reduced';
+  tag?: 'deload' | 'reduced' | 'custom';
 }
 
 export interface ExerciseRecord {
@@ -527,14 +537,26 @@ export interface ExerciseRecord {
   latest?: BestSet;
 }
 
-/** "Your record" on an exercise's guide: its best working set per session, newest first. */
+/**
+ * "Your record" on an exercise's guide: its best working set per session, newest first. A custom
+ * Forge is listed with a "custom" tag, but "Since Day 1" (first and latest) leaves it out.
+ */
 export function exerciseRecord(exerciseId: string, context: ProgressionContext): ExerciseRecord {
   if (progressionKind(exerciseId) === 'none') return { rows: [] };
-  const rows = exposuresFor(context.sessions, exerciseId).flatMap((exposure): RecordRow[] => {
+  const custom = new Set(
+    context.sessions.filter((session) => isCustomSession(session)).map((session) => session.id),
+  );
+  const rows = exposuresIncluding(context.sessions, exerciseId).flatMap((exposure): RecordRow[] => {
     const best = bestSet(exposure);
     if (!best) return [];
     const day = context.dayOf(exposure.date);
-    const tag = day?.deload ? 'deload' : exposure.reduced ? 'reduced' : undefined;
+    const tag = custom.has(exposure.sessionId)
+      ? 'custom'
+      : day?.deload
+        ? 'deload'
+        : exposure.reduced
+          ? 'reduced'
+          : undefined;
     return [
       {
         sessionId: exposure.sessionId,
@@ -545,9 +567,10 @@ export function exerciseRecord(exerciseId: string, context: ProgressionContext):
       },
     ];
   });
+  const tracked = rows.filter((row) => row.tag !== 'custom');
   return {
     rows,
-    ...(rows.length ? { first: rows.at(-1)!.best, latest: rows[0].best } : {}),
+    ...(tracked.length ? { first: tracked.at(-1)!.best, latest: tracked[0].best } : {}),
   };
 }
 
