@@ -50,4 +50,25 @@
       </section>
     }
   }
+
+  <h2 class="manual-chapter" id="all-exercises">Every exercise, A to Z</h2>
+  <p class="manual-subline">
+    Every movement has a written guide and Quick Help, including those no session uses yet.
+  </p>
+  <ul class="manual-rows" role="list">
+    @for (guide of allGuides; track guide.id) {
+      <li>
+        <a
+          class="manual-row"
+          [routerLink]="['/field-manual/exercises', guide.id]"
+          [queryParams]="{ from: 'exercises' }"
+        >
+          <span class="manual-row__text">
+            <strong>{{ guide.name }}</strong>
+          </span>
+          <app-icon class="manual-row__arrow" name="arrow-right" />
+        </a>
+      </li>
+    }
+  </ul>
 </article>

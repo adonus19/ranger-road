@@ -533,12 +533,14 @@
           <button type="button" (click)="closePanel()">Close</button>
         </div>
         <p>{{ guide.purpose }}</p>
-        <div
-          class="sequence"
-          [style.background-image]="'url(' + helpMediaBase() + '/sequence.webp)'"
-          role="img"
-          [attr.aria-label]="'Four illustrated stages of ' + guide.name"
-        ></div>
+        @if (!guide.textOnly) {
+          <div
+            class="sequence"
+            [style.background-image]="'url(' + helpMediaBase() + '/sequence.webp)'"
+            role="img"
+            [attr.aria-label]="'Four illustrated stages of ' + guide.name"
+          ></div>
+        }
         <ol>
           @for (step of helpSteps(); track step) {
             <li>{{ step }}</li>
@@ -568,12 +570,26 @@
           @if (guide.stepUpFrom) {
             <p><strong>Step-up from:</strong> {{ guide.stepUpFrom }}</p>
           }
-          <img
-            src="images/exercises/box-squat/muscle-map.webp"
-            [src]="helpMediaBase() + '/muscle-map.webp'"
-            [alt]="'Neck-down front and back muscle map for ' + guide.name"
-            loading="lazy"
-          />
+          @if (guide.harderVersions) {
+            <p><strong>Harder versions:</strong> {{ guide.harderVersions }}</p>
+          }
+          @if (guide.safety) {
+            <p><strong>Safety:</strong> {{ guide.safety }}</p>
+          }
+          @if (guide.stopOrSubstitute) {
+            <p><strong>Stop or substitute:</strong> {{ guide.stopOrSubstitute }}</p>
+          }
+          @if (guide.equipment) {
+            <p><strong>Equipment:</strong> {{ guide.equipment }}</p>
+          }
+          @if (!guide.textOnly) {
+            <img
+              src="images/exercises/box-squat/muscle-map.webp"
+              [src]="helpMediaBase() + '/muscle-map.webp'"
+              [alt]="'Neck-down front and back muscle map for ' + guide.name"
+              loading="lazy"
+            />
+          }
         </details>
       </section>
     }

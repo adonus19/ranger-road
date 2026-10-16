@@ -152,6 +152,58 @@ describe('progression kinds', () => {
     });
   });
 
+  it('assigns the Forge expansion exercises their progression kinds', () => {
+    const expected: Record<string, string> = {
+      'two-hand-overhead-carry': 'timed-carry',
+      'waiter-carry': 'timed-carry',
+      'seated-two-db-overhead-press': 'loaded',
+      'standing-two-db-overhead-press': 'loaded',
+      'one-arm-db-overhead-press': 'loaded',
+      'half-kneeling-one-arm-db-press': 'loaded',
+      'barbell-overhead-press': 'barbell-upper',
+      'seated-barbell-overhead-press': 'barbell-upper',
+      'db-biceps-curl': 'loaded',
+      'preacher-curl': 'loaded',
+      'hammer-curl': 'loaded',
+      'chest-supported-db-reverse-fly': 'loaded',
+      'chin-up': 'assisted-pull-up',
+      'assisted-pull-up': 'assisted-pull-up',
+    };
+    for (const [id, kind] of Object.entries(expected)) expect(progressionKind(id), id).toBe(kind);
+    // Band exercises, anti-rotation work and every skill track step give no load hint.
+    for (const id of [
+      'band-pull-apart',
+      'band-face-pull',
+      'pallof-press',
+      'plank-shoulder-taps',
+      'band-light-pull-up',
+      'pull-up',
+      'chest-to-bar-pull-up',
+      'straight-bar-dip',
+      'band-assisted-muscle-up',
+      'muscle-up',
+      'pike-push-up',
+      'feet-elevated-pike-push-up',
+      'wall-handstand-push-up-negative',
+      'wall-handstand-push-up',
+      'wall-plank-hold',
+      'wall-walk',
+      'chest-to-wall-handstand-hold',
+      'kick-up-to-wall',
+      'freestanding-handstand-attempts',
+      'planche-lean',
+      'frog-stand',
+      'pseudo-planche-push-up',
+      'tuck-planche-hold',
+      'advanced-tuck-planche-hold',
+      'tuck-planche-push-up',
+      'straddle-planche',
+      'planche-push-up',
+    ]) {
+      expect(progressionKind(id), id).toBe('none');
+    }
+  });
+
   it('links each step-up to the easier exercise its guide names', () => {
     for (const [id, easier] of Object.entries(STEP_UP_FROM)) {
       expect(getExerciseGuide(id)?.stepUpFrom).toBe(`${getExerciseGuide(easier)?.name}.`);
@@ -309,6 +361,23 @@ describe('the progression hint', () => {
       );
     expect(hint(suitcase, carry(suitcase, [40, 40, 40]))?.action).toBe('May add 5 lb → 30 lb');
     expect(hint(farmer, carry(farmer, [40, 40, 40]))?.reason).toBe('not every set reached 45 s');
+  });
+
+  it('adds time to an overhead carry first, then weight', () => {
+    const carry = {
+      exerciseId: 'two-hand-overhead-carry',
+      sets: 2,
+      durationSeconds: '20–30',
+    };
+    const at = (seconds: number[]) =>
+      context(
+        session('2026-11-05', [
+          { id: carry.exerciseId, sets: timed(20, seconds, 6), prescription: carry },
+        ]),
+      );
+    expect(hint(carry, at([20, 25]))?.action).toBe('May hold longer, up to 25 s');
+    expect(hint(carry, at([30, 30]))?.action).toBe('May add 5 lb → 25 lb');
+    expect(hint(carry, at([15, 30]))?.reason).toBe('not every set reached 30 s');
   });
 
   it('adds seconds to a hold up to the top of its range', () => {

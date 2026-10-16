@@ -161,6 +161,10 @@ export class ExerciseGuidePage implements OnInit {
       { label: 'Progression', text: guide.progression },
       { label: 'Rule', text: guide.rule },
       { label: 'Step-up from', text: guide.stepUpFrom },
+      { label: 'Harder versions', text: guide.harderVersions },
+      { label: 'Safety', text: guide.safety },
+      { label: 'Stop or substitute', text: guide.stopOrSubstitute },
+      { label: 'Equipment', text: guide.equipment },
     ].filter((note): note is { label: string; text: string } => !!note.text);
   });
 }

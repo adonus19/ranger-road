@@ -176,13 +176,15 @@
                   <h3 id="trial-station-title" tabindex="-1">{{ stationName(planned) }}</h3>
                   <p class="trial-station__count">Round {{ cursor.round }} of 3 · Station {{ cursor.index + 1 }} of 6</p>
                   <p class="trial-dose"><strong>{{ planned.reps ?? planned.durationSeconds }}</strong><span>{{ planned.reps !== undefined ? 'reps' : 'seconds' }}{{ planned.perSide ? ' per side' : '' }}</span></p>
-                  <img
-                    class="trial-sequence"
-                    src="images/exercises/box-squat/sequence.webp"
-                    [src]="guideBase() + '/sequence.webp'"
-                    [alt]="'Illustrated movement sequence for ' + stationName(planned)"
-                    width="2020" height="780" loading="lazy"
-                  />
+                  @if (!guide()?.textOnly) {
+                    <img
+                      class="trial-sequence"
+                      src="images/exercises/box-squat/sequence.webp"
+                      [src]="guideBase() + '/sequence.webp'"
+                      [alt]="'Illustrated movement sequence for ' + stationName(planned)"
+                      width="2020" height="780" loading="lazy"
+                    />
+                  }
                   <button
                     type="button"
                     id="trial-help-trigger"
@@ -198,7 +200,9 @@
                         <button type="button" (click)="closeHelp()">Close</button>
                       </div>
                       <p>{{ exercise.purpose }}</p>
-                      <img src="images/exercises/box-squat/sequence.webp" [src]="guideBase() + '/sequence.webp'" [alt]="'Movement sequence for ' + exercise.name" width="2020" height="780" loading="lazy" />
+                      @if (!exercise.textOnly) {
+                        <img src="images/exercises/box-squat/sequence.webp" [src]="guideBase() + '/sequence.webp'" [alt]="'Movement sequence for ' + exercise.name" width="2020" height="780" loading="lazy" />
+                      }
                       <ol>
                         @for (step of guideSteps(); track step) { <li>{{ step }}</li> }
                       </ol>
@@ -209,7 +213,9 @@
                         <p>{{ exercise.how }}</p>
                         @if (exercise.targets) { <p><strong>Targets:</strong> {{ exercise.targets }}</p> }
                         @if (exercise.painAwareOptions) { <p><strong>For pain:</strong> {{ exercise.painAwareOptions }}</p> }
-                        <img src="images/exercises/box-squat/muscle-map.webp" [src]="guideBase() + '/muscle-map.webp'" [alt]="'Neck-down front and back muscle map for ' + exercise.name" width="1200" height="1200" loading="lazy" />
+                        @if (!exercise.textOnly) {
+                          <img src="images/exercises/box-squat/muscle-map.webp" [src]="guideBase() + '/muscle-map.webp'" [alt]="'Neck-down front and back muscle map for ' + exercise.name" width="1200" height="1200" loading="lazy" />
+                        }
                       </details>
                     </section>
                   }

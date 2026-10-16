@@ -384,6 +384,13 @@ function progressionHint(
       if (atTop) return addLoad(todayReps?.low ?? range.low);
       return { type: 'add-reps', aimFor: (todayReps ?? range).high, ...withContext };
     }
+    case 'timed-carry': {
+      // Time first, up to the top of the chapter's range; then +5 lb.
+      const target = todaySeconds ?? range;
+      const best = Math.min(...values.map((value) => value!));
+      if (best >= target.high) return addLoad();
+      return { type: 'add-seconds', aimFor: Math.min(target.high, best + 5), ...withContext };
+    }
     case 'hold': {
       const target = todaySeconds ?? range;
       if (target.high <= target.low)
@@ -574,7 +581,8 @@ export function chapterSummary(chapter: number, context: ProgressionContext): Ch
     const found = change(exerciseId, full.at(-1)!, full[0]);
     if (!found) continue;
     if (found.direction === 'held') summary.heldCount += 1;
-    else if (kind === 'carry' || kind === 'hold') summary.carriesAndHolds.push(found);
+    else if (kind === 'carry' || kind === 'timed-carry' || kind === 'hold')
+      summary.carriesAndHolds.push(found);
     else summary.lifts.push(found);
   }
   return summary;

@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { getExerciseGuide } from '../../../core/program/exercise-guides';
+import { getExerciseGuide, listExerciseGuides } from '../../../core/program/exercise-guides';
 import { getChapterSessions, orderedPrograms, warmupId } from '../../../core/program/field-manual';
 import { formatChapterNumeral } from '../../../core/program/program-catalog';
 import { Icon } from '../../../shared/icon/icon';
@@ -16,6 +16,11 @@ import { ManualBackLink } from '../manual-back-link';
 export class ExercisesPage implements OnInit {
   private readonly weekState = inject(FieldManualWeekState);
   protected readonly week = this.weekState.week;
+
+  /** Every guide by name, so an exercise no session uses yet can still be read. */
+  protected readonly allGuides = listExerciseGuides()
+    .map(({ id, name }) => ({ id, name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   /** The chapter the campaign is in first, then the others in order. */
   protected readonly chapters = computed(() =>

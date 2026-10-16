@@ -5,14 +5,16 @@
     <h1>{{ guide.name }}</h1>
     <p class="manual-subline">{{ guide.purpose }}</p>
 
-    <figure class="manual-figure">
-      <img
-        [src]="media() + '/sequence.webp'"
-        [alt]="'Four illustrated stages of ' + guide.name"
-        width="2017"
-        height="780"
-      />
-    </figure>
+    @if (!guide.textOnly) {
+      <figure class="manual-figure">
+        <img
+          [src]="media() + '/sequence.webp'"
+          [alt]="'Four illustrated stages of ' + guide.name"
+          width="2017"
+          height="780"
+        />
+      </figure>
+    }
 
     <section class="manual-section manual-prose" aria-labelledby="guide-steps">
       <h2 id="guide-steps">How to do it</h2>
@@ -69,18 +71,20 @@
       </section>
     }
 
-    <section class="manual-section" aria-labelledby="guide-map">
-      <h2 id="guide-map">Muscle map</h2>
-      <figure class="manual-figure muscle-map">
-        <img
-          [src]="media() + '/muscle-map.webp'"
-          [alt]="'Neck-down front and back muscle map for ' + guide.name"
-          width="1591"
-          height="989"
-          loading="lazy"
-        />
-      </figure>
-    </section>
+    @if (!guide.textOnly) {
+      <section class="manual-section" aria-labelledby="guide-map">
+        <h2 id="guide-map">Muscle map</h2>
+        <figure class="manual-figure muscle-map">
+          <img
+            [src]="media() + '/muscle-map.webp'"
+            [alt]="'Neck-down front and back muscle map for ' + guide.name"
+            width="1591"
+            height="989"
+            loading="lazy"
+          />
+        </figure>
+      </section>
+    }
   } @else {
     <h1>Guide not found</h1>
     <p class="manual-empty">
