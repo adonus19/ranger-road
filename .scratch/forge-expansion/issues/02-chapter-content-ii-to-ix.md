@@ -4,7 +4,7 @@
 
 **Blocked by:** 01
 
-**Status:** ready-for-human (content drafted 2026-10-16; waiting on the person's review of the chapter tables)
+**Status:** done (reviewed and approved by the person 2026-10-16)
 
 **Model / effort:** Sonnet 5.5, medium
 
@@ -14,7 +14,7 @@
 - [x] Chapter V–IX Forge A always uses the barbell press
 - [x] Week 8 (and other deload) set-count notes are recounted where they quote numbers
 - [x] Chapter I Forge A/B text unchanged; Forge C added as optional
-- [ ] The person reviews the chapter tables
+- [x] The person reviews the chapter tables
 
 ## Comments
 

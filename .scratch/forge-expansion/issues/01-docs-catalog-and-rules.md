@@ -4,7 +4,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-human (docs drafted 2026-10-16; the questions are answered; waiting on the person's review of the docs)
+**Status:** done (reviewed and approved by the person 2026-10-16)
 
 **Model / effort:** Opus 5.5, medium
 
@@ -16,7 +16,7 @@
 - [x] CHAPTERS_AND_TRIALS.md covers skill parts in trials (step or the one below counts; set aside for pain)
 - [x] UX_SPEC, DATA_MODEL and DESIGN.md cover the optional-Forge card, the builder flow and how custom sessions are kept out of hints
 - [x] Nothing beyond `spec.md` is invented; any gap is raised with the person
-- [ ] The person reviews the docs before ticket 02 starts
+- [x] The person reviews the docs before ticket 02 starts
 
 ## Comments
 
