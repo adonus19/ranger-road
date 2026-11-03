@@ -29,3 +29,5 @@ Choices made beyond the docs, for the person to confirm:
 3. The curl rotation keeps going past Week 4 while the trial waits (Week 5 DB curl, Week 6 preacher curl).
 4. On Today's Mission the card sits above "Log light activity", not right under the order title, so it doesn't split the order from its details.
 5. Finishing Forge C does not record Today's Mission. The finish screen says it was extra work and links back to Keep.
+
+**2026-11-03, answers.** 1 Keep the card visible on a Red day: the person always has the choice (opening a strength session still says Red means no strength work, because that rule lives in the workout domain). 2, 3 and 4 OK. 5 The session is recorded and tracked like any other, and it records Today's Mission when a mission matches; the "extra work" finish text shows only when none does. Linking back to Keep stays. Applied in code and docs; 569 tests and the build pass.

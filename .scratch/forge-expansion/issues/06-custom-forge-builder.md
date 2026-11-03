@@ -33,3 +33,5 @@ Choices made beyond the docs, for the person to confirm:
 7. The builder asks for today's readiness check before showing the list, as the session start screen does.
 8. During a custom session the Current Set screen still shows Last time from Forge A or B for reference, with no hint line.
 9. "Your record" in the ticket: custom rows are listed with a "custom" tag (as the spec says) and only "Since Day 1" ignores them.
+
+**2026-11-03, answers.** 1 and 2: "dose" means reps and sets; the person can set both, so the builder now has a reps stepper (1–50; seconds 5–300 by five for holds and carries) beside the sets stepper. A written range such as 8–10 stays as written until changed; numbers set in a session carry into "Start from last time's list". 3, 4, 5, 8 and 9 OK. 6 The person chooses Normal or Reduced; a deload week starts on Reduced with "Keep it light." 7 Readiness no longer affects the builder (no gate, no Yellow note); Begin still needs today's check, because the workout domain requires one, and says so with a link. Applied in code and docs; 569 tests and the build pass.

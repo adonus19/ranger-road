@@ -277,7 +277,7 @@ A third Forge the person may choose, at most once a week. It is never required, 
   2. "Start from last time's list" is a shortcut, and the list stays editable.
   3. Done picking opens the existing order editor to reorder.
   4. Begin. The standard warm-up comes first automatically and can be skipped.
-- **Prescriptions in the builder.** Each exercise's default is its prescription in the current chapter's Forge A or B. Otherwise it is the latest dose written for that exercise in the content packs up to the current chapter, or its catalog default when no pack names it. An exercise with neither is not offered until a chapter or the catalog writes a dose for it. The set count is editable in the builder.
+- **Prescriptions in the builder.** Each exercise's default is its prescription in the current chapter's Forge A or B. Otherwise it is the latest dose written for that exercise in the content packs up to the current chapter, or its catalog default when no pack names it. An exercise with neither is not offered until a chapter or the catalog writes a dose for it. The set count and the reps (or seconds) are editable in the builder, and readiness does not change the builder. The person chooses whether the session is reduced or normal.
 - **History.** Custom sessions are kept in history and shown on the exercise, but they do not feed progression hints.
 
 ### Forge C (Chapter I)
@@ -292,7 +292,7 @@ Optional, about 20–25 minutes, after the standard warm-up. Forge C sessions fe
 - Pallof Press: 2 × 8 per side
 - Curl: 2 × 10–12, rotating week by week through hammer curl, DB biceps curl and preacher curl. The rotation counts calendar weeks from Week 1's Monday, so it carries on while the Gate Trial waits (Week 4 hammer, then DB curl, then preacher curl).
 
-Week 4 is the deload, so Forge C there is saved as reduced with the note "Keep it light." The days while the Gate Trial waits repeat Week 4, so they get the same note. A Forge C session does not record the day's own order; that is still recorded on Today's Mission.
+Week 4 is the deload, so Forge C there is saved as reduced with the note "Keep it light." The days while the Gate Trial waits repeat Week 4, so they get the same note. A finished optional Forge is recorded and tracked like any other session, and records Today's Mission when a mission matches it.
 
 ## Conditioning
 

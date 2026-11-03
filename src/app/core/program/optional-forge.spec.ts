@@ -50,7 +50,6 @@ function offer(
   saved: MakeupHistory = weekOne,
   options: {
     today?: LocalDate;
-    readiness?: 'green' | 'yellow' | 'red' | null;
     trials?: TrialRecord[];
   } = {},
 ) {
@@ -59,7 +58,6 @@ function offer(
     options.today ?? date,
     resolverFor(options.trials),
     saved,
-    options.readiness ?? null,
   );
 }
 
@@ -156,10 +154,8 @@ describe('Optional Forge eligibility', () => {
     expect(offer('2026-11-04', done, { trials })).toBeNull();
   });
 
-  it('is not offered on a Red day; Yellow and an unchecked day still show it', () => {
-    expect(offer('2026-10-07', weekOne, { readiness: 'red' })).toBeNull();
-    expect(offer('2026-10-07', weekOne, { readiness: 'yellow' })).not.toBeNull();
-    expect(offer('2026-10-07', weekOne, { readiness: 'green' })).not.toBeNull();
+  it('does not read readiness: the person always has the choice', () => {
+    expect(offer('2026-10-07')).not.toBeNull();
   });
 
   it('knows Forge C is the optional Forge', () => {

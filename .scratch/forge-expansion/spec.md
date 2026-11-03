@@ -142,7 +142,7 @@ A track is one slot whose exercise steps up over the campaign. Each step is its 
   2. "Start from last time's list" is offered as a shortcut, still editable.
   3. Done picking → the order editor (the existing one) to reorder.
   4. Begin. The standard warm-up is in front automatically and can be skipped.
-  - Each exercise's default prescription is its prescription in the current chapter's Forge A or B, or a catalog default otherwise. The set count is editable in the builder.
+  - Each exercise's default prescription is its prescription in the current chapter's Forge A or B, or a catalog default otherwise. The set count and the reps or seconds are editable in the builder.
   - Custom sessions are kept in history and shown on the exercise, but **do not** feed progression hints.
 
 ## Trials
@@ -171,3 +171,4 @@ Only Pallof press, chest-supported reverse fly, and these track steps get image 
 - 2026-10-16: Ticket 04 built and deployed: Forge C and the optional-Forge card. 526 tests and the build pass. Five small choices are listed in ticket 04's Comments for the person to confirm. Next: ticket 05.
 - 2026-10-16: Ticket 05 built and deployed: Chapter II Forge A/B rebalanced (content version 2), band pull-apart in the warm-up, Week 8 guide now 21 of 28. Saved order drops with its note when IDs change (existing applySavedOrder). 526 tests and the build pass. Next: ticket 06.
 - 2026-10-16: Ticket 06 built and deployed: the custom Forge builder (database version 8, `kind: 'custom'`). 565 tests and the build pass. Nine small choices are listed in ticket 06's Comments for the person to confirm. Next: ticket 07.
+- 2026-11-03: Review answers for tickets 04 and 06 applied (card shows on Red; optional sessions record like others; builder edits reps and sets, user chooses reduced or normal, readiness does not affect the builder). 569 tests and the build pass. Next: ticket 07, and image batches once the OpenAI key is confirmed.

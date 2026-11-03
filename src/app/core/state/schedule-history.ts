@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import type { LocalDate, ReadinessStatus } from '../domain/models';
+import type { LocalDate } from '../domain/models';
 import type { ChapterDay } from '../program/campaign-position';
 import { resolveCampaignPosition, type TrialRecord } from '../program/campaign-position';
 import { withMakeup, type MakeupHistory } from '../program/makeup-schedule';
@@ -53,11 +53,10 @@ export class ScheduleHistory {
     startDate: LocalDate,
     today: LocalDate,
     trials: readonly TrialRecord[],
-    readiness: ReadinessStatus | null,
   ): OptionalForgeOffer | null {
     const history = this.history();
     if (!history) return null;
-    return getOptionalForge(today, today, chapterResolver(startDate, trials), history, readiness);
+    return getOptionalForge(today, today, chapterResolver(startDate, trials), history);
   }
 
   /** A date's chapter day with any make-up applied. */

@@ -88,12 +88,7 @@ export class ForgePage implements OnInit {
       light: false,
     }));
     const offer = campaign
-      ? this.schedule.optionalForge(
-          campaign.startDate,
-          today,
-          this.completedTrials(),
-          this.status(),
-        )
+      ? this.schedule.optionalForge(campaign.startDate, today, this.completedTrials())
       : null;
     if (offer) {
       choices.push({

@@ -20,7 +20,7 @@
           <app-progress-rows [rows]="comparison()" />
         </section>
       }
-      @if (optional) {
+      @if (optional && !missionRecorded()?.recorded) {
         <p>This was extra work. Today’s own order is still there to record.</p>
         <a routerLink="/keep">Back to Keep</a>
       } @else if (missionRecorded(); as mission) {

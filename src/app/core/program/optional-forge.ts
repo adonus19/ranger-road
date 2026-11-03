@@ -1,4 +1,4 @@
-import type { LocalDate, ReadinessStatus } from '../domain/models';
+import type { LocalDate } from '../domain/models';
 import { addDays, getWeekday, mondayOnOrBefore } from './calendar';
 import type { ChapterDay } from './campaign-position';
 import { getDayContent } from './chapter-orders';
@@ -37,6 +37,7 @@ export function isOptionalForge(workoutId: string): boolean {
 /**
  * Whether the optional Forge is offered on a date. Pure: it reads the make-up planner for the
  * three-Forge week and a moved Forge, and the saved sessions for this week's completed one.
+ * Readiness never hides the card: the person always has the choice.
  * A day without the card says nothing; nothing here is stored, counted, or listed as missed.
  */
 export function getOptionalForge(
@@ -44,11 +45,8 @@ export function getOptionalForge(
   today: LocalDate,
   resolve: DayResolver,
   history: MakeupHistory,
-  readiness: ReadinessStatus | null,
 ): OptionalForgeOffer | null {
   if (!ELIGIBLE_WEEKDAYS.has(getWeekday(date))) return null;
-  // Red means no strength work today, so there is nothing optional to offer.
-  if (readiness === 'red') return null;
   const own = resolve(date);
   const workoutId = own?.program.optionalForgeId;
   if (!own || !workoutId || own.attemptDay) return null;

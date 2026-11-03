@@ -301,7 +301,6 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       campaign.startDate,
       this.state.today(),
       this.completedTrials(),
-      this.readiness()?.status ?? null,
     );
   });
   protected readonly allowed = computed(() => {
@@ -834,8 +833,6 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
 
   /** The work is already saved; recording today's mission is a courtesy that can fail quietly. */
   private async recordMission(session: WorkoutSession): Promise<void> {
-    // The optional Forge stands beside today's order and never records it.
-    if (this.optional) return;
     try {
       this.missionRecorded.set(
         await this.recorder.recordToday(

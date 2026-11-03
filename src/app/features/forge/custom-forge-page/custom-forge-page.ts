@@ -6,11 +6,13 @@ import {
   CUSTOM_FORGE_ID,
   CUSTOM_SETS_MAX,
   CUSTOM_SETS_MIN,
+  amountRange,
   buildCustomForge,
   builderLibrary,
   doseLabel,
   lastCustomList,
   repeatNote,
+  writtenAmount,
   type BuilderExercise,
   type CustomPick,
 } from '../../../core/program/custom-forge';
@@ -71,10 +73,13 @@ export class CustomForgePage implements OnInit {
   protected readonly program = computed(
     () => this.position()?.chapter.program ?? chapterPrograms[0],
   );
+  /** Readiness only matters when a session begins; it never changes the builder. */
   protected readonly readiness = computed(() => {
     const check = this.state.readiness();
     return check?.date === this.state.today() ? check : null;
   });
+  /** The person decides whether this session counts as reduced; a deload week starts it so. */
+  protected readonly reduced = signal(false);
   /** Today's optional Forge card, when it opens this builder. */
   protected readonly offer = computed(() => {
     const campaign = this.state.campaign();
@@ -83,7 +88,6 @@ export class CustomForgePage implements OnInit {
       campaign.startDate,
       this.state.today(),
       this.completedTrials(),
-      this.readiness()?.status ?? null,
     );
     return offer?.workoutId === CUSTOM_FORGE_ID ? offer : null;
   });
@@ -162,6 +166,33 @@ export class CustomForgePage implements OnInit {
     );
   }
 
+  /** The reps (or seconds) shown for a pick: the person's own, else as written. */
+  protected amountOf(exercise: BuilderExercise): number | undefined {
+    return (
+      this.picks().find((pick) => pick.exerciseId === exercise.exerciseId)?.amount ??
+      writtenAmount(exercise.dose)
+    );
+  }
+
+  protected amountUnit(exercise: BuilderExercise): string {
+    return exercise.dose.reps !== undefined ? 'reps' : 'sec';
+  }
+
+  protected canStep(exercise: BuilderExercise, by: -1 | 1): boolean {
+    const range = amountRange(exercise.dose);
+    const now = this.amountOf(exercise) ?? range.min;
+    return by < 0 ? now > range.min : now < range.max;
+  }
+
+  protected changeAmount(exercise: BuilderExercise, by: -1 | 1): void {
+    const range = amountRange(exercise.dose);
+    const now = this.amountOf(exercise) ?? range.min;
+    const amount = Math.min(range.max, Math.max(range.min, now + by * range.step));
+    this.picks.update((picks) =>
+      picks.map((pick) => (pick.exerciseId === exercise.exerciseId ? { ...pick, amount } : pick)),
+    );
+  }
+
   protected changeSets(exerciseId: string, by: -1 | 1): void {
     this.picks.update((picks) =>
       picks.map((pick) =>
@@ -182,6 +213,7 @@ export class CustomForgePage implements OnInit {
   protected donePicking(): void {
     if (!this.picks().length) return;
     this.order.set(this.picks().map((_, index) => index));
+    this.reduced.set(this.offer()?.light ?? false);
     this.goTo('order');
   }
 
@@ -202,7 +234,12 @@ export class CustomForgePage implements OnInit {
 
   protected async begin(): Promise<void> {
     const offer = this.offer();
-    if (this.saving() || !offer || !this.readiness()) return;
+    if (this.saving() || !offer) return;
+    const check = this.readiness();
+    if (!check) {
+      this.error.set('Check readiness today before you begin.');
+      return;
+    }
     this.saving.set(true);
     this.error.set(null);
     try {
@@ -215,9 +252,9 @@ export class CustomForgePage implements OnInit {
         date: this.state.today(),
         definition,
         kind: 'custom',
-        // A deload week keeps it light, so the session never reads as a full one.
-        reduced: offer.light,
-        ...(offer.light ? { sessionInstructions: [KEEP_IT_LIGHT] } : {}),
+        // The person says whether this was a reduced session or a normal one.
+        reduced: this.reduced(),
+        ...(this.reduced() && offer.light ? { sessionInstructions: [KEEP_IT_LIGHT] } : {}),
       });
       await this.router.navigate(['/forge/session', CUSTOM_FORGE_ID]);
     } catch (error) {

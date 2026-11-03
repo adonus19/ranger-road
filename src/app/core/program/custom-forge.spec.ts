@@ -128,8 +128,8 @@ describe('Custom Forge library', () => {
 describe('Custom Forge definition', () => {
   it('snapshots the picks in tap order with their set counts and the standard warm-up', () => {
     const definition = buildCustomForge(chapterTwoProgram, [
-      { exerciseId: 'pallof-press', sets: 3 },
-      { exerciseId: 'box-squat', sets: 2 },
+      { exerciseId: 'pallof-press', sets: 3, amount: 8 },
+      { exerciseId: 'box-squat', sets: 2, amount: 6 },
     ]);
     expect(definition).toMatchObject({
       id: CUSTOM_FORGE_ID,
@@ -178,6 +178,34 @@ describe('Custom Forge definition', () => {
   });
 });
 
+describe('Custom reps and seconds', () => {
+  it('sets the person’s own reps, or seconds for a hold, and keeps the rest as written', () => {
+    const definition = buildCustomForge(chapterTwoProgram, [
+      { exerciseId: 'hammer-curl', sets: 2, amount: 12 },
+      { exerciseId: 'pallof-press', sets: 2 },
+    ]);
+    expect(definition.exercises[0].reps).toBe(12);
+    expect(definition.exercises[1].reps).toBe(
+      builderLibrary(chapterTwoProgram)
+        .flatMap((section) => section.exercises)
+        .find((exercise) => exercise.exerciseId === 'pallof-press')?.dose.reps,
+    );
+  });
+
+  it('refuses reps outside the range', () => {
+    expect(() =>
+      buildCustomForge(chapterTwoProgram, [{ exerciseId: 'hammer-curl', sets: 2, amount: 0 }]),
+    ).toThrow();
+    expect(() =>
+      buildCustomForge(chapterTwoProgram, [{ exerciseId: 'hammer-curl', sets: 2, amount: 99 }]),
+    ).toThrow();
+  });
+
+  it('labels the chosen amount in place of the written one', () => {
+    expect(doseLabel({ exerciseId: 'hammer-curl', sets: 2, reps: 10 }, 3, 12)).toBe('3 × 12');
+  });
+});
+
 describe('Start from last time’s list', () => {
   it('reads the newest custom session in the order it was worked', () => {
     const older = session({
@@ -203,8 +231,8 @@ describe('Start from last time’s list', () => {
       definitionSnapshot: chapterTwoForgeB,
     });
     expect(lastCustomList([older, newer, forge], chapterTwoProgram)).toEqual([
-      { exerciseId: 'pallof-press', sets: 3 },
-      { exerciseId: 'box-squat', sets: 2 },
+      { exerciseId: 'pallof-press', sets: 3, amount: 8 },
+      { exerciseId: 'box-squat', sets: 2, amount: 6 },
     ]);
   });
 
@@ -222,7 +250,7 @@ describe('Start from last time’s list', () => {
       },
     });
     expect(lastCustomList([saved], chapterTwoProgram)).toEqual([
-      { exerciseId: 'box-squat', sets: 6 },
+      { exerciseId: 'box-squat', sets: 6, amount: 6 },
     ]);
     expect(lastCustomList([], chapterTwoProgram)).toEqual([]);
   });

@@ -110,6 +110,7 @@ h1:focus {
 
 .row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
   border-bottom: 1px solid var(--line-soft);
@@ -123,7 +124,7 @@ h1:focus {
 
 .toggle {
   display: flex;
-  min-width: 0;
+  min-width: min(100%, 12rem);
   min-height: 3.5rem;
   flex: 1;
   align-items: center;
@@ -355,4 +356,40 @@ h1:focus {
   .row {
     transition: none;
   }
+}
+
+.row .stepper {
+  margin: 0 0 0.5rem 0.5rem;
+}
+
+.session-kind {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 1rem 0;
+  padding: 0;
+  border: 0;
+}
+
+.session-kind legend {
+  margin-bottom: 0.25rem;
+  padding: 0;
+  font-weight: 600;
+}
+
+.session-kind label {
+  display: inline-flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.session-kind input {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.session-kind .light-note {
+  flex-basis: 100%;
+  margin: 0;
 }

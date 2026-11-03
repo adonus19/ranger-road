@@ -1,5 +1,5 @@
 <div class="builder-page">
-  @if (step() === 'order' && offer() && readiness() && !active()) {
+  @if (step() === 'order' && offer() && !active()) {
     <button type="button" class="back-link" (click)="backToPicks()">
       <app-icon name="arrow-left" />Back to picks
     </button>
@@ -38,12 +38,6 @@
       </p>
       <a routerLink="/forge">View today in the Forge</a>
     </section>
-  } @else if (!readiness()) {
-    <section class="notice" aria-labelledby="builder-title">
-      <h1 id="builder-title">Check readiness first</h1>
-      <p>This is strength work, so it needs today’s readiness check before you build it.</p>
-      <a routerLink="/readiness">Check readiness</a>
-    </section>
   } @else if (step() === 'pick') {
     <section class="pick" aria-labelledby="builder-title">
       <h1 id="builder-title" tabindex="-1">Build your session</h1>
@@ -52,8 +46,6 @@
       </p>
       @if (offer()?.light) {
         <p class="light-note">Keep it light this week.</p>
-      } @else if (readiness()?.status === 'yellow') {
-        <p class="light-note">Yellow · Reduce. Keep volume and load down today.</p>
       }
 
       @if (lastList().length) {
@@ -86,7 +78,11 @@
                     <span class="name">{{ exercise.name }}</span>
                     <span class="dose"
                       >{{
-                        doseLabel(exercise.dose, place ? setsOf(exercise.exerciseId) : undefined)
+                        doseLabel(
+                          exercise.dose,
+                          place ? setsOf(exercise.exerciseId) : undefined,
+                          place ? amountOf(exercise) : undefined
+                        )
                       }}
                       · {{ exercise.source }}</span
                     >
@@ -118,6 +114,36 @@
                       <app-icon name="plus" />
                     </button>
                   </div>
+                  @if (amountOf(exercise) !== undefined) {
+                    <div
+                      class="stepper"
+                      role="group"
+                      [attr.aria-label]="
+                        (amountUnit(exercise) === 'reps' ? 'Reps of ' : 'Seconds of ') +
+                        exercise.name
+                      "
+                    >
+                      <button
+                        type="button"
+                        [disabled]="!canStep(exercise, -1)"
+                        [attr.aria-label]="'Fewer ' + amountUnit(exercise) + ' of ' + exercise.name"
+                        (click)="changeAmount(exercise, -1)"
+                      >
+                        <app-icon name="minus" />
+                      </button>
+                      <span class="count" aria-live="polite"
+                        ><strong>{{ amountOf(exercise) }}</strong> {{ amountUnit(exercise) }}</span
+                      >
+                      <button
+                        type="button"
+                        [disabled]="!canStep(exercise, 1)"
+                        [attr.aria-label]="'More ' + amountUnit(exercise) + ' of ' + exercise.name"
+                        (click)="changeAmount(exercise, 1)"
+                      >
+                        <app-icon name="plus" />
+                      </button>
+                    </div>
+                  }
                 }
               </li>
             }
@@ -157,8 +183,27 @@
         (reorder)="reorder($event)"
         (useWrittenOrder)="useTapOrder()"
       />
+      <fieldset class="session-kind">
+        <legend>How will this session go?</legend>
+        <label
+          ><input type="radio" name="kind" [checked]="!reduced()" (change)="reduced.set(false)" />
+          Normal</label
+        >
+        <label
+          ><input type="radio" name="kind" [checked]="reduced()" (change)="reduced.set(true)" />
+          Reduced</label
+        >
+        @if (offer()?.light) {
+          <p class="light-note">Keep it light this week.</p>
+        }
+      </fieldset>
       @if (error(); as message) {
-        <p class="inline-error" role="alert">{{ message }}</p>
+        <p class="inline-error" role="alert">
+          {{ message }}
+          @if (!readiness()) {
+            <a routerLink="/readiness">Check readiness</a>
+          }
+        </p>
       }
       <p class="privacy-note">Your training record stays on this device.</p>
       <div class="action-dock">

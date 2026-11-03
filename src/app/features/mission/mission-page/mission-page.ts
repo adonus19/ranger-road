@@ -296,7 +296,6 @@ export class MissionPage {
       campaign.startDate,
       this.state.today(),
       this.completedTrials(),
-      this.readiness()?.status ?? null,
     );
   });
 

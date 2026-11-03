@@ -206,7 +206,7 @@ describe('CustomForgePage', () => {
     const { element, settle } = await render();
     row(element, 'Hammer Curl').querySelector<HTMLButtonElement>('.toggle')!.click();
     await settle();
-    const stepper = row(element, 'Hammer Curl').querySelector('.stepper')!;
+    const stepper = row(element, 'Hammer Curl').querySelectorAll('.stepper')[0];
     const [fewer, more] = stepper.querySelectorAll('button');
     expect(stepper.querySelector('strong')?.textContent).toBe('2');
     more.click();
@@ -269,10 +269,36 @@ describe('CustomForgePage', () => {
     );
   });
 
-  it('asks for readiness first', async () => {
-    const { element } = await render({ readiness: null });
-    expect(element.querySelector('h1')?.textContent).toContain('Check readiness first');
-    expect(element.querySelector('.group')).toBeNull();
+  it('builds a list without a readiness check; readiness only matters at Begin', async () => {
+    const { element, settle } = await render({ readiness: null });
+    expect(element.querySelector('h1')?.textContent).toContain('Build your session');
+    expect(element.querySelector('.group')).not.toBeNull();
+    row(element, 'Hammer Curl').querySelector<HTMLButtonElement>('.toggle')!.click();
+    await settle();
+    button(element, 'Done picking').click();
+    await settle();
+    button(element, 'Begin').click();
+    await settle();
+    expect(element.querySelector('.inline-error')?.textContent).toContain('Check readiness');
+  });
+
+  it('edits reps and lets the person choose a reduced or normal session', async () => {
+    const { element, settle } = await render();
+    row(element, 'Hammer Curl').querySelector<HTMLButtonElement>('.toggle')!.click();
+    await settle();
+    const reps = row(element, 'Hammer Curl').querySelectorAll('.stepper')[1];
+    const [fewer, more] = reps.querySelectorAll('button');
+    expect(reps.querySelector('strong')?.textContent).toBe('10');
+    more.click();
+    await settle();
+    expect(row(element, 'Hammer Curl').querySelector('.dose')?.textContent).toContain('2 × 11');
+    fewer.click();
+    fewer.click();
+    await settle();
+    expect(row(element, 'Hammer Curl').querySelector('.dose')?.textContent).toContain('2 × 9');
+    button(element, 'Done picking').click();
+    await settle();
+    expect(element.querySelector('fieldset.session-kind')).not.toBeNull();
   });
 
   it('stays closed on a day without the optional Forge', async () => {

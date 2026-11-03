@@ -115,12 +115,10 @@ export class KeepPage implements OnInit {
   protected readonly optionalForge = computed(() => {
     const campaign = this.state.campaign();
     if (!campaign || !this.position() || this.chapterComplete()) return null;
-    const check = this.state.readiness();
     return this.schedule.optionalForge(
       campaign.startDate,
       this.state.today(),
       this.completedTrials(),
-      check?.date === this.state.today() ? check.status : null,
     );
   });
 

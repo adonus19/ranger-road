@@ -37,10 +37,40 @@ export interface BuilderSection {
   exercises: BuilderExercise[];
 }
 
-/** A picked exercise: tap order is the array order. */
+/** The reps stepper's range, and the seconds stepper's range and step, in the builder. */
+export const CUSTOM_REPS_MIN = 1;
+export const CUSTOM_REPS_MAX = 50;
+export const CUSTOM_SECONDS_MIN = 5;
+export const CUSTOM_SECONDS_MAX = 300;
+export const CUSTOM_SECONDS_STEP = 5;
+
+/**
+ * A picked exercise: tap order is the array order. `amount` is the person's own reps (or
+ * seconds, for a hold or carry); left out, the dose stays as written.
+ */
 export interface CustomPick {
   exerciseId: string;
   sets: number;
+  amount?: number;
+}
+
+/** Whether a dose counts reps (else seconds). */
+export function isRepDose(dose: DeepReadonly<ExercisePrescription>): boolean {
+  return dose.reps !== undefined;
+}
+
+/** The first number in a written dose such as 8, "8-10" or "20–30", where a stepper starts. */
+export function writtenAmount(dose: DeepReadonly<ExercisePrescription>): number | undefined {
+  const raw = isRepDose(dose) ? dose.reps : (dose.durationSeconds ?? dose.duration);
+  const value = typeof raw === 'number' ? raw : Number.parseInt(String(raw ?? ''), 10);
+  return Number.isFinite(value) && value > 0 ? value : undefined;
+}
+
+/** The stepper's range for a dose: reps by one, seconds by five. */
+export function amountRange(dose: DeepReadonly<ExercisePrescription>) {
+  return isRepDose(dose)
+    ? { min: CUSTOM_REPS_MIN, max: CUSTOM_REPS_MAX, step: 1 }
+    : { min: CUSTOM_SECONDS_MIN, max: CUSTOM_SECONDS_MAX, step: CUSTOM_SECONDS_STEP };
 }
 
 /**
@@ -131,7 +161,18 @@ export function buildCustomForge(
     ) {
       throw new RangeError(`Sets must be from ${CUSTOM_SETS_MIN} to ${CUSTOM_SETS_MAX}.`);
     }
-    return { ...structuredClone(entry.dose), sets: pick.sets };
+    const dose: ExercisePrescription = { ...structuredClone(entry.dose), sets: pick.sets };
+    if (pick.amount === undefined) return dose;
+    const range = amountRange(entry.dose);
+    if (!Number.isInteger(pick.amount) || pick.amount < range.min || pick.amount > range.max) {
+      throw new RangeError(`Reps or seconds must be from ${range.min} to ${range.max}.`);
+    }
+    if (isRepDose(entry.dose)) dose.reps = pick.amount;
+    else {
+      dose.durationSeconds = pick.amount;
+      delete dose.duration;
+    }
+    return dose;
   });
   const warmup = standardWarmup(program);
   return {
@@ -169,7 +210,10 @@ export function lastCustomList(
     const exercise = exercises[index];
     if (!exercise || !available.has(exercise.exerciseId)) return [];
     const sets = Math.min(CUSTOM_SETS_MAX, Math.max(CUSTOM_SETS_MIN, exercise.sets ?? 1));
-    return [{ exerciseId: exercise.exerciseId, sets }];
+    const raw = isRepDose(exercise) ? exercise.reps : (exercise.durationSeconds ?? exercise.duration);
+    // Only a number the person set is carried; a written range such as 8–10 stays as written.
+    const amount = typeof raw === 'number' ? writtenAmount(exercise) : undefined;
+    return [{ exerciseId: exercise.exerciseId, sets, ...(amount ? { amount } : {}) }];
   });
 }
 
@@ -230,9 +274,14 @@ function joinNames(names: readonly string[]): string {
 }
 
 /** "3 × 6", "2 × 20–30 sec per side": the dose a builder row shows. */
-export function doseLabel(dose: DeepReadonly<ExercisePrescription>, sets = dose.sets ?? 1): string {
-  const amount =
-    dose.reps !== undefined ? `${dose.reps}` : `${dose.durationSeconds ?? dose.duration ?? ''} sec`;
+export function doseLabel(
+  dose: DeepReadonly<ExercisePrescription>,
+  sets = dose.sets ?? 1,
+  chosen?: number,
+): string {
+  const written = dose.reps !== undefined ? dose.reps : (dose.durationSeconds ?? dose.duration);
+  const value = chosen ?? written;
+  const amount = dose.reps !== undefined ? `${value}` : `${value ?? ''} sec`;
   return `${sets} × ${amount}${dose.perSide ? ' per side' : ''}`;
 }
 
