@@ -136,6 +136,11 @@ export interface ExercisePrescription {
   progressionRule?: string;
   substitutionIds?: string[];
   notes?: string;
+  /**
+   * The skill track this slot follows (`pull`, `push`, ...). The written exercise is the track's
+   * first step; a session's snapshot holds the step actually done. Older prescriptions have none.
+   */
+  trackId?: string;
 }
 
 export interface CompletedSet {
@@ -188,6 +193,18 @@ export interface WorkoutSession {
   kind?: 'custom';
   /** The warm-up was skipped (custom Forge only). */
   warmupSkipped?: boolean;
+}
+
+/**
+ * The person tapped "Take this step" on a skill track. Append-only: a track's current step is
+ * its newest row, or the track's first step when there is none.
+ */
+export interface TrackStepChoice {
+  id: string;
+  trackId: string;
+  /** The step's exercise ID. */
+  exerciseId: string;
+  takenAt: IsoTimestamp;
 }
 
 /** A person's chosen exercise order for one workout, reused the next time it starts. */

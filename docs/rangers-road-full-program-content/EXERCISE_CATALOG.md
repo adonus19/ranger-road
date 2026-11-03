@@ -430,7 +430,7 @@ Added with the Forge expansion (approved 2026-10-16; spec in `.scratch/forge-exp
 
 **Custom Forge default** is the dose the custom Forge builder uses when the current chapter's Forge A and B do not prescribe the exercise. Every default below is a draft for the person's approval.
 
-Track steps also carry **Passed when** (the step's criteria) and **Earliest chapter** (the first chapter the step may be taken up). These are drafts for the person's approval before ticket 08. Unless an entry says otherwise, a step is passed in a completed session, on a day that is not Yellow, with no pain note on that exercise, and with the final set's effort at 7 or less.
+Track steps also carry **Passed when** (the step's criteria) and **Earliest chapter** (the first chapter the step may be taken up). The person approved both on 2026-10-16; the "(draft)" marks on them below are left from the review. Unless an entry says otherwise, a step is passed in a completed session, on a day that is not Yellow, with no pain note on that exercise, and with the final set's effort at 7 or less.
 
 # Overhead Press
 

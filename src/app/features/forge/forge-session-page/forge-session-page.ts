@@ -13,6 +13,7 @@ import type {
   CompletedSet,
   DeepReadonly,
   ExercisePrescription,
+  TrackStepChoice,
   TrialResult,
   WorkoutDraft,
   WorkoutSession,
@@ -47,6 +48,12 @@ import { shoulderSwapFor } from '../../../core/program/readiness-swaps';
 import { isOptionalForge, missionMatchFor } from '../../../core/program/optional-forge';
 import { CUSTOM_FORGE_ID } from '../../../core/program/custom-forge';
 import { progressionKind } from '../../../core/program/progression-kinds';
+import { recordsBandHelp, skillTrack } from '../../../core/program/skill-tracks';
+import {
+  stepPrescription,
+  trackStatus,
+  withCurrentSteps,
+} from '../../../core/program/skill-track-progress';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { ProgressionHistory } from '../../../core/state/progression-history';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
@@ -223,10 +230,45 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     if (!swap || draft.exerciseResults.some((item) => item.exerciseId === swap.toId)) return null;
     return { ...swap, name: getExerciseGuide(swap.toId)?.name ?? swap.toId };
   });
-  /** Assisted pull-ups record band help in place of a load. */
-  protected readonly isAssisted = computed(
-    () => progressionKind(this.currentPrescription()?.exerciseId ?? '') === 'assisted-pull-up',
-  );
+  /** Assisted pull-ups, and track steps whose criteria count band help, record it in place of a load. */
+  protected readonly isAssisted = computed(() => {
+    const id = this.currentPrescription()?.exerciseId ?? '';
+    return progressionKind(id) === 'assisted-pull-up' || recordsBandHelp(id);
+  });
+  /** The person's "Take this step" choices; with none, every track is at its first step. */
+  private readonly trackChoices = signal<readonly TrackStepChoice[]>([]);
+  /** Track slots where the person said "Not yet" in this session. */
+  private readonly notYet = signal<readonly string[]>([]);
+  /** A step taken after the slot began: it starts next time. */
+  private readonly stepSaved = signal<{ trackId: string; text: string } | null>(null);
+  protected readonly stepSavedNote = computed(() => {
+    const saved = this.stepSaved();
+    return saved && saved.trackId === this.currentPrescription()?.trackId ? saved.text : null;
+  });
+  /**
+   * "Next step available" under a track slot (Skill Tracks): the current step is passed in the
+   * saved sessions and the next step's chapter has come. Information only, on a Green day outside
+   * a deload week, like the hint; the person chooses, and nothing changes until they do.
+   */
+  protected readonly trackStep = computed(() => {
+    const draft = this.draft();
+    const prescription = this.currentPrescription();
+    const result = this.currentResult();
+    const context = this.progressionContext();
+    if (!draft || !prescription?.trackId || !result || result.swappedFrom || !context) return null;
+    if (this.custom || this.notYet().includes(prescription.trackId)) return null;
+    if (this.readiness()?.status !== 'green' || context.dayOf(draft.date)?.deload) return null;
+    const track = skillTrack(prescription.trackId);
+    if (!track) return null;
+    const status = trackStatus(track, this.trackChoices(), context, this.program().chapter.number);
+    if (!status.nextAvailable || !status.next) return null;
+    if (status.current.exerciseId !== prescription.exerciseId) return null;
+    return {
+      trackId: track.id,
+      exerciseId: status.next.exerciseId,
+      name: this.getExerciseName(status.next.exerciseId),
+    };
+  });
   /** The final set of an exercise asks for the effort that next time's hint relies on. */
   protected readonly isFinalSet = computed(() => {
     const draft = this.draft();
@@ -415,12 +457,14 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     this.error.set(null);
     try {
       await this.state.initialize();
-      const [active, completedTrials] = await Promise.all([
+      const [active, completedTrials, choices] = await Promise.all([
         this.history.active(),
         loadCampaignTrials(this.trialHistory),
+        this.readTrackChoices(),
         this.schedule.refresh(),
       ]);
       this.completedTrials.set(completedTrials);
+      this.trackChoices.set(choices);
       await this.loadProgression();
       if (active?.workoutDefinitionId === this.workoutId) {
         this.draft.set(active);
@@ -448,6 +492,15 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     }
   }
 
+  /** For the "Next step available" line only; starting a session reads the choices again. */
+  private async readTrackChoices(): Promise<TrackStepChoice[]> {
+    try {
+      return await this.history.trackSteps();
+    } catch {
+      return [];
+    }
+  }
+
   /** Last time and the hint are reference only: a storage error leaves the screen without them. */
   private async loadProgression(): Promise<void> {
     try {
@@ -468,14 +521,17 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       const chapter = this.todayOrders();
       if (!definition || !chapter || !this.allowed()) return;
       const { note, reduced } = chapter.program.workoutPlan(this.workoutId, chapter.contentWeek);
+      // A remembered order names the written exercises, so a track step never drops it.
       const saved = applySavedOrder(definition, await this.history.savedOrder(definition.id));
       if (saved.changed) {
         await this.history.forgetOrder(definition.id);
         this.orderNote.set(ORDER_CHANGED_NOTE);
       }
+      const choices = await this.history.trackSteps();
+      this.trackChoices.set(choices);
       const draft = await this.history.start({
         date: this.state.today(),
-        definition,
+        definition: withCurrentSteps(definition, choices),
         reduced,
         sessionInstructions: note ? [note] : undefined,
         exerciseOrder: saved.order,
@@ -562,11 +618,16 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     try {
       if (order) {
         const exercises = draft.definitionSnapshot.exercises;
+        const written = this.definition()?.exercises;
+        const asWritten = written?.length === exercises.length ? written : undefined;
         await this.history.rememberOrder(
           draft.workoutDefinitionId,
-          // A swapped exercise is remembered as the one that was written.
+          // A swapped exercise or a track step is remembered as the one that was written.
           order.map(
-            (index) => draft.exerciseResults[index]?.swappedFrom ?? exercises[index].exerciseId,
+            (index) =>
+              asWritten?.[index].exerciseId ??
+              draft.exerciseResults[index]?.swappedFrom ??
+              exercises[index].exerciseId,
           ),
         );
       } else {
@@ -791,6 +852,57 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       );
       this.draft.set(saved);
       this.syncForms(saved);
+    } catch (error) {
+      this.showError(error);
+    } finally {
+      this.saving.set(false);
+    }
+  }
+
+  /** "Not yet" only hides the line for this session. */
+  protected notYetStep(): void {
+    const trackId = this.currentPrescription()?.trackId;
+    if (trackId) this.notYet.update((hidden) => [...hidden, trackId]);
+  }
+
+  /**
+   * "Take this step": the choice is saved. Before the slot's first set (and with no pain note)
+   * today's session does the new step at once; otherwise it starts next time.
+   */
+  protected async takeTrackStep(): Promise<void> {
+    const draft = this.draft();
+    const step = this.trackStep();
+    const index = draft?.currentExerciseIndex ?? -1;
+    const written = this.definition()?.exercises[index];
+    const result = draft?.exerciseResults[index];
+    if (!draft || !step || !result || this.saving()) return;
+    this.saving.set(true);
+    this.error.set(null);
+    try {
+      await this.state.initialize();
+      if (this.blocked()) return;
+      const now =
+        !!written?.trackId &&
+        written.trackId === step.trackId &&
+        !result.painEvents.length &&
+        result.sets.every((set) => set.completed === undefined);
+      const taken = await this.history.takeTrackStep(
+        step.trackId,
+        step.exerciseId,
+        now && written
+          ? { draftId: draft.id, index, prescription: stepPrescription(written, step.exerciseId) }
+          : undefined,
+      );
+      this.trackChoices.update((choices) => [...choices, taken.choice]);
+      if (taken.draft) {
+        this.draft.set(taken.draft);
+        this.syncForms(taken.draft);
+      } else {
+        this.stepSaved.set({
+          trackId: step.trackId,
+          text: `Saved. ${step.name} starts next time.`,
+        });
+      }
     } catch (error) {
       this.showError(error);
     } finally {

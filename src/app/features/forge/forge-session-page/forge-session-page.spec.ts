@@ -7,6 +7,7 @@ import type {
   Campaign,
   CompletedSet,
   ReadinessCheck,
+  TrackStepChoice,
   WorkoutDraft,
   WorkoutSession,
 } from '../../../core/domain/models';
@@ -55,6 +56,8 @@ async function render(
     sessions?: WorkoutSession[];
     history?: Partial<Record<keyof WorkoutHistory, unknown>>;
     shoulderPain?: number;
+    status?: 'green' | 'yellow';
+    trackSteps?: TrackStepChoice[];
   } = {},
 ) {
   const schedule = new ScheduleHistory();
@@ -67,7 +70,7 @@ async function render(
   schedule.refresh = vi.fn(async () => undefined);
   const readiness = {
     date: today,
-    status: 'green',
+    status: options.status ?? 'green',
     shoulderPain: options.shoulderPain ?? 0,
   } as ReadinessCheck;
   TestBed.configureTestingModule({
@@ -92,6 +95,7 @@ async function render(
         provide: WorkoutHistory,
         useValue: {
           active: vi.fn(async () => options.draft),
+          trackSteps: vi.fn(async () => options.trackSteps ?? []),
           ...options.history,
         },
       },
@@ -140,8 +144,8 @@ async function render(
 }
 
 /** A Chapter II Forge A session in progress: Box Squat first, 3 sets, no warm-up left. */
-function startedDraft(today: string, set = 0): WorkoutDraft {
-  const definition = loadWorkout('chapter-2-forge-a')!;
+function startedDraft(today: string, set = 0, workoutId = 'chapter-2-forge-a'): WorkoutDraft {
+  const definition = loadWorkout(workoutId)!;
   return {
     id: 'draft',
     date: today,
@@ -189,7 +193,191 @@ function boxSquatWeekTwo(): WorkoutSession {
   } as WorkoutSession;
 }
 
+/** Push-ups 3 × 12 on Thursday, Nov 5 (Chapter II), final effort 6: the push track's step 1. */
+function pushUpsPassed(): WorkoutSession {
+  return {
+    id: 'push-pass',
+    date: '2026-11-05',
+    workoutDefinitionId: 'chapter-2-forge-b',
+    readinessId: 'green',
+    completedAt: '2026-11-05T08:00:00.000Z',
+    outcome: 'completed',
+    definitionSnapshot: loadWorkout('chapter-2-forge-b')!,
+    exerciseResults: [
+      {
+        exerciseId: 'push-up',
+        sets: [12, 12, 12].map((reps, index) => ({
+          completed: true,
+          reps,
+          ...(index === 2 ? { rpe: 6 } : {}),
+        })),
+        painEvents: [],
+      },
+    ],
+  } as WorkoutSession;
+}
+
 describe('ForgeSessionPage', () => {
+  describe('Skill track step', () => {
+    const today = '2026-11-10';
+    const pushDraft = (marked = false) => {
+      const draft = startedDraft(today, 0, 'chapter-2-forge-b');
+      draft.currentExerciseIndex = draft.definitionSnapshot.exercises.findIndex(
+        (exercise) => exercise.trackId === 'push',
+      );
+      if (marked) {
+        draft.exerciseResults[draft.currentExerciseIndex].sets[0] = { completed: true, reps: 10 };
+        draft.currentSetIndex = 1;
+      }
+      return draft;
+    };
+    const line = (element: HTMLElement) => element.querySelector('.track-step');
+    const button = (element: HTMLElement, text: string) =>
+      [...element.querySelectorAll<HTMLButtonElement>('.track-step button')].find((b) =>
+        b.textContent?.includes(text),
+      )!;
+
+    it('shows "Next step available" as information and changes nothing by itself', async () => {
+      const takeTrackStep = vi.fn();
+      const element = await render('chapter-2-forge-b', today, {
+        draft: pushDraft(),
+        sessions: [pushUpsPassed()],
+        history: { takeTrackStep },
+      });
+      expect(line(element)?.textContent).toContain('Next step available: Pike Push-Up');
+      expect(button(element, 'Take this step')).toBeTruthy();
+      expect(button(element, 'Not yet')).toBeTruthy();
+      expect(element.textContent).not.toMatch(/behind/i);
+      expect(element.querySelector('#exercise-title')?.textContent).toContain('Push-Up');
+      expect(takeTrackStep).not.toHaveBeenCalled();
+    });
+
+    it('shows nothing before the step is passed, on a Yellow day, or off the track slot', async () => {
+      const none = await render('chapter-2-forge-b', today, { draft: pushDraft() });
+      expect(line(none)).toBeNull();
+      TestBed.resetTestingModule();
+      const yellow = await render('chapter-2-forge-b', today, {
+        draft: pushDraft(),
+        sessions: [pushUpsPassed()],
+        status: 'yellow',
+      });
+      expect(line(yellow)).toBeNull();
+      TestBed.resetTestingModule();
+      const squat = await render('chapter-2-forge-b', today, {
+        draft: startedDraft(today, 0, 'chapter-2-forge-b'),
+        sessions: [pushUpsPassed()],
+      });
+      expect(line(squat)).toBeNull();
+    });
+
+    it('hides the line for this session on "Not yet"', async () => {
+      const element = await render('chapter-2-forge-b', today, {
+        draft: pushDraft(),
+        sessions: [pushUpsPassed()],
+      });
+      button(element, 'Not yet').click();
+      await vi.waitFor(() => expect(line(element)).toBeNull());
+    });
+
+    it('takes the step into today’s session before the slot’s first set', async () => {
+      const draft = pushDraft();
+      const index = draft.currentExerciseIndex;
+      const takeTrackStep = vi.fn(async (_track: string, exerciseId: string, change) => {
+        const changed = structuredClone(draft);
+        (changed.definitionSnapshot.exercises as unknown[])[index] = change.prescription;
+        changed.exerciseResults[index] = { exerciseId, sets: [{}, {}, {}], painEvents: [] };
+        return {
+          choice: { id: 'c', trackId: 'push', exerciseId, takenAt: `${today}T09:00:00.000Z` },
+          draft: changed,
+        };
+      });
+      const element = await render('chapter-2-forge-b', today, {
+        draft,
+        sessions: [pushUpsPassed()],
+        history: { takeTrackStep },
+      });
+      button(element, 'Take this step').click();
+      await vi.waitFor(() =>
+        expect(element.querySelector('#exercise-title')?.textContent).toContain('Pike Push-Up'),
+      );
+      expect(takeTrackStep).toHaveBeenCalledWith('push', 'pike-push-up', {
+        draftId: 'draft',
+        index,
+        prescription: {
+          exerciseId: 'pike-push-up',
+          sets: 3,
+          reps: '8–12',
+          notes: 'Submaximal sets. Never to failure.',
+          trackId: 'push',
+        },
+      });
+      expect(line(element)).toBeNull();
+    });
+
+    it('saves the step for next time once the slot has begun', async () => {
+      const takeTrackStep = vi.fn(async () => ({
+        choice: {
+          id: 'c',
+          trackId: 'push',
+          exerciseId: 'pike-push-up',
+          takenAt: `${today}T09:00:00.000Z`,
+        },
+      }));
+      const element = await render('chapter-2-forge-b', today, {
+        draft: pushDraft(true),
+        sessions: [pushUpsPassed()],
+        history: { takeTrackStep },
+      });
+      button(element, 'Take this step').click();
+      await vi.waitFor(() =>
+        expect(line(element)?.textContent).toContain('Saved. Pike Push-Up starts next time.'),
+      );
+      expect(takeTrackStep).toHaveBeenCalledWith('push', 'pike-push-up', undefined);
+      expect(element.querySelector('#exercise-title')?.textContent).not.toContain('Pike');
+    });
+
+    it('starts the session on the current step and keeps the remembered order', async () => {
+      const start = vi.fn(async (input: WorkoutStart) => ({
+        ...startedDraft('2026-11-10'),
+        exerciseOrder: input.exerciseOrder,
+      }));
+      const ids = loadWorkout('chapter-2-forge-a')!.exercises.map((e) => e.exerciseId);
+      const order = ids.map((_, index) => index).reverse();
+      const forgetOrder = vi.fn(async () => undefined);
+      const element = await render('chapter-2-forge-a', '2026-11-10', {
+        trackSteps: [
+          {
+            id: 'c',
+            trackId: 'pull',
+            exerciseId: 'band-light-pull-up',
+            takenAt: '2026-11-05T09:00:00.000Z',
+          },
+        ],
+        history: {
+          start,
+          forgetOrder,
+          savedOrder: vi.fn(async () => ({
+            id: 'chapter-2-forge-a',
+            exerciseIds: order.map((index) => ids[index]),
+            updatedAt: 'x',
+          })),
+        },
+      });
+      [...element.querySelectorAll('button')]
+        .find((b) => b.textContent?.includes('Start'))!
+        .click();
+      await vi.waitFor(() => expect(start).toHaveBeenCalled());
+      const input = start.mock.calls[0][0];
+      expect(input.definition.exercises[2]).toMatchObject({
+        exerciseId: 'band-light-pull-up',
+        trackId: 'pull',
+        reps: '6–8',
+      });
+      expect(input.exerciseOrder).toEqual(order);
+      expect(forgetOrder).not.toHaveBeenCalled();
+    });
+  });
+
   describe('Shoulder swap', () => {
     const pressDraft = () => {
       const draft = startedDraft('2026-11-10');

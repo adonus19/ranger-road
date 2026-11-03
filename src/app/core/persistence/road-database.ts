@@ -11,7 +11,9 @@ import type {
   PostMissionFunction,
   ReadinessCheck,
   RoadSession,
+  ExercisePrescription,
   SavedExerciseOrder,
+  TrackStepChoice,
   TrialAttempt,
   TrialDraft,
   TrialResult,
@@ -43,6 +45,7 @@ import {
   createRecordedWorkoutPain,
   createWorkoutDraft,
   latestWorkoutReadiness,
+  stepUpWorkoutExercise,
   swapWorkoutExercise,
   updateWorkoutDraft,
   type RecordedWorkoutPainEvent,
@@ -52,13 +55,15 @@ import {
 import { addDays, getCampaignDay, isGateTrialAttemptDay } from '../program/campaign';
 import { resolveCampaignPosition } from '../program/campaign-position';
 import { checkInSaveError, testsHeldFor } from '../program/check-in-schedule';
+import { createTrackStepChoice } from '../program/skill-track-progress';
 
 export const DATABASE_NAME = 'rangers-road';
 /**
- * Version 8 marks custom Forge sessions (`kind: 'custom'` on a workout session). It adds no
- * store: older rows have no kind and read exactly as before.
+ * Version 8 marked custom Forge sessions (`kind: 'custom'` on a workout session) without a new
+ * store. Version 9 adds `trackSteps`, the person's "Take this step" choices; every older record
+ * reads exactly as before, and with no rows every track is at its first step.
  */
-export const DATABASE_VERSION = 8;
+export const DATABASE_VERSION = 9;
 
 export const STORE_NAMES = [
   'campaigns',
@@ -77,6 +82,7 @@ export const STORE_NAMES = [
   'dailyChecks',
   'lightActivities',
   'exerciseOrders',
+  'trackSteps',
 ] as const;
 
 export type StoreName = (typeof STORE_NAMES)[number];
@@ -286,6 +292,71 @@ export class RoadDatabase {
 
   deleteExerciseOrder(workoutDefinitionId: string): Promise<void> {
     return this.remove('exerciseOrders', workoutDefinitionId);
+  }
+
+  /** Every "Take this step" choice, in no particular order; the newest per track is current. */
+  getTrackSteps(): Promise<TrackStepChoice[]> {
+    return this.readAll<TrackStepChoice>('trackSteps');
+  }
+
+  /**
+   * Saves a "Take this step" choice (append-only) and, when `change` is given, puts the new step
+   * into the active session's track slot in the same transaction. A failure saves neither.
+   */
+  takeTrackStep(
+    trackId: string,
+    exerciseId: string,
+    change?: { draftId: string; index: number; prescription: ExercisePrescription },
+  ): Promise<{ choice: TrackStepChoice; draft?: WorkoutDraft }> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(['trackSteps', 'workoutDrafts'], 'readwrite');
+      let choice: TrackStepChoice | undefined;
+      let draft: WorkoutDraft | undefined;
+      let failure: Error | undefined;
+      const fail = (error: unknown) => {
+        failure = error instanceof Error ? error : new Error('The step could not be saved.');
+        transaction.abort();
+      };
+      const choicesRequest = transaction.objectStore('trackSteps').getAll();
+      choicesRequest.onsuccess = () => {
+        try {
+          choice = createTrackStepChoice(
+            trackId,
+            exerciseId,
+            choicesRequest.result as TrackStepChoice[],
+          );
+          transaction.objectStore('trackSteps').add(choice);
+        } catch (error) {
+          fail(error);
+          return;
+        }
+        if (!change) return;
+        const draftRequest = transaction.objectStore('workoutDrafts').get(change.draftId);
+        draftRequest.onsuccess = () => {
+          try {
+            const stored = draftRequest.result as WorkoutDraft | undefined;
+            if (!stored) throw new Error('The active workout was not found.');
+            if (
+              change.prescription.exerciseId !== exerciseId ||
+              change.prescription.trackId !== trackId
+            ) {
+              throw new Error('That step does not match this track.');
+            }
+            draft = stepUpWorkoutExercise(stored, change.index, change.prescription);
+            transaction.objectStore('workoutDrafts').put(draft);
+          } catch (error) {
+            fail(error);
+          }
+        };
+      };
+      transaction.oncomplete = () =>
+        resolve({
+          choice: structuredClone(choice!),
+          ...(draft ? { draft: structuredClone(draft) } : {}),
+        });
+      transaction.onabort = () =>
+        reject(failure ?? transaction.error ?? new Error('Unable to save the step.'));
+    });
   }
 
   /** Version 2 permits one resumable draft; all completed workout rows remain in the v1 store. */

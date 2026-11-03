@@ -46,7 +46,7 @@ describe('RoadDatabase', () => {
   it('opens a versioned schema and explicitly updates campaign state', async () => {
     const name = newName();
     const db = await RoadDatabase.open(name);
-    expect(DATABASE_VERSION).toBe(8);
+    expect(DATABASE_VERSION).toBe(9);
     expect(await db.getCampaign('primary')).toBeUndefined();
 
     await db.putCampaign(campaign);
@@ -636,6 +636,85 @@ describe('RoadDatabase', () => {
     expect(records.workoutSessions).toEqual([forge]);
     expect(Object.keys(records).sort()).toEqual([...STORE_NAMES].sort());
     upgraded.close();
+  });
+
+  it('upgrades version 8 to 9 by adding the track-step store, keeping every record', async () => {
+    const name = newName();
+    const v8Stores = STORE_NAMES.filter((store) => store !== 'trackSteps');
+    const old = await openRaw(name, 8, (database, transaction) => {
+      for (const store of v8Stores) database.createObjectStore(store, { keyPath: 'id' });
+      transaction.objectStore('readinessChecks').createIndex('date', 'date', { unique: false });
+    });
+    const forge = {
+      id: 'forge-b-v8',
+      date: '2026-11-05',
+      workoutDefinitionId: 'chapter-2-forge-b',
+      readinessId: 'r1',
+      outcome: 'completed',
+      definitionSnapshot: {
+        id: 'chapter-2-forge-b',
+        title: 'Forge B',
+        exercises: [{ exerciseId: 'push-up', sets: 3, reps: '8–12' }],
+      },
+      exerciseResults: [
+        { exerciseId: 'push-up', sets: [{ completed: true, reps: 12, rpe: 6 }], painEvents: [] },
+      ],
+    };
+    const order = { id: 'chapter-2-forge-b', exerciseIds: ['push-up'], updatedAt: 'x' };
+    await rawAdd(old, 'workoutSessions', forge);
+    await rawAdd(old, 'exerciseOrders', order);
+    old.close();
+
+    const upgraded = await RoadDatabase.open(name);
+    const records = await upgraded.exportRecords();
+    expect(records.workoutSessions).toEqual([forge]);
+    expect(records.exerciseOrders).toEqual([order]);
+    expect(records.trackSteps).toEqual([]);
+    expect(await upgraded.getTrackSteps()).toEqual([]);
+    upgraded.close();
+  });
+
+  it('saves a track step, and puts it into the active session before the slot begins', async () => {
+    const db = await RoadDatabase.open(newName());
+    await db.putCampaign(campaign);
+    await db.addReadinessCheck(readiness);
+    const definition: WorkoutDefinition = {
+      id: 'chapter-2-forge-b',
+      title: 'Forge B',
+      exercises: [
+        { exerciseId: 'goblet-squat', sets: 3, reps: '8–10' },
+        { exerciseId: 'push-up', sets: 3, reps: '8–12', trackId: 'push' },
+      ],
+    };
+    const draft = await db.startWorkoutDraft({ date: readiness.date, definition });
+    const pike = { exerciseId: 'pike-push-up', sets: 3, reps: '8–12', trackId: 'push' };
+
+    await expect(
+      db.takeTrackStep('push', 'pike-push-up', { draftId: draft.id, index: 0, prescription: pike }),
+    ).rejects.toThrow('not a skill track slot');
+    expect(await db.getTrackSteps()).toEqual([]);
+
+    const taken = await db.takeTrackStep('push', 'pike-push-up', {
+      draftId: draft.id,
+      index: 1,
+      prescription: pike,
+    });
+    expect(taken.choice).toMatchObject({ trackId: 'push', exerciseId: 'pike-push-up' });
+    expect(taken.draft?.definitionSnapshot.exercises[1]).toEqual(pike);
+    expect(taken.draft?.exerciseResults[1]).toEqual({
+      exerciseId: 'pike-push-up',
+      sets: [{}, {}, {}],
+      painEvents: [],
+    });
+    expect(await db.getActiveWorkoutDraft()).toEqual(taken.draft);
+    expect(await db.getTrackSteps()).toEqual([taken.choice]);
+
+    // Only the step right after the current one can be taken; the store is append-only.
+    await expect(db.takeTrackStep('push', 'pike-push-up')).rejects.toThrow('not the next step');
+    const later = await db.takeTrackStep('push', 'feet-elevated-pike-push-up');
+    expect(later.draft).toBeUndefined();
+    expect((await db.getTrackSteps()).length).toBe(2);
+    db.close();
   });
 
   it('starts and saves a custom Forge with its kind, snapshot and skipped warm-up', async () => {

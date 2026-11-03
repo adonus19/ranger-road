@@ -409,11 +409,13 @@ Built in ticket 06 as `CUSTOM_FORGE_LIBRARY` in `core/program/custom-forge-libra
 
 A chapter's prescription names the track for a slot, not a fixed exercise; the session's definition snapshot records the step actually done.
 
-### TrackStep store
+Built in ticket 08 as `SKILL_TRACKS` in `core/program/skill-tracks.ts`. Each step has `exerciseId`, `earliestChapter`, `passedWhen` (the catalog text), `criteria?` (the part the sets can show: `sets`, and per set `reps` or `top-of-range`, `seconds`, `maxAssistance`; or `totalReps` over the session) and `unchecked?` (the part the person judges). A slot is an ExercisePrescription with an optional `trackId`; its written exercise is the track's first step. Chapter II's Forge A assisted pull-up is `pull` and its Forge B push-up is `push`. When a session starts, each slot takes the current step (`withCurrentSteps`), and the snapshot keeps `trackId`. A custom Forge's picks carry no `trackId`.
 
-Store `trackSteps`, append-only: `{ id, trackId, exerciseId, takenAt }`, written when the person taps "Take this step". A track's current step is its newest row, or step 1 when there is none. Rows are never rewritten. Included in backups; a backup made before this store restores with every track at step 1.
+### TrackStep store (database version 9, built 2026-11-03)
 
-Whether a step is **passed** and whether the next step is **available** are derived from saved sessions and the campaign position, never stored. Only completed Forge A, B and C sessions count; custom Forge sessions do not (decided 2026-10-16).
+Store `trackSteps`, append-only: `{ id, trackId, exerciseId, takenAt }` (TrackStepChoice), written when the person taps "Take this step". Only the step right after the current one can be written. A track's current step is its newest row whose exercise is still in the track, or step 1 when there is none. Rows are never rewritten. Taken before the slot's first set, the same transaction puts the step into the active draft; otherwise only the row is written. Version 9 adds only this store and leaves every existing record unchanged. Included in backups and counted with the records; a backup made before version 9 restores with every track at step 1.
+
+Whether a step is **passed** and whether the next step is **available** are derived from saved sessions and the campaign position, never stored (`core/program/skill-track-progress.ts`). Only completed Forge A, B and C sessions count; custom Forge sessions do not (decided 2026-10-16). A result with `swappedFrom`, `substitutionId`, `modificationNotes` or a pain event never counts, nor does a Yellow day's session. A step's first pass is the oldest session that meets it, with its chapter from the campaign position.
 
 ### Custom Forge sessions (database version 8, built 2026-10-16)
 

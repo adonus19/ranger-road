@@ -236,7 +236,7 @@ In Forge B's tenth slot when it is not the glute bridge: single-leg balance with
 
 These swaps are offered as a calm choice on the Forge screen. None is automatic, and none counts against the session beyond the usual rule that a substitution marks it reduced.
 
-- **Shoulder pain at 3 or more:** the overhead carry may swap to Front-Hold Carry, and the overhead press to Band Pull-Apart. The swap is a calm choice on the exercise screen before its first set, with "Keep as written" beside it. A swap marks the session reduced, keeps the sets (a swapped press becomes 12 band pull-aparts with its own sets and no load), and saves the exercise actually done with the written one noted. It applies in Forge C, the Chapter II+ Forges and the custom Forge. The muscle-up steps of the pull track (straight-bar dip and transition drills, band-assisted muscle-up, muscle-up) follow this swap too.
+- **Shoulder pain at 3 or more:** the overhead carry may swap to Front-Hold Carry, and the overhead press to Band Pull-Apart. The swap is a calm choice on the exercise screen before its first set, with "Keep as written" beside it. A swap marks the session reduced, keeps the sets (a swapped press becomes 12 band pull-aparts with its own sets and no load), and saves the exercise actually done with the written one noted. It applies in Forge C, the Chapter II+ Forges and the custom Forge. The muscle-up steps of the pull track (straight-bar dip and transition drills, band-assisted muscle-up, muscle-up) follow the press swap: they may swap to 12 band pull-aparts with their own sets. A swapped step never counts toward passing that step.
 - **Neck or shoulder pain at 2 or more:** handstand holds, wall walks, handstand push-up work and planche work may swap to a Pike Hold or a regular Push-Up.
 - **Back pain at 2 or more (Chapter IV on):** the press stance rule above.
 - Handstand and planche days add a wrist warm-up of about 1 minute before the work, alternating Wrist Circles and Wrist Rocks from one session to the next.
@@ -244,7 +244,7 @@ These swaps are offered as a calm choice on the Forge screen. None is automatic,
 
 ## Skill Tracks
 
-A track is one Forge slot whose exercise steps up over the campaign. Each step is its own exercise in the library, with its own guide. Each step's criteria and earliest chapter are in `EXERCISE_CATALOG.md` (drafts awaiting the person's approval).
+A track is one Forge slot whose exercise steps up over the campaign. Each step is its own exercise in the library, with its own guide. Each step's criteria and earliest chapter are in `EXERCISE_CATALOG.md` (approved 2026-10-16). The app holds them as content in `core/program/skill-tracks.ts`.
 
 | Track | Slot | Steps |
 |---|---|---|
@@ -253,8 +253,11 @@ A track is one Forge slot whose exercise steps up over the campaign. Each step i
 | Handstand balance | Forge A slot 10, from Chapter V | Wall plank hold; wall walk; chest-to-wall handstand hold; kick-up to wall; freestanding attempts |
 | Planche (stretch goal) | Optional stretch item at the end of Forge B, from Chapter V | Planche lean; frog stand; pseudo-planche push-up; tuck planche hold; advanced tuck hold; tuck planche push-up; straddle planche; planche push-up |
 
-- **Passed** means a step's criteria were met.
-- **Stepping up** is gated by the criteria and the step's earliest chapter. When both are met, the app shows "Next step available" as information. The person chooses when to take it. The app never moves the person up on its own.
+- **Passed** means a step's criteria were met in one session. Only a completed Forge A, B or C counts, on a day that is not Yellow. The exercise must carry no pain note, readiness swap, substitute or written modification, and its final set's effort must be recorded at 7 or less. A step's first pass is kept with the chapter it happened in, worked out from the saved sessions.
+- **What the app can check.** The app reads the sets: reps, seconds and band help. Where "Passed when" also names something the sets cannot show (form, a tempo, a second drill such as the slow negatives), the app checks the counted part and the person judges the rest. A step with nothing countable (freestanding handstand attempts, logged as attempts) is never read as passed.
+- **The dose of a step.** The chapter writes one dose for the slot, and it applies to whatever step is current. A step counted the other way (seconds against reps) takes its catalog default instead.
+- **Live from Chapter II.** The pull track is Forge A's assisted pull-up slot and the push track is Forge B's push-up slot. The handstand and planche tracks wait for Chapter V's Forges.
+- **Stepping up** is gated by the criteria and the step's earliest chapter: the current step is passed and the next step's chapter has come. The app then shows "Next step available" as information, on a Green day outside a deload week (the same days a hint may rise). The person chooses when to take it, and the choice is saved. The app never moves the person up on its own, and there is no way back down except a substitute for the day.
 - A step not yet reached shows no "behind" message, and no track shows a schedule the person should be on.
 - The planche item is 2 short sets, about 5 minutes, skippable, and never shown as missed.
 - Every track step is available in the custom Forge, but custom sessions do not count toward passing a step.

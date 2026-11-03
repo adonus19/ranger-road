@@ -357,6 +357,17 @@
         } @else if (currentResult()?.swappedFrom) {
           <p class="swap-note">Swapped for your shoulder today. This session is reduced.</p>
         }
+        @if (trackStep(); as step) {
+          <div class="track-step">
+            <p>Next step available: {{ step.name }}</p>
+            <button type="button" [disabled]="saving()" (click)="takeTrackStep()">
+              Take this step
+            </button>
+            <button type="button" class="not-yet" (click)="notYetStep()">Not yet</button>
+          </div>
+        } @else if (stepSavedNote(); as note) {
+          <p class="track-step" role="status">{{ note }}</p>
+        }
         <div class="utility-actions">
           <button type="button" (click)="openHelp()">
             <app-icon name="book-open" />Quick Help

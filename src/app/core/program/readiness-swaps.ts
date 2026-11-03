@@ -23,6 +23,9 @@ const OVERHEAD_PRESSES = [
   'seated-barbell-overhead-press',
 ];
 
+/** The pull track's muscle-up steps follow the press swap (Readiness Gates). */
+const MUSCLE_UP_STEPS = ['straight-bar-dip', 'band-assisted-muscle-up', 'muscle-up'];
+
 const SHOULDER_SWAPS: readonly ReadinessSwap[] = [
   ...OVERHEAD_CARRIES.map((fromId) => ({
     fromId,
@@ -33,6 +36,11 @@ const SHOULDER_SWAPS: readonly ReadinessSwap[] = [
     fromId,
     toId: 'band-pull-apart',
     reason: 'Your shoulder is sore today. You can do band pull-aparts instead of pressing.',
+  })),
+  ...MUSCLE_UP_STEPS.map((fromId) => ({
+    fromId,
+    toId: 'band-pull-apart',
+    reason: 'Your shoulder is sore today. You can do band pull-aparts instead of this step.',
   })),
 ];
 

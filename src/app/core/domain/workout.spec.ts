@@ -4,6 +4,7 @@ import {
   completeWorkoutDraft,
   createRecordedWorkoutPain,
   createWorkoutDraft,
+  stepUpWorkoutExercise,
   swapWorkoutExercise,
   updateWorkoutDraft,
 } from './workout';
@@ -295,5 +296,48 @@ describe('shoulder swap', () => {
       'two-hand-overhead-carry',
     ]);
     expect(draft.exerciseResults.some((item) => item.swappedFrom)).toBe(false);
+  });
+});
+
+describe('taking a track step in a session', () => {
+  const trackDefinition: WorkoutDefinition = {
+    id: 'chapter-2-forge-a',
+    title: 'Forge A',
+    exercises: [
+      { exerciseId: 'box-squat', sets: 3, reps: 6 },
+      { exerciseId: 'muscle-up', sets: 3, reps: 1, trackId: 'pull' },
+    ],
+  };
+  const start = () =>
+    createWorkoutDraft({ date: green.date, definition: trackDefinition }, green, startedAt, 'd');
+  const next = { exerciseId: 'band-light-pull-up', sets: 2, reps: '6–8', trackId: 'pull' };
+
+  it('puts the step into the slot before its first set, without marking the session reduced', () => {
+    const stepped = stepUpWorkoutExercise(start(), 1, next, savedAt);
+    expect(stepped.definitionSnapshot.exercises[1]).toEqual(next);
+    expect(stepped.exerciseResults[1]).toEqual({
+      exerciseId: 'band-light-pull-up',
+      sets: [{}, {}],
+      painEvents: [],
+    });
+    expect(stepped.reduced).toBe(false);
+  });
+
+  it('leaves a begun, pained, swapped or untracked slot as it is', () => {
+    const begun = start();
+    begun.exerciseResults[1].sets[0] = { completed: true, reps: 1 };
+    expect(() => stepUpWorkoutExercise(begun, 1, next, savedAt)).toThrow('next time');
+    const pained = start();
+    pained.exerciseResults[1].painEvents.push({
+      timestamp: savedAt,
+      bodyArea: 'Shoulder',
+      severity: 2,
+      actionTaken: 'Continue',
+    });
+    expect(() => stepUpWorkoutExercise(pained, 1, next, savedAt)).toThrow('next time');
+    const sore = { ...green, id: 'sore', shoulderPain: 3, status: 'yellow' as const };
+    const swapped = swapWorkoutExercise(start(), 1, 'band-pull-apart', sore, savedAt);
+    expect(() => stepUpWorkoutExercise(swapped, 1, next, savedAt)).toThrow();
+    expect(() => stepUpWorkoutExercise(start(), 0, next, savedAt)).toThrow('not a skill track');
   });
 });

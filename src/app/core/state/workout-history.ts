@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
-import type { LocalDate, SavedExerciseOrder, WorkoutDraft, WorkoutSession } from '../domain/models';
+import type {
+  ExercisePrescription,
+  LocalDate,
+  SavedExerciseOrder,
+  TrackStepChoice,
+  WorkoutDraft,
+  WorkoutSession,
+} from '../domain/models';
 import type { RecordedWorkoutPainEvent, WorkoutPainInput, WorkoutStart } from '../domain/workout';
 import { RoadDatabase } from '../persistence/road-database';
 
@@ -56,6 +63,20 @@ export class WorkoutHistory {
 
   async forgetOrder(workoutDefinitionId: string): Promise<void> {
     return this.withDatabase((database) => database.deleteExerciseOrder(workoutDefinitionId));
+  }
+
+  /** The person's "Take this step" choices; a track with none is at its first step. */
+  async trackSteps(): Promise<TrackStepChoice[]> {
+    return this.withDatabase((database) => database.getTrackSteps());
+  }
+
+  /** Saves the choice and, with `change`, puts the step into today's session at once. */
+  async takeTrackStep(
+    trackId: string,
+    exerciseId: string,
+    change?: { draftId: string; index: number; prescription: ExercisePrescription },
+  ): Promise<{ choice: TrackStepChoice; draft?: WorkoutDraft }> {
+    return this.withDatabase((database) => database.takeTrackStep(trackId, exerciseId, change));
   }
 
   private async withDatabase<T>(work: (database: RoadDatabase) => Promise<T>): Promise<T> {

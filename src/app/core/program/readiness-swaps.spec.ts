@@ -26,6 +26,20 @@ describe('Shoulder swaps', () => {
     }
   });
 
+  it('offers band pull-aparts for the muscle-up steps of the pull track at 3 or more', () => {
+    for (const id of ['straight-bar-dip', 'band-assisted-muscle-up', 'muscle-up']) {
+      expect(shoulderSwapFor(id, 3)?.toId).toBe('band-pull-apart');
+      expect(shoulderSwapFor(id, 2)).toBeNull();
+    }
+    expect(shoulderSwapFor('pull-up', 6)).toBeNull();
+    expect(
+      swappedPrescription(
+        { exerciseId: 'muscle-up', sets: 3, reps: 1, trackId: 'pull' },
+        'band-pull-apart',
+      ),
+    ).toEqual({ exerciseId: 'band-pull-apart', sets: 3, reps: 12 });
+  });
+
   it('leaves other exercises alone', () => {
     expect(shoulderSwapFor('farmer-carry', 8)).toBeNull();
   });

@@ -152,7 +152,9 @@ Each exercise's dose comes from the current chapter's Forge A or B, or from its 
 Rules are in `RANGERS_ROAD_PROGRAM.md` (Skill Tracks).
 
 - A track slot shows the person's current step by name, with that step's guide in Quick Help.
-- When the next step's criteria are met and its earliest chapter has come, a plain line under the exercise reads "Next step available: Pike Push-Up", with "Take this step" and "Not yet". Nothing changes until the person taps "Take this step", and "Not yet" only hides the line for that session.
+- When the current step is passed and the next step's earliest chapter has come, a plain line under the exercise reads "Next step available: Pike Push-Up", with "Take this step" and "Not yet". It shows on a Green day outside a deload week, never in a custom Forge, and never on a swapped exercise. Nothing changes until the person taps "Take this step", and "Not yet" only hides the line for that session.
+- "Take this step" before the slot's first set (and with no pain note on it) changes today's exercise to the new step at once, with the slot's dose. Once the slot has begun, the choice is saved and the line reads "Saved. Pike Push-Up starts next time." A remembered exercise order keeps working after a step, since it names the written exercises.
+- A step whose criteria count band help (Band-Light Pull-Up and Slow Negatives) records "Band assistance (lb)" on each set, as the assisted pull-up does.
 - A step not yet reached shows nothing: no "behind", no countdown, no list of what is left.
 - The planche item at the end of Forge B is marked "Optional · about 5 minutes" and can be skipped. A skipped planche item does not mark the session reduced and is never shown as missed.
 - Readiness swaps (see Readiness Gates) are offered on the exercise as a calm choice ("Shoulder pain is 3 today. Swap to Front-Hold Carry?"), with the swap and "Keep it" side by side. On back pain at 2 or more from Chapter IV, the press offers Seated and Half-kneeling; a seated barbell press shows "Reduce the load", with a link to swap to dumbbells.

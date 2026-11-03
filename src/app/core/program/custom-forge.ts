@@ -95,7 +95,10 @@ function doseFor(
       const found = workout.exercises.find((exercise) => exercise.exerciseId === exerciseId);
       if (!found) continue;
       const where = current ? '' : `Chapter ${formatChapterNumeral(chapter.chapter.number)} `;
-      return { dose: structuredClone(found), source: `From ${where}${workout.title}` };
+      const dose = structuredClone(found);
+      // A custom Forge has no track slots; every step is its own pick.
+      delete dose.trackId;
+      return { dose, source: `From ${where}${workout.title}` };
     }
   }
   const catalog = CUSTOM_FORGE_LIBRARY[exerciseId]?.catalogDose;

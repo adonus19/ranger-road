@@ -1,5 +1,6 @@
 import type {
   CompletedSet,
+  ExercisePrescription,
   ExerciseResult,
   IsoTimestamp,
   LocalDate,
@@ -308,6 +309,51 @@ export function swapWorkoutExercise(
     modificationNotes: `Swapped from the written exercise for shoulder pain (${readiness.shoulderPain}).`,
   };
   updated.reduced = true;
+  updated.updatedAt = now;
+  return updated;
+}
+
+/**
+ * "Take this step" before the track slot's first set: the session does the new step from now
+ * on. The step's prescription comes from the slot as written (`stepPrescription`). A slot that
+ * was swapped, has a marked set or a pain note keeps today's exercise; the step starts next time.
+ */
+export function stepUpWorkoutExercise(
+  stored: WorkoutDraft,
+  index: number,
+  prescription: ExercisePrescription,
+  now: IsoTimestamp = new Date().toISOString(),
+): WorkoutDraft {
+  assertTimestamp(now, 'Step time');
+  const current = stored.definitionSnapshot.exercises[index];
+  const result = stored.exerciseResults[index];
+  if (!current || !result) throw new RangeError('That exercise is not in this session.');
+  if (!current.trackId || current.trackId !== prescription.trackId) {
+    throw new Error('That exercise is not a skill track slot.');
+  }
+  if (result.swappedFrom) throw new Error('This exercise was swapped today.');
+  if (result.sets.some((set) => set.completed !== undefined) || result.painEvents.length) {
+    throw new Error('The new step starts next time, since this one has begun.');
+  }
+  if (
+    stored.exerciseResults.some(
+      (item, other) => other !== index && item.exerciseId === prescription.exerciseId,
+    )
+  ) {
+    throw new Error('That exercise is already in this session.');
+  }
+  if (!Number.isInteger(prescription.sets ?? 1) || (prescription.sets ?? 1) < 1) {
+    throw new RangeError('The step needs at least one set.');
+  }
+  const updated = structuredClone(stored);
+  const snapshot = updated.definitionSnapshot as WorkoutDefinition;
+  snapshot.exercises[index] = structuredClone(prescription);
+  updated.exerciseResults[index] = {
+    exerciseId: prescription.exerciseId,
+    sets: Array.from({ length: prescription.sets ?? 1 }, () => ({})),
+    painEvents: [],
+  };
+  if (updated.currentExerciseIndex === index) updated.currentSetIndex = 0;
   updated.updatedAt = now;
   return updated;
 }

@@ -47,6 +47,14 @@ function sampleStores(): StoreRecords {
         updatedAt: '2026-11-10T08:00:00.000Z',
       },
     ],
+    trackSteps: [
+      {
+        id: 'track-step-1',
+        trackId: 'push',
+        exerciseId: 'pike-push-up',
+        takenAt: '2026-11-12T08:00:00.000Z',
+      },
+    ],
   };
 }
 
@@ -75,6 +83,21 @@ describe('records backup file', () => {
     expect(parsed.stores.postMissionFunctions).toEqual([]);
     expect(parsed.stores.exerciseOrders).toEqual([]);
     expect(parsed.stores.readinessChecks).toHaveLength(2);
+  });
+
+  it('keeps track-step choices in a copy, and opens a version 8 copy with every track at step 1', () => {
+    const backup = createRecordsBackup(sampleStores(), '2026-11-12T20:00:00.000Z');
+    expect(parseRecordsBackup(JSON.stringify(backup)).stores.trackSteps).toEqual(
+      sampleStores().trackSteps,
+    );
+    const stores: Record<string, unknown> = { ...sampleStores() };
+    delete stores['trackSteps'];
+    const older = parseRecordsBackup(
+      JSON.stringify({ ...createRecordsBackup(sampleStores()), databaseVersion: 8, stores }),
+    );
+    expect(older.databaseVersion).toBe(8);
+    expect(older.stores.trackSteps).toEqual([]);
+    expect(older.stores.workoutSessions).toEqual(sampleStores().workoutSessions);
   });
 
   it('keeps custom Forge sessions in a copy, and opens a version 7 copy without any', () => {
@@ -165,7 +188,8 @@ describe('records backup file', () => {
     expect(summarizeRecords(sampleStores())).toEqual({
       startDate: '2026-10-05',
       latestDate: '2026-10-07',
-      count: 4,
+      // A track-step choice is history, so it counts; the campaign and saved orders do not.
+      count: 5,
     });
     expect(summarizeRecords(emptyStores())).toEqual({ count: 0 });
   });

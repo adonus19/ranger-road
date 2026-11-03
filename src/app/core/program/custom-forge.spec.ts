@@ -57,6 +57,16 @@ function session(
 }
 
 describe('Custom Forge library', () => {
+  it('offers track slots as plain picks, without the slot’s track', () => {
+    expect(entry('push-up')?.dose).toEqual({
+      exerciseId: 'push-up',
+      sets: 3,
+      reps: '8–12',
+      notes: 'Submaximal sets. Never to failure.',
+    });
+    expect(entry('assisted-pull-up')?.dose.trackId).toBeUndefined();
+  });
+
   it('gives every exercise guide a builder group', () => {
     for (const guide of listExerciseGuides()) {
       expect(CUSTOM_FORGE_LIBRARY[guide.id], guide.id).toBeDefined();

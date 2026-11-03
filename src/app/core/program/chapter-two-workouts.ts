@@ -26,7 +26,7 @@ export const chapterTwoForgeA: WorkoutDefinition = {
   exercises: [
     { exerciseId: 'box-squat', sets: 3, reps: 6 },
     { exerciseId: 'bench-press', sets: 3, reps: 6 },
-    { exerciseId: 'assisted-pull-up', sets: 3, reps: '6–8' },
+    { exerciseId: 'assisted-pull-up', sets: 3, reps: '6–8', trackId: 'pull' },
     { exerciseId: 'split-squat', sets: 3, reps: 6, perSide: true },
     { exerciseId: 'seated-two-db-overhead-press', sets: 3, reps: 8 },
     { exerciseId: 'suitcase-carry', sets: 2, durationSeconds: 40, perSide: true },
@@ -52,7 +52,13 @@ export const chapterTwoForgeB: WorkoutDefinition = {
     { exerciseId: 'goblet-squat', sets: 3, reps: '8–10' },
     { exerciseId: 'step-up', sets: 3, reps: 8, perSide: true },
     { exerciseId: 'one-arm-db-row', sets: 3, reps: '8–10', perSide: true },
-    { exerciseId: 'push-up', sets: 3, reps: '8–12', notes: 'Submaximal sets. Never to failure.' },
+    {
+      exerciseId: 'push-up',
+      sets: 3,
+      reps: '8–12',
+      notes: 'Submaximal sets. Never to failure.',
+      trackId: 'push',
+    },
     {
       exerciseId: 'one-arm-db-overhead-press',
       sets: 3,

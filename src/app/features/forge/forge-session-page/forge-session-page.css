@@ -876,3 +876,29 @@ h2 {
 .swap-actions button {
   min-height: var(--touch-target);
 }
+.track-step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.7rem 0 0;
+  color: var(--text-secondary);
+}
+.track-step p {
+  flex-basis: 100%;
+  margin: 0;
+}
+.track-step button {
+  min-height: var(--touch-target);
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-page);
+  color: var(--text);
+  font-weight: 600;
+}
+.track-step .not-yet {
+  border: 0;
+  background: none;
+  text-decoration: underline;
+}
