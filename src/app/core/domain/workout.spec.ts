@@ -4,6 +4,7 @@ import {
   completeWorkoutDraft,
   createRecordedWorkoutPain,
   createWorkoutDraft,
+  swapWorkoutExercise,
   updateWorkoutDraft,
 } from './workout';
 
@@ -240,5 +241,59 @@ describe('exercise order', () => {
         ),
       ).toThrow('every exercise once');
     }
+  });
+});
+
+describe('shoulder swap', () => {
+  const carryDefinition: WorkoutDefinition = {
+    id: 'chapter-2-forge-a',
+    title: 'Forge A',
+    contentVersion: 1,
+    exercises: [
+      { exerciseId: 'barbell-overhead-press', sets: 3, reps: 5 },
+      { exerciseId: 'two-hand-overhead-carry', sets: 2, durationSeconds: '20–30' },
+    ],
+  };
+  const sore = { ...green, id: 'sore', shoulderPain: 3 };
+  const start = () =>
+    createWorkoutDraft({ date: green.date, definition: carryDefinition }, green, startedAt, 'd');
+
+  it('saves the exercise actually done, keeps the written one, and reads reduced', () => {
+    const draft = start();
+    expect(draft.reduced).toBe(false);
+    const swapped = swapWorkoutExercise(draft, 1, 'front-hold-carry', sore, savedAt);
+    expect(swapped.definitionSnapshot.exercises[1]).toEqual({
+      exerciseId: 'front-hold-carry',
+      sets: 2,
+      durationSeconds: '20–30',
+    });
+    expect(swapped.exerciseResults[1].exerciseId).toBe('front-hold-carry');
+    expect(swapped.exerciseResults[1].swappedFrom).toBe('two-hand-overhead-carry');
+    expect(swapped.exerciseResults[1].sets).toHaveLength(2);
+    expect(swapped.reduced).toBe(true);
+    // It survives a later set edit and the saved session.
+    const edited = structuredClone(swapped);
+    edited.exerciseResults[1].sets[0] = { duration: 25, completed: true };
+    const saved = updateWorkoutDraft(swapped, edited, sore, savedAt);
+    expect(saved.exerciseResults[1].swappedFrom).toBe('two-hand-overhead-carry');
+  });
+
+  it('is only offered at shoulder pain 3 or more, for a named swap, before the first set', () => {
+    const draft = start();
+    const fine = { ...green, shoulderPain: 2 };
+    expect(() => swapWorkoutExercise(draft, 1, 'front-hold-carry', fine, savedAt)).toThrow();
+    expect(() => swapWorkoutExercise(draft, 1, 'farmer-carry', sore, savedAt)).toThrow();
+    const begun = structuredClone(draft);
+    begun.exerciseResults[1].sets[0] = { duration: 25, completed: true };
+    expect(() => swapWorkoutExercise(begun, 1, 'front-hold-carry', sore, savedAt)).toThrow();
+  });
+
+  it('never swaps on its own: a fresh draft keeps the written exercises', () => {
+    const draft = start();
+    expect(draft.exerciseResults.map((item) => item.exerciseId)).toEqual([
+      'barbell-overhead-press',
+      'two-hand-overhead-carry',
+    ]);
+    expect(draft.exerciseResults.some((item) => item.swappedFrom)).toBe(false);
   });
 });

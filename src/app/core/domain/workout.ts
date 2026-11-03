@@ -10,6 +10,7 @@ import type {
   WorkoutDraft,
   WorkoutSession,
 } from './models';
+import { shoulderSwapFor, swappedPrescription } from '../program/readiness-swaps';
 import { classifyReadiness } from './readiness';
 
 export interface WorkoutStart {
@@ -191,6 +192,7 @@ export function updateWorkoutDraft(
       painEvents: structuredClone(original.painEvents),
       substitutionId: result.substitutionId,
       modificationNotes: result.modificationNotes?.trim() || undefined,
+      ...(original.swappedFrom ? { swappedFrom: original.swappedFrom } : {}),
     };
   });
   if (
@@ -263,6 +265,51 @@ export function createRecordedWorkoutPain(
     actionTaken: input.actionTaken.trim(),
     workoutSessionId: draft.id,
   };
+}
+
+/**
+ * A calm readiness swap on one exercise: the person did not start it yet, today's shoulder pain
+ * is high enough, and the program names this swap. The draft then holds the exercise actually
+ * done, the session reads as reduced, and the written exercise is kept in `swappedFrom`.
+ */
+export function swapWorkoutExercise(
+  stored: WorkoutDraft,
+  index: number,
+  toId: string,
+  readiness: ReadinessCheck | undefined,
+  now: IsoTimestamp = new Date().toISOString(),
+): WorkoutDraft {
+  assertTimestamp(now, 'Swap time');
+  if (!readiness || readiness.date !== stored.date) {
+    throw new Error('Check readiness today before continuing this session.');
+  }
+  const written = stored.definitionSnapshot.exercises[index];
+  const result = stored.exerciseResults[index];
+  if (!written || !result) throw new RangeError('That exercise is not in this session.');
+  if (result.swappedFrom) throw new Error('This exercise was already swapped.');
+  const swap = shoulderSwapFor(written.exerciseId, readiness.shoulderPain);
+  if (!swap || swap.toId !== toId) {
+    throw new Error('That swap is not offered at today’s readiness.');
+  }
+  if (stored.exerciseResults.some((item) => item.exerciseId === toId)) {
+    throw new Error('That exercise is already in this session.');
+  }
+  if (result.sets.some((set) => set.completed !== undefined)) {
+    throw new Error('Swap before the first set. Record a modification instead.');
+  }
+  const updated = structuredClone(stored);
+  const snapshot = updated.definitionSnapshot as WorkoutDefinition;
+  snapshot.exercises[index] = swappedPrescription(written, toId);
+  updated.exerciseResults[index] = {
+    exerciseId: toId,
+    sets: Array.from({ length: snapshot.exercises[index].sets ?? 1 }, () => ({})),
+    painEvents: structuredClone(result.painEvents),
+    swappedFrom: written.exerciseId,
+    modificationNotes: `Swapped from the written exercise for shoulder pain (${readiness.shoulderPain}).`,
+  };
+  updated.reduced = true;
+  updated.updatedAt = now;
+  return updated;
 }
 
 export function completeWorkoutDraft(

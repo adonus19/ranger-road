@@ -102,6 +102,37 @@ describe('WorkoutHistory', () => {
     await expect(history.complete(draft.id)).rejects.toThrow('not found');
   });
 
+  it('swaps an overhead exercise on a sore shoulder and saves the one actually done', async () => {
+    const database = await originalOpen(databaseName);
+    await database.addReadinessCheck({ ...green, shoulderPain: 4, status: 'yellow' });
+    database.close();
+    const carry: WorkoutDefinition = {
+      ...definition,
+      exercises: [{ exerciseId: 'two-hand-overhead-carry', sets: 2, durationSeconds: '20–30' }],
+    };
+    const history = new WorkoutHistory();
+    const draft = await history.start({ date: green.date, definition: carry });
+    await expect(history.swapExercise(draft.id, 0, 'farmer-carry')).rejects.toThrow('not offered');
+    const swapped = await history.swapExercise(draft.id, 0, 'front-hold-carry');
+    expect(swapped.exerciseResults[0].swappedFrom).toBe('two-hand-overhead-carry');
+    const resumed = await new WorkoutHistory().active();
+    expect(resumed?.definitionSnapshot.exercises[0].exerciseId).toBe('front-hold-carry');
+    const edited = structuredClone(resumed!);
+    edited.warmupComplete = true;
+    edited.exerciseResults[0].sets = [
+      { duration: 25, completed: true },
+      { duration: 25, completed: true },
+    ];
+    await history.saveDraft(edited);
+    const done = await history.complete(draft.id);
+    expect(done.reduced).toBe(true);
+    expect(done.exerciseResults[0]).toMatchObject({
+      exerciseId: 'front-hold-carry',
+      swappedFrom: 'two-hand-overhead-carry',
+    });
+    expect(done.definitionSnapshot?.exercises[0].exerciseId).toBe('front-hold-carry');
+  });
+
   it('uses the latest same-day readiness at start, blocks new Red work, and preserves a stopped session', async () => {
     const database = await originalOpen(databaseName);
     await database.addReadinessCheck(green);

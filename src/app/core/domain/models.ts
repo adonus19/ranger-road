@@ -155,6 +155,8 @@ export interface ExerciseResult {
   substitutionId?: string;
   /** A person's own description of a modification; no prescription is inferred from it. */
   modificationNotes?: string;
+  /** Set when a readiness swap replaced the written exercise: the exercise that was written. */
+  swappedFrom?: string;
 }
 
 export interface WorkoutSession {

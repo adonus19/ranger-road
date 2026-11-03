@@ -147,6 +147,7 @@ Only one workout draft may be active. It is updated as sets are recorded, can re
 - sets[] (each set: reps?, duration?, load?, rpe?, completed?, assistance?)
 - painEvents[]
 - substitutionId?
+- swappedFrom? (the written exercise, when a readiness swap replaced it)
 - modificationNotes? (the person's own description of a change; it does not create a new prescribed substitution)
 
 Each set may carry `assistance?` (pounds of band help on an assisted pull-up, 0 for no band, stacked bands added together). It is separate from `load`. Sets saved before it existed simply lack it. For assisted pull-ups, less assistance is the better set, with more reps breaking a tie.
@@ -429,7 +430,7 @@ Forge C is a seeded WorkoutDefinition for Chapter I (`chapter-1-forge-c`) whose 
 
 ### Readiness swaps
 
-A swap taken on a readiness gate is saved as the ExerciseResult's `substitutionId`, with `substitutionReason?: 'readiness'`, so the session is reduced for a pain reason and holds the next hint. A press stance choice on a back-pain day is saved as `stance?: 'seated' | 'half-kneeling' | 'standing'` on the ExerciseResult.
+A swap taken on a readiness gate is saved under the exercise actually done: the draft's prescription and the ExerciseResult hold the new exercise, and the result's `swappedFrom?` names the written one. The session is marked reduced, so no load rises after it. The written exercise's next hint holds ("swapped for your shoulder last time") until it is done as written again. Older sessions have no `swappedFrom` and read unchanged; the field is optional, so the database version is unchanged. A press stance choice on a back-pain day is saved as `stance?: 'seated' | 'half-kneeling' | 'standing'` on the ExerciseResult.
 
 ### Skill parts in trials
 

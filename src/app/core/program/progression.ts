@@ -61,6 +61,7 @@ export type HoldReason =
   | { code: 'yellow-today' }
   | { code: 'deload-week' }
   | { code: 'yellow-last' }
+  | { code: 'swapped-last' }
   | { code: 'final-effort'; effort: number }
   | { code: 'no-final-effort' }
   | { code: 'below-target'; target: number; unit: 'reps' | 'seconds' }
@@ -226,6 +227,25 @@ function wasYellow(context: ProgressionContext, exposure: Exposure): boolean {
   return !!check && effectiveReadinessStatus(check) !== 'green';
 }
 
+/** Whether a readiness swap replaced this exercise in a session after its last exposure. */
+function swappedSince(
+  context: ProgressionContext,
+  exerciseId: string,
+  last: Exposure | undefined,
+): boolean {
+  return (
+    !!last &&
+    context.sessions.some(
+      (session) =>
+        !isCustomSession(session) &&
+        session.outcome !== 'stopped' &&
+        session.date >= last.date &&
+        session.id !== last.sessionId &&
+        session.exerciseResults.some((result) => result.swappedFrom === exerciseId),
+    )
+  );
+}
+
 function hadPain(context: ProgressionContext, exposure: Exposure): boolean {
   const session = sessionById(context, exposure.sessionId);
   return !!session?.exerciseResults.find((result) => result.exerciseId === exposure.exerciseId)
@@ -338,6 +358,9 @@ function progressionHint(
   // Strength never starts without a same-day check, so a missing check never reaches here.
   if (today.readiness && today.readiness !== 'green') return hold({ code: 'yellow-today' });
   if (context.dayOf(today.date)?.deload) return hold({ code: 'deload-week' });
+  // A shoulder swap after the last time this was done as written: no load rise from older work.
+  if (swappedSince(context, prescription.exerciseId, exposures[0]))
+    return hold({ code: 'swapped-last' });
   if ('hold' in found) return hold(found.hold);
 
   const { basis, context: basisContext } = found;

@@ -855,3 +855,24 @@ h2 {
 .rest-length select {
   flex: none;
 }
+.swap-offer {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.7rem;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-tint);
+}
+.swap-offer h3,
+.swap-offer p,
+.swap-note {
+  margin: 0;
+}
+.swap-actions {
+  display: grid;
+  gap: 0.5rem;
+}
+.swap-actions button {
+  min-height: var(--touch-target);
+}

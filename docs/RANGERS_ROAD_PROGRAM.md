@@ -236,7 +236,7 @@ In Forge B's tenth slot when it is not the glute bridge: single-leg balance with
 
 These swaps are offered as a calm choice on the Forge screen. None is automatic, and none counts against the session beyond the usual rule that a substitution marks it reduced.
 
-- **Shoulder pain at 3 or more:** the overhead carry may swap to Front-Hold Carry, and the overhead press to Band Pull-Apart. The muscle-up steps of the pull track (straight-bar dip and transition drills, band-assisted muscle-up, muscle-up) follow this swap too.
+- **Shoulder pain at 3 or more:** the overhead carry may swap to Front-Hold Carry, and the overhead press to Band Pull-Apart. The swap is a calm choice on the exercise screen before its first set, with "Keep as written" beside it. A swap marks the session reduced, keeps the sets (a swapped press becomes 12 band pull-aparts with its own sets and no load), and saves the exercise actually done with the written one noted. It applies in Forge C, the Chapter II+ Forges and the custom Forge. The muscle-up steps of the pull track (straight-bar dip and transition drills, band-assisted muscle-up, muscle-up) follow this swap too.
 - **Neck or shoulder pain at 2 or more:** handstand holds, wall walks, handstand push-up work and planche work may swap to a Pike Hold or a regular Push-Up.
 - **Back pain at 2 or more (Chapter IV on):** the press stance rule above.
 - Handstand and planche days add a wrist warm-up of about 1 minute before the work, alternating Wrist Circles and Wrist Rocks from one session to the next.
@@ -292,7 +292,7 @@ Optional, about 20–25 minutes, after the standard warm-up. Forge C sessions fe
 - Pallof Press: 2 × 8 per side
 - Curl: 2 × 10–12, rotating week by week through hammer curl, DB biceps curl and preacher curl. The rotation counts calendar weeks from Week 1's Monday, so it carries on while the Gate Trial waits (Week 4 hammer, then DB curl, then preacher curl).
 
-Week 4 is the deload, so Forge C there is saved as reduced with the note "Keep it light." The days while the Gate Trial waits repeat Week 4, so they get the same note. A finished optional Forge is recorded and tracked like any other session, and records Today's Mission when a mission matches it.
+Week 4 is the deload, so Forge C there is saved as reduced with the note "Keep it light." The days while the Gate Trial waits repeat Week 4, so they get the same note. A finished optional Forge is recorded and tracked like any other session, and a completed one records the day's walk as Today's Mission when the day's mission is a walk.
 
 ## Conditioning
 

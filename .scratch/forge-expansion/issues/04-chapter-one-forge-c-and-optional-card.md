@@ -31,3 +31,5 @@ Choices made beyond the docs, for the person to confirm:
 5. Finishing Forge C does not record Today's Mission. The finish screen says it was extra work and links back to Keep.
 
 **2026-11-03, answers.** 1 Keep the card visible on a Red day: the person always has the choice (opening a strength session still says Red means no strength work, because that rule lives in the workout domain). 2, 3 and 4 OK. 5 The session is recorded and tracked like any other, and it records Today's Mission when a mission matches; the "extra work" finish text shows only when none does. Linking back to Keep stays. Applied in code and docs; 569 tests and the build pass.
+
+**2026-11-03, follow-up.** 5 refined: a completed optional Forge records the day's walk as Today's Mission when the day's mission is a walk (`missionMatchFor`); a stopped one records nothing, and a reduced optional Forge does not make the walk reduced.

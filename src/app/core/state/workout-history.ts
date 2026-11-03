@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import type {
-  LocalDate,
-  SavedExerciseOrder,
-  WorkoutDraft,
-  WorkoutSession,
-} from '../domain/models';
+import type { LocalDate, SavedExerciseOrder, WorkoutDraft, WorkoutSession } from '../domain/models';
 import type { RecordedWorkoutPainEvent, WorkoutPainInput, WorkoutStart } from '../domain/workout';
 import { RoadDatabase } from '../persistence/road-database';
 
@@ -21,6 +16,11 @@ export class WorkoutHistory {
 
   async saveDraft(draft: WorkoutDraft): Promise<WorkoutDraft> {
     return this.withDatabase((database) => database.saveWorkoutDraft(draft));
+  }
+
+  /** Swaps one exercise before its first set, when today's readiness offers it. */
+  async swapExercise(draftId: string, index: number, toId: string): Promise<WorkoutDraft> {
+    return this.withDatabase((database) => database.swapWorkoutExercise(draftId, index, toId));
   }
 
   async recordPain(draftId: string, input: WorkoutPainInput): Promise<RecordedWorkoutPainEvent> {

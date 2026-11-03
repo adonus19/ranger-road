@@ -43,7 +43,8 @@ import {
   isRestorationWorkout,
   loadWorkoutOn,
 } from '../../../core/program/program-catalog';
-import { isOptionalForge } from '../../../core/program/optional-forge';
+import { shoulderSwapFor } from '../../../core/program/readiness-swaps';
+import { isOptionalForge, missionMatchFor } from '../../../core/program/optional-forge';
 import { CUSTOM_FORGE_ID } from '../../../core/program/custom-forge';
 import { progressionKind } from '../../../core/program/progression-kinds';
 import { CampaignState } from '../../../core/state/campaign-state';
@@ -206,6 +207,21 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   protected readonly currentSet = computed(() => {
     const draft = this.draft();
     return draft?.exerciseResults[draft.currentExerciseIndex]?.sets[draft.currentSetIndex] ?? null;
+  });
+  /** Written exercises the person chose to keep today; the choice is theirs and never automatic. */
+  private readonly keptAsWritten = signal<readonly string[]>([]);
+  /** The calm shoulder swap on the current exercise, offered only before its first set. */
+  protected readonly shoulderSwap = computed(() => {
+    const draft = this.draft();
+    const written = this.currentPrescription();
+    const result = this.currentResult();
+    const check = this.readiness();
+    if (!draft || !written || !result || !check || result.swappedFrom) return null;
+    if (this.keptAsWritten().includes(written.exerciseId)) return null;
+    if (result.sets.some((set) => set.completed !== undefined)) return null;
+    const swap = shoulderSwapFor(written.exerciseId, check.shoulderPain);
+    if (!swap || draft.exerciseResults.some((item) => item.exerciseId === swap.toId)) return null;
+    return { ...swap, name: getExerciseGuide(swap.toId)?.name ?? swap.toId };
   });
   /** Assisted pull-ups record band help in place of a load. */
   protected readonly isAssisted = computed(
@@ -548,7 +564,10 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
         const exercises = draft.definitionSnapshot.exercises;
         await this.history.rememberOrder(
           draft.workoutDefinitionId,
-          order.map((index) => exercises[index].exerciseId),
+          // A swapped exercise is remembered as the one that was written.
+          order.map(
+            (index) => draft.exerciseResults[index]?.swappedFrom ?? exercises[index].exerciseId,
+          ),
         );
       } else {
         await this.history.forgetOrder(draft.workoutDefinitionId);
@@ -751,6 +770,34 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     }
   }
 
+  protected keepAsWritten(): void {
+    const written = this.currentPrescription();
+    if (written) this.keptAsWritten.update((kept) => [...kept, written.exerciseId]);
+  }
+
+  protected async takeSwap(): Promise<void> {
+    const draft = this.draft();
+    const swap = this.shoulderSwap();
+    if (!draft || !swap || this.saving()) return;
+    this.saving.set(true);
+    this.error.set(null);
+    try {
+      await this.state.initialize();
+      if (this.blocked()) return;
+      const saved = await this.history.swapExercise(
+        draft.id,
+        draft.currentExerciseIndex,
+        swap.toId,
+      );
+      this.draft.set(saved);
+      this.syncForms(saved);
+    } catch (error) {
+      this.showError(error);
+    } finally {
+      this.saving.set(false);
+    }
+  }
+
   protected async saveModification(event: Event): Promise<void> {
     event.preventDefault();
     const draft = this.draft();
@@ -833,12 +880,14 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
 
   /** The work is already saved; recording today's mission is a courtesy that can fail quietly. */
   private async recordMission(session: WorkoutSession): Promise<void> {
+    const match = missionMatchFor(session.workoutDefinitionId, session.outcome, this.isRestoration);
+    if (!match) return;
     try {
       this.missionRecorded.set(
-        await this.recorder.recordToday(
-          { workoutId: session.workoutDefinitionId, restoration: this.isRestoration },
-          { reduced: session.outcome === 'stopped' || !!session.reduced },
-        ),
+        await this.recorder.recordToday(match, {
+          // The optional Forge's own reduced flag says nothing about the walk it records.
+          reduced: !this.optional && (session.outcome === 'stopped' || !!session.reduced),
+        }),
       );
     } catch {
       this.missionRecorded.set(null);

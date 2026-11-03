@@ -43,6 +43,7 @@ import {
   createRecordedWorkoutPain,
   createWorkoutDraft,
   latestWorkoutReadiness,
+  swapWorkoutExercise,
   updateWorkoutDraft,
   type RecordedWorkoutPainEvent,
   type WorkoutPainInput,
@@ -398,6 +399,57 @@ export class RoadDatabase {
       transaction.oncomplete = () => resolve(structuredClone(saved!));
       transaction.onabort = () =>
         reject(failure ?? transaction.error ?? new Error('Unable to save the workout draft.'));
+    });
+  }
+
+  /** A calm readiness swap, checked against today's readiness inside one transaction. */
+  swapWorkoutExercise(draftId: string, index: number, toId: string): Promise<WorkoutDraft> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(
+        ['readinessChecks', 'workoutDrafts'],
+        'readwrite',
+      );
+      let swapped: WorkoutDraft | undefined;
+      let stored: WorkoutDraft | undefined;
+      let checks: ReadinessCheck[] | undefined;
+      let failure: Error | undefined;
+      const fail = (error: unknown) => {
+        failure = error instanceof Error ? error : new Error('The swap could not be saved.');
+        transaction.abort();
+      };
+      const swapWhenLoaded = () => {
+        if (!stored || !checks || swapped) return;
+        try {
+          swapped = swapWorkoutExercise(
+            stored,
+            index,
+            toId,
+            latestWorkoutReadiness(checks, stored.date),
+          );
+          transaction.objectStore('workoutDrafts').put(swapped);
+        } catch (error) {
+          fail(error);
+        }
+      };
+      const draftRequest = transaction.objectStore('workoutDrafts').get(draftId);
+      draftRequest.onsuccess = () => {
+        stored = draftRequest.result as WorkoutDraft | undefined;
+        if (!stored) fail(new Error('The active workout was not found.'));
+        else {
+          const date = stored.date;
+          const checksRequest = transaction
+            .objectStore('readinessChecks')
+            .index('date')
+            .getAll(date);
+          checksRequest.onsuccess = () => {
+            checks = checksRequest.result as ReadinessCheck[];
+            swapWhenLoaded();
+          };
+        }
+      };
+      transaction.oncomplete = () => resolve(structuredClone(swapped!));
+      transaction.onabort = () =>
+        reject(failure ?? transaction.error ?? new Error('Unable to swap the exercise.'));
     });
   }
 

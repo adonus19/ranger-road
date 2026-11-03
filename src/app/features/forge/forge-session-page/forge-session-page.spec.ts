@@ -54,6 +54,7 @@ async function render(
     draft?: WorkoutDraft;
     sessions?: WorkoutSession[];
     history?: Partial<Record<keyof WorkoutHistory, unknown>>;
+    shoulderPain?: number;
   } = {},
 ) {
   const schedule = new ScheduleHistory();
@@ -64,7 +65,11 @@ async function render(
     redDates: new Set(),
   });
   schedule.refresh = vi.fn(async () => undefined);
-  const readiness = { date: today, status: 'green' } as ReadinessCheck;
+  const readiness = {
+    date: today,
+    status: 'green',
+    shoulderPain: options.shoulderPain ?? 0,
+  } as ReadinessCheck;
   TestBed.configureTestingModule({
     imports: [ForgeSessionPage],
     providers: [
@@ -185,6 +190,51 @@ function boxSquatWeekTwo(): WorkoutSession {
 }
 
 describe('ForgeSessionPage', () => {
+  describe('Shoulder swap', () => {
+    const pressDraft = () => {
+      const draft = startedDraft('2026-11-10');
+      draft.currentExerciseIndex = draft.definitionSnapshot.exercises.findIndex((exercise) =>
+        exercise.exerciseId.includes('overhead-press'),
+      );
+      return draft;
+    };
+
+    it('offers a calm choice at shoulder pain 3, and applies nothing by itself', async () => {
+      const draft = pressDraft();
+      const swapExercise = vi.fn();
+      const element = await render('chapter-2-forge-a', '2026-11-10', {
+        draft,
+        shoulderPain: 3,
+        history: { swapExercise },
+      });
+      expect(draft.currentExerciseIndex).toBeGreaterThanOrEqual(0);
+      const offer = element.querySelector('.swap-offer');
+      expect(offer?.textContent).toContain('Band Pull-Apart');
+      expect(offer?.textContent).toContain('reduced');
+      expect(swapExercise).not.toHaveBeenCalled();
+    });
+
+    it('stays away below shoulder pain 3', async () => {
+      const element = await render('chapter-2-forge-a', '2026-11-10', {
+        draft: pressDraft(),
+        shoulderPain: 2,
+      });
+      expect(element.querySelector('.swap-offer')).toBeNull();
+    });
+
+    it('closes the offer on "Keep as written"', async () => {
+      const element = await render('chapter-2-forge-a', '2026-11-10', {
+        draft: pressDraft(),
+        shoulderPain: 4,
+      });
+      const keep = [...element.querySelectorAll<HTMLButtonElement>('.swap-offer button')].find(
+        (button) => button.textContent?.includes('Keep as written'),
+      )!;
+      keep.click();
+      await vi.waitFor(() => expect(element.querySelector('.swap-offer')).toBeNull());
+    });
+  });
+
   it('opens a Forge session moved to today by a make-up', async () => {
     const element = await render('chapter-2-forge-a', '2026-11-10');
     expect(element.textContent).not.toContain('not part of today');

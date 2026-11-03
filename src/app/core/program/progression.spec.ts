@@ -67,6 +67,7 @@ interface Work {
   prescription?: ExercisePrescription;
   pain?: boolean;
   substitution?: boolean;
+  swappedFrom?: string;
 }
 
 let count = 0;
@@ -104,6 +105,7 @@ function session(
           ]
         : [],
       ...(item.substitution ? { substitutionId: 'other' } : {}),
+      ...(item.swappedFrom ? { swappedFrom: item.swappedFrom } : {}),
     })),
   } as WorkoutSession;
 }
@@ -696,5 +698,30 @@ describe('campaign days', () => {
     expect(dayOf('2026-11-23')).toEqual({ chapter: 2, week: 8, deload: true });
     expect(dayOf('2026-10-04')).toBeNull();
     expect(campaignDayResolver(undefined, trials)('2026-10-19')).toBeNull();
+  });
+});
+
+describe('A shoulder swap and the next hint', () => {
+  it('holds the written exercise until it is done as written again', () => {
+    const asWritten = session('2026-11-02', [
+      { id: 'bench-press', sets: sets(95, [6, 6, 6], 6), prescription: bench },
+    ]);
+    const swapped = session(
+      '2026-11-05',
+      [{ id: 'band-pull-apart', sets: sets(undefined, [12, 12, 12]), swappedFrom: 'bench-press' }],
+      { reduced: true },
+    );
+    const held = exerciseProgress(bench, green, context(asWritten, swapped));
+    expect(held.hint).toMatchObject({ type: 'hold', reason: { code: 'swapped-last' } });
+
+    const again = session('2026-11-09', [
+      { id: 'bench-press', sets: sets(95, [6, 6, 6], 6), prescription: bench },
+    ]);
+    const next = exerciseProgress(
+      bench,
+      { ...green, date: '2026-11-12' },
+      context(asWritten, swapped, again),
+    );
+    expect(next.hint).not.toMatchObject({ reason: { code: 'swapped-last' } });
   });
 });

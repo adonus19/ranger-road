@@ -95,6 +95,7 @@ const HOLD_REASONS: Record<HoldReason['code'], (reason: HoldReason) => string> =
   'yellow-today': () => 'Yellow today',
   'deload-week': () => 'deload week',
   'yellow-last': () => 'last session was Yellow',
+  'swapped-last': () => 'swapped for your shoulder last time',
   'final-effort': (reason) =>
     `final effort ${reason.code === 'final-effort' ? reason.effort : ''} last time`,
   'no-final-effort': () => 'no final effort recorded',

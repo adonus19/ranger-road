@@ -75,3 +75,17 @@ function doneThisWeek(date: LocalDate, history: MakeupHistory): boolean {
       session.date <= sunday,
   );
 }
+
+/**
+ * Which of the day's missions a finished session records. The optional Forge sits beside the
+ * day's order, so a completed one records the day's walk (the conditioning mission), as the
+ * walk itself would; a stopped one records nothing. Any other session records its own mission.
+ */
+export function missionMatchFor(
+  workoutId: string,
+  outcome: 'completed' | 'stopped' | undefined,
+  restoration: boolean,
+): { workoutId?: string; missionType?: 'conditioning'; restoration?: boolean } | null {
+  if (!isOptionalForge(workoutId)) return { workoutId, restoration };
+  return outcome === 'stopped' ? null : { missionType: 'conditioning' };
+}

@@ -5,7 +5,7 @@ import { resolveCampaignPosition, type TrialRecord } from './campaign-position';
 import { getActivityChoices } from './chapter-orders';
 import { chapterOneForgeC, chapterOneForgeCForWeek } from './chapter-one-workouts';
 import { isThreeForgeWeek, type MakeupHistory } from './makeup-schedule';
-import { getOptionalForge, isOptionalForge } from './optional-forge';
+import { getOptionalForge, isOptionalForge, missionMatchFor } from './optional-forge';
 import { loadWorkoutOn } from './program-catalog';
 import { exerciseProgress } from './progression';
 
@@ -53,12 +53,7 @@ function offer(
     trials?: TrialRecord[];
   } = {},
 ) {
-  return getOptionalForge(
-    date,
-    options.today ?? date,
-    resolverFor(options.trials),
-    saved,
-  );
+  return getOptionalForge(date, options.today ?? date, resolverFor(options.trials), saved);
 }
 
 describe('Optional Forge eligibility', () => {
@@ -156,6 +151,18 @@ describe('Optional Forge eligibility', () => {
 
   it('does not read readiness: the person always has the choice', () => {
     expect(offer('2026-10-07')).not.toBeNull();
+  });
+
+  it('records the day’s walk when an optional Forge is completed, and nothing when stopped', () => {
+    expect(missionMatchFor(FORGE_C, 'completed', false)).toEqual({ missionType: 'conditioning' });
+    expect(missionMatchFor('custom-forge', 'completed', false)).toEqual({
+      missionType: 'conditioning',
+    });
+    expect(missionMatchFor(FORGE_C, 'stopped', false)).toBeNull();
+    expect(missionMatchFor('chapter-1-forge-a', 'completed', false)).toEqual({
+      workoutId: 'chapter-1-forge-a',
+      restoration: false,
+    });
   });
 
   it('knows Forge C is the optional Forge', () => {
