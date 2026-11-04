@@ -593,7 +593,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     painAwareOptions:
       'Shorter dip range, more foot help in the transition. Shoulder pain at 3 or more swaps this step.',
     equipment: 'The rack’s two short dip bars; a barbell and rack for the transition drill.',
-    textOnly: true,
   },
   {
     id: 'band-assisted-muscle-up',
@@ -607,7 +606,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
       'Kipping beyond a small hip drive, one arm turning over before the other, crashing down.',
     painAwareOptions: 'A stronger band or fewer reps. Shoulder pain at 3 or more swaps this step.',
     equipment: 'Pull-up bar with clearance above it, band.',
-    textOnly: true,
   },
   {
     id: 'muscle-up',
@@ -621,7 +619,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     painAwareOptions:
       'Go back to the band for the day. Shoulder pain at 3 or more swaps this step.',
     equipment: 'Pull-up bar with clearance above it.',
-    textOnly: true,
   },
   {
     id: 'pike-push-up',
@@ -634,7 +631,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Elbows flaring straight out, dropping the hips, letting the head hit the floor.',
     painAwareOptions: 'A smaller range, hands on the bench, or regular push-ups.',
     equipment: 'None.',
-    textOnly: true,
   },
   {
     id: 'feet-elevated-pike-push-up',
@@ -648,7 +644,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     painAwareOptions:
       'Feet on a lower step, or flat pike push-ups. Neck or shoulder pain at 2 or more swaps this to a pike hold or regular push-ups.',
     equipment: 'Bench or box.',
-    textOnly: true,
   },
   {
     id: 'wall-handstand-push-up-negative',
@@ -662,7 +657,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     painAwareOptions:
       'A shorter lowering, or feet-elevated pike push-ups. Neck or shoulder pain at 2 or more swaps this.',
     equipment: 'Clear wall space, a folded towel or mat.',
-    textOnly: true,
   },
   {
     id: 'wall-handstand-push-up',
@@ -675,7 +669,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Bouncing off the head, kicking the legs to finish, a hard arch.',
     painAwareOptions: 'Negatives only. Neck or shoulder pain at 2 or more swaps this.',
     equipment: 'Clear wall space, a folded towel or mat.',
-    textOnly: true,
   },
   {
     id: 'wall-plank-hold',
@@ -688,7 +681,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Sagging hips, holding the breath, going higher than feels controlled.',
     painAwareOptions: 'Lower on the wall, or a plank on the floor.',
     equipment: 'Clear wall space.',
-    textOnly: true,
   },
   {
     id: 'wall-walk',
@@ -701,7 +693,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Rushing, letting the low back sag, walking closer than you can control.',
     painAwareOptions: 'Stop partway up.',
     equipment: 'Clear wall space.',
-    textOnly: true,
   },
   {
     id: 'chest-to-wall-handstand-hold',
@@ -714,7 +705,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'A banana-shaped back, bent arms, holding the breath.',
     painAwareOptions: 'Shorter holds or a wall walk partway.',
     equipment: 'Clear wall space.',
-    textOnly: true,
   },
   {
     id: 'kick-up-to-wall',
@@ -728,7 +718,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
       'Kicking hard enough to slam the wall, hands too far from the wall, not practising the bail first.',
     painAwareOptions: 'Chest-to-wall hold instead.',
     equipment: 'Clear wall space.',
-    textOnly: true,
   },
   {
     id: 'freestanding-handstand-attempts',
@@ -754,7 +743,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Bent elbows, sagging hips, leaning further than the wrists allow.',
     painAwareOptions: 'A smaller lean.',
     equipment: 'None.',
-    textOnly: true,
   },
   {
     id: 'frog-stand',
@@ -767,7 +755,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Leaning so far that you tip onto your face, holding the breath.',
     painAwareOptions: 'Keep the toes touching the floor.',
     equipment: 'None; a cushion in front.',
-    textOnly: true,
   },
   {
     id: 'pseudo-planche-push-up',
@@ -780,7 +767,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Losing the lean on the way up, sagging hips.',
     painAwareOptions: 'Less lean.',
     equipment: 'None.',
-    textOnly: true,
   },
   {
     id: 'tuck-planche-hold',
@@ -793,7 +779,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Bent arms, rushing into it.',
     painAwareOptions: 'Frog stand.',
     equipment: 'None.',
-    textOnly: true,
   },
   {
     id: 'advanced-tuck-planche-hold',
@@ -806,7 +791,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Bent arms, hips dropping.',
     painAwareOptions: 'Tuck planche.',
     equipment: 'None.',
-    textOnly: true,
   },
   {
     id: 'tuck-planche-push-up',
@@ -819,7 +803,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Feet touching down, losing the lean.',
     painAwareOptions: 'Tuck planche hold.',
     equipment: 'None.',
-    textOnly: true,
   },
   {
     id: 'straddle-planche',
@@ -832,7 +815,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Bent arms, hips piking up.',
     painAwareOptions: 'Advanced tuck.',
     equipment: 'None.',
-    textOnly: true,
   },
   {
     id: 'planche-push-up',
@@ -845,7 +827,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Bent arms at the top, piking.',
     painAwareOptions: 'Straddle planche hold.',
     equipment: 'None.',
-    textOnly: true,
   },
   {
     id: 'wrist-circles',
@@ -898,7 +879,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Knee caving inward, hip dropping, landing weight on the lowering foot.',
     painAwareOptions: 'A lower step, a hand on the rack.',
     equipment: 'Low step or box.',
-    textOnly: true,
   },
   {
     id: 'single-leg-reach',
@@ -911,7 +891,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Putting weight on the reaching foot, knee caving in.',
     painAwareOptions: 'Shorter reaches, a hand on the rack.',
     equipment: 'None.',
-    textOnly: true,
   },
   {
     id: 'single-leg-romanian-deadlift',
@@ -926,7 +905,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     stopOrSubstitute:
       'If lower-back symptoms increase, as with the Elevated Light Hinge. Skip it on a day the light hinge would be skipped.',
     equipment: 'One light dumbbell; a wall or rack for balance if needed.',
-    textOnly: true,
   },
 ];
 
