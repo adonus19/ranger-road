@@ -47,7 +47,7 @@
   </section>
 
   <div class="station-parts">
-    @for (phase of trial.phases.slice(1); track phase.id) {
+    @for (phase of trial.phases.slice(1); track phase.id; let index = $index) {
       <section [id]="phase.id" [attr.aria-labelledby]="phase.id + '-title'">
         <h2 [id]="phase.id + '-title'">{{ phase.title }}</h2>
         @for (instruction of phase.instructions ?? []; track instruction) {
@@ -57,6 +57,26 @@
           <p>{{ prompt }}</p>
         }
       </section>
+      @if (index === 1 && skillParts().length) {
+        <section id="skill-parts" aria-labelledby="skill-parts-title">
+          <h2 id="skill-parts-title">
+            {{ skillParts().length === 1 ? 'Skill part' : 'Skill parts' }}
+          </h2>
+          <p>
+            You passed
+            @for (
+              part of skillParts();
+              track part.stepExerciseId;
+              let last = $last;
+              let first = $first
+            ) {
+              {{ first ? '' : last ? ' and ' : ', ' }}{{ exerciseName(part.stepExerciseId) }}
+            }
+            in your Forge, so the trial asks you to show
+            {{ skillParts().length === 1 ? 'it' : 'each one' }}, or the step just below.
+          </p>
+        </section>
+      }
     }
     <p>
       Passing means finishing every part as written on a Green day, with no pain at 3 or more and no
@@ -112,6 +132,10 @@
               Three flights · breathlessness
               {{ metric(result.phaseResults[2], 'breathlessness') }}/10
             </p>
+            @for (part of result.definitionSnapshot?.skillParts ?? []; track part.stepExerciseId) {
+              <h3>{{ exerciseName(part.stepExerciseId) }}</h3>
+              <p>{{ outcomeWords(result.skillResults?.[$index]) }}</p>
+            }
             <h3>Leadership</h3>
             <p>{{ response(result.phaseResults[3], 'attentive') }}</p>
             <p>Behavior to change: {{ response(result.phaseResults[3], 'behavior') }}</p>

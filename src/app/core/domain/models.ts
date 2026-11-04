@@ -464,6 +464,34 @@ export interface TrialDefinition {
   /** Definition revision; absent on trials saved before detailed program content arrived. */
   contentVersion?: number;
   phases: TrialPhase[];
+  /**
+   * Skill parts (CHAPTERS_AND_TRIALS.md, Skill Parts in Trials): the track steps first passed in
+   * this trial's chapter, copied in when an attempt starts. Absent on the seed and on older rows.
+   */
+  skillParts?: TrialSkillPart[];
+}
+
+/** One track step a trial asks the person to show. */
+export interface TrialSkillPart {
+  trackId: string;
+  stepExerciseId: string;
+  /** The step just below, which also completes the part. Absent for a track's first step. */
+  stepBelowExerciseId?: string;
+  /** The session date of the step's first pass. */
+  passedOn: LocalDate;
+}
+
+export type TrialSkillOutcome = 'demonstrated' | 'step-below' | 'set-aside-for-pain';
+
+/** What the person recorded for one skill part. A draft may not have an outcome yet. */
+export interface TrialSkillPartResult {
+  trackId: string;
+  stepExerciseId: string;
+  outcome?: TrialSkillOutcome;
+  /** The step, or the step below; absent when the part was set aside for pain. */
+  exerciseIdDone?: string;
+  /** Optional reps or seconds for each set, as for a Forge set. */
+  sets?: { reps?: number; seconds?: number }[];
 }
 
 export interface TrialCircuitMovementResult {
@@ -506,6 +534,8 @@ export interface TrialResult {
   readinessId?: string;
   /** Time saved, separate from the trial's local date. */
   recordedAt?: IsoTimestamp;
+  /** One result per skill part in the snapshot, in the same order. Absent on older rows. */
+  skillResults?: TrialSkillPartResult[];
 }
 
 export type RecoveryEnergy = 'low' | 'steady' | 'good';
@@ -551,6 +581,8 @@ export interface TrialDraft {
   phaseResults: TrialPhaseResult[];
   painEvents: PainEvent[];
   photoAsset?: string;
+  /** One slot per skill part in the snapshot; absent when the trial has none. */
+  skillResults?: TrialSkillPartResult[];
 }
 
 /** An immutable historical record when an in-progress trial is stopped. */

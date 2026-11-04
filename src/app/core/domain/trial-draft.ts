@@ -10,8 +10,15 @@ import type {
   TrialDraft,
   TrialPhaseResult,
   TrialResult,
+  TrialSkillPart,
 } from './models';
 import { classifyReadiness } from './readiness';
+import {
+  SKILL_PARTS_PHASE_ID,
+  assertSkillPartsComplete,
+  blankSkillResults,
+  normalizeSkillResults,
+} from './trial-skill-parts';
 import {
   threeMilePhaseComplete,
   threeMileReflection,
@@ -71,7 +78,9 @@ export function trialRulesFor(trialId: string): TrialRules {
 
 /** Revalidate any completed trial at the storage boundary. */
 export function validateCompletedTrialResult(result: TrialResult): SavedTrialResult {
-  return trialRulesFor(result.trialId).validate(result);
+  const saved = trialRulesFor(result.trialId).validate(result);
+  const skillResults = assertSkillPartsComplete(result.skillResults, saved.definitionSnapshot);
+  return skillResults ? { ...saved, skillResults } : saved;
 }
 
 /** Whether one phase of any trial holds everything it needs. */
@@ -86,7 +95,7 @@ export function trialPhaseComplete(
 export type TrialPainAction = 'continue' | 'reduce' | 'substitute' | 'end-exercise';
 
 export interface TrialPainInput {
-  /** A physical phase of the trial, such as 'brisk-walk' or 'three-mile-walk'. */
+  /** A physical phase of the trial, such as 'brisk-walk' or 'three-mile-walk', or the skill parts. */
   phaseId: string;
   bodyArea: string;
   severity: number;
@@ -111,12 +120,17 @@ export function createGateTrialDraft(
   return createTrialDraft(gateTrialDefinition.id, date, readiness, now, id);
 }
 
+/**
+ * `skillParts` are the track steps first passed in the trial's chapter (see
+ * `trialSkillParts`); they are copied into the snapshot so later passes never change it.
+ */
 export function createTrialDraft(
   trialId: string,
   date: LocalDate,
   readiness: ReadinessCheck | undefined,
   now: IsoTimestamp = new Date().toISOString(),
   id: string = `trial-${crypto.randomUUID()}`,
+  skillParts: readonly TrialSkillPart[] = [],
 ): TrialDraft {
   const rules = trialRulesFor(trialId);
   const definition = rules.definition;
@@ -133,9 +147,12 @@ export function createTrialDraft(
     updatedAt: now,
     revision: 1,
     currentPhaseIndex: 0,
-    definitionSnapshot: structuredClone(definition),
+    definitionSnapshot: skillParts.length
+      ? { ...structuredClone(definition), skillParts: structuredClone([...skillParts]) }
+      : structuredClone(definition),
     phaseResults: definition.phases.map((phase) => ({ phaseId: phase.id })),
     painEvents: [],
+    ...(skillParts.length ? { skillResults: blankSkillResults(skillParts) } : {}),
   };
 }
 
@@ -183,6 +200,7 @@ export function updateTrialDraft(
     throw new RangeError(`Move through the ${rules.name} one phase at a time.`);
   }
   const phaseResults = normalizePartialPhases(edited.phaseResults, stored.definitionSnapshot);
+  const skillResults = normalizeSkillResults(edited.skillResults, stored.definitionSnapshot);
   if (edited.photoAsset !== undefined && !edited.photoAsset.trim()) {
     throw new Error('An attached trial photo needs an asset reference.');
   }
@@ -195,6 +213,10 @@ export function updateTrialDraft(
       assertGreenReadiness(latestReadiness, stored.date, now, rules.name);
       assertNoUnsafeTrialPain(stored.painEvents);
     }
+    // The skill parts follow the last physical phase, so they are recorded before moving on.
+    if (stored.currentPhaseIndex === rules.physicalPhases - 1) {
+      assertSkillPartsComplete(skillResults, stored.definitionSnapshot, latestReadiness);
+    }
   }
   return {
     ...structuredClone(stored),
@@ -205,6 +227,7 @@ export function updateTrialDraft(
     photoAsset: edited.photoAsset?.trim(),
     /** A stale form cannot remove pain already saved in the historical store. */
     painEvents: structuredClone(stored.painEvents),
+    ...(skillResults ? { skillResults } : {}),
   };
 }
 
@@ -220,9 +243,12 @@ export function createRecordedTrialPain(
   }
   const rules = trialRulesFor(draft.trialId);
   const physical = rules.definition.phases.slice(0, rules.physicalPhases).map((phase) => phase.id);
+  const skillParts = draft.definitionSnapshot.skillParts ?? [];
+  const skillPhase = input.phaseId === SKILL_PARTS_PHASE_ID && skillParts.length > 0;
   if (
-    !physical.includes(input.phaseId) ||
-    !draft.phaseResults.some((phase) => phase.phaseId === input.phaseId)
+    !skillPhase &&
+    (!physical.includes(input.phaseId) ||
+      !draft.phaseResults.some((phase) => phase.phaseId === input.phaseId))
   ) {
     throw new Error(`Choose a physical ${rules.name} phase for this pain record.`);
   }
@@ -233,7 +259,16 @@ export function createRecordedTrialPain(
   if (!['continue', 'reduce', 'substitute', 'end-exercise'].includes(input.actionTaken)) {
     throw new Error('Choose what you did in response to the pain.');
   }
-  if (input.exerciseId) {
+  if (input.exerciseId && skillPhase) {
+    if (
+      !skillParts.some(
+        (part) =>
+          part.stepExerciseId === input.exerciseId || part.stepBelowExerciseId === input.exerciseId,
+      )
+    ) {
+      throw new Error('Choose one of the trial’s skill parts for this pain record.');
+    }
+  } else if (input.exerciseId) {
     const circuit = rules.definition.phases.find((phase) => phase.id === input.phaseId)?.circuit;
     if (!circuit?.movements.some((movement) => movement.exerciseId === input.exerciseId)) {
       throw new Error('Choose a station in the circuit for this pain record.');
@@ -284,7 +319,12 @@ export function completeTrialDraft(
       );
     }
   }
-  return rules.validate({
+  const skillResults = assertSkillPartsComplete(
+    draft.skillResults,
+    draft.definitionSnapshot,
+    latestReadiness,
+  );
+  return validateCompletedTrialResult({
     id: draft.id,
     trialId: draft.trialId,
     date: draft.date,
@@ -294,6 +334,7 @@ export function completeTrialDraft(
     phaseResults: phases,
     ...(draft.photoAsset ? { photoAsset: draft.photoAsset } : {}),
     reflection: rules.reflection(phases),
+    ...(skillResults ? { skillResults } : {}),
   });
 }
 
@@ -326,6 +367,7 @@ export function stopGateTrialDraft(
     phaseResults: structuredClone(draft.phaseResults),
     painEvents: structuredClone(draft.painEvents),
     ...(draft.photoAsset ? { photoAsset: draft.photoAsset } : {}),
+    ...(draft.skillResults ? { skillResults: structuredClone(draft.skillResults) } : {}),
     outcome: 'stopped',
   };
 }

@@ -232,6 +232,8 @@ Save a completed trial without forcing an early post-mission function answer. A 
 
 When a chapter's trial includes a skill part (see Skill Parts in Trials in `CHAPTERS_AND_TRIALS.md`), it is its own part in the active trial, named by the step ("Wall Walk"). The person records one of: "Demonstrated", "Demonstrated the step below (Wall Plank Hold)", or, on a pain-gated day, "Set aside for pain". The step's Quick Help opens from the part.
 
+Built in ticket 09 for the Three-Mile Trial. The skill parts share one step after the stairs and before the leadership reflection, with its own dot in the progress row. Each part shows the step's "Passed when" as the standard and, below it, the step below and its standard. A track's first step has no "step below" choice. "Set aside for pain" appears only when today's check meets that step's gate, with a line saying the trial still counts. Once an outcome is chosen, optional boxes take the reps or seconds of each set, counted in the done step's own unit. Pain can be recorded and the trial stopped from this step, as on the walk, carry and stairs. The step must be finished, like any physical part, before the reflection opens, and the end of physical effort (for the recovery check) is saved when the person leaves it. The trial's plan page and its start screen name the parts an attempt today would include, and the part count reads six or more. The review, the completed summary and the recorded attempts list each part's outcome.
+
 ## Pain Flow
 
 Tap Pain:
@@ -299,5 +301,5 @@ When a Forge session is missed, the next morning's Keep, Today's Mission and For
 - Carry: weight (prefilled 30 lb; at least 30 lb to pass), seconds in each hand (at least 60 each), and grip, core and posture difficulty as plain words: Easy, Moderate, Hard. The Suitcase Carry's Quick Help and pictures open from this part.
 - Stairs: a "three flights at a steady pace" confirmation and breathlessness 1–10. If the stairs are not appropriate that day, the attempt is stopped and kept, not passed.
 - Leadership reflection: both prompts answered. Prayer: a confirmation that Psalm 121 was read and the family prayed for.
-- Pain notes can be recorded during the walk, carry and stairs. The end of the stair test is saved as the end of physical effort, for the recovery check.
+- Pain notes can be recorded during the walk, carry and stairs, and during any skill parts. The end of the stair test (or of the skill parts, when the trial has them) is saved as the end of physical effort, for the recovery check.
 - The recovery check works as it does for the Gate Trial: it opens 60 minutes after the stair test ends (`/road/three-mile-trial/recovery/:resultId`), and the Keep reminder, which looks across every chapter's trial, links to the right one for 12 hours. The saved check and any pain notes appear in the trial's recorded attempts.

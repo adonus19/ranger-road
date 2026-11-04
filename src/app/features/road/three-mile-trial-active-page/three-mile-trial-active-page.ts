@@ -17,6 +17,9 @@ import type {
   TrialDraft,
   TrialPhaseResult,
   TrialResult,
+  TrialSkillOutcome,
+  TrialSkillPart,
+  TrialSkillPartResult,
 } from '../../../core/domain/models';
 import {
   CARRY_DIFFICULTIES,
@@ -25,6 +28,15 @@ import {
 } from '../../../core/domain/three-mile-trial';
 import type { SavedTrialResult } from '../../../core/domain/trial';
 import { trialPhaseComplete, type TrialPainAction } from '../../../core/domain/trial-draft';
+import {
+  SKILL_PARTS_PHASE_ID,
+  skillPartDose,
+  skillPartsComplete,
+  stepPainGated,
+  skillPartsForTrial,
+} from '../../../core/domain/trial-skill-parts';
+import { trackStepOf } from '../../../core/program/skill-tracks';
+import { ProgressionHistory } from '../../../core/state/progression-history';
 import { threeMileTrialDefinition } from '../../../core/program/chapter-two-trial.seed';
 import { getExerciseGuide, getQuickHelpSteps } from '../../../core/program/exercise-guides';
 import { getTrialWindow } from '../../../core/program/trial-window';
@@ -32,6 +44,7 @@ import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory, loadCampaignTrials } from '../../../core/state/trial-history';
 import { formatLongDate, formatShortDate } from '../../../shared/format-date';
 import { Icon } from '../../../shared/icon/icon';
+import { exerciseName, skillOutcomeWords } from '../skill-part-words';
 
 const GREEN = 'Green · Ready';
 const PHYSICAL_PHASES = 3;
@@ -55,6 +68,10 @@ function numeric(value: string, integer = false): number | undefined {
     );
   }
   return parsed;
+}
+
+function countWord(count: number): string {
+  return ['five', 'six', 'seven', 'eight', 'nine', 'ten'][count - 5] ?? String(count);
 }
 
 function shown(value: unknown): string {
@@ -119,6 +136,16 @@ export class ThreeMileTrialActivePage implements OnInit, OnDestroy {
   protected readonly invalidField = signal<string | null>(null);
   protected readonly clock = signal(Date.now());
   private readonly campaignTrials = signal<TrialResult[]>([]);
+  private readonly progression = inject(ProgressionHistory);
+  /** The skill step sits after the stairs; it is shown while the draft is still on the stairs. */
+  protected readonly skillView = signal(false);
+  /** Before starting: the skill parts an attempt today would include. */
+  protected readonly previewParts = signal<TrialSkillPart[]>([]);
+  protected readonly skillParts = computed(() => this.draft()?.definitionSnapshot.skillParts ?? []);
+  protected readonly skillDone = computed(() => {
+    const draft = this.draft();
+    return !!draft && skillPartsComplete(draft.skillResults, draft.definitionSnapshot);
+  });
 
   protected readonly model = signal(blankModel());
   protected readonly fields = form(this.model);
@@ -173,6 +200,15 @@ export class ThreeMileTrialActivePage implements OnInit, OnDestroy {
     ),
   );
   protected readonly phase = computed(() => this.trial.phases[this.phaseIndex()]);
+  /** Parts named in the start line and the progress list. */
+  protected readonly partCount = computed(() =>
+    countWord(
+      this.trial.phases.length + (this.draft() ? this.skillParts() : this.previewParts()).length,
+    ),
+  );
+  protected readonly partCountTitle = computed(
+    () => this.partCount().charAt(0).toUpperCase() + this.partCount().slice(1),
+  );
   protected readonly staleDate = computed(() => {
     const draft = this.draft();
     return !!draft && draft.date !== this.state.today();
@@ -240,10 +276,146 @@ export class ThreeMileTrialActivePage implements OnInit, OnDestroy {
       this.campaignTrials.set(trials);
       if (draft?.trialId === this.trial.id) this.accept(draft);
       else this.otherDraft.set(draft ?? null);
+      if (!draft) await this.loadPreview();
     } catch {
       this.error.set('The trial could not open from local storage. Try again.');
     } finally {
       this.loading.set(false);
+    }
+  }
+
+  /** The same rule the attempt uses when it starts, so the start screen names the parts. */
+  private async loadPreview(): Promise<void> {
+    try {
+      const context = await this.progression.load();
+      this.previewParts.set(skillPartsForTrial(this.trial.id, context));
+    } catch {
+      this.previewParts.set([]);
+    }
+  }
+
+  protected completedCount(result: SavedTrialResult): string {
+    return countWord(
+      this.trial.phases.length + (result.definitionSnapshot.skillParts?.length ?? 0),
+    );
+  }
+
+  protected outcomeWords(result: TrialSkillPartResult | undefined): string {
+    return skillOutcomeWords(result);
+  }
+
+  protected setsWords(result: TrialSkillPartResult | undefined): string {
+    const done = result?.exerciseIdDone;
+    const unit = done ? skillPartDose(done)?.unit : undefined;
+    if (!unit || !result?.sets?.some((set) => set[unit] !== undefined)) return '';
+    const values = result.sets.map((set) => (set[unit] === undefined ? '—' : String(set[unit])));
+    return `${values.join(' · ')} ${unit === 'reps' ? 'reps' : 'sec'}`;
+  }
+
+  protected exerciseName(id: string | undefined): string {
+    return exerciseName(id);
+  }
+
+  protected passedWhen(id: string | undefined): string {
+    const found = id ? trackStepOf(id) : undefined;
+    return found?.track.steps[found.index].passedWhen ?? '';
+  }
+
+  protected helpSteps(id: string): string[] {
+    return getQuickHelpSteps(id) ?? [];
+  }
+
+  protected hasPictures(id: string): boolean {
+    const guide = getExerciseGuide(id);
+    return !!guide && !guide.textOnly;
+  }
+
+  protected skillResult(index: number): TrialSkillPartResult | undefined {
+    return this.draft()?.skillResults?.[index];
+  }
+
+  protected canSetAside(part: TrialSkillPart): boolean {
+    return stepPainGated(part.stepExerciseId, this.readiness());
+  }
+
+  /** The optional sets for the exercise the outcome names. */
+  protected doseFor(index: number): { sets: number[]; unit: 'reps' | 'seconds' } | null {
+    const done = this.skillResult(index)?.exerciseIdDone;
+    const dose = done ? skillPartDose(done) : undefined;
+    return dose
+      ? { sets: Array.from({ length: dose.sets }, (_, set) => set), unit: dose.unit }
+      : null;
+  }
+
+  protected setValue(index: number, set: number, unit: 'reps' | 'seconds'): string {
+    const value = this.skillResult(index)?.sets?.[set]?.[unit];
+    return value === undefined ? '' : String(value);
+  }
+
+  protected async chooseSkillOutcome(index: number, outcome: TrialSkillOutcome): Promise<void> {
+    const part = this.skillParts()[index];
+    if (!part) return;
+    const done =
+      outcome === 'demonstrated'
+        ? part.stepExerciseId
+        : outcome === 'step-below'
+          ? part.stepBelowExerciseId
+          : undefined;
+    try {
+      await this.write((next) => {
+        const previous = next.skillResults![index];
+        next.skillResults![index] = {
+          trackId: part.trackId,
+          stepExerciseId: part.stepExerciseId,
+          outcome,
+          ...(done ? { exerciseIdDone: done } : {}),
+          // Sets belong to the exercise done; changing it clears them.
+          ...(done && previous.exerciseIdDone === done && previous.sets
+            ? { sets: previous.sets }
+            : {}),
+        };
+      });
+    } catch (error) {
+      this.fail(error);
+    }
+  }
+
+  protected async recordSkillSet(
+    index: number,
+    set: number,
+    unit: 'reps' | 'seconds',
+    event: Event,
+  ): Promise<void> {
+    const text = (event.target as HTMLInputElement).value;
+    try {
+      const value = numeric(text, true);
+      const sets = this.doseFor(index)?.sets.length ?? 0;
+      await this.write((next) => {
+        const result = next.skillResults![index];
+        const list = Array.from({ length: sets }, (_, item) => ({ ...result.sets?.[item] }));
+        if (value === undefined) delete list[set][unit];
+        else list[set][unit] = value;
+        result.sets = list;
+      });
+    } catch (error) {
+      this.fail(error);
+    }
+  }
+
+  protected async openSkill(): Promise<void> {
+    const draft = this.draft();
+    if (!draft || !this.skillParts().length || !this.phaseComplete(2) || this.skillView()) return;
+    try {
+      if (this.autosave) clearTimeout(this.autosave);
+      if (this.phaseIndex() === 2) await this.flush();
+      this.phaseIndex.set(2);
+      this.skillView.set(true);
+      this.reviewing.set(false);
+      this.painOpen.set(false);
+      this.confirmingStop.set(false);
+      this.revealPhase();
+    } catch (error) {
+      this.fail(error);
     }
   }
 
@@ -296,12 +468,18 @@ export class ThreeMileTrialActivePage implements OnInit, OnDestroy {
 
   protected async selectPhase(index: number): Promise<void> {
     const draft = this.draft();
-    if (!draft || index < 0 || index > draft.currentPhaseIndex || index === this.phaseIndex())
+    if (
+      !draft ||
+      index < 0 ||
+      index > draft.currentPhaseIndex ||
+      (index === this.phaseIndex() && !this.skillView())
+    )
       return;
     try {
       if (this.autosave) clearTimeout(this.autosave);
       await this.flush();
       this.phaseIndex.set(index);
+      this.skillView.set(false);
       this.reviewing.set(false);
       this.painOpen.set(false);
       this.confirmingStop.set(false);
@@ -335,7 +513,16 @@ export class ThreeMileTrialActivePage implements OnInit, OnDestroy {
         const gap = this.incomplete(index);
         throw gap ? new FieldError(gap.message, gap.field) : new Error('Finish this part first.');
       }
-      if (index === this.trial.phases.length - 1) {
+      const skillNext = index === PHYSICAL_PHASES - 1 && this.skillParts().length > 0;
+      if (skillNext && !this.skillView()) {
+        this.skillView.set(true);
+      } else if (skillNext && !this.skillDone()) {
+        const missing = this.skillParts().findIndex((_, item) => !this.skillResult(item)?.outcome);
+        throw new FieldError(
+          `Record how ${this.exerciseName(this.skillParts()[missing]?.stepExerciseId)} went.`,
+          `trial-skill-${missing}-demonstrated`,
+        );
+      } else if (index === this.trial.phases.length - 1) {
         this.reviewing.set(true);
       } else {
         await this.write((next) => {
@@ -352,6 +539,7 @@ export class ThreeMileTrialActivePage implements OnInit, OnDestroy {
           }
         });
         this.phaseIndex.set(index + 1);
+        this.skillView.set(false);
       }
       this.confirmingStop.set(false);
       this.savedMessage.set('Progress saved on this device.');
@@ -468,7 +656,7 @@ export class ThreeMileTrialActivePage implements OnInit, OnDestroy {
         // A malformed unsaved field cannot delay an immediate pain record.
       }
       await this.history.recordPain(draft.id, {
-        phaseId: this.trial.phases[this.phaseIndex()].id,
+        phaseId: this.skillView() ? SKILL_PARTS_PHASE_ID : this.trial.phases[this.phaseIndex()].id,
         bodyArea,
         severity,
         actionTaken: values.actionTaken as TrialPainAction,
@@ -564,6 +752,7 @@ export class ThreeMileTrialActivePage implements OnInit, OnDestroy {
   private accept(draft: TrialDraft): void {
     this.draft.set(draft);
     this.phaseIndex.set(draft.currentPhaseIndex);
+    this.skillView.set(false);
     const [walk, carry, stairs, leadership, prayer] = draft.phaseResults;
     this.model.set({
       fullWalk: walk.metrics?.['distanceMiles'] === 3,
@@ -659,7 +848,14 @@ export class ThreeMileTrialActivePage implements OnInit, OnDestroy {
   }
 
   private revealPhase(): void {
-    this.reveal(this.reviewing() ? '#review-title' : '.trial-phase h2', '.trial-progress');
+    this.reveal(
+      this.reviewing()
+        ? '#review-title'
+        : this.skillView()
+          ? '#skill-parts-title'
+          : '.trial-phase h2',
+      '.trial-progress',
+    );
   }
 
   private reveal(

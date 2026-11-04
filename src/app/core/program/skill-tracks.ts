@@ -39,7 +39,24 @@ export interface TrackStep {
   criteria?: StepCriteria;
   /** The part of "Passed when" the app cannot see in the sets; the person judges it. */
   unchecked?: string;
+  /**
+   * The readiness gate that swaps this step (RANGERS_ROAD_PROGRAM.md, Readiness Gates, and the
+   * step's "Pain-aware options" in the catalog). On such a day a trial's skill part may be set
+   * aside for pain. Absent when no gate names the step.
+   */
+  painGate?: StepPainGate;
 }
+
+/** Pain in any of these areas at or above `atLeast` on today's readiness check. */
+export interface StepPainGate {
+  areas: readonly ('neck' | 'shoulder')[];
+  atLeast: number;
+}
+
+/** Shoulder pain at 3 or more: the muscle-up steps follow the press swap. */
+const SHOULDER_GATE: StepPainGate = { areas: ['shoulder'], atLeast: 3 };
+/** Neck or shoulder pain at 2 or more: handstand, handstand push-up and planche work. */
+const INVERSION_GATE: StepPainGate = { areas: ['neck', 'shoulder'], atLeast: 2 };
 
 export interface SkillTrack {
   id: TrackId;
@@ -96,6 +113,7 @@ export const SKILL_TRACKS: readonly SkillTrack[] = [
       },
       {
         exerciseId: 'straight-bar-dip',
+        painGate: SHOULDER_GATE,
         earliestChapter: 6,
         passedWhen: '3 × 6 straight-bar dips and 3 × 5 transition drills with light foot help.',
         criteria: { sets: 3, reps: 6 },
@@ -103,6 +121,7 @@ export const SKILL_TRACKS: readonly SkillTrack[] = [
       },
       {
         exerciseId: 'band-assisted-muscle-up',
+        painGate: SHOULDER_GATE,
         earliestChapter: 7,
         passedWhen: '3 × 2 clean band-assisted muscle-ups with both arms turning over together.',
         criteria: { sets: 3, reps: 2 },
@@ -110,6 +129,7 @@ export const SKILL_TRACKS: readonly SkillTrack[] = [
       },
       {
         exerciseId: 'muscle-up',
+        painGate: SHOULDER_GATE,
         earliestChapter: 8,
         passedWhen: '3 × 1 strict muscle-ups.',
         criteria: { sets: 3, reps: 1 },
@@ -137,12 +157,14 @@ export const SKILL_TRACKS: readonly SkillTrack[] = [
       },
       {
         exerciseId: 'feet-elevated-pike-push-up',
+        painGate: INVERSION_GATE,
         earliestChapter: 3,
         passedWhen: '3 × 8 feet-elevated pike push-ups.',
         criteria: { sets: 3, reps: 8 },
       },
       {
         exerciseId: 'wall-handstand-push-up-negative',
+        painGate: INVERSION_GATE,
         earliestChapter: 5,
         passedWhen: '3 × 3 controlled negatives of at least 3 seconds each.',
         criteria: { sets: 3, reps: 3 },
@@ -150,6 +172,7 @@ export const SKILL_TRACKS: readonly SkillTrack[] = [
       },
       {
         exerciseId: 'wall-handstand-push-up',
+        painGate: INVERSION_GATE,
         earliestChapter: 7,
         passedWhen: '3 × 3 full wall handstand push-ups.',
         criteria: { sets: 3, reps: 3 },
@@ -164,6 +187,7 @@ export const SKILL_TRACKS: readonly SkillTrack[] = [
     steps: [
       {
         exerciseId: 'wall-plank-hold',
+        painGate: INVERSION_GATE,
         earliestChapter: 5,
         passedWhen: '3 × 30 sec with the feet at hip height or higher.',
         criteria: { sets: 3, seconds: 30 },
@@ -171,6 +195,7 @@ export const SKILL_TRACKS: readonly SkillTrack[] = [
       },
       {
         exerciseId: 'wall-walk',
+        painGate: INVERSION_GATE,
         earliestChapter: 5,
         passedWhen: '3 walks to the hands about a hand’s length from the wall, down under control.',
         criteria: { sets: 3, reps: 1 },
@@ -178,12 +203,14 @@ export const SKILL_TRACKS: readonly SkillTrack[] = [
       },
       {
         exerciseId: 'chest-to-wall-handstand-hold',
+        painGate: INVERSION_GATE,
         earliestChapter: 6,
         passedWhen: '3 × 30 sec.',
         criteria: { sets: 3, seconds: 30 },
       },
       {
         exerciseId: 'kick-up-to-wall',
+        painGate: INVERSION_GATE,
         earliestChapter: 6,
         passedWhen:
           '5 controlled kick-ups each followed by a 15-second hold, plus the bail practised on both sides.',
@@ -192,6 +219,7 @@ export const SKILL_TRACKS: readonly SkillTrack[] = [
       },
       {
         exerciseId: 'freestanding-handstand-attempts',
+        painGate: INVERSION_GATE,
         earliestChapter: 7,
         passedWhen: 'a 10-second freestanding hold. The track stays open past this step.',
         unchecked: 'a 10-second freestanding hold',
@@ -207,6 +235,7 @@ export const SKILL_TRACKS: readonly SkillTrack[] = [
     steps: [
       {
         exerciseId: 'planche-lean',
+        painGate: INVERSION_GATE,
         earliestChapter: 5,
         passedWhen: '2 × 20 sec with the shoulders clearly ahead of the hands.',
         criteria: { sets: 2, seconds: 20 },
@@ -214,42 +243,49 @@ export const SKILL_TRACKS: readonly SkillTrack[] = [
       },
       {
         exerciseId: 'frog-stand',
+        painGate: INVERSION_GATE,
         earliestChapter: 5,
         passedWhen: '2 × 20 sec.',
         criteria: { sets: 2, seconds: 20 },
       },
       {
         exerciseId: 'pseudo-planche-push-up',
+        painGate: INVERSION_GATE,
         earliestChapter: 6,
         passedWhen: '2 × 8.',
         criteria: { sets: 2, reps: 8 },
       },
       {
         exerciseId: 'tuck-planche-hold',
+        painGate: INVERSION_GATE,
         earliestChapter: 7,
         passedWhen: '2 × 10 sec.',
         criteria: { sets: 2, seconds: 10 },
       },
       {
         exerciseId: 'advanced-tuck-planche-hold',
+        painGate: INVERSION_GATE,
         earliestChapter: 8,
         passedWhen: '2 × 10 sec.',
         criteria: { sets: 2, seconds: 10 },
       },
       {
         exerciseId: 'tuck-planche-push-up',
+        painGate: INVERSION_GATE,
         earliestChapter: 9,
         passedWhen: '2 × 3.',
         criteria: { sets: 2, reps: 3 },
       },
       {
         exerciseId: 'straddle-planche',
+        painGate: INVERSION_GATE,
         earliestChapter: 9,
         passedWhen: '2 × 5 sec.',
         criteria: { sets: 2, seconds: 5 },
       },
       {
         exerciseId: 'planche-push-up',
+        painGate: INVERSION_GATE,
         earliestChapter: 9,
         passedWhen: '2 × 1.',
         criteria: { sets: 2, reps: 1 },

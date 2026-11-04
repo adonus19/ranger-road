@@ -1,0 +1,100 @@
+/* Skill parts in a chapter trial (UX_SPEC.md, Skill parts in a trial). */
+.trial-page .skill-part {
+  margin: 1.25rem 0 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--line);
+}
+.trial-page .skill-part h3 {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+.skill-part__standards {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0 0 0.6rem;
+}
+.skill-part__standards dt {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+.skill-part__standards dd {
+  max-width: 60ch;
+  margin: 0;
+}
+.skill-part__choices,
+.skill-part__sets {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+  margin: 1rem 0 0;
+  padding: 0;
+  border: 0;
+}
+.skill-part__choices legend,
+.skill-part__sets legend {
+  margin-bottom: 0.5rem;
+  padding: 0;
+  font-weight: 650;
+}
+.skill-part__sets legend span {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+.skill-choice {
+  display: flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-page);
+  font-weight: 600;
+  cursor: pointer;
+}
+.skill-choice:has(input:checked) {
+  border-color: var(--action);
+  background: var(--surface-tint);
+}
+.skill-choice:has(input[aria-invalid='true']) {
+  border-color: var(--status-red-text);
+}
+.skill-choice input {
+  width: 1.35rem;
+  height: 1.35rem;
+  flex: none;
+  margin: 0;
+  accent-color: var(--action);
+}
+.skill-part__set-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.skill-part__set-fields label {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+.skill-part__set-fields input {
+  min-width: 0;
+  min-height: var(--touch-target);
+}
+.trial-page .skill-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.5rem;
+  margin: 0.25rem 0 1rem;
+  color: var(--text);
+  font-weight: 600;
+}
+.skill-preview span {
+  color: var(--text-secondary);
+  font-weight: 400;
+}

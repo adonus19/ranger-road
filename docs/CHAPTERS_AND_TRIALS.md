@@ -21,6 +21,9 @@ Skill tracks are described in `RANGERS_ROAD_PROGRAM.md` (Skill Tracks). A track 
 - The part is passed by demonstrating that step or the step just below it. Doing the step below is not a changed movement for this rule.
 - On a pain-gated day (see Readiness Gates in `RANGERS_ROAD_PROGRAM.md`), the person may mark the skill part "Set aside for pain" without failing the trial. Neck or shoulder pain at 2 still allows a Green day. Pain at 3 or more makes the day Yellow, so the whole trial waits for a Green day as usual.
 - The rest of each trial is unchanged.
+- Before a track is live: A track adds trial parts only from the chapter its Forge slot starts in (the pull and push tracks from Chapter II). A step passed before then, such as Chapter I's assisted pull-up or push-up, joins that first chapter's trial once. So the Gate Trial has no skill parts, and a step-1 pass from Chapter I is a part of the Three-Mile Trial. (Settled in ticket 09, waiting on the person's confirmation.)
+- Pain-gated days: A step's gate is the Readiness Gate that swaps it: neck or shoulder pain at 2 or more for the feet-elevated pike push-up, both wall handstand push-up steps, every handstand step and every planche step; shoulder pain at 3 or more for the muscle-up steps. The assisted, band-light, bodyweight and chest-to-bar pull-ups, the push-up and the pike push-up have no gate, so their part cannot be set aside.
+- The parts are fixed when an attempt starts. A step first passed after that joins the next attempt. Going back a step on the track does not remove a part.
 
 
 ## I — The Muster (Weeks 1–4)

@@ -7,7 +7,12 @@ import type {
   TrialDraft,
   TrialPhaseResult,
   TrialResult,
+  TrialSkillPart,
+  TrialSkillPartResult,
 } from '../../../core/domain/models';
+import { skillPartsForTrial } from '../../../core/domain/trial-skill-parts';
+import { ProgressionHistory } from '../../../core/state/progression-history';
+import { exerciseName, skillOutcomeWords } from '../skill-part-words';
 import {
   RECOVERY_AREAS,
   recoveryOpensAt,
@@ -39,6 +44,14 @@ const READINESS_GUIDANCE: Record<ReadinessStatus, string> = {
 export class ThreeMileTrialPage implements OnInit {
   protected readonly state = inject(CampaignState);
   private readonly history = inject(TrialHistory);
+  private readonly progression = inject(ProgressionHistory);
+  protected readonly exerciseName = exerciseName;
+  /** The skill parts an attempt started today would include. */
+  private readonly previewParts = signal<TrialSkillPart[]>([]);
+  /** A saved attempt keeps its own parts; otherwise today's rule names them. */
+  protected readonly skillParts = computed(
+    () => this.ownDraft()?.definitionSnapshot.skillParts ?? this.previewParts(),
+  );
   protected readonly trial = threeMileTrialDefinition;
   protected readonly shortDate = formatShortDate;
   protected readonly minutes = formatMinutes;
@@ -148,6 +161,10 @@ export class ThreeMileTrialPage implements OnInit {
     return phase?.responses?.[key] || '—';
   }
 
+  protected outcomeWords(result: TrialSkillPartResult | undefined): string {
+    return skillOutcomeWords(result);
+  }
+
   protected attemptPhase(attempt: TrialAttempt): string {
     return attempt.definitionSnapshot.phases[attempt.currentPhaseIndex]?.title ?? 'the trial';
   }
@@ -179,6 +196,10 @@ export class ThreeMileTrialPage implements OnInit {
         ),
       );
       this.painByAttempt.set(Object.fromEntries(painRows));
+      if (!completed.length) {
+        const context = await this.progression.load();
+        this.previewParts.set(skillPartsForTrial(this.trial.id, context));
+      }
     } catch {
       this.historyError.set(true);
     } finally {

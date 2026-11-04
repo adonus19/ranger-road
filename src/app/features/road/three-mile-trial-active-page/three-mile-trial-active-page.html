@@ -19,7 +19,9 @@
   } @else if (completed(); as result) {
     <section class="trial-end" aria-labelledby="completed-title">
       <h2 id="completed-title" tabindex="-1">Three-Mile Trial recorded</h2>
-      <p>Your five parts are saved in your campaign history on this device.</p>
+      <p>
+        Your {{ completedCount(result) }} parts are saved in your campaign history on this device.
+      </p>
       <dl class="trial-summary">
         <div>
           <dt>Walk</dt>
@@ -33,6 +35,12 @@
           <dt>Stairs</dt>
           <dd>Breathlessness {{ result.phaseResults[2].metrics?.['breathlessness'] }}/10</dd>
         </div>
+        @for (part of result.definitionSnapshot.skillParts ?? []; track part.stepExerciseId) {
+          <div>
+            <dt>{{ exerciseName(part.stepExerciseId) }}</dt>
+            <dd>{{ outcomeWords(result.skillResults?.[$index]) }}</dd>
+          </div>
+        }
         <div>
           <dt>Leadership</dt>
           <dd>Reflection recorded</dd>
@@ -78,13 +86,31 @@
               <span class="visually-hidden">{{ part.title }}</span>
             </button>
           </li>
+          @if (index === 2 && skillParts().length) {
+            <li>
+              <button
+                type="button"
+                [class.is-current]="skillView()"
+                [class.is-complete]="skillDone()"
+                [disabled]="!phaseComplete(2) || saving()"
+                [attr.aria-current]="skillView() ? 'step' : null"
+                [attr.aria-label]="
+                  (skillParts().length === 1 ? 'Skill part' : 'Skill parts') +
+                  (skillDone() ? ', completed' : '')
+                "
+                (click)="openSkill()"
+              >
+                <span class="visually-hidden">Skill parts</span>
+              </button>
+            </li>
+          }
         }
       </ol>
     </nav>
 
     @if (reviewing()) {
       <section class="trial-review" aria-labelledby="review-title">
-        <h2 id="review-title" tabindex="-1">Review the five parts</h2>
+        <h2 id="review-title" tabindex="-1">Review the {{ partCount() }} parts</h2>
         <p>Check the record before saving the completed Three-Mile Trial.</p>
         <dl class="trial-summary">
           <div>
@@ -119,6 +145,15 @@
               {{ metric(active.phaseResults[2], 'breathlessness') }}/10
             </dd>
           </div>
+          @for (part of skillParts(); track part.stepExerciseId; let i = $index) {
+            <div>
+              <dt>{{ exerciseName(part.stepExerciseId) }}</dt>
+              <dd>{{ outcomeWords(skillResult(i)) }}</dd>
+              @if (setsWords(skillResult(i)); as sets) {
+                <dd>{{ sets }}</dd>
+              }
+            </div>
+          }
           <div>
             <dt>Leadership</dt>
             <dd>{{ response(active.phaseResults[3], 'attentive') }}</dd>
@@ -159,6 +194,155 @@
             (click)="confirmCompletion()"
           >
             Save completed trial
+          </button>
+        </div>
+      </section>
+    } @else if (skillView()) {
+      <section class="trial-phase" aria-labelledby="skill-parts-title">
+        <h2 id="skill-parts-title" tabindex="-1">
+          {{ skillParts().length === 1 ? 'Skill part' : 'Skill parts' }}
+        </h2>
+        <p class="trial-lead">
+          You passed {{ skillParts().length === 1 ? 'this step' : 'these steps' }} in your Forge.
+          Show {{ skillParts().length === 1 ? 'it' : 'each one' }} here, or the step just below it.
+        </p>
+        @if (physicalBlocked()) {
+          <p class="trial-hold" role="alert">{{ holdMessage() }}</p>
+        }
+        <ng-container [ngTemplateOutlet]="painPanel" />
+        @for (part of skillParts(); track part.stepExerciseId; let i = $index) {
+          <article class="skill-part" [attr.aria-labelledby]="'skill-part-' + i + '-title'">
+            <h3 [id]="'skill-part-' + i + '-title'">{{ exerciseName(part.stepExerciseId) }}</h3>
+            <dl class="skill-part__standards">
+              <div>
+                <dt>The standard</dt>
+                <dd>{{ passedWhen(part.stepExerciseId) }}</dd>
+              </div>
+              @if (part.stepBelowExerciseId; as below) {
+                <div>
+                  <dt>Or the step below</dt>
+                  <dd>{{ exerciseName(below) }}: {{ passedWhen(below) }}</dd>
+                </div>
+              }
+            </dl>
+            <details class="trial-optional">
+              <summary>How to do the {{ exerciseName(part.stepExerciseId) }}</summary>
+              @if (hasPictures(part.stepExerciseId)) {
+                <img
+                  class="trial-sequence"
+                  [src]="'images/exercises/' + part.stepExerciseId + '/sequence.webp'"
+                  [alt]="'Movement sequence for ' + exerciseName(part.stepExerciseId)"
+                  width="2020"
+                  height="780"
+                  loading="lazy"
+                />
+              }
+              <ol>
+                @for (step of helpSteps(part.stepExerciseId); track step) {
+                  <li>{{ step }}</li>
+                }
+              </ol>
+            </details>
+            <fieldset class="skill-part__choices">
+              <legend>How did it go?</legend>
+              <label class="skill-choice">
+                <input
+                  type="radio"
+                  [name]="'trial-skill-' + i"
+                  [id]="'trial-skill-' + i + '-demonstrated'"
+                  [checked]="skillResult(i)?.outcome === 'demonstrated'"
+                  [attr.aria-invalid]="invalid('trial-skill-' + i + '-demonstrated')"
+                  [disabled]="saving()"
+                  (change)="chooseSkillOutcome(i, 'demonstrated')"
+                />
+                <span>Demonstrated</span>
+              </label>
+              @if (part.stepBelowExerciseId; as below) {
+                <label class="skill-choice">
+                  <input
+                    type="radio"
+                    [name]="'trial-skill-' + i"
+                    [checked]="skillResult(i)?.outcome === 'step-below'"
+                    [disabled]="saving()"
+                    (change)="chooseSkillOutcome(i, 'step-below')"
+                  />
+                  <span>Demonstrated the step below ({{ exerciseName(below) }})</span>
+                </label>
+              }
+              @if (canSetAside(part) || skillResult(i)?.outcome === 'set-aside-for-pain') {
+                <label class="skill-choice">
+                  <input
+                    type="radio"
+                    [name]="'trial-skill-' + i"
+                    [checked]="skillResult(i)?.outcome === 'set-aside-for-pain'"
+                    [disabled]="saving()"
+                    (change)="chooseSkillOutcome(i, 'set-aside-for-pain')"
+                  />
+                  <span>Set aside for pain</span>
+                </label>
+                <small class="trial-help-line"
+                  >Today’s neck or shoulder pain lets you set this part aside. The trial still
+                  counts.</small
+                >
+              }
+            </fieldset>
+            @if (doseFor(i); as dose) {
+              <fieldset class="skill-part__sets">
+                <legend>
+                  {{ dose.unit === 'reps' ? 'Reps' : 'Seconds' }} in each set
+                  <span>optional</span>
+                </legend>
+                <div class="skill-part__set-fields">
+                  @for (set of dose.sets; track set) {
+                    <label
+                      >Set {{ set + 1 }}
+                      <input
+                        type="number"
+                        step="1"
+                        min="0"
+                        inputmode="numeric"
+                        [value]="setValue(i, set, dose.unit)"
+                        (change)="recordSkillSet(i, set, dose.unit, $event)"
+                      />
+                    </label>
+                  }
+                </div>
+              </fieldset>
+            }
+          </article>
+        }
+        <div class="trial-dock">
+          <div class="trial-utility">
+            @if (confirmingStop()) {
+              <ng-container [ngTemplateOutlet]="stopConfirm" />
+            } @else {
+              <button
+                type="button"
+                id="trial-pain-trigger"
+                class="trial-secondary"
+                (click)="openPain()"
+              >
+                Record pain
+              </button>
+              <button
+                type="button"
+                id="trial-stop-trigger"
+                class="trial-secondary"
+                (click)="askStop()"
+                [disabled]="saving()"
+              >
+                Stop trial
+              </button>
+            }
+          </div>
+          <ng-container [ngTemplateOutlet]="dockMessage" />
+          <button
+            type="button"
+            class="trial-primary"
+            [disabled]="saving() || physicalBlocked()"
+            (click)="continuePhase($event)"
+          >
+            Save and continue
           </button>
         </div>
       </section>
@@ -531,10 +715,24 @@
   } @else {
     <section class="trial-start" aria-labelledby="start-title">
       <h2 id="start-title">Begin the Three-Mile Trial</h2>
-      <p>
-        Five parts, in order: the walk, the carry, the stairs, a leadership reflection, and prayer.
-        Your progress is saved on this device.
-      </p>
+      @if (previewParts().length) {
+        <p>
+          {{ partCountTitle() }} parts, in order: the walk, the carry, the stairs, then
+          {{ previewParts().length === 1 ? 'a skill part' : 'skill parts' }}, a leadership
+          reflection, and prayer. Your progress is saved on this device.
+        </p>
+        <p class="skill-preview">
+          <span>{{ previewParts().length === 1 ? 'Skill part' : 'Skill parts' }}</span>
+          @for (part of previewParts(); track part.stepExerciseId; let last = $last) {
+            {{ exerciseName(part.stepExerciseId) }}{{ last ? '' : ', ' }}
+          }
+        </p>
+      } @else {
+        <p>
+          Five parts, in order: the walk, the carry, the stairs, a leadership reflection, and
+          prayer. Your progress is saved on this device.
+        </p>
+      }
       @if (state.error() || error()) {
         <p class="trial-error" role="alert">{{ error() ?? state.error() }}</p>
         <button type="button" class="trial-secondary" (click)="retry()">Try again</button>

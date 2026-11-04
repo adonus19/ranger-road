@@ -56,6 +56,8 @@ import { addDays, getCampaignDay, isGateTrialAttemptDay } from '../program/campa
 import { resolveCampaignPosition } from '../program/campaign-position';
 import { checkInSaveError, testsHeldFor } from '../program/check-in-schedule';
 import { createTrackStepChoice } from '../program/skill-track-progress';
+import { campaignDayResolver } from '../program/campaign-day';
+import { skillPartsForTrial } from '../domain/trial-skill-parts';
 
 export const DATABASE_NAME = 'rangers-road';
 /**
@@ -662,12 +664,13 @@ export class RoadDatabase {
   startTrialDraft(date: LocalDate, trialId = 'gate-trial'): Promise<TrialDraft> {
     return new Promise((resolve, reject) => {
       const transaction = this.database.transaction(
-        ['campaigns', 'readinessChecks', 'trialDrafts', 'trialResults'],
+        ['campaigns', 'readinessChecks', 'trialDrafts', 'trialResults', 'workoutSessions'],
         'readwrite',
       );
       let campaign: Campaign | undefined;
       let campaignLoaded = false;
       let drafts: TrialDraft[] | undefined;
+      let sessions: WorkoutSession[] | undefined;
       let checks: ReadinessCheck[] | undefined;
       let results: TrialResult[] | undefined;
       let started: TrialDraft | undefined;
@@ -678,7 +681,7 @@ export class RoadDatabase {
         transaction.abort();
       };
       const startWhenLoaded = () => {
-        if (!campaignLoaded || !drafts || !checks || !results || started) return;
+        if (!campaignLoaded || !drafts || !checks || !results || !sessions || started) return;
         try {
           const name = trialRulesFor(trialId).name;
           if (!campaign || getCampaignDay(campaign.startDate, date) < 1) {
@@ -707,7 +710,20 @@ export class RoadDatabase {
               `Finish or stop the active ${trialRulesFor(drafts[0].trialId).name} before starting another.`,
             );
           }
-          started = createTrialDraft(trialId, date, latestSameDayReadiness(checks, date));
+          // The track steps first passed in this chapter join the attempt as skill parts.
+          const skillParts = skillPartsForTrial(trialId, {
+            sessions,
+            readinessById: new Map(checks.map((check) => [check.id, check])),
+            dayOf: campaignDayResolver(campaign.startDate, results),
+          });
+          started = createTrialDraft(
+            trialId,
+            date,
+            latestSameDayReadiness(checks, date),
+            undefined,
+            undefined,
+            skillParts,
+          );
           transaction.objectStore('trialDrafts').add(started);
         } catch (error) {
           fail(error);
@@ -724,7 +740,8 @@ export class RoadDatabase {
         drafts = draftsRequest.result as TrialDraft[];
         startWhenLoaded();
       };
-      const checksRequest = transaction.objectStore('readinessChecks').index('date').getAll(date);
+      // Every check, not only today's: a step's pass is judged by its session's own check.
+      const checksRequest = transaction.objectStore('readinessChecks').getAll();
       checksRequest.onsuccess = () => {
         checks = checksRequest.result as ReadinessCheck[];
         startWhenLoaded();
@@ -732,6 +749,11 @@ export class RoadDatabase {
       const resultsRequest = transaction.objectStore('trialResults').getAll();
       resultsRequest.onsuccess = () => {
         results = resultsRequest.result as TrialResult[];
+        startWhenLoaded();
+      };
+      const sessionsRequest = transaction.objectStore('workoutSessions').getAll();
+      sessionsRequest.onsuccess = () => {
+        sessions = sessionsRequest.result as WorkoutSession[];
         startWhenLoaded();
       };
       transaction.oncomplete = () => resolve(structuredClone(started!));
