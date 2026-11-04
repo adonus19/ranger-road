@@ -56,6 +56,7 @@ async function render(
     sessions?: WorkoutSession[];
     history?: Partial<Record<keyof WorkoutHistory, unknown>>;
     shoulderPain?: number;
+    neckPain?: number;
     status?: 'green' | 'yellow';
     trackSteps?: TrackStepChoice[];
   } = {},
@@ -72,6 +73,7 @@ async function render(
     date: today,
     status: options.status ?? 'green',
     shoulderPain: options.shoulderPain ?? 0,
+    neckPain: options.neckPain ?? 0,
   } as ReadinessCheck;
   TestBed.configureTestingModule({
     imports: [ForgeSessionPage],
@@ -402,6 +404,22 @@ describe('ForgeSessionPage', () => {
       expect(offer?.textContent).toContain('Band Pull-Apart');
       expect(offer?.textContent).toContain('reduced');
       expect(swapExercise).not.toHaveBeenCalled();
+    });
+
+    it('offers a pike hold and a push-up for a handstand step at neck pain 2', async () => {
+      const draft = startedDraft('2026-11-10');
+      (draft.definitionSnapshot.exercises as unknown[])[0] = {
+        exerciseId: 'chest-to-wall-handstand-hold',
+        sets: 3,
+        durationSeconds: '15–30',
+      };
+      draft.exerciseResults[0].exerciseId = 'chest-to-wall-handstand-hold';
+      const element = await render('chapter-2-forge-a', '2026-11-10', { draft, neckPain: 2 });
+      const buttons = [...element.querySelectorAll('.swap-offer button')].map((button) =>
+        button.textContent?.trim(),
+      );
+      expect(buttons).toEqual(['Do Pike Hold', 'Do Push-Up', 'Keep as written']);
+      expect(element.querySelector('.swap-offer')?.textContent).toContain('neck or shoulder');
     });
 
     it('stays away below shoulder pain 3', async () => {

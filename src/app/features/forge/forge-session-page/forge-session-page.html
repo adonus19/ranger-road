@@ -339,23 +339,30 @@
           }
         </div>
 
-        @if (shoulderSwap(); as swap) {
+        @if (swapOffer(); as swap) {
           <section class="swap-offer" aria-labelledby="swap-title">
             <h3 id="swap-title">Your choice</h3>
             <p>
               {{ swap.reason }} This session will count as reduced and will not set your next load.
             </p>
             <div class="swap-actions">
-              <button type="button" class="panel-save" [disabled]="saving()" (click)="takeSwap()">
-                Do {{ swap.name }}
-              </button>
+              @for (option of swap.options; track option.toId) {
+                <button
+                  type="button"
+                  [class.panel-save]="$first"
+                  [disabled]="saving()"
+                  (click)="takeSwap(option.toId)"
+                >
+                  Do {{ option.name }}
+                </button>
+              }
               <button type="button" [disabled]="saving()" (click)="keepAsWritten()">
                 Keep as written
               </button>
             </div>
           </section>
         } @else if (currentResult()?.swappedFrom) {
-          <p class="swap-note">Swapped for your shoulder today. This session is reduced.</p>
+          <p class="swap-note">Swapped for your neck or shoulder today. This session is reduced.</p>
         }
         @if (trackStep(); as step) {
           <div class="track-step">

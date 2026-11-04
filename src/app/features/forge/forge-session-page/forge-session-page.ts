@@ -44,7 +44,8 @@ import {
   isRestorationWorkout,
   loadWorkoutOn,
 } from '../../../core/program/program-catalog';
-import { shoulderSwapFor } from '../../../core/program/readiness-swaps';
+import { swapsFor } from '../../../core/program/readiness-swaps';
+import { withWristWarmup } from '../../../core/program/wrist-warmup';
 import { isOptionalForge, missionMatchFor } from '../../../core/program/optional-forge';
 import { CUSTOM_FORGE_ID } from '../../../core/program/custom-forge';
 import { progressionKind } from '../../../core/program/progression-kinds';
@@ -217,8 +218,8 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   });
   /** Written exercises the person chose to keep today; the choice is theirs and never automatic. */
   private readonly keptAsWritten = signal<readonly string[]>([]);
-  /** The calm shoulder swap on the current exercise, offered only before its first set. */
-  protected readonly shoulderSwap = computed(() => {
+  /** The calm swap on the current exercise (shoulder, neck), offered only before its first set. */
+  protected readonly swapOffer = computed(() => {
     const draft = this.draft();
     const written = this.currentPrescription();
     const result = this.currentResult();
@@ -226,9 +227,17 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     if (!draft || !written || !result || !check || result.swappedFrom) return null;
     if (this.keptAsWritten().includes(written.exerciseId)) return null;
     if (result.sets.some((set) => set.completed !== undefined)) return null;
-    const swap = shoulderSwapFor(written.exerciseId, check.shoulderPain);
-    if (!swap || draft.exerciseResults.some((item) => item.exerciseId === swap.toId)) return null;
-    return { ...swap, name: getExerciseGuide(swap.toId)?.name ?? swap.toId };
+    const options = swapsFor(written.exerciseId, check).filter(
+      (swap) => !draft.exerciseResults.some((item) => item.exerciseId === swap.toId),
+    );
+    if (!options.length) return null;
+    return {
+      reason: options[0].reason,
+      options: options.map((swap) => ({
+        toId: swap.toId,
+        name: getExerciseGuide(swap.toId)?.name ?? swap.toId,
+      })),
+    };
   });
   /** Assisted pull-ups, and track steps whose criteria count band help, record it in place of a load. */
   protected readonly isAssisted = computed(() => {
@@ -549,7 +558,11 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       this.trackChoices.set(choices);
       const draft = await this.history.start({
         date: this.state.today(),
-        definition: withCurrentSteps(definition, choices),
+        // Handstand and planche steps add a short wrist warm-up in front of the work.
+        definition: withWristWarmup(
+          withCurrentSteps(definition, choices),
+          this.progressionContext()?.sessions ?? [],
+        ),
         reduced,
         sessionInstructions: note ? [note] : undefined,
         exerciseOrder: saved.order,
@@ -854,10 +867,10 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     if (written) this.keptAsWritten.update((kept) => [...kept, written.exerciseId]);
   }
 
-  protected async takeSwap(): Promise<void> {
+  protected async takeSwap(toId: string): Promise<void> {
     const draft = this.draft();
-    const swap = this.shoulderSwap();
-    if (!draft || !swap || this.saving()) return;
+    if (!draft || !this.swapOffer()?.options.some((option) => option.toId === toId)) return;
+    if (this.saving()) return;
     this.saving.set(true);
     this.error.set(null);
     try {
@@ -866,7 +879,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       const saved = await this.history.swapExercise(
         draft.id,
         draft.currentExerciseIndex,
-        swap.toId,
+        toId,
       );
       this.draft.set(saved);
       this.syncForms(saved);

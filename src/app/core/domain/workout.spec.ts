@@ -340,4 +340,40 @@ describe('taking a track step in a session', () => {
     expect(() => stepUpWorkoutExercise(swapped, 1, next, savedAt)).toThrow();
     expect(() => stepUpWorkoutExercise(start(), 0, next, savedAt)).toThrow('not a skill track');
   });
+
+  it('offers a pike hold or a push-up for a handstand step at neck or shoulder pain 2', () => {
+    const handstand: WorkoutDefinition = {
+      id: 'chapter-5-forge-a',
+      title: 'Forge A',
+      contentVersion: 1,
+      exercises: [
+        { exerciseId: 'chest-to-wall-handstand-hold', sets: 3, durationSeconds: '15–30' },
+      ],
+    };
+    const draft = createWorkoutDraft(
+      { date: green.date, definition: handstand },
+      green,
+      startedAt,
+      'h',
+    );
+    const neck = { ...green, id: 'neck', neckPain: 2 };
+    const fine = { ...green, id: 'fine', neckPain: 1, shoulderPain: 1 };
+    expect(() => swapWorkoutExercise(draft, 0, 'pike-hold', fine, savedAt)).toThrow();
+    const swapped = swapWorkoutExercise(draft, 0, 'pike-hold', neck, savedAt);
+    expect(swapped.exerciseResults[0]).toMatchObject({
+      exerciseId: 'pike-hold',
+      swappedFrom: 'chest-to-wall-handstand-hold',
+    });
+    expect(swapped.definitionSnapshot.exercises[0]).toEqual({
+      exerciseId: 'pike-hold',
+      sets: 3,
+      durationSeconds: '20–30',
+    });
+    expect(swapped.reduced).toBe(true);
+    // The other named option works too; one that is not named does not.
+    expect(
+      swapWorkoutExercise(draft, 0, 'push-up', neck, savedAt).exerciseResults[0].exerciseId,
+    ).toBe('push-up');
+    expect(() => swapWorkoutExercise(draft, 0, 'band-pull-apart', neck, savedAt)).toThrow();
+  });
 });

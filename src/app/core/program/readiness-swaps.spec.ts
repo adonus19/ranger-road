@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { shoulderSwapFor, swappedPrescription } from './readiness-swaps';
+import { shoulderSwapFor, swapsFor, swappedPrescription } from './readiness-swaps';
 
 describe('Shoulder swaps', () => {
   it('offers nothing below shoulder pain 3', () => {
@@ -57,5 +57,69 @@ describe('Shoulder swaps', () => {
         'band-pull-apart',
       ),
     ).toEqual({ exerciseId: 'band-pull-apart', sets: 3, reps: 12 });
+  });
+});
+
+describe('Neck and shoulder inversion swaps', () => {
+  const calm = { shoulderPain: 1, neckPain: 1 };
+
+  it('offers nothing below neck or shoulder pain 2', () => {
+    for (const id of [
+      'chest-to-wall-handstand-hold',
+      'wall-handstand-push-up',
+      'tuck-planche-hold',
+    ]) {
+      expect(swapsFor(id, calm)).toEqual([]);
+    }
+  });
+
+  it('offers a pike hold or a push-up at neck pain 2, or at shoulder pain 2', () => {
+    for (const pain of [
+      { shoulderPain: 0, neckPain: 2 },
+      { shoulderPain: 2, neckPain: 0 },
+    ]) {
+      for (const id of [
+        'wall-plank-hold',
+        'wall-walk',
+        'chest-to-wall-handstand-hold',
+        'wall-handstand-push-up-negative',
+        'wall-handstand-push-up',
+        'planche-lean',
+        'tuck-planche-hold',
+        'planche-push-up',
+      ]) {
+        expect(
+          swapsFor(id, pain).map((swap) => swap.toId),
+          id,
+        ).toEqual(['pike-hold', 'push-up']);
+      }
+    }
+  });
+
+  it('leaves the pike push-up, the pull track and the presses to their own gates', () => {
+    const neck = { shoulderPain: 0, neckPain: 6 };
+    expect(swapsFor('pike-push-up', neck)).toEqual([]);
+    expect(swapsFor('muscle-up', neck)).toEqual([]);
+    expect(swapsFor('barbell-overhead-press', { shoulderPain: 2, neckPain: 0 })).toEqual([]);
+    expect(
+      swapsFor('barbell-overhead-press', { shoulderPain: 3, neckPain: 0 }).map((s) => s.toId),
+    ).toEqual(['band-pull-apart']);
+    expect(swapsFor('muscle-up', { shoulderPain: 3, neckPain: 0 }).map((s) => s.toId)).toEqual([
+      'band-pull-apart',
+    ]);
+  });
+
+  it('keeps a step’s sets and gives the pike hold or push-up its own dose', () => {
+    const written = { exerciseId: 'wall-walk', sets: 3, reps: 2 };
+    expect(swappedPrescription(written, 'pike-hold')).toEqual({
+      exerciseId: 'pike-hold',
+      sets: 3,
+      durationSeconds: '20–30',
+    });
+    expect(swappedPrescription(written, 'push-up')).toEqual({
+      exerciseId: 'push-up',
+      sets: 3,
+      reps: '8–12',
+    });
   });
 });

@@ -159,7 +159,8 @@ Rules are in `RANGERS_ROAD_PROGRAM.md` (Skill Tracks).
 - A step not yet reached shows nothing: no "behind", no countdown, no list of what is left.
 - The planche item at the end of Forge B is marked "Optional · about 5 minutes" and can be skipped. A skipped planche item does not mark the session reduced and is never shown as missed.
 - Readiness swaps (see Readiness Gates) are offered on the exercise as a calm choice ("Shoulder pain is 3 today. Swap to Front-Hold Carry?"), with the swap and "Keep it" side by side. On back pain at 2 or more from Chapter IV, the press offers Seated and Half-kneeling; a seated barbell press shows "Reduce the load", with a link to swap to dumbbells.
-- Handstand and planche days show a wrist warm-up of about 1 minute inside the warm-up list, alternating Wrist Circles and Wrist Rocks between sessions.
+- On neck or shoulder pain of 2 or more, a handstand, wall-walk, handstand push-up or planche step offers the same calm card with two choices, "Do Pike Hold" and "Do Push-Up", beside "Keep as written". It keeps the step's sets, takes the pike hold's 20–30 seconds or the push-up's 8–12 reps, and marks the session reduced. The card shows before the exercise's first set and never applies itself.
+- Handstand and planche days show a wrist warm-up of about 1 minute inside the warm-up list (a 60-second Wrist Circles or Wrist Rocks step after the written warm-up), alternating between the two from the newest session that had one. A day counts when the work includes any handstand-track or planche-track step or a wall handstand push-up step. It is added when the session starts, in a Forge slot or a custom Forge, and has Help like any warm-up step.
 
 ## Exercise Quick Help
 

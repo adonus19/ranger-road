@@ -34,3 +34,5 @@ Other choices for you to confirm:
 8. Pain during the skill step is recorded under its own phase (`skill-parts`) and holds the trial the same way pain on the walk does.
 
 Docs updated: CHAPTERS_AND_TRIALS.md (the Chapter I reading, the gates, fixed at start), UX_SPEC.md (the skill step, Three-Mile pain and effort end), DATA_MODEL.md (the built shape), RANGERS_ROAD_PROGRAM.md (the stale "no way back down" line now names Go back a step).
+
+**2026-11-04, answers.** Choices 1 and 3 to 8 confirmed. 2: show all passed steps as parts (no highest-step-only rule), as built.

@@ -11,7 +11,7 @@ import type {
   WorkoutDraft,
   WorkoutSession,
 } from './models';
-import { shoulderSwapFor, swappedPrescription } from '../program/readiness-swaps';
+import { swapsFor, swappedPrescription } from '../program/readiness-swaps';
 import { classifyReadiness } from './readiness';
 
 export interface WorkoutStart {
@@ -288,8 +288,8 @@ export function swapWorkoutExercise(
   const result = stored.exerciseResults[index];
   if (!written || !result) throw new RangeError('That exercise is not in this session.');
   if (result.swappedFrom) throw new Error('This exercise was already swapped.');
-  const swap = shoulderSwapFor(written.exerciseId, readiness.shoulderPain);
-  if (!swap || swap.toId !== toId) {
+  const swap = swapsFor(written.exerciseId, readiness).find((item) => item.toId === toId);
+  if (!swap) {
     throw new Error('That swap is not offered at today’s readiness.');
   }
   if (stored.exerciseResults.some((item) => item.exerciseId === toId)) {
@@ -306,7 +306,7 @@ export function swapWorkoutExercise(
     sets: Array.from({ length: snapshot.exercises[index].sets ?? 1 }, () => ({})),
     painEvents: structuredClone(result.painEvents),
     swappedFrom: written.exerciseId,
-    modificationNotes: `Swapped from the written exercise for shoulder pain (${readiness.shoulderPain}).`,
+    modificationNotes: `Swapped from the written exercise for neck or shoulder pain (neck ${readiness.neckPain}, shoulder ${readiness.shoulderPain}).`,
   };
   updated.reduced = true;
   updated.updatedAt = now;

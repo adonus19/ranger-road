@@ -16,6 +16,7 @@ import {
   type BuilderExercise,
   type CustomPick,
 } from '../../../core/program/custom-forge';
+import { withWristWarmup } from '../../../core/program/wrist-warmup';
 import { getExerciseGuide } from '../../../core/program/exercise-guides';
 import { chapterPrograms } from '../../../core/program/program-catalog';
 import { CampaignState } from '../../../core/state/campaign-state';
@@ -244,9 +245,12 @@ export class CustomForgePage implements OnInit {
     this.error.set(null);
     try {
       const picks = this.picks();
-      const definition = buildCustomForge(
-        this.program(),
-        this.order().map((index) => picks[index]),
+      const definition = withWristWarmup(
+        buildCustomForge(
+          this.program(),
+          this.order().map((index) => picks[index]),
+        ),
+        this.sessions(),
       );
       await this.history.start({
         date: this.state.today(),
