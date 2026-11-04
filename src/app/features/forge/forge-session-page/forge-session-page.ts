@@ -250,6 +250,24 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
    * saved sessions and the next step's chapter has come. Information only, on a Green day outside
    * a deload week, like the hint; the person chooses, and nothing changes until they do.
    */
+  /** The step before the current one, offered quietly on a track slot at any time. */
+  protected readonly trackBack = computed(() => {
+    const prescription = this.currentPrescription();
+    const result = this.currentResult();
+    const context = this.progressionContext();
+    if (!prescription?.trackId || !result || result.swappedFrom || !context || this.custom) {
+      return null;
+    }
+    const track = skillTrack(prescription.trackId);
+    if (!track) return null;
+    const status = trackStatus(track, this.trackChoices(), context, this.program().chapter.number);
+    if (!status.previous || status.current.exerciseId !== prescription.exerciseId) return null;
+    return {
+      trackId: track.id,
+      exerciseId: status.previous.exerciseId,
+      name: this.getExerciseName(status.previous.exerciseId),
+    };
+  });
   protected readonly trackStep = computed(() => {
     const draft = this.draft();
     const prescription = this.currentPrescription();
@@ -870,8 +888,19 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
    * today's session does the new step at once; otherwise it starts next time.
    */
   protected async takeTrackStep(): Promise<void> {
+    await this.moveTrack(this.trackStep(), 'starts next time');
+  }
+
+  /** "Go back a step": the same saved choice, one step earlier. */
+  protected async goBackTrackStep(): Promise<void> {
+    await this.moveTrack(this.trackBack(), 'starts next time');
+  }
+
+  private async moveTrack(
+    step: { trackId: string; exerciseId: string; name: string } | null,
+    later: string,
+  ): Promise<void> {
     const draft = this.draft();
-    const step = this.trackStep();
     const index = draft?.currentExerciseIndex ?? -1;
     const written = this.definition()?.exercises[index];
     const result = draft?.exerciseResults[index];
@@ -900,7 +929,7 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       } else {
         this.stepSaved.set({
           trackId: step.trackId,
-          text: `Saved. ${step.name} starts next time.`,
+          text: `Saved. ${step.name} ${later}.`,
         });
       }
     } catch (error) {

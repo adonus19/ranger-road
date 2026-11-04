@@ -13,3 +13,7 @@
 - [ ] Works with the Trial Timing rule (Monday/Thursday attempts until passed)
 - [ ] Existing trial records read unchanged
 - [ ] Tests and build pass; deployed
+
+## Comments
+
+**2026-11-04, from ticket 08's answers.** A step first passed in Chapter I is a Chapter I pass, and the Gate Trial is already done, so it does not become a part of that trial. It stays on record (`stepPasses` keeps each step's first pass and its chapter). The person asked that such passes can still become part of future trials where that applies. Decide in this ticket what "where that applies" means, for example a step passed in Chapter I but not yet shown in a trial, and ask the person if the docs do not settle it. "Go back a step" is allowed (ticket 08); a step stays passed for the trial it was first passed in even if the person goes back.

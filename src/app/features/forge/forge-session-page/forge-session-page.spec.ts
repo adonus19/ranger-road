@@ -311,7 +311,9 @@ describe('ForgeSessionPage', () => {
           trackId: 'push',
         },
       });
-      expect(line(element)).toBeNull();
+      expect(line(element)?.textContent).not.toContain('Next step available');
+      // Past the first step, going back is offered quietly, and nothing happens until it is tapped.
+      expect(button(element, 'Go back a step').textContent).toContain('Push-Up');
     });
 
     it('saves the step for next time once the slot has begun', async () => {

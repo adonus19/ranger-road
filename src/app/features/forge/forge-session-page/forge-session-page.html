@@ -368,6 +368,20 @@
         } @else if (stepSavedNote(); as note) {
           <p class="track-step" role="status">{{ note }}</p>
         }
+        @if (trackBack(); as back) {
+          @if (!stepSavedNote()) {
+            <div class="track-step">
+              <button
+                type="button"
+                class="back-step"
+                [disabled]="saving()"
+                (click)="goBackTrackStep()"
+              >
+                Go back a step to {{ back.name }}
+              </button>
+            </div>
+          }
+        }
         <div class="utility-actions">
           <button type="button" (click)="openHelp()">
             <app-icon name="book-open" />Quick Help

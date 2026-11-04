@@ -40,3 +40,5 @@ Questions:
 
 - There is no way to step back down a track; a hard day uses the Substitute panel. Do you want a "Go back a step" choice?
 - Chapter I's assisted pull-up and push-up sessions count toward step 1, so a step 1 may already be passed in Chapter I. Ticket 09 adds first passes to that chapter's trial; the Gate Trial is already passed, so Chapter I passes would not become trial parts. Is that what you want?
+
+**2026-11-04, answers.** Choices 1 to 12 confirmed. "Go back a step": yes, added. The link "Go back a step to <previous>" shows under any track slot past step 1; it saves one more row (the newest row is current), so earlier passes stay and nothing is edited. Chapter I passes: fine, as long as they can become part of future trials where that applies (see ticket 09). The "Next step" and swap offers moved to the shared stylesheet `src/styles/session-offers.css`, which brings the session CSS back under its budget (14.06 kB). Checked at 390 px in light and dark: every control is 48 px tall and nothing scrolls sideways. 621 tests and the build pass.

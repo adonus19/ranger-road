@@ -471,7 +471,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Rotating toward the rack, leaning away, shrugging, holding the breath through the set.',
     painAwareOptions: 'Stand closer to the rack for less pull, or use Plank Shoulder Taps.',
     equipment: 'Band, rack upright (chest-height anchor).',
-    textOnly: true,
   },
   {
     id: 'plank-shoulder-taps',
@@ -524,7 +523,6 @@ const exerciseGuides: ExerciseGuideContent[] = [
     avoid: 'Heavy weights, swinging, lifting the chest off the pad, shrugging.',
     painAwareOptions: 'Lighter weights or a shorter range.',
     equipment: 'Adjustable bench (incline), dumbbells.',
-    textOnly: true,
   },
   {
     id: 'chin-up',

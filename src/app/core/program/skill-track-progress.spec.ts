@@ -317,7 +317,7 @@ describe('the next step', () => {
       trackStatus(push, [choice('push', 'pike-push-up', 'x')], context([pike]), 3).nextAvailable,
     ).toBe(true);
     expect(Object.keys(status).sort()).toEqual(
-      ['current', 'currentIndex', 'next', 'nextAvailable', 'passes', 'track'].sort(),
+      ['current', 'currentIndex', 'next', 'nextAvailable', 'passes', 'previous', 'track'].sort(),
     );
   });
 
@@ -350,6 +350,35 @@ describe('the next step', () => {
     );
     expect(() => createTrackStepChoice('push', 'push-up', [])).toThrow('not the next step');
     expect(() => createTrackStepChoice('nope', 'push-up', [])).toThrow('not in the program');
+  });
+
+  it('goes back one step at a time, and the newest choice is the current step', () => {
+    const up = createTrackStepChoice('push', 'pike-push-up', [], '2026-11-05T10:00:00.000Z', 'c1');
+    expect(() => createTrackStepChoice('push', 'push-up', [], undefined, 'x')).toThrow();
+    const back = createTrackStepChoice('push', 'push-up', [up], '2026-11-12T10:00:00.000Z', 'c2');
+    expect(back.exerciseId).toBe('push-up');
+    const push = skillTrack('push')!;
+    expect(currentStepIndex(push, [up, back])).toBe(0);
+    // Two steps back, or staying put, is not a choice.
+    const twoUp = createTrackStepChoice(
+      'push',
+      'feet-elevated-pike-push-up',
+      [up],
+      '2026-11-06T10:00:00.000Z',
+      'c3',
+    );
+    expect(() => createTrackStepChoice('push', 'push-up', [up, twoUp], undefined, 'y')).toThrow();
+    expect(() =>
+      createTrackStepChoice('push', 'feet-elevated-pike-push-up', [up, twoUp]),
+    ).toThrow();
+  });
+
+  it('offers the previous step in the status once past the first, and keeps earlier passes', () => {
+    const push = skillTrack('push')!;
+    const up = createTrackStepChoice('push', 'pike-push-up', [], '2026-11-05T10:00:00.000Z', 'c1');
+    const context = { sessions: [], readinessById: new Map(), dayOf: () => null };
+    expect(trackStatus(push, [], context, 3).previous).toBeUndefined();
+    expect(trackStatus(push, [up], context, 3).previous?.exerciseId).toBe('push-up');
   });
 });
 

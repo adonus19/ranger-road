@@ -43,6 +43,8 @@ export interface TrackStatus {
   next?: TrackStep;
   /** The current step is passed and the next step's earliest chapter has come. */
   nextAvailable: boolean;
+  /** The step before the current one, when there is one to go back to. */
+  previous?: TrackStep;
 }
 
 export interface TrackContext {
@@ -168,6 +170,7 @@ export function trackStatus(
     current,
     passes,
     ...(next ? { next } : {}),
+    ...(currentIndex > 0 ? { previous: track.steps[currentIndex - 1] } : {}),
     nextAvailable: !!next && currentPassed && chapter >= next.earliestChapter,
   };
 }
@@ -243,9 +246,10 @@ export function withCurrentSteps(
 }
 
 /**
- * A "Take this step" choice, checked against the track: only the step right after the current
- * one can be taken. Whether it is available (criteria and chapter) is the screen's to show; the
- * choice is the person's.
+ * A "Take this step" or "Go back a step" choice, checked against the track: only the step right
+ * after the current one, or the one right before it, can be chosen. Whether a step up is
+ * available (criteria and chapter) is the screen's to show; going back is always the person's
+ * to do. Choices are only ever added, and the newest one is the current step.
  */
 export function createTrackStepChoice(
   trackId: string,
@@ -256,9 +260,10 @@ export function createTrackStepChoice(
 ): TrackStepChoice {
   const track = skillTrack(trackId);
   if (!track) throw new Error('That skill track is not in the program.');
-  const next = track.steps[currentStepIndex(track, choices) + 1];
-  if (!next || next.exerciseId !== exerciseId) {
-    throw new Error('That is not the next step on this track.');
+  const index = currentStepIndex(track, choices);
+  const allowed = [track.steps[index + 1], track.steps[index - 1]];
+  if (!allowed.some((step) => step?.exerciseId === exerciseId)) {
+    throw new Error('That is not the next step, or the one before, on this track.');
   }
   if (!Number.isFinite(Date.parse(now))) throw new Error('Choice time is invalid.');
   return { id, trackId, exerciseId, takenAt: now };
