@@ -74,8 +74,8 @@ describe('Chapter I daily content', () => {
       missionType: 'conditioning',
       estimatedMinutes: 30,
     });
-    expect(chapterOneDailySeed[3].days[6].activity.trialPreparation).toContain(
-      'Monday’s Gate Trial',
+    expect(chapterOneDailySeed[3].days[6].activity.trialPreparation).toBe(
+      'Then prepare for the Gate Trial: choose the 2-mile route and set out the box, pull-up band, and carry weight.',
     );
   });
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolveCampaignPosition } from './campaign-position';
+import { resolveCampaignPosition, withTrialDay } from './campaign-position';
 import {
   getActivityChoices,
   getDayMissions,
@@ -142,7 +142,7 @@ describe('Chapter II daily content', () => {
       estimatedMinutes: 30,
     });
     expect(chapterTwoDailySeed[3].days[6].activity.trialPreparation).toBe(
-      'Then prepare for Monday’s Three-Mile Trial: choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs.',
+      'Then prepare for the Three-Mile Trial: choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs.',
     );
     expect(chapterTwoDailySeed[3].days[7].reflectionPrompt).toBe(
       'Where has consistent small effort begun changing me?',
@@ -212,7 +212,7 @@ describe('Chapter II dated missions', () => {
     );
   });
 
-  it('prepares for the Three-Mile Trial on Week 8 Saturday, then holds attempts on Monday and Thursday', () => {
+  it('prepares for the Three-Mile Trial on Week 8 Saturday, then repeats Week 8 until a day it is taken', () => {
     // A Gate Trial pass on Nov 2 makes Week 5 begin that Monday, so Week 8 is Nov 23–29.
     const saturday = getDayMissions(on('2026-11-28'));
     expect(saturday[0].scriptureReference).toBe('Psalm 121');
@@ -220,21 +220,23 @@ describe('Chapter II dated missions', () => {
     expect(saturday[1].trialPreparation).toContain('choose the 3-mile route');
     expect(saturday[1].plannedTrialId).toBeUndefined();
 
-    const monday = getDayMissions(on('2026-11-30'));
-    expect(monday[1]).toMatchObject({
-      id: 'chapter-2-three-mile-trial-attempt-day-1-weekly',
+    // Every day after Week 8 repeats Week 8, Forge A included, with its own IDs.
+    expect(getDayMissions(on('2026-11-30'))[1]).toMatchObject({
+      id: 'chapter-2-week-8-day-1-weekly',
+      title: 'Forge A',
+    });
+    expect(getDayMissions(on('2026-12-03'))[1].title).toBe('Forge B at reduced volume');
+
+    // The day it is taken, any weekday, the trial replaces that order.
+    const wednesday = withTrialDay(on('2026-12-02'), '2026-12-02', [
+      { trialId: 'three-mile-trial', date: '2026-12-02' },
+    ]);
+    expect(getDayMissions(wednesday)[1]).toMatchObject({
+      id: 'chapter-2-three-mile-trial-attempt-day-3-weekly',
       title: 'Three-Mile Trial',
       missionType: 'trial',
       plannedTrialId: 'three-mile-trial',
     });
-    expect(getDayOrders(on('2026-11-30'), 'yellow')[1].title).toBe(
-      'Three-Mile Trial waits for Green',
-    );
-    // Between attempts, Week 8's easy days repeat with their own IDs.
-    expect(getDayMissions(on('2026-12-01'))[1]).toMatchObject({
-      id: 'chapter-2-week-8-day-2-weekly',
-      title: '30-minute easy walk',
-    });
-    expect(getDayMissions(on('2026-12-03'))[1].title).toBe('Three-Mile Trial');
+    expect(getDayOrders(wednesday, 'yellow')[1].title).toBe('Three-Mile Trial waits for Green');
   });
 });

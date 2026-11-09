@@ -10,15 +10,14 @@ import type {
   TrialPhaseResult,
   TrialResult,
 } from '../../../core/domain/models';
-import { RECOVERY_AREAS, recoveryOpensAt, recoveryWord } from '../../../core/domain/post-mission-function';
+import {
+  RECOVERY_AREAS,
+  recoveryOpensAt,
+  recoveryWord,
+} from '../../../core/domain/post-mission-function';
 import type { RecordedTrialPainEvent } from '../../../core/domain/trial-draft';
 import { getExerciseGuide } from '../../../core/program/exercise-guides';
-import {
-  addDays,
-  getGateTrialTargetDate,
-  getNextGateTrialAttempt,
-  isGateTrialAttemptDay,
-} from '../../../core/program/campaign';
+import { getGateTrialTargetDate, isGateTrialOpen } from '../../../core/program/campaign';
 import { getChapterOneTrialPass } from '../../../core/program/chapter-one-completion';
 import { gateTrialDefinition } from '../../../core/program/chapter-one-trial.seed';
 import { CampaignState } from '../../../core/state/campaign-state';
@@ -69,7 +68,7 @@ export class GateTrialPage implements OnInit {
   );
   protected readonly attemptToday = computed(() => {
     const campaign = this.state.campaign();
-    return !!campaign && isGateTrialAttemptDay(campaign.startDate, this.state.today());
+    return !!campaign && isGateTrialOpen(campaign.startDate, this.state.today());
   });
   /** On a day the trial is not open, when it opens next, or that it is passed. */
   protected readonly waitingMessage = computed(() => {
@@ -78,11 +77,7 @@ export class GateTrialPage implements OnInit {
     const pass = this.pass();
     if (pass) return `Passed ${formatShortDate(pass.date)}`;
     if (this.attemptToday()) return null;
-    const today = this.state.today();
-    const next = getNextGateTrialAttempt(campaign.startDate, today);
-    return today < getGateTrialTargetDate(campaign.startDate)
-      ? `First attempt ${formatShortDate(next)}`
-      : `Next attempt ${formatShortDate(next)}`;
+    return `Opens ${formatShortDate(getGateTrialTargetDate(campaign.startDate))}`;
   });
   protected readonly readinessGuidance = computed(() => {
     if (this.state.loading()) return 'Opening your campaign…';
@@ -94,16 +89,12 @@ export class GateTrialPage implements OnInit {
     const pass = this.pass();
     if (pass) return `You passed the Gate Trial on ${formatLongDate(pass.date)}.`;
     if (!this.attemptToday() && !this.activeDraft()) {
-      const today = this.state.today();
-      const next = getNextGateTrialAttempt(campaign.startDate, today);
-      return today < getGateTrialTargetDate(campaign.startDate)
-        ? `The first attempt is ${formatLongDate(next)}, the Monday after Week 4. Review the plan now.`
-        : `The next attempt is ${formatLongDate(next)}. Attempts fall on Mondays and Thursdays until you pass.`;
+      const opens = getGateTrialTargetDate(campaign.startDate);
+      return `The Gate Trial opens ${formatLongDate(opens)}, after Week 4, and you can take it on any day you choose from then. Review the plan now.`;
     }
     const status = this.readiness()?.status;
     if (status && status !== 'green') {
-      const after = getNextGateTrialAttempt(campaign.startDate, addDays(this.state.today(), 1));
-      return `${READINESS_GUIDANCE[status]} The next attempt is ${formatLongDate(after)}.`;
+      return `${READINESS_GUIDANCE[status]} You can take it on any day you’re Green.`;
     }
     return status ? READINESS_GUIDANCE[status] : 'Check readiness before the physical parts.';
   });
@@ -149,10 +140,14 @@ export class GateTrialPage implements OnInit {
       ]);
       this.activeDraft.set(draft ?? null);
       this.completedResults.set(completed);
-      this.recoveries.set(Object.fromEntries(recoveries.map((entry) => [entry.trialResultId, entry])));
+      this.recoveries.set(
+        Object.fromEntries(recoveries.map((entry) => [entry.trialResultId, entry])),
+      );
       this.stoppedAttempts.set(stopped);
       const painRows = await Promise.all(
-        completed.map(async (result) => [result.id, await this.history.painForAttempt(result.id)] as const),
+        completed.map(
+          async (result) => [result.id, await this.history.painForAttempt(result.id)] as const,
+        ),
       );
       this.painByAttempt.set(Object.fromEntries(painRows));
     } catch {

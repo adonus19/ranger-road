@@ -30,4 +30,11 @@ describe('needsBackOnTrack', () => {
       needsBackOnTrack(start, '2026-10-09', [], (d) => (d === '2026-10-08' ? [record] : [])),
     ).toBe(false);
   });
+
+  it('does not count a day the trial was taken on after the last week', () => {
+    // Week 4 ends Sun Nov 1; Mon Nov 2 and Tue Nov 3 repeat Week 4 while the Gate Trial waits.
+    expect(needsBackOnTrack(start, '2026-11-04', [], none)).toBe(true);
+    const gateTuesday = [{ trialId: 'gate-trial', date: '2026-11-03' }];
+    expect(needsBackOnTrack(start, '2026-11-04', [], none, gateTuesday)).toBe(false);
+  });
 });

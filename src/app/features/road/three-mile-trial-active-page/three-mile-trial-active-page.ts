@@ -186,9 +186,9 @@ export class ThreeMileTrialActivePage implements OnInit, OnDestroy {
     if (window.pass)
       return `You passed the Three-Mile Trial on ${formatLongDate(window.pass.date)}.`;
     if (!window.chapter)
-      return 'The Three-Mile Trial opens on the Monday after Chapter II’s Week 8.';
+      return 'The Three-Mile Trial opens after Chapter II’s Week 8, on any day you choose.';
     if (window.attemptToday) return null;
-    return `The next attempt is ${formatLongDate(window.nextAttempt ?? this.state.today())}. Attempts fall on Mondays and Thursdays until you pass.`;
+    return `The Three-Mile Trial opens ${formatLongDate(window.firstAttempt ?? this.state.today())}, after Week 8, on any day you choose.`;
   });
   protected readonly canStart = computed(() =>
     Boolean(

@@ -4,7 +4,7 @@
 
 A chapter's trial comes after its last full week, not inside it, so the person starts the trial rested rather than at the tired end of a week.
 
-**Any-day trials (decided 2026-11-09, for every trial from the Three-Mile Trial on).** Once a chapter's last week has ended, the person may start its trial on any day. The content pack's day is shown only as a suggestion.
+**Any-day trials (decided 2026-11-09, for every trial; the Gate Trial joined the same day, before it was passed).** Once a chapter's last week has ended, the person may start its trial on any day. The content pack's day is shown only as a suggestion.
 
 - The trial replaces that day's main order (Forge, walk or Restoration). Nothing is added on top.
 - There is no required gap between attempts. The person tries again when they feel able.
@@ -15,7 +15,7 @@ A chapter's trial comes after its last full week, not inside it, so the person s
 - The next chapter begins only after a pass. After a Monday pass it continues that same week from Tuesday, because the trial took the place of its first strength day. After a pass on any other day it begins the following Monday, and the days in between repeat the previous chapter's final week.
 - A make-up never delays a trial. When a trial is started on a day that holds a moved Forge session, the trial takes the day and the moved session is dropped (confirmed 2026-11-09).
 - Each week of retries moves every later chapter back by a week. Monthly check-ins stay anchored to Day 1.
-- The Gate Trial was passed under the earlier Monday and Thursday rule and is unchanged.
+- The Gate Trial first used Monday and Thursday attempt days. It moved to this rule on 2026-11-09, before it was passed, because those days did not fit the person's schedule. Drafts, attempts and results saved under the earlier rule read unchanged.
 
 Content packs may still list a trial on a named day. That is a suggestion only. Each trial's page states its parts; the High Country Trial and its stand-in are below.
 
@@ -73,7 +73,7 @@ Trial: **The Gate Trial**
 
 The [Chapter I content pack](rangers-road-full-program-content/01_THE_MUSTER.md) supplies the exact Forge A/B prescriptions, daily walking doses, six circuit stations, and trial prompts. Complete the Gate Trial phases in the documented order: Road, Gate Circuit, Mind, Spirit, then Oath. Rest 5–10 minutes after the walk before starting the circuit; at least 5 minutes is required, and longer than 10 minutes is allowed when needed to recover safely. Spend 10–15 quiet minutes in prayer; at least 10 minutes is required, and longer is allowed. Record the actual rest and prayer durations on a new completed trial result. The circuit is controlled; its completion time is recorded without a speed target.
 
-The Gate Trial follows the Trial Timing rule above. Its first attempt is the Monday after Week 4: campaign day 29 for a Monday Day 1, or day 30–35 when a short lead-in follows a Tuesday–Sunday start. The retry days are that week's Thursday, then each following Monday and Thursday. The Gate Trial opens only on those days, and the dashboard countdown points to the next one. Week 4 Saturday is a 30-minute easy walk plus preparation for Monday: choose the 2-mile route and set out the box, pull-up band, and carry weight. Chapter I is complete once the Gate Trial is passed; Chapter II then begins as the Trial Timing rule describes.
+The Gate Trial follows the Trial Timing rule above, including the any-day rule (from 2026-11-09). It opens the Monday after Week 4, the suggested day: campaign day 29 for a Monday Day 1, or day 30–35 when a short lead-in follows a Tuesday–Sunday start. From then it can be taken on any day until it is passed, and the dashboard countdown runs to that first day. Until the pass, every day repeats Week 4, its lighter Forges included (no load increases). 2 Timothy 4:7 is read on the day it is taken. Week 4 Saturday is a 30-minute easy walk plus preparation for the trial: choose the 2-mile route and set out the box, pull-up band, and carry weight. Chapter I is complete once the Gate Trial is passed; Chapter II then begins as the Trial Timing rule describes.
 
 ---
 

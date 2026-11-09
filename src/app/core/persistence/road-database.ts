@@ -53,8 +53,8 @@ import {
   type WorkoutPainInput,
   type WorkoutStart,
 } from '../domain/workout';
-import { addDays, getCampaignDay, isGateTrialAttemptDay } from '../program/campaign';
-import { resolveCampaignPosition } from '../program/campaign-position';
+import { addDays, getCampaignDay } from '../program/campaign';
+import { isTrialAvailable, resolveCampaignPosition } from '../program/campaign-position';
 import { checkInSaveError, testsHeldFor } from '../program/check-in-schedule';
 import { createTrackStepChoice } from '../program/skill-track-progress';
 import { campaignDayResolver } from '../program/campaign-day';
@@ -663,6 +663,22 @@ export class RoadDatabase {
     return drafts[0];
   }
 
+  /**
+   * The days a trial was started on: the active draft's and each kept attempt's. With the
+   * passes, they are the days a trial took in place of the day's order (Trial Timing).
+   */
+  async getTrialDays(): Promise<{ trialId: string; date: LocalDate }[]> {
+    const [drafts, attempts] = await Promise.all([
+      this.readAll<TrialDraft>('trialDrafts'),
+      this.readAll<TrialAttempt>('trialAttempts'),
+    ]);
+    const days = new Map<string, { trialId: string; date: LocalDate }>();
+    for (const { trialId, date } of [...drafts, ...attempts]) {
+      days.set(`${trialId}:${date}`, { trialId, date });
+    }
+    return [...days.values()];
+  }
+
   async getStoppedTrialAttemptsForTrial(trialId: string): Promise<TrialAttempt[]> {
     const attempts = await this.readAll<TrialAttempt>('trialAttempts');
     return attempts
@@ -683,7 +699,7 @@ export class RoadDatabase {
   }
 
   /**
-   * One write transaction checks the campaign, the attempt day, that the trial is not
+   * One write transaction checks the campaign, that the trial is open that day, that it is not
    * already passed, the single-draft rule, and the latest Green check.
    */
   startTrialDraft(date: LocalDate, trialId = 'gate-trial'): Promise<TrialDraft> {
@@ -715,20 +731,12 @@ export class RoadDatabase {
           if (results.some((result) => result.trialId === trialId)) {
             throw new Error(`The ${name} is already passed.`);
           }
-          if (trialId === 'gate-trial') {
-            if (!isGateTrialAttemptDay(campaign.startDate, date)) {
-              throw new Error(
-                'The Gate Trial opens on the Monday after Week 4, then on Mondays and Thursdays until it is passed.',
-              );
-            }
-          } else {
-            // A later trial opens on its own chapter's attempt days, found from Day 1 and passes.
-            const chapter = resolveCampaignPosition(campaign.startDate, date, results)?.chapter;
-            if (!chapter || chapter.program.trial.id !== trialId || !chapter.attemptDay) {
-              throw new Error(
-                `The ${name} opens on the Monday after its chapter's last week, then on Mondays and Thursdays until it is passed.`,
-              );
-            }
+          // Any day once the trial's chapter has ended (Trial Timing), found from Day 1 and passes.
+          const chapter = resolveCampaignPosition(campaign.startDate, date, results)?.chapter;
+          if (!chapter || chapter.program.trial.id !== trialId || !isTrialAvailable(chapter)) {
+            throw new Error(
+              `The ${name} opens once its chapter's last week has ended, on any day you choose.`,
+            );
           }
           if (drafts.length) {
             throw new Error(

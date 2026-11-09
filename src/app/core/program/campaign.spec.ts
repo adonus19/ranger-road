@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   addDays,
   getCampaignDay,
+  getChapterOneDay,
   getChapterOneLeadInDays,
   getChapterOneSchedule,
   getChapterOneTargetDay,
@@ -10,10 +11,12 @@ import {
   getGateTrialTargetDate,
   getNextGateTrialAttempt,
   getTodaysOrders,
-  isGateTrialAttemptDay,
+  isGateTrialOpen,
   isLocalDate,
   reconcileChapterOneCampaign,
 } from './campaign';
+import { withTrialDay } from './campaign-position';
+import { getDayOrders } from './chapter-orders';
 import { chapterOneSeed } from './chapter-one.seed';
 
 describe('Chapter I seed', () => {
@@ -37,28 +40,26 @@ describe('campaign calendar', () => {
     expect(getCampaignDay('2026-03-07', '2026-03-09')).toBe(3);
   });
 
-  it('counts down to the Monday after Week 4, then to each Monday and Thursday attempt', () => {
+  it('counts down to the Monday after Week 4, then stays open every day', () => {
     expect(getChapterOneTargetDay('2026-09-07')).toBe(28);
     expect(getGateTrialPlannedDay('2026-09-07')).toBe(29);
     expect(getGateTrialTargetDate('2026-09-07')).toBe('2026-10-05');
     expect(getDaysUntilGateTrial('2026-09-07', '2026-09-07')).toBe(28);
     expect(getDaysUntilGateTrial('2026-09-07', '2026-10-03')).toBe(2);
     expect(getDaysUntilGateTrial('2026-09-07', '2026-10-05')).toBe(0);
-    expect(getDaysUntilGateTrial('2026-09-07', '2026-10-06')).toBe(2);
-    expect(getDaysUntilGateTrial('2026-09-07', '2026-10-08')).toBe(0);
-    expect(getDaysUntilGateTrial('2026-09-07', '2026-10-09')).toBe(3);
+    expect(getDaysUntilGateTrial('2026-09-07', '2026-10-06')).toBe(0);
+    expect(getDaysUntilGateTrial('2026-09-07', '2026-10-09')).toBe(0);
     expect(getNextGateTrialAttempt('2026-09-07', '2026-09-20')).toBe('2026-10-05');
-    expect(getNextGateTrialAttempt('2026-09-07', '2026-10-10')).toBe('2026-10-12');
+    expect(getNextGateTrialAttempt('2026-09-07', '2026-10-10')).toBe('2026-10-10');
   });
 
-  it('opens the Gate Trial only on Mondays and Thursdays after Week 4', () => {
+  it('opens the Gate Trial on any day once Week 4 has ended', () => {
     // Week 4's own Monday and Thursday are strength days, not attempts.
-    expect(isGateTrialAttemptDay('2026-09-07', '2026-09-28')).toBe(false);
-    expect(isGateTrialAttemptDay('2026-09-07', '2026-10-01')).toBe(false);
-    expect(isGateTrialAttemptDay('2026-09-07', '2026-10-05')).toBe(true);
-    expect(isGateTrialAttemptDay('2026-09-07', '2026-10-06')).toBe(false);
-    expect(isGateTrialAttemptDay('2026-09-07', '2026-10-08')).toBe(true);
-    expect(isGateTrialAttemptDay('2026-09-07', '2026-10-12')).toBe(true);
+    expect(isGateTrialOpen('2026-09-07', '2026-09-28')).toBe(false);
+    expect(isGateTrialOpen('2026-09-07', '2026-10-04')).toBe(false);
+    expect(isGateTrialOpen('2026-09-07', '2026-10-05')).toBe(true);
+    expect(isGateTrialOpen('2026-09-07', '2026-10-06')).toBe(true);
+    expect(isGateTrialOpen('2026-09-07', '2026-10-10')).toBe(true);
   });
 
   it('uses a short lead-in before four full weeks for a midweek or Sunday start', () => {
@@ -96,7 +97,7 @@ describe('campaign calendar', () => {
       week: 4,
       contentWeek: 4,
       afterTarget: true,
-      attemptDay: true,
+      attemptDay: false,
     });
   });
 
@@ -191,19 +192,29 @@ describe("Today's Orders", () => {
     );
   });
 
-  it('gives the strength days after Week 4 to Gate Trial attempts and repeats Week 4’s other days', () => {
-    const attempt = getTodaysOrders('2026-09-07', '2026-10-05', 'green');
-    expect(attempt[1]).toMatchObject({ title: 'Gate Trial', missionType: 'trial' });
-    expect(attempt[0].guidance).toBe('2 Timothy 4:7');
+  it('repeats every Week 4 order after Week 4, its lighter Forges included', () => {
+    const monday = getTodaysOrders('2026-09-07', '2026-10-05', 'green');
+    expect(monday[1].title).toBe('Forge A at reduced effort');
+    expect(monday[0].guidance).toBe('Hebrews 12:1–3');
     expect(getTodaysOrders('2026-09-07', '2026-10-06', 'green')[1].title).toBe(
       '30-minute easy walk',
     );
     expect(getTodaysOrders('2026-09-07', '2026-10-07', 'green')[1].title).toBe('Restoration');
-    expect(getTodaysOrders('2026-09-07', '2026-10-08', 'green')[1].title).toBe('Gate Trial');
-    expect(getTodaysOrders('2026-09-07', '2026-10-10', 'green')[1].title).toBe(
-      '30-minute easy walk',
+    expect(getTodaysOrders('2026-09-07', '2026-10-08', 'green')[1].title).toBe(
+      'Forge B at reduced volume',
     );
-    expect(getTodaysOrders('2026-09-07', '2026-10-12', 'green')[1].title).toBe('Gate Trial');
+    expect(getTodaysOrders('2026-09-07', '2026-10-12', 'green')[1].title).toBe(
+      'Forge A at reduced effort',
+    );
+  });
+
+  it('gives a day the Gate Trial is taken on to the trial, with its Scripture', () => {
+    const tuesday = withTrialDay(getChapterOneDay('2026-09-07', '2026-10-06')!, '2026-10-06', [
+      { trialId: 'gate-trial', date: '2026-10-06' },
+    ]);
+    const orders = getDayOrders(tuesday, 'green');
+    expect(orders[1]).toMatchObject({ title: 'Gate Trial', missionType: 'trial' });
+    expect(orders[0].guidance).toBe('2 Timothy 4:7');
   });
 
   it('repeats Week 1 content during the lead-in without reaching Week 2 early', () => {
@@ -215,16 +226,17 @@ describe("Today's Orders", () => {
     expect(getTodaysOrders('2026-09-10', '2026-10-10', 'green')[1].title).toBe(
       '30-minute easy walk',
     );
-    expect(getTodaysOrders('2026-09-10', '2026-10-12', 'green')[1].title).toBe('Gate Trial');
+    expect(getTodaysOrders('2026-09-10', '2026-10-12', 'green')[1].title).toBe(
+      'Forge A at reduced effort',
+    );
   });
 
-  it('defers the planned Gate Trial on Yellow or Red', () => {
-    expect(getTodaysOrders('2026-09-07', '2026-10-05', 'green')[1].title).toBe('Gate Trial');
-    expect(getTodaysOrders('2026-09-07', '2026-10-05', 'yellow')[1].title).toBe(
-      'Gate Trial waits for Green',
-    );
-    expect(getTodaysOrders('2026-09-07', '2026-10-05', 'red')[1].guidance).toContain(
-      'No strength or trial',
-    );
+  it('defers the Gate Trial on Yellow or Red', () => {
+    const day = withTrialDay(getChapterOneDay('2026-09-07', '2026-10-05')!, '2026-10-05', [
+      { trialId: 'gate-trial', date: '2026-10-05' },
+    ]);
+    expect(getDayOrders(day, 'green')[1].title).toBe('Gate Trial');
+    expect(getDayOrders(day, 'yellow')[1].title).toBe('Gate Trial waits for Green');
+    expect(getDayOrders(day, 'red')[1].guidance).toContain('No strength or trial');
   });
 });

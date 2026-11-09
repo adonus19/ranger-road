@@ -13,8 +13,7 @@ import type {
   ReadinessStatus,
   TrialResult,
 } from '../../../core/domain/models';
-import { addDays } from '../../../core/program/calendar';
-import { getNextAttempt, resolveCampaignPosition } from '../../../core/program/campaign-position';
+import { resolveCampaignPosition } from '../../../core/program/campaign-position';
 import {
   getActivityChoices,
   getDayContent,
@@ -125,11 +124,6 @@ export class MissionPage {
   protected readonly trialPass = computed(() => this.position()?.chapter.pass);
   protected readonly trialPassed = computed(() => Boolean(this.trialPass()));
   protected readonly nextChapterStart = computed(() => this.position()?.chapter.nextStart);
-  /** The attempt after today, for an attempt day that doesn't go. */
-  protected readonly nextAttempt = computed(() => {
-    const chapter = this.position()?.chapter;
-    return chapter ? getNextAttempt(chapter, addDays(this.state.today(), 1)) : null;
-  });
   protected readonly longDate = formatLongDate;
   protected readonly numeral = formatChapterNumeral;
 

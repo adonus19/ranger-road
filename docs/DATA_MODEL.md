@@ -22,14 +22,14 @@
 - startDate
 - currentChapterId (the chapter the campaign began in, always Chapter I; today's chapter is derived, see Campaign Position)
 - status
-- trialTargetDate? (planning date; Chapter I uses the first Gate Trial attempt, the Monday after Week 4. Attempts then follow the Monday and Thursday rule whatever an older saved date says)
+- trialTargetDate? (planning date; Chapter I uses the Gate Trial's first day, the Monday after Week 4. From then it can be taken any day, whatever an older saved date says)
 - scheduleVersion? (Chapter I version 2 adds a short lead-in before four complete Monday–Sunday weeks; version 3 used Week 4 Saturday as its generated planning date; version 4 moves the generated target for each older version—Day 1 + 27, the closing Sunday, or Week 4 Saturday—to the first Monday Gate Trial attempt. A separately chosen date stays as saved; older campaigns may lack this field.)
 
 ### Campaign Position (derived, never stored)
 
-Today's chapter, week, and weekday come from Day 1 and the saved trial results, so a restored copy always lands in the same place. Chapter I starts on Day 1, with a short lead-in when Day 1 is not a Monday. Each later chapter starts the day after its predecessor's trial pass if that was a Monday, otherwise the following Monday. Its first week is the Monday–Sunday week that holds that first day, so after a Monday pass the trial day counts as the new chapter's first Monday. Campaign week numbers run across chapters (Chapter II is Weeks 5–8). After a chapter's last week, the Gate Trial's Mondays and Thursdays are attempts until its pass; from the Three-Mile Trial on, any day is an attempt day (see Any-day trials below). Days that are not a trial repeat the last week. A chapter whose orders are not in the app yet shows the previous chapter as complete from its first day.
+Today's chapter, week, and weekday come from Day 1 and the saved trial results, so a restored copy always lands in the same place. Chapter I starts on Day 1, with a short lead-in when Day 1 is not a Monday. Each later chapter starts the day after its predecessor's trial pass if that was a Monday, otherwise the following Monday. Its first week is the Monday–Sunday week that holds that first day, so after a Monday pass the trial day counts as the new chapter's first Monday. Campaign week numbers run across chapters (Chapter II is Weeks 5–8). After a chapter's last week, its trial can be taken any day until its pass (see Any-day trials below). Days that are not a trial repeat the last week. A day is a trial day when a trial draft or kept attempt is dated that day, or the pass is; that is read from the saved drafts, attempts and results, never stored. A chapter whose orders are not in the app yet shows the previous chapter as complete from its first day.
 
-Mission IDs name the chapter and week (`chapter-2-week-5-day-3-weekly`), the chapter and trial on attempt days (`chapter-2-three-mile-trial-attempt-day-1-weekly`), or Chapter I's lead-in (`chapter-1-lead-in-day-4-weekly`). Chapter I's IDs are unchanged by the multi-chapter schedule.
+Mission IDs name the chapter and week (`chapter-2-week-5-day-3-weekly`), the chapter and trial on a day the trial is taken (`chapter-2-three-mile-trial-attempt-day-1-weekly`; older records from Monday and Thursday attempt days keep the same form), or Chapter I's lead-in (`chapter-1-lead-in-day-4-weekly`). Chapter I's IDs are unchanged by the multi-chapter schedule.
 
 ### ChapterProgram (seed content, not stored)
 
@@ -314,7 +314,7 @@ The check opens 60 minutes after physical effort and suggests 60–120 minutes a
 - painEvents[] (copies of immediately appended trial-linked pain history)
 - photoAsset? (optional attachment reference carried into a completed or stopped snapshot)
 
-Only one trial draft may be active. Starting requires an attempt day (for the Gate Trial, a Monday or Thursday after Week 4; from the Three-Mile Trial on, any day once the chapter's last week has ended), no completed result for the trial yet, and the latest same-day Green readiness check. Draft autosave keeps partial observations even if readiness later turns Yellow or Red. Advancing past either physical phase and saving a completed result requires the latest same-day Green check. Pain at 3 or more, or a reduce, substitute, or end-exercise response, prevents that attempt from being recorded as a full completed Gate Trial. The person can stop and retain the partial attempt.
+Only one trial draft may be active. Starting requires that the trial's chapter has ended (any day after its last week; the Gate Trial included from 2026-11-09), no completed result for the trial yet, and the latest same-day Green readiness check. Draft autosave keeps partial observations even if readiness later turns Yellow or Red. Advancing past either physical phase and saving a completed result requires the latest same-day Green check. Pain at 3 or more, or a reduce, substitute, or end-exercise response, prevents that attempt from being recorded as a full completed Gate Trial. The person can stop and retain the partial attempt.
 
 ### TrialAttempt
 
@@ -370,7 +370,7 @@ Historical records are immutable except explicit user edits.
 Restoring a saved copy is the one operation that replaces history. It runs only after the person confirms, and it replaces every store in a single transaction, so a failure leaves the device unchanged.
 Program definition updates must not rewrite prior completed sessions.
 When Chapter I scheduling changes, reconcile only the campaign's generated planning date. Preserve any separately chosen target date and every historical row. Dated mission attempts retain their definition snapshots and remain readable even when their old week-based ID differs from the newly scheduled order.
-A completed trial result is the pass for its chapter. The next chapter's first day is derived from the first completed result: the day after a Monday pass, the Monday after any other pass, or the first attempt day for an older result saved before the trial window. A chapter is complete once today is on or after that day. None of this mutates the Campaign or TrialResult.
+A completed trial result is the pass for its chapter. The next chapter's first day is derived from the first completed result: the day after a Monday pass, the Monday after any other pass, or the trial's first day (the Monday after the last week) for an older result saved before the trial window. A chapter is complete once today is on or after that day. None of this mutates the Campaign or TrialResult.
 
 ## RoadSession additions
 

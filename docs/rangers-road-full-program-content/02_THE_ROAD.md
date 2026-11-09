@@ -116,7 +116,7 @@ The Navigation I field card in `FIELD_MANUAL.md` holds the written skills. It ha
 
 # The Three-Mile Trial
 
-Take the Three-Mile Trial on the Monday after Week 8, in place of that week's Forge A. If it is not passed, try again that Thursday (in place of Forge B), then each following Monday and Thursday. Chapter III begins only after a pass. Passing means finishing every part below as written on a Green day, with no pain at 3 or more and no changed movement; there is no time standard. Read Psalm 121 on each attempt day. Days between attempts repeat Week 8's easy days.
+Take the Three-Mile Trial once Week 8 is over, on any day you choose (see Trial Timing in `CHAPTERS_AND_TRIALS.md`; the Monday after Week 8 is the suggestion). It replaces that day's order. Chapter III begins only after a pass. Passing means finishing every part below as written on a Green day, with no pain at 3 or more and no changed movement; there is no time standard. Read Psalm 121 on the day you take it. Until it is passed, every day repeats Week 8, its Forges included at Week 8's dose.
 1. Walk 3 continuous miles; record time, splits if available, HR, RPE, knee/back discomfort, 5-min recovery.
 2. 30-lb suitcase carry — 60 sec right, 60 sec left; record grip/core/posture difficulty.
 3. Three-flight stair test at steady pace if appropriate; rate breathlessness 1–10.

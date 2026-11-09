@@ -27,15 +27,15 @@ export interface ChapterDay<T extends TrialRecord = TrialRecord> {
   /** After the chapter's last full week, while its trial waits for a pass. */
   afterLastWeek: boolean;
   /**
-   * A Monday or Thursday after the last week, until the day of the pass. Always false for an
-   * any-day trial, whose days after the last week repeat that week.
+   * The trial takes this day's order: a day after the last week on which the trial was passed
+   * or (via `withTrialDay`) started or stopped. Other days after the last week repeat it.
    */
   attemptDay: boolean;
   /** The first day of this chapter's own orders. */
   start: LocalDate;
   /** The Monday that begins the chapter's first full week. */
   firstMonday: LocalDate;
-  /** The first trial attempt: the Monday after the last week, in place of Forge A. */
+  /** The first day the trial can be taken, and its suggested day: the Monday after the last week. */
   firstAttempt: LocalDate;
   /** The first completed result for this chapter's trial. Completing it is the pass. */
   pass?: T;
@@ -123,11 +123,7 @@ export function getChapterDay<T extends TrialRecord>(
     weekday,
     leadIn,
     afterLastWeek,
-    attemptDay:
-      afterLastWeek &&
-      !program.anyDayTrial &&
-      (weekday === 1 || weekday === 4) &&
-      (!pass || date <= pass.date),
+    attemptDay: afterLastWeek && pass?.date === date,
     start,
     firstMonday,
     firstAttempt,
@@ -159,20 +155,43 @@ export function getNextChapterStart(passDate: LocalDate, firstAttempt: LocalDate
   return addDays(passDate, weekday === 1 ? 1 : 8 - weekday);
 }
 
-/** The next trial attempt on or after a date: the first attempt, then Mondays and Thursdays. */
+/**
+ * The next day the trial can be taken (Trial Timing, CHAPTERS_AND_TRIALS.md): any day from the
+ * first, which is the Monday after the chapter's last week.
+ */
 export function getNextAttemptFrom(firstAttempt: LocalDate, from: LocalDate): LocalDate {
-  if (from <= firstAttempt) return firstAttempt;
-  const weekday = getWeekday(from);
-  return addDays(from, weekday === 1 ? 0 : weekday <= 4 ? 4 - weekday : 8 - weekday);
+  return from < firstAttempt ? firstAttempt : from;
 }
 
-/** The next day the trial can be taken: any day from the first, for an any-day trial. */
 export function getNextAttempt(chapter: ChapterDay, from: LocalDate): LocalDate {
-  if (chapter.program.anyDayTrial) return from < chapter.firstAttempt ? chapter.firstAttempt : from;
   return getNextAttemptFrom(chapter.firstAttempt, from);
 }
 
-/** An any-day trial that can be taken today: its chapter's last week is over and it is not passed. */
+/** The trial can be taken today: its chapter's last week is over and it is not passed. */
 export function isTrialAvailable(chapter: ChapterDay): boolean {
-  return !!chapter.program.anyDayTrial && chapter.afterLastWeek && !chapter.pass;
+  return chapter.afterLastWeek && !chapter.pass;
+}
+
+/**
+ * A day after the chapter's last week on which its trial was started, stopped or passed takes
+ * the trial as its order, in place of the repeated week's (Trial Timing). A moved Forge
+ * session on that day is dropped, not rescheduled. `trialDays` lists those days by trial.
+ */
+export function withTrialDay<T extends TrialRecord>(
+  day: ChapterDay<T>,
+  date: LocalDate,
+  trialDays: readonly TrialRecord[],
+): ChapterDay<T> {
+  if (day.attemptDay) return day.makeup ? withoutMakeup(day) : day;
+  if (!day.afterLastWeek || (day.pass && date > day.pass.date)) return day;
+  const taken = trialDays.some(
+    (record) => record.trialId === day.program.trial.id && record.date === date,
+  );
+  return taken ? withoutMakeup({ ...day, attemptDay: true }) : day;
+}
+
+function withoutMakeup<T extends TrialRecord>(day: ChapterDay<T>): ChapterDay<T> {
+  const copy = { ...day };
+  delete copy.makeup;
+  return copy;
 }

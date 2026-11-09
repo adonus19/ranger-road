@@ -6,7 +6,7 @@ const start = '2026-10-05';
 const gatePass = [{ trialId: 'gate-trial', date: '2026-11-02' }];
 
 describe('getTrialWindow', () => {
-  it('is closed before its chapter, then opens the Monday after Week 8', () => {
+  it('is closed before its chapter, then open any day from the Monday after Week 8', () => {
     expect(getTrialWindow(start, '2026-10-20', [], 'three-mile-trial').chapter).toBeNull();
     const week8 = getTrialWindow(start, '2026-11-25', gatePass, 'three-mile-trial');
     expect(week8.attemptToday).toBe(false);
@@ -14,9 +14,9 @@ describe('getTrialWindow', () => {
     expect(getTrialWindow(start, '2026-11-30', gatePass, 'three-mile-trial').attemptToday).toBe(
       true,
     );
-    expect(getTrialWindow(start, '2026-12-01', gatePass, 'three-mile-trial').nextAttempt).toBe(
-      '2026-12-03',
-    );
+    const tuesday = getTrialWindow(start, '2026-12-01', gatePass, 'three-mile-trial');
+    expect(tuesday.attemptToday).toBe(true);
+    expect(tuesday.nextAttempt).toBe('2026-12-01');
   });
 
   it('reports the pass and stops offering attempts', () => {

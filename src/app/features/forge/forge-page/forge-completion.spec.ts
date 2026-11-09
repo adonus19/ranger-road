@@ -126,9 +126,9 @@ describe('Forge across chapters', () => {
     expect(history.start).not.toHaveBeenCalled();
   });
 
-  it('gives an attempt day to the Gate Trial and keeps Restoration as needed', async () => {
+  it('repeats Week 4’s lighter Forge A while the Gate Trial waits, with Restoration as needed', async () => {
     const { root } = await render(ForgePage, '2026-11-02', []);
-    expect(root.textContent).not.toContain('Forge A');
+    expect(root.textContent).toContain('Forge A');
     expect(root.textContent).toContain('Restoration');
     expect(root.querySelector('.choice-list')).not.toBeNull();
   });

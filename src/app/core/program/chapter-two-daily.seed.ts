@@ -51,8 +51,8 @@ const restDay = { title: 'Rest and worship', missionType: 'reflection' } as cons
 
 /**
  * Chapter II's dated orders, from 02_THE_ROAD.md. Chapter II starts the day after a Monday pass
- * or the Monday after any other pass; it has no lead-in. After Week 8, Mondays and Thursdays
- * are Three-Mile Trial attempts and the other days repeat Week 8 until it is passed.
+ * or the Monday after any other pass; it has no lead-in. After Week 8 every day repeats Week 8
+ * until the Three-Mile Trial is passed; it can be taken on any day, in place of that day's order.
  */
 export const chapterTwoDailySeed: readonly ChapterWeekContent[] = [
   {
@@ -194,7 +194,7 @@ export const chapterTwoDailySeed: readonly ChapterWeekContent[] = [
           missionType: 'conditioning',
           estimatedMinutes: 30,
           trialPreparation:
-            'Then prepare for Monday’s Three-Mile Trial: choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs.',
+            'Then prepare for the Three-Mile Trial: choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs.',
         },
       },
       7: {
@@ -228,8 +228,8 @@ export const chapterTwoDailySeed: readonly ChapterWeekContent[] = [
 ];
 
 /**
- * A Monday or Thursday after Week 8: the Three-Mile Trial takes that strength slot until it is
- * passed. Its Scripture, Psalm 121, is read on each attempt day.
+ * The order of a day after Week 8 on which the Three-Mile Trial is taken. Its Scripture,
+ * Psalm 121, is read that day.
  */
 export const chapterTwoTrialAttempt: ChapterDayContent = {
   scriptureReference: 'Psalm 121',

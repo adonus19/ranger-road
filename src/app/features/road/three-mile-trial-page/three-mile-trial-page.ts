@@ -19,7 +19,6 @@ import {
   recoveryWord,
 } from '../../../core/domain/post-mission-function';
 import type { RecordedTrialPainEvent } from '../../../core/domain/trial-draft';
-import { addDays } from '../../../core/program/calendar';
 import { threeMileTrialDefinition } from '../../../core/program/chapter-two-trial.seed';
 import { getTrialWindow } from '../../../core/program/trial-window';
 import { CampaignState } from '../../../core/state/campaign-state';
@@ -88,9 +87,7 @@ export class ThreeMileTrialPage implements OnInit {
     if (window.pass) return `Passed ${formatShortDate(window.pass.date)}`;
     if (!window.chapter) return 'Opens after Chapter II';
     if (window.attemptToday) return null;
-    return window.nextAttempt && window.firstAttempt && this.state.today() < window.firstAttempt
-      ? `First attempt ${formatShortDate(window.nextAttempt)}`
-      : `Next attempt ${formatShortDate(window.nextAttempt ?? this.state.today())}`;
+    return `Opens ${formatShortDate(window.firstAttempt ?? this.state.today())}`;
   });
   protected readonly guidance = computed(() => {
     if (this.state.loading()) return 'Opening your campaign…';
@@ -103,25 +100,15 @@ export class ThreeMileTrialPage implements OnInit {
     if (window.pass)
       return `You passed the Three-Mile Trial on ${formatLongDate(window.pass.date)}.`;
     if (!window.chapter) {
-      return 'The Three-Mile Trial ends Chapter II. It opens on the Monday after Week 8. Review the plan now.';
+      return 'The Three-Mile Trial ends Chapter II. It opens after Week 8, on any day you choose. Review the plan now.';
     }
     if (!window.attemptToday && !this.ownDraft()) {
-      const next = window.nextAttempt ?? this.state.today();
-      return window.firstAttempt && this.state.today() < window.firstAttempt
-        ? `The first attempt is ${formatLongDate(next)}, the Monday after Week 8. Review the plan now.`
-        : `The next attempt is ${formatLongDate(next)}. Attempts fall on Mondays and Thursdays until you pass.`;
+      const opens = window.firstAttempt ?? this.state.today();
+      return `The Three-Mile Trial opens ${formatLongDate(opens)}, after Week 8, and you can take it on any day you choose from then. Review the plan now.`;
     }
     const status = this.readiness()?.status;
     if (status && status !== 'green') {
-      const after =
-        window.chapter &&
-        getTrialWindow(
-          this.state.campaign()!.startDate,
-          addDays(this.state.today(), 1),
-          this.campaignTrials(),
-          this.trial.id,
-        ).nextAttempt;
-      return `${READINESS_GUIDANCE[status]}${after ? ` The next attempt is ${formatLongDate(after)}.` : ''}`;
+      return `${READINESS_GUIDANCE[status]} You can take it on any day you’re Green.`;
     }
     return status ? READINESS_GUIDANCE[status] : 'Check readiness before the physical parts.';
   });

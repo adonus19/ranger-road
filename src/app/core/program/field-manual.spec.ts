@@ -156,16 +156,19 @@ describe('This week', () => {
     ]);
   });
 
-  it('shows the Gate Trial circuit on attempt weeks and Chapter II’s start after a pass', () => {
+  it('shows the Gate Trial circuit beside Week 4’s repeated days, and Chapter II’s start after a pass', () => {
     const trial = getFieldManualWeek({ startDate, today: '2026-11-02' });
     expect(trial.stage).toBe('trial');
     expect(trial.heading).toBe('The Gate Trial');
     expect(trial.rows.map((row) => [row.title, row.line])).toEqual([
       ['Carry the details', 'Leadership lesson · Week 4, 3 minutes'],
-      ['2 Timothy 4:7', 'Scripture today · six more this week'],
-      ['Gate Circuit and Restoration', 'Exercise guides · 13 movements this week'],
+      ['Hebrews 12:1–3', 'Scripture today · six more this week'],
+      ['Forge, Gate Circuit and Restoration', 'Exercise guides · 18 movements this week'],
     ]);
-    expect(trial.rows[1].fragment).toBe('gate-trial-attempts');
+    expect(trial.rows[1].fragment).toBe('week-4-day-1');
+    expect(trial.sessions.find((session) => session.id === 'gate-circuit')?.days).toBe(
+      'the day you take the trial',
+    );
 
     const gatePass = [{ trialId: 'gate-trial', date: '2026-11-05' }];
     const passed = getFieldManualWeek({
@@ -175,8 +178,12 @@ describe('This week', () => {
     });
     expect(passed.heading).toBe('Gate Trial passed');
     expect(passed.subline).toBe('Chapter I · The Muster · Chapter II begins Mon, Nov 9');
-    expect(passed.sessions.map((session) => session.id)).toEqual(['chapter-1-restoration']);
-    expect(passed.rows.at(-1)?.title).toBe('Restoration');
+    // Monday repeated Week 4's Forge A; Thursday's pass took that day's Forge B.
+    expect(passed.sessions.map((session) => session.id)).toEqual([
+      'chapter-1-forge-a',
+      'chapter-1-restoration',
+    ]);
+    expect(passed.rows.at(-1)?.title).toBe('Forge A and Restoration');
   });
 });
 
@@ -228,9 +235,10 @@ describe('This week in Chapter II', () => {
     const trial = week('2026-12-07');
     expect(trial.stage).toBe('trial');
     expect(trial.heading).toBe('The Three-Mile Trial');
+    // Monday after Week 8 repeats Week 8's Monday until the day the trial is taken.
     expect(trial.rows.find((row) => row.kind === 'scripture')).toMatchObject({
-      title: 'Psalm 121',
-      fragment: 'three-mile-trial-attempts',
+      title: 'Micah 6:8',
+      fragment: 'week-8-day-1',
     });
     expect(trial.rows.some((row) => row.kind === 'fieldcraft')).toBe(false);
     expect(trial.sessions.map((session) => session.id)).not.toContain('gate-circuit');
@@ -318,7 +326,7 @@ describe('Chapter II reference pages', () => {
     ]);
     expect(getTrialScripture(chapterTwo)).toEqual([
       {
-        label: 'Each attempt day and the prayer',
+        label: 'The day you take it, and the prayer',
         reference: 'Psalm 121',
         id: 'three-mile-trial-attempts',
       },

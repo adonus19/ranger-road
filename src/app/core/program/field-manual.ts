@@ -181,11 +181,22 @@ function sessionIdFor(day: ChapterDay): string | undefined {
 }
 
 /** The sessions a week's days call for, in training order, with the days they fall on. */
-function sessionsForDays(program: ChapterProgram, days: readonly WeekDay[]): FieldManualSession[] {
+/**
+ * `trialOpen`: the trial can be taken any day this week, so its circuit's guides are listed
+ * beside the repeated week's sessions.
+ */
+function sessionsForDays(
+  program: ChapterProgram,
+  days: readonly WeekDay[],
+  trialOpen = false,
+): FieldManualSession[] {
   const used = new Map<string, string[]>();
   for (const day of days) {
     const id = sessionIdFor(day.day);
     if (id) used.set(id, [...(used.get(id) ?? []), weekdayName(day)]);
+  }
+  if (trialOpen && !used.has(GATE_CIRCUIT_ID) && trialCircuitIds(program).length) {
+    used.set(GATE_CIRCUIT_ID, ['the day you take the trial']);
   }
   const [forgeA, forgeB] = program.workouts;
   const order = [forgeA?.id, forgeB?.id, GATE_CIRCUIT_ID, program.restorationId];
@@ -379,6 +390,7 @@ export function getFieldManualWeek(input: FieldManualWeekInput): FieldManualWeek
   const sessions = sessionsForDays(
     program,
     pass ? days.filter((day) => !day.day.attemptDay) : days,
+    afterTarget && !pass,
   );
   if (sessions.length) {
     const count = uniqueExerciseIds(sessions).length;
@@ -582,7 +594,7 @@ export function getAllSessions(): SessionDetail[] {
   return chapterPrograms.flatMap((program) => getChapterSessions(program));
 }
 
-/** Read on each Gate Trial attempt day, and in the trial's Spirit part. */
+/** Read on the day the Gate Trial is taken, and in the trial's Spirit part. */
 export const GATE_TRIAL_SCRIPTURE = {
   attemptDays: chapterOneGateTrialAttempt.scriptureReference,
   spirit: 'Psalm 121',
@@ -597,14 +609,14 @@ export interface TrialScriptureRow {
 
 /** The Scripture a chapter's trial calls for, with anchors the This week rows link to. */
 export function getTrialScripture(program: ChapterProgram): TrialScriptureRow[] {
-  // An any-day trial has no attempt days, and its pack names no attempt-day Scripture.
+  // A trial whose pack names no Scripture for the day it is taken has none here.
   if (!program.trialAttempt) return [];
   const attempts: TrialScriptureRow = {
-    label: 'Each attempt day',
+    label: 'The day you take it',
     reference: program.trialAttempt.scriptureReference,
     id: trialAttemptsFragment(program.trial.id),
   };
-  // The Gate Trial's Spirit part reads a second passage; other trials read the attempt-day one.
+  // The Gate Trial's Spirit part reads a second passage; other trials read the day's one.
   return program.trial.id === 'gate-trial'
     ? [
         attempts,
@@ -614,7 +626,7 @@ export function getTrialScripture(program: ChapterProgram): TrialScriptureRow[] 
           id: 'gate-trial-spirit',
         },
       ]
-    : [{ ...attempts, label: 'Each attempt day and the prayer' }];
+    : [{ ...attempts, label: 'The day you take it, and the prayer' }];
 }
 
 export type FieldManualEntryKind =

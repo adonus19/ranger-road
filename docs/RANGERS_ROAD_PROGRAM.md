@@ -33,7 +33,7 @@ The [full program content pack](rangers-road-full-program-content/PROGRAM_INDEX.
 
 Chapter I has four complete Monday–Sunday weeks. When the chosen Day 1 is Tuesday through Sunday, the days from Day 1 through the first Sunday are a short lead-in: use Week 1's existing content for each matching weekday, then begin the full Week 1 on Monday. A Monday Day 1 begins Week 1 immediately. The lead-in adds no new progression step or trial.
 
-Every chapter's trial follows the Trial Timing rule in `CHAPTERS_AND_TRIALS.md`. The Gate Trial was set on Mondays and Thursdays after Week 4. From the Three-Mile Trial on, a trial can be started on any day once the chapter's last week has ended (the Monday after is the suggestion); it replaces that day's order, and days between attempts repeat the last week. The next chapter begins only after a pass. Chapter I is complete once the Gate Trial is passed.
+Every chapter's trial follows the Trial Timing rule in `CHAPTERS_AND_TRIALS.md`: a trial can be started on any day once the chapter's last week has ended (the Monday after is the suggestion); it replaces that day's order, and days between attempts repeat the last week, its Forges included. The Gate Trial moved to this rule on 2026-11-09, before it was passed; it had been set on Mondays and Thursdays. The next chapter begins only after a pass. Chapter I is complete once the Gate Trial is passed.
 
 Chapter II's Three-Mile Trial has Week 8 Saturday as its preparation day. Chapter III's High Country Trial has Week 12 Saturday (an easy walk, choose the trail, check the forecast, pack).
 
@@ -282,7 +282,7 @@ A track is one Forge slot whose exercise steps up over the campaign. Each step i
 A third Forge the person may choose, at most once a week. It is never required, never counted, and never logged as missed.
 
 - **Where it shows.** A quiet card on the day's orders: "Optional Forge available." It sits alongside the day's walk or restoration and replaces nothing.
-- **Eligible days.** Tuesday, Wednesday, Friday and Saturday. Never on a trial attempt day. Not offered in a three-Forge make-up week. Deload weeks and trial weeks are allowed; in a deload week the card adds "Keep it light."
+- **Eligible days.** Tuesday, Wednesday, Friday and Saturday. Never on a day a trial is taken. Not offered in a three-Forge make-up week. Deload weeks and trial weeks are allowed; in a deload week the card adds "Keep it light."
 - **Moved Forge.** Not offered on a day that already holds a moved (make-up) Forge, since two Forge sessions never stack on one day.
 - **Next to a Forge day.** Nothing blocks it. If the chosen exercises repeat that day's or yesterday's main lifts, a quiet note says so.
 - **Once done**, the card is gone for the rest of the week (Monday through Sunday). Only a completed session counts; a stopped one leaves the card in place. If it is not done, nothing is said.

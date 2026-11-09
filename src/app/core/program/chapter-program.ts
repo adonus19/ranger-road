@@ -120,15 +120,11 @@ export interface ChapterProgram extends ChapterSeed {
   /** Dated weeks in order; the first is `chapter.weeks[0]`. */
   weeks: readonly ChapterWeekContent[];
   /**
-   * A Monday or Thursday after the last week, while the trial waits for a pass. Only chapters
-   * whose trial keeps those attempt days have one; an any-day trial has none.
+   * The order of a day the trial is taken on, after the last week (Trial Timing,
+   * CHAPTERS_AND_TRIALS.md: any day, with the Monday after the last week as the suggestion).
+   * Without one, that day keeps its own Scripture and the trial takes its activity.
    */
   trialAttempt?: ChapterDayContent;
-  /**
-   * The trial can be taken on any day once the last week has ended (Trial Timing,
-   * CHAPTERS_AND_TRIALS.md). There are no attempt days: every later day repeats the last week.
-   */
-  anyDayTrial?: boolean;
   /** A short line on choosing the day, such as "Pick a clear-weather day." */
   trialDayNote?: string;
   workouts: readonly WorkoutDefinition[];

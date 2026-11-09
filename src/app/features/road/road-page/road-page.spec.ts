@@ -61,7 +61,7 @@ describe('RoadPage', () => {
     const element = await render('2026-09-21', '2026-09-25');
 
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'First attempt Monday, October 19, the Monday after Week 4. If it doesn’t go, try again that Thursday. Chapter II waits until you pass.',
+      'Available from Monday, October 19, after Week 4, on any day you choose. Chapter II waits until you pass.',
     );
     expect(element.querySelector('.trial__open')?.getAttribute('href')).toBe('/road/gate-trial');
     expect(element.querySelector('ol.trial__phases')).not.toBeNull();
@@ -88,17 +88,17 @@ describe('RoadPage', () => {
     const element = await render('2026-08-20', '2026-09-25');
 
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'Next attempt Monday, September 28. Chapter II waits until you pass.',
+      'Available any day you choose. Chapter II waits until you pass.',
     );
     expect(element.querySelector('.route')?.getAttribute('aria-label')).toContain(
       'A 4-day lead-in ends before Week 1 begins on day 5. Gate Trial target on day 33.',
     );
   });
 
-  it('keeps the attempt rule even when an older campaign saved a different target date', async () => {
+  it('keeps the trial’s first day even when an older campaign saved a different target date', async () => {
     const element = await render('2026-09-21', '2026-09-25', [], '2026-10-24');
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toContain(
-      'First attempt Monday, October 19',
+      'Available from Monday, October 19',
     );
     expect(element.querySelector('.route')?.getAttribute('aria-label')).toContain(
       'Gate Trial target on day 29.',
@@ -171,7 +171,7 @@ describe('RoadPage', () => {
       'The Three-Mile Trial',
     );
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'First attempt Monday, November 30, the Monday after Week 8. If it doesn’t go, try again that Thursday. Chapter III waits until you pass.',
+      'Available from Monday, November 30, after Week 8, on any day you choose. Chapter III waits until you pass.',
     );
     expect(element.querySelector('.trial__open')?.getAttribute('href')).toBe(
       '/road/three-mile-trial',
@@ -228,7 +228,7 @@ describe('RoadPage', () => {
 
     expect(element.querySelector('.road-band__meta')?.textContent).toContain('Current chapter');
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'Today is an attempt day. If it doesn’t go, the next is Thursday, November 5.',
+      'Available any day you choose. Chapter II waits until you pass.',
     );
   });
 

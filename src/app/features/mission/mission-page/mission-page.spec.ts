@@ -60,6 +60,7 @@ function setup(
   walks: unknown[] = [],
   done: string[] = [],
   schedule: MakeupHistory | null = null,
+  trialDays: { trialId: string; date: string }[] = [],
 ) {
   const checks = signal(new Set<string>(done));
   const setDone = vi.fn(async (_date: string, item: string, on: boolean) => {
@@ -110,7 +111,10 @@ function setup(
         provide: ScheduleHistory,
         useFactory: () => {
           const history = new ScheduleHistory();
-          history.refresh = async () => history.history.set(schedule);
+          history.refresh = async () => {
+            history.history.set(schedule);
+            history.trialDays.set(trialDays);
+          };
           return history;
         },
       },
@@ -676,22 +680,35 @@ describe('MissionPage', () => {
     );
   });
 
-  it('offers the Gate Trial on an attempt day and names the next one', async () => {
-    const { fixture } = setup(readiness('yellow', '2026-10-19'), '2026-10-19');
+  it('repeats Week 4’s order after Week 4 until the Gate Trial is started', async () => {
+    const { fixture } = setup(readiness('green', '2026-10-19'), '2026-10-19');
+    const root = await ready(fixture);
+    expect(root.querySelector('#order-title')?.textContent?.trim()).toBe(
+      'Forge A at reduced effort',
+    );
+    expect(root.textContent).not.toContain('Gate Trial today');
+  });
+
+  it('makes the Gate Trial the order of the day it is started, any day', async () => {
+    const { fixture } = setup(readiness('yellow', '2026-10-20'), '2026-10-20', [], [], [], null, [
+      { trialId: 'gate-trial', date: '2026-10-20' },
+    ]);
     const root = await ready(fixture);
 
     expect(root.querySelector('#order-title')?.textContent?.trim()).toBe(
       'Gate Trial waits for Green',
     );
     expect(root.textContent).toContain('Gate Trial today');
-    expect(root.textContent).toContain('the next attempt is Thursday, October 22');
+    expect(root.textContent).toContain('you can take it on any day you’re Green');
     expect(root.querySelector('.recorded a')?.getAttribute('href')).toBe('/road/gate-trial');
     expect(option(root, 'full')).toBeNull();
   });
 
   it('marks the attempt day’s order passed once the Gate Trial is saved', async () => {
     const { fixture, forTrial } = setup(readiness('yellow', '2026-10-19'), '2026-10-19');
-    forTrial.mockResolvedValue([{ trialId: 'gate-trial', date: '2026-10-19' } as TrialResult]);
+    forTrial.mockImplementation(async (trialId) =>
+      trialId === 'gate-trial' ? [{ trialId, date: '2026-10-19' } as TrialResult] : [],
+    );
     const root = await ready(fixture);
 
     expect(root.querySelector('#order-title')?.textContent?.trim()).toBe('Gate Trial');
@@ -702,7 +719,7 @@ describe('MissionPage', () => {
     expect(root.querySelector('.recorded a')?.getAttribute('href')).toBe('/road/gate-trial');
   });
 
-  it('asks Week 4 Saturday to prepare for Monday only while the trial is pending', async () => {
+  it('asks Week 4 Saturday to prepare for the trial only while it is pending', async () => {
     const pending = setup(readiness('green', '2026-10-17'), '2026-10-17');
     const root = await ready(pending.fixture);
     expect(root.querySelector('#order-title')?.textContent?.trim()).toBe('30-minute easy walk');

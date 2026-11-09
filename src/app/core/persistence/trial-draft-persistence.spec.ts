@@ -104,9 +104,7 @@ describe('Gate Trial draft persistence', () => {
     };
     const saved = await database.saveTrialDraft(partial);
     expect(saved.phaseResults[0].responses?.['knee']).toContain('stopped');
-    await expect(
-      database.saveTrialDraft({ ...saved, currentPhaseIndex: 1 }),
-    ).rejects.toThrow();
+    await expect(database.saveTrialDraft({ ...saved, currentPhaseIndex: 1 })).rejects.toThrow();
     expect(await database.getActiveTrialDraft()).toEqual(saved);
     await database.finishTrialDraft(started.id, 'stopped');
     database.close();
@@ -172,11 +170,30 @@ describe('Gate Trial draft persistence', () => {
     database.close();
   });
 
-  it('opens a draft only on an attempt day, and not once the trial is passed', async () => {
+  it('opens a draft on any day after Week 4, and not once the trial is passed', async () => {
     const { database } = await preparedDatabase();
-    // For a campaign that began Monday, Sep 14, Oct 5 is Week 4's Forge A day, not an attempt.
+    // For a campaign that began Monday, Sep 14, Oct 5 is inside Week 4: the trial is not open yet.
     await database.putCampaign({ ...campaign, startDate: '2026-09-14' });
-    await expect(database.startTrialDraft(date)).rejects.toThrow(/Monday after Week 4/);
+    await expect(database.startTrialDraft(date)).rejects.toThrow(/last week has ended/);
+
+    // Tuesday, Oct 6 was never a Monday or Thursday attempt day; the any-day rule opens it
+    // (Trial Timing, CHAPTERS_AND_TRIALS.md).
+    await database.putCampaign(campaign);
+    vi.setSystemTime(new Date(2026, 9, 6, 13, 0));
+    const tuesday = '2026-10-06';
+    await database.addReadinessCheck({
+      ...green,
+      id: 'tuesday-green',
+      date: tuesday,
+      checkedAt: new Date(Date.now() - 60_000).toISOString(),
+    });
+    const anyDay = await database.startTrialDraft(tuesday);
+    expect(anyDay).toMatchObject({ trialId: 'gate-trial', date: tuesday });
+    // The day a trial is started (and kept if stopped) takes the trial as its order.
+    expect(await database.getTrialDays()).toEqual([{ trialId: 'gate-trial', date: tuesday }]);
+    await database.finishTrialDraft(anyDay.id, 'stopped');
+    expect(await database.getTrialDays()).toEqual([{ trialId: 'gate-trial', date: tuesday }]);
+    vi.setSystemTime(new Date(2026, 9, 5, 13, 0));
 
     await database.putCampaign(campaign);
     await database.addTrialResult(

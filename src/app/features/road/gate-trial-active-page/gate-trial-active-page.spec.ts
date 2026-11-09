@@ -2,7 +2,13 @@ import { computed, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { describe, expect, it, vi } from 'vitest';
-import type { Campaign, ReadinessCheck, TrialDraft, TrialPhaseResult, TrialResult } from '../../../core/domain/models';
+import type {
+  Campaign,
+  ReadinessCheck,
+  TrialDraft,
+  TrialPhaseResult,
+  TrialResult,
+} from '../../../core/domain/models';
 import { gateTrialDefinition } from '../../../core/program/chapter-one-trial.seed';
 import { CampaignState } from '../../../core/state/campaign-state';
 import { TrialHistory } from '../../../core/state/trial-history';
@@ -36,7 +42,9 @@ const readiness: ReadinessCheck = {
 };
 
 function draftAt(phase: number): TrialDraft {
-  const phases: TrialPhaseResult[] = gateTrialDefinition.phases.map((item) => ({ phaseId: item.id }));
+  const phases: TrialPhaseResult[] = gateTrialDefinition.phases.map((item) => ({
+    phaseId: item.id,
+  }));
   if (phase > 0) {
     phases[0] = {
       phaseId: 'brisk-walk',
@@ -57,7 +65,12 @@ function draftAt(phase: number): TrialDraft {
               ? { repsBySide: { left: movement.reps, right: movement.reps } }
               : { reps: movement.reps }
             : movement.perSide
-              ? { durationSecondsBySide: { left: movement.durationSeconds!, right: movement.durationSeconds! } }
+              ? {
+                  durationSecondsBySide: {
+                    left: movement.durationSeconds!,
+                    right: movement.durationSeconds!,
+                  },
+                }
               : { durationSeconds: movement.durationSeconds! }),
         })),
       })),
@@ -93,11 +106,18 @@ function draftAt(phase: number): TrialDraft {
 }
 
 async function render(
-  options: { draft?: TrialDraft; check?: ReadinessCheck | null; today?: string; completed?: TrialResult[] } = {},
+  options: {
+    draft?: TrialDraft;
+    check?: ReadinessCheck | null;
+    today?: string;
+    completed?: TrialResult[];
+  } = {},
 ) {
   const state = {
     campaign: signal<Campaign | null>(campaign),
-    readiness: signal<ReadinessCheck | null>(options.check === undefined ? readiness : options.check),
+    readiness: signal<ReadinessCheck | null>(
+      options.check === undefined ? readiness : options.check,
+    ),
     today: signal(options.today ?? date),
     loading: signal(false),
     error: signal<string | null>(null),
@@ -110,7 +130,11 @@ async function render(
     startDraft: vi.fn(async () => draftAt(0)),
     saveDraft: vi.fn(async (edited: TrialDraft) => ({ ...edited, revision: edited.revision + 1 })),
     recordPain: vi.fn(async () => undefined),
-    finishDraft: vi.fn(async () => ({ ...draftAt(4), outcome: 'stopped' as const, stoppedAt: '2026-09-28T12:00:00.000Z' })),
+    finishDraft: vi.fn(async () => ({
+      ...draftAt(4),
+      outcome: 'stopped' as const,
+      stoppedAt: '2026-09-28T12:00:00.000Z',
+    })),
   };
   TestBed.configureTestingModule({
     imports: [GateTrialActivePage],
@@ -132,19 +156,26 @@ async function render(
 }
 
 describe('active Gate Trial', () => {
-  it('opens only on an attempt day, and not after a pass', async () => {
+  it('opens on any day after Week 4, and not after a pass', async () => {
     const weekFour = await render({ today: '2026-09-24' });
-    expect(weekFour.root.textContent).toContain('The Gate Trial opens Monday, September 28, the Monday after Week 4.');
+    expect(weekFour.root.textContent).toContain(
+      'The Gate Trial opens Monday, September 28, after Week 4, on any day you choose.',
+    );
     expect(weekFour.root.textContent).not.toContain('Begin Gate Trial');
     TestBed.resetTestingModule();
 
-    const tuesday = await render({ today: '2026-09-29' });
-    expect(tuesday.root.textContent).toContain('The next attempt is Thursday, October 1.');
-    expect(tuesday.history.startDraft).not.toHaveBeenCalled();
+    const tuesday = await render({
+      today: '2026-09-29',
+      check: { ...readiness, date: '2026-09-29', checkedAt: '2026-09-29T11:00:00.000Z' },
+    });
+    expect(tuesday.root.textContent).not.toContain('opens');
+    expect(tuesday.root.textContent).toContain('Begin Gate Trial');
     TestBed.resetTestingModule();
 
     const passed = await render({
-      completed: [{ id: 'gate-passed', trialId: 'gate-trial', date, phaseResults: [], reflection: '' }],
+      completed: [
+        { id: 'gate-passed', trialId: 'gate-trial', date, phaseResults: [], reflection: '' },
+      ],
     });
     expect(passed.root.textContent).toContain('You passed the Gate Trial on Monday, September 28.');
     expect(passed.root.textContent).not.toContain('Begin Gate Trial');
@@ -164,8 +195,12 @@ describe('active Gate Trial', () => {
     expect(root.querySelectorAll('.trial-progress button.is-complete')).toHaveLength(1);
     expect(root.querySelector('.trial-station h3')?.textContent).toContain('Box Squat');
     expect(root.querySelector('.trial-dose')?.textContent).toContain('10');
-    expect((root.querySelector('.trial-station-form input[type="number"]') as HTMLInputElement).value).toBe('');
-    expect(root.querySelector('.trial-dock .trial-primary')?.textContent).toContain('Save station and continue');
+    expect(
+      (root.querySelector('.trial-station-form input[type="number"]') as HTMLInputElement).value,
+    ).toBe('');
+    expect(root.querySelector('.trial-dock .trial-primary')?.textContent).toContain(
+      'Save station and continue',
+    );
     const help = root.querySelector('.trial-help-button') as HTMLButtonElement;
     help.click();
     fixture.detectChanges();
@@ -180,18 +215,22 @@ describe('active Gate Trial', () => {
     const { root, fixture, history } = await render({ draft: partial });
     history.activeDraft.mockResolvedValueOnce({
       ...partial,
-      painEvents: [{
-        id: 'pain-1',
-        timestamp: '2026-09-28T11:00:00.000Z',
-        bodyArea: 'Back',
-        severity: 3,
-        actionTaken: 'reduce',
-      }],
+      painEvents: [
+        {
+          id: 'pain-1',
+          timestamp: '2026-09-28T11:00:00.000Z',
+          bodyArea: 'Back',
+          severity: 3,
+          actionTaken: 'reduce',
+        },
+      ],
     });
     (root.querySelector('.trial-utility button') as HTMLButtonElement).click();
     fixture.detectChanges();
     root.querySelector<HTMLInputElement>('.trial-pain .segments input[value="Back"]')!.click();
-    root.querySelector<HTMLInputElement>('.trial-pain .scale__options--pain input[value="3"]')!.click();
+    root
+      .querySelector<HTMLInputElement>('.trial-pain .scale__options--pain input[value="3"]')!
+      .click();
     root.querySelector<HTMLInputElement>('.trial-pain .segments input[value="reduce"]')!.click();
     await fixture.whenStable();
     fixture.detectChanges();
@@ -290,7 +329,9 @@ describe('active Gate Trial', () => {
 
   it('reviews recorded station values before allowing a completed result', async () => {
     const { root, fixture, history } = await render({ draft: draftAt(4) });
-    expect((root.querySelector('textarea') as HTMLTextAreaElement).value).toContain('I will keep my word');
+    expect((root.querySelector('textarea') as HTMLTextAreaElement).value).toContain(
+      'I will keep my word',
+    );
     (root.querySelector('.trial-dock .trial-primary') as HTMLButtonElement).click();
     await fixture.whenStable();
     expect(root.querySelector('#review-title')?.textContent).toContain('Review the five parts');

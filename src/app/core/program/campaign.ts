@@ -24,11 +24,11 @@ export interface ChapterOneSchedule {
   targetDay: number;
   /** After Week 4, while the Gate Trial window is open. */
   afterTarget: boolean;
-  /** A Monday or Thursday after Week 4, when the Gate Trial takes the strength slot. */
+  /** A day the Gate Trial takes; without trial history this is always false. */
   attemptDay: boolean;
 }
 
-/** Days until the next Gate Trial attempt; 0 on an attempt day. */
+/** Days until the Gate Trial opens; 0 once it is open. */
 export function getDaysUntilGateTrial(startDate: LocalDate, today: LocalDate): number {
   return getDaysUntil(getNextGateTrialAttempt(startDate, today), today);
 }
@@ -49,25 +49,26 @@ export function getGateTrialPlannedDay(startDate: LocalDate): number {
 }
 
 /**
- * The first Gate Trial attempt, the Monday after Week 4, in place of that week's Forge A.
- * Until the trial is passed, each following Thursday and Monday is another attempt day.
+ * The Gate Trial's suggested first day, the Monday after Week 4. From then it can be taken on
+ * any day until it is passed (Trial Timing, CHAPTERS_AND_TRIALS.md).
  */
 export function getGateTrialTargetDate(startDate: LocalDate): LocalDate {
   return addDays(startDate, getGateTrialPlannedDay(startDate) - 1);
 }
 
-/** The next Gate Trial attempt on or after today: the first attempt, then Mondays and Thursdays. */
+/** The next day the Gate Trial can be taken: its first day, then any day. */
 export function getNextGateTrialAttempt(startDate: LocalDate, today: LocalDate): LocalDate {
   return getNextAttemptFrom(getGateTrialTargetDate(startDate), today);
 }
 
-export function isGateTrialAttemptDay(startDate: LocalDate, date: LocalDate): boolean {
-  return getChapterOneSchedule(startDate, date)?.attemptDay ?? false;
+/** Week 4 has ended, so the Gate Trial can be taken on this date (whether or not passed). */
+export function isGateTrialOpen(startDate: LocalDate, date: LocalDate): boolean {
+  return getChapterOneSchedule(startDate, date)?.afterTarget ?? false;
 }
 
 /**
- * A date in Chapter I, without trial history: after Week 4 every Monday and Thursday stays an
- * attempt day. Screens that span chapters use resolveCampaignPosition instead.
+ * A date in Chapter I, without trial history: after Week 4 every day repeats Week 4. Screens
+ * that span chapters use resolveCampaignPosition instead.
  */
 export function getChapterOneDay(startDate: LocalDate, date: LocalDate): ChapterDay | null {
   const campaignDay = getCampaignDay(startDate, date);

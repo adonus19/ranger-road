@@ -106,7 +106,7 @@ export class RoadPage implements OnInit {
     return campaign ? `Day 1 · ${formatLongDate(campaign.startDate)}` : '';
   });
 
-  /** Where the chapter's trial stands: its first attempt, the next one, or the pass. */
+  /** Where the chapter's trial stands: when it opens, that it is open, or the pass. */
   protected readonly trialTarget = computed(() => {
     const program = this.program();
     const trial = program.trialName;
@@ -119,30 +119,17 @@ export class RoadPage implements OnInit {
     if (pass && chapter?.nextStart) {
       return `Passed ${formatLongDate(pass.date)}. ${nextChapter} begins ${formatLongDate(chapter.nextStart)}.`;
     }
-    if (!chapter) {
-      return `First attempt on the Monday after Week ${program.chapter.weeks.at(-1)}. ${nextChapter} waits until you pass.`;
-    }
-    const today = this.state.today();
     const last = program.chapter.weeks.at(-1);
-    if (program.anyDayTrial) {
-      const when =
-        today < chapter.firstAttempt
-          ? `Available from ${formatLongDate(chapter.firstAttempt)}, after Week ${last}, on any day you choose.`
-          : 'Available any day you choose.';
-      return [when, program.trialDayNote, `${nextChapter} waits until you pass.`]
-        .filter(Boolean)
-        .join(' ');
+    if (!chapter) {
+      return `After Week ${last}, on any day you choose. ${nextChapter} waits until you pass.`;
     }
-    // Civil dates in YYYY-MM-DD form compare correctly as strings.
-    if (today < chapter.firstAttempt) {
-      return `First attempt ${formatLongDate(chapter.firstAttempt)}, the Monday after Week ${program.chapter.weeks.at(-1)}. If it doesn’t go, try again that Thursday. ${nextChapter} waits until you pass.`;
-    }
-    const next = getNextAttempt(chapter, today);
-    if (next === today) {
-      const after = getNextAttempt(chapter, addDays(today, 1));
-      return `Today is an attempt day. If it doesn’t go, the next is ${formatLongDate(after)}.`;
-    }
-    return `Next attempt ${formatLongDate(next)}. ${nextChapter} waits until you pass.`;
+    const when =
+      this.state.today() < chapter.firstAttempt
+        ? `Available from ${formatLongDate(chapter.firstAttempt)}, after Week ${last}, on any day you choose.`
+        : 'Available any day you choose.';
+    return [when, program.trialDayNote, `${nextChapter} waits until you pass.`]
+      .filter(Boolean)
+      .join(' ');
   });
 
   ngOnInit(): void {

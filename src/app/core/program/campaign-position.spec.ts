@@ -4,7 +4,9 @@ import { getChapterOneSchedule } from './campaign';
 import {
   getNextAttempt,
   getNextChapterStart,
+  isTrialAvailable,
   resolveCampaignPosition,
+  withTrialDay,
   type TrialRecord,
 } from './campaign-position';
 import type { ChapterProgram } from './chapter-program';
@@ -68,15 +70,44 @@ describe('resolveCampaignPosition', () => {
     }
   });
 
-  it('stays in Chapter I without a pass, repeating Week 4 between Monday and Thursday attempts', () => {
+  it('stays in Chapter I without a pass, repeating Week 4 every day with the Gate Trial open', () => {
     const monday = resolveCampaignPosition(start, '2026-11-02', [], programs)!;
     expect(monday.chapter.program.chapter.id).toBe('chapter-1');
-    expect(monday.chapter).toMatchObject({ week: 4, afterLastWeek: true, attemptDay: true });
+    expect(monday.chapter).toMatchObject({ week: 4, afterLastWeek: true, attemptDay: false });
+    // Monday repeats Week 4's lighter Forge A while the trial waits.
+    expect(getDayMissions(monday.chapter)[1]).toMatchObject({
+      id: 'chapter-1-week-4-day-1-weekly',
+      contentReferences: ['chapter-1-forge-a'],
+    });
+    expect(isTrialAvailable(monday.chapter)).toBe(true);
     const tuesday = resolveCampaignPosition(start, '2026-11-03', [], programs)!;
     expect(tuesday.chapter.attemptDay).toBe(false);
-    expect(getNextAttempt(tuesday.chapter, '2026-11-03')).toBe('2026-11-05');
-    expect(getNextAttempt(tuesday.chapter, '2026-11-06')).toBe('2026-11-09');
+    expect(getNextAttempt(tuesday.chapter, '2026-11-03')).toBe('2026-11-03');
+    expect(getNextAttempt(tuesday.chapter, '2026-11-06')).toBe('2026-11-06');
     expect(getNextAttempt(tuesday.chapter, '2026-10-20')).toBe('2026-11-02');
+    const week4 = resolveCampaignPosition(start, '2026-10-29', [], programs)!;
+    expect(isTrialAvailable(week4.chapter)).toBe(false);
+  });
+
+  it('makes the trial the order of a day it was taken on, after the last week only', () => {
+    const tuesday = resolveCampaignPosition(start, '2026-11-03', [], programs)!.chapter;
+    const taken = withTrialDay(tuesday, '2026-11-03', [pass('gate-trial', '2026-11-03')]);
+    expect(taken.attemptDay).toBe(true);
+    expect(getDayMissions(taken)[1]).toMatchObject({
+      id: 'chapter-1-gate-trial-attempt-day-2-weekly',
+      plannedTrialId: 'gate-trial',
+    });
+    // Another trial's day, or a day inside the chapter, keeps its own order.
+    expect(withTrialDay(tuesday, '2026-11-03', [pass('three-mile-trial', '2026-11-03')])).toBe(
+      tuesday,
+    );
+    // A moved Forge session on that day is dropped, not rescheduled.
+    const moved = { ...tuesday, makeup: { primary: tuesday, optional: [], note: 'Moved.' } };
+    expect(withTrialDay(moved, '2026-11-03', [pass('gate-trial', '2026-11-03')]).makeup).toBe(
+      undefined,
+    );
+    const week4 = resolveCampaignPosition(start, '2026-10-27', [], programs)!.chapter;
+    expect(withTrialDay(week4, '2026-10-27', [pass('gate-trial', '2026-10-27')])).toBe(week4);
   });
 
   it('starts Chapter II on Tuesday after a Monday pass, counting that Monday as Week 5', () => {
@@ -100,7 +131,7 @@ describe('resolveCampaignPosition', () => {
     expect(tuesday.chapter.program.chapter.id).toBe('chapter-2');
     expect(resolveCampaignPosition(start, '2026-11-29', trials, programs)!.chapter.week).toBe(8);
     const firstAttempt = resolveCampaignPosition(start, '2026-11-30', trials, programs)!;
-    expect(firstAttempt.chapter).toMatchObject({ week: 8, afterLastWeek: true, attemptDay: true });
+    expect(firstAttempt.chapter).toMatchObject({ week: 8, afterLastWeek: true, attemptDay: false });
   });
 
   it('keeps Week 4’s easy days through Sunday after a Thursday pass, then starts Monday', () => {
@@ -108,6 +139,8 @@ describe('resolveCampaignPosition', () => {
     const friday = resolveCampaignPosition(start, '2026-11-06', trials, programs)!;
     expect(friday.chapter.program.chapter.id).toBe('chapter-1');
     expect(friday.chapter).toMatchObject({ week: 4, attemptDay: false, nextStart: '2026-11-09' });
+    const passDay = resolveCampaignPosition(start, '2026-11-05', trials, programs)!;
+    expect(passDay.chapter.attemptDay).toBe(true);
     const monday = resolveCampaignPosition(start, '2026-11-09', trials, programs)!;
     expect(monday.chapter).toMatchObject({ week: 5, weekday: 1, firstAttempt: '2026-12-07' });
     expect(monday.chapter.program.chapter.id).toBe('chapter-2');
@@ -162,7 +195,11 @@ describe('chapter orders', () => {
       'chapter-2-week-5-day-3-weekly',
       'chapter-2-week-5-day-3-evening-watch',
     ]);
-    const attempt = resolveCampaignPosition(start, '2026-11-30', trials, programs)!.chapter;
+    const attempt = withTrialDay(
+      resolveCampaignPosition(start, '2026-11-30', trials, programs)!.chapter,
+      '2026-11-30',
+      [pass('three-mile-trial', '2026-11-30')],
+    );
     expect(getDayMissions(attempt)[1]).toMatchObject({
       id: 'chapter-2-three-mile-trial-attempt-day-1-weekly',
       plannedTrialId: 'three-mile-trial',

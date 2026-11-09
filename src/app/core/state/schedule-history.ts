@@ -1,7 +1,11 @@
 import { Injectable, signal } from '@angular/core';
 import type { LocalDate } from '../domain/models';
 import type { ChapterDay } from '../program/campaign-position';
-import { resolveCampaignPosition, type TrialRecord } from '../program/campaign-position';
+import {
+  resolveCampaignPosition,
+  withTrialDay,
+  type TrialRecord,
+} from '../program/campaign-position';
 import { withMakeup, type MakeupHistory } from '../program/makeup-schedule';
 import { getOptionalForge, type OptionalForgeOffer } from '../program/optional-forge';
 import { RoadDatabase } from '../persistence/road-database';
@@ -14,16 +18,20 @@ import { RoadDatabase } from '../persistence/road-database';
 export class ScheduleHistory {
   /** Null until read: without saved history nothing is treated as missed. */
   readonly history = signal<MakeupHistory | null>(null);
+  /** Days a trial was started on (drafts and kept attempts): the trial is that day's order. */
+  readonly trialDays = signal<readonly TrialRecord[]>([]);
 
   async refresh(): Promise<void> {
     try {
       const database = await RoadDatabase.open();
       try {
-        const [records, sessions, checks] = await Promise.all([
+        const [records, sessions, checks, trialDays] = await Promise.all([
           database.getAllHistorical('missionInstances'),
           database.getAllHistorical('workoutSessions'),
           database.getAllReadinessChecks(),
+          database.getTrialDays(),
         ]);
+        this.trialDays.set(trialDays);
         this.history.set({
           records: records.map(({ date, definitionId }) => ({ date, definitionId })),
           sessions: sessions.map(({ date, workoutDefinitionId, outcome }) => ({
@@ -56,10 +64,14 @@ export class ScheduleHistory {
   ): OptionalForgeOffer | null {
     const history = this.history();
     if (!history) return null;
-    return getOptionalForge(today, today, chapterResolver(startDate, trials), history);
+    const resolve = chapterResolver(startDate, trials);
+    // Never on a day a trial was taken.
+    const own = resolve(today);
+    if (own && withTrialDay(own, today, this.trialDays()).attemptDay) return null;
+    return getOptionalForge(today, today, resolve, history);
   }
 
-  /** A date's chapter day with any make-up applied. */
+  /** A date's chapter day with any make-up applied, or the trial if it was taken that day. */
   dayFor(
     startDate: LocalDate,
     date: LocalDate,
@@ -71,8 +83,11 @@ export class ScheduleHistory {
     if (!position) return null;
     // Once a chapter is complete and the next is not in the app, nothing is moved.
     const history = this.history();
-    if (position.awaitingNextChapter || !history) return position.chapter;
-    return withMakeup(position.chapter, date, today, resolve, history);
+    if (position.awaitingNextChapter) return position.chapter;
+    const day = history
+      ? withMakeup(position.chapter, date, today, resolve, history)
+      : position.chapter;
+    return withTrialDay(day, date, this.trialDays());
   }
 }
 

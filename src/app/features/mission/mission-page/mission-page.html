@@ -210,8 +210,8 @@
           <section class="recorded" role="status">
             <h2>{{ program().trialName }} today</h2>
             <p>
-              The full trial needs a Green readiness day. If it doesn’t go today, the next attempt
-              is {{ longDate(nextAttempt() ?? state.today()) }}.
+              The full trial needs a Green readiness day. If it doesn’t go today, you can take it on
+              any day you’re Green.
             </p>
             <a [routerLink]="program().trialRoute">Open the {{ program().trialName }}</a>
           </section>

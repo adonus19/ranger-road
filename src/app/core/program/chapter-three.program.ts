@@ -41,7 +41,6 @@ export const chapterThreeProgram: ChapterProgram = {
   trialRoute: '/road/high-country-trial',
   trialDayNote: 'Pick a clear-weather day.',
   leadsIn: false,
-  anyDayTrial: true,
   weeks: chapterThreeDailySeed,
   workouts: [chapterThreeForgeA, chapterThreeForgeB, chapterThreeRestoration],
   restorationId: chapterThreeRestoration.id,

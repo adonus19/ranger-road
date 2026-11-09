@@ -13,8 +13,8 @@ const fridayRestoration = [
 /**
  * Any start outside Monday uses the remaining weekdays through Sunday as a
  * short lead-in with Week 1 content. Then Weeks 1–4 each run Monday–Sunday.
- * After Week 4, Mondays and Thursdays are Gate Trial attempts and the other days repeat
- * Week 4 until the trial is passed.
+ * After Week 4 every day repeats Week 4 until the Gate Trial is passed; it can be taken on
+ * any day, in place of that day's order.
  */
 export const chapterOneDailySeed: readonly ChapterWeekContent[] = [
   {
@@ -269,7 +269,7 @@ export const chapterOneDailySeed: readonly ChapterWeekContent[] = [
           missionType: 'conditioning',
           estimatedMinutes: 30,
           trialPreparation:
-            'Then prepare for Monday’s Gate Trial: choose the 2-mile route and set out the box, pull-up band, and carry weight.',
+            'Then prepare for the Gate Trial: choose the 2-mile route and set out the box, pull-up band, and carry weight.',
         },
       },
       7: {
@@ -282,8 +282,8 @@ export const chapterOneDailySeed: readonly ChapterWeekContent[] = [
 ];
 
 /**
- * A Monday or Thursday after Week 4: the Gate Trial takes that strength slot until it is
- * passed. The trial's Scripture, 2 Timothy 4:7, is read on each attempt day.
+ * The order of a day after Week 4 on which the Gate Trial is taken. The trial's Scripture,
+ * 2 Timothy 4:7, is read that day.
  */
 export const chapterOneGateTrialAttempt: ChapterDayContent = {
   scriptureReference: '2 Timothy 4:7',
@@ -295,7 +295,7 @@ export const chapterOneGateTrialAttempt: ChapterDayContent = {
   },
 };
 
-/** The day's content; an attempt day after Week 4 takes the Gate Trial instead. */
+/** The day's content; a day the Gate Trial is taken on takes the trial instead. */
 export function getChapterOneDayContent(
   week: number,
   day: Weekday,

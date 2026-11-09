@@ -99,8 +99,8 @@ export class KeepPage implements OnInit {
   protected readonly chapterComplete = computed(() => !!this.position()?.awaitingNextChapter);
   /** The chapter's trial pass, if there is one: its date sets when the next chapter begins. */
   protected readonly trialPass = computed(() => this.position()?.chapter.pass);
-  /** An attempt day, or the day of the pass: no check-in tests on top of the trial. */
-  protected readonly trialDay = computed(() => !!this.position()?.chapter.attemptDay);
+  /** A day the trial was started or passed on: no check-in tests on top of the trial. */
+  protected readonly trialDay = computed(() => !!this.scheduledDay()?.attemptDay);
   protected readonly longDate = formatLongDate;
   protected readonly numeral = formatChapterNumeral;
 
@@ -116,7 +116,10 @@ export class KeepPage implements OnInit {
   /** An any-day trial waiting after its chapter's last week: the quiet "available" row. */
   protected readonly trialAvailable = computed(() => {
     const chapter = this.position()?.chapter;
-    return chapter && !this.chapterComplete() && isTrialAvailable(chapter) ? chapter.program : null;
+    // On a day the trial was started, it is already the main order.
+    return chapter && !this.chapterComplete() && !this.trialDay() && isTrialAvailable(chapter)
+      ? chapter.program
+      : null;
   });
 
   /** The quiet optional Forge row, on the days it is offered. */
@@ -180,6 +183,7 @@ export class KeepPage implements OnInit {
       this.state.today(),
       this.completedTrials(),
       (date) => recent.filter((record) => record.date === date),
+      this.schedule.trialDays(),
     );
   });
 

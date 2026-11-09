@@ -72,20 +72,11 @@ export class KeepBand {
     const program = this.program();
     const chapter = this.position()?.chapter;
     const today = this.state.today();
-    if (program.anyDayTrial) {
-      return chapter && today >= chapter.firstAttempt
-        ? [`${program.trialName} available any day you choose.`, program.trialDayNote]
-            .filter(Boolean)
-            .join(' ')
-        : `${program.trialName} after Week ${program.chapter.weeks.at(-1)}, on any day you choose.`;
-    }
-    if (!chapter || today < chapter.firstAttempt) {
-      return `${program.trialName} on the Monday after Week ${program.chapter.weeks.at(-1)}. If it doesn’t go, try again Thursday.`;
-    }
-    const next = getNextAttempt(chapter, today);
-    if (next !== today) return `Next ${program.trialName} attempt: ${formatShortDate(next)}.`;
-    const after = getNextAttempt(chapter, addDays(today, 1));
-    return `${program.trialName} today if you’re Green; otherwise ${formatShortDate(after)}.`;
+    return chapter && today >= chapter.firstAttempt
+      ? [`${program.trialName} available any day you choose.`, program.trialDayNote]
+          .filter(Boolean)
+          .join(' ')
+      : `${program.trialName} after Week ${program.chapter.weeks.at(-1)}, on any day you choose.`;
   });
 
   protected readonly daysUntilTrial = computed(() => {
@@ -93,7 +84,7 @@ export class KeepBand {
     if (!campaign) return 0;
     const chapter = this.position()?.chapter;
     const today = this.state.today();
-    // Before Day 1 there is no position yet; the count runs to Chapter I's first attempt.
+    // Before Day 1 there is no position yet; the count runs to the day the Gate Trial opens.
     return chapter
       ? getDaysUntil(getNextAttempt(chapter, today), today)
       : getDaysUntilGateTrial(campaign.startDate, today);

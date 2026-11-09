@@ -9,6 +9,9 @@ import {
   getChapterOneActivityChoicesForDate,
   getChapterOneMissionsForDate,
 } from './chapter-one-missions';
+import { getChapterOneDay } from './campaign';
+import { withTrialDay } from './campaign-position';
+import { getDayMissions } from './chapter-orders';
 
 describe('Chapter I date-specific missions', () => {
   it('uses the dated Scripture and restoration plan while preserving daily watch IDs', () => {
@@ -68,27 +71,21 @@ describe('Chapter I date-specific missions', () => {
     });
   });
 
-  it('takes Monday and Thursday after Week 4 for the Gate Trial and repeats Week 4’s other days', () => {
+  it('repeats Week 4 after Week 4, its Forges included, with Week 4’s mission IDs', () => {
     const dayTwentyEight = getChapterOneMissionsForDate('2026-09-07', '2026-10-04');
     const dayTwentyNine = getChapterOneMissionsForDate('2026-09-07', '2026-10-05');
     const dayThirty = getChapterOneMissionsForDate('2026-09-07', '2026-10-06');
-    const dayThirtySix = getChapterOneMissionsForDate('2026-09-07', '2026-10-12');
     expect(dayTwentyEight).toHaveLength(3);
     expect(dayTwentyEight[1]).toMatchObject({ week: 4, day: 7, missionType: 'reflection' });
     expect(missionNeedsReadiness(dayTwentyEight[1])).toBe(false);
     expect(dayTwentyEight.some((mission) => mission.missionType === 'trial')).toBe(false);
     expect(dayTwentyNine).toHaveLength(3);
-    expect(dayTwentyNine[0].scriptureReference).toBe('2 Timothy 4:7');
-    expect(dayTwentyNine[1]).toMatchObject({
-      id: 'chapter-1-gate-trial-attempt-day-1-weekly',
-      title: 'Gate Trial',
-      missionType: 'trial',
-      plannedTrialId: 'gate-trial',
-    });
-    // The days between attempts keep Week 4's order and its mission ID.
+    expect(dayTwentyNine[1]).toMatchObject({ week: 4, day: 1, title: 'Forge A at reduced effort' });
+    expect(dayTwentyNine[1].id).toBe(
+      getChapterOneMissionsForDate('2026-09-07', '2026-09-28')[1].id,
+    );
     expect(dayThirty[1]).toMatchObject({ week: 4, day: 2, title: '30-minute easy walk' });
     expect(dayThirty[1].id).toBe(getChapterOneMissionsForDate('2026-09-07', '2026-09-29')[1].id);
-    expect(dayThirtySix[1].id).toBe(dayTwentyNine[1].id);
     expect(getChapterOneMissionsForDate('2026-09-07', '2026-09-06')).toEqual([]);
   });
 
@@ -179,7 +176,10 @@ describe('Chapter I main activity choices', () => {
   });
 
   it('keeps a Gate Trial attempt as a plan that the generic logger cannot complete', () => {
-    const [morning, planned, evening] = getChapterOneMissionsForDate('2026-09-07', '2026-10-05');
+    const day = withTrialDay(getChapterOneDay('2026-09-07', '2026-10-05')!, '2026-10-05', [
+      { trialId: 'gate-trial', date: '2026-10-05' },
+    ]);
+    const [morning, planned, evening] = getDayMissions(day);
     expect(morning.scriptureReference).toBe('2 Timothy 4:7');
     expect(planned).toMatchObject({
       title: 'Gate Trial',
@@ -200,7 +200,7 @@ describe('Chapter I main activity choices', () => {
     expect(evening.title).toBe('Evening Watch');
   });
 
-  it('makes Week 4 Saturday an easy walk that prepares for Monday’s attempt', () => {
+  it('makes Week 4 Saturday an easy walk that prepares for the Gate Trial', () => {
     const [morning, saturday] = getChapterOneMissionsForDate('2026-09-07', '2026-10-03');
     expect(morning.scriptureReference).toBe('2 Timothy 4:7');
     expect(saturday).toMatchObject({

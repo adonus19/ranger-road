@@ -21,7 +21,10 @@ export function getWeekContent(day: ChapterDay): ChapterWeekContent {
   return content;
 }
 
-/** The day's content; an attempt day takes the chapter's trial instead. */
+/**
+ * The day's content. A day the trial is taken on takes the chapter's trial order instead; a
+ * chapter without one keeps the day's own Scripture with the trial as its activity.
+ */
 export function getDayContent(day: ChapterDay): ChapterDayContent {
   if (day.attemptDay && day.program.trialAttempt) return day.program.trialAttempt;
   const content = getWeekContent(day).days[day.weekday];
@@ -30,7 +33,16 @@ export function getDayContent(day: ChapterDay): ChapterDayContent {
       `No ${day.program.chapter.id} content for week ${day.contentWeek}, day ${day.weekday}.`,
     );
   }
-  return content;
+  if (!day.attemptDay) return content;
+  return {
+    scriptureReference: content.scriptureReference,
+    activity: {
+      title: day.program.trialName,
+      missionType: 'trial',
+      plannedTrialId: day.program.trial.id,
+      details: ['Record the trial through its own page.'],
+    },
+  };
 }
 
 /** Mission IDs stay stable across content revisions, so saved records keep matching. */

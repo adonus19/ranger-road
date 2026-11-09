@@ -2,7 +2,13 @@ import { computed, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { describe, expect, it, vi } from 'vitest';
-import type { Campaign, PostMissionFunction, ReadinessCheck, TrialDraft, TrialResult } from '../../../core/domain/models';
+import type {
+  Campaign,
+  PostMissionFunction,
+  ReadinessCheck,
+  TrialDraft,
+  TrialResult,
+} from '../../../core/domain/models';
 import { createPostMissionFunction } from '../../../core/domain/post-mission-function';
 import { createGateTrialResult } from '../../../core/domain/trial';
 import { CampaignState } from '../../../core/state/campaign-state';
@@ -103,35 +109,44 @@ describe('Station Gate Trial plan', () => {
   it('names Green readiness and directs the person back to their check', async () => {
     const { root } = await render(readiness('green'));
     expect(root.textContent).toContain('Green · Ready');
-    expect(root.querySelector('.station-dock a')?.getAttribute('href')).toBe('/road/gate-trial/active');
+    expect(root.querySelector('.station-dock a')?.getAttribute('href')).toBe(
+      '/road/gate-trial/active',
+    );
     expect(root.querySelector('.station-dock a')?.textContent).toContain('Begin the Gate Trial');
   });
 
   it('defers the physical trial on Yellow or Red', async () => {
     const yellow = await render(readiness('yellow'));
     expect(yellow.root.textContent).toContain('Wait for a Green day');
-    expect(yellow.root.textContent).toContain('The next attempt is Thursday, October 8.');
+    expect(yellow.root.textContent).toContain('You can take it on any day you’re Green.');
     expect(yellow.root.querySelector('.station-dock a')?.textContent).toContain('Review readiness');
     TestBed.resetTestingModule();
     const red = await render(readiness('red'));
     expect(red.root.textContent).toContain('Do not attempt the physical trial today.');
   });
 
-  it('opens only on attempt days, and not after a pass', async () => {
+  it('opens on any day after Week 4, and not after a pass', async () => {
     const { root, state } = await render(readiness('green'));
     state.today.set('2026-10-03');
     await new Promise((resolve) => setTimeout(resolve, 0));
-    expect(root.textContent).toContain('The first attempt is Monday, October 5');
+    expect(root.textContent).toContain(
+      'The Gate Trial opens Monday, October 5, after Week 4, and you can take it on any day you choose from then.',
+    );
     expect(root.querySelector('.station-dock a')).toBeNull();
-    expect(root.querySelector('.station-dock')?.textContent).toContain('First attempt Mon, Oct 5');
+    expect(root.querySelector('.station-dock')?.textContent).toContain('Opens Mon, Oct 5');
 
+    // Tuesday was never an attempt day; now a Green check opens the trial.
+    state.readiness.set({ ...readiness('green'), date: '2026-10-06' });
     state.today.set('2026-10-06');
     await new Promise((resolve) => setTimeout(resolve, 0));
-    expect(root.querySelector('.station-dock')?.textContent).toContain('Next attempt Thu, Oct 8');
+    expect(root.querySelector('.station-dock a')?.textContent).toContain('Begin the Gate Trial');
     TestBed.resetTestingModule();
 
     const passed = await render(readiness('green'), campaign, {}, null, [
-      { ...createGateTrialResult({ ...completeGateTrialInput(readiness('green')) }), date: '2026-10-05' },
+      {
+        ...createGateTrialResult({ ...completeGateTrialInput(readiness('green')) }),
+        date: '2026-10-05',
+      },
     ]);
     expect(passed.root.textContent).toContain('You passed the Gate Trial on Monday, October 5.');
     expect(passed.root.querySelector('.station-dock a')).toBeNull();
@@ -159,20 +174,27 @@ describe('Station Gate Trial plan', () => {
   });
 
   it('resumes a saved attempt even when the latest check is no longer Green', async () => {
-    const { root } = await render(readiness('yellow'), campaign, {}, {
-      id: 'draft-1',
-      trialId: 'gate-trial',
-      date,
-      readinessId: 'earlier-green',
-      startedAt: `${date}T09:00:00.000Z`,
-      updatedAt: `${date}T09:00:00.000Z`,
-      revision: 1,
-      currentPhaseIndex: 0,
-      definitionSnapshot: { id: 'gate-trial', chapterId: 'chapter-1', phases: [] },
-      phaseResults: [],
-      painEvents: [],
-    });
-    expect(root.querySelector('.station-dock a')?.getAttribute('href')).toBe('/road/gate-trial/active');
+    const { root } = await render(
+      readiness('yellow'),
+      campaign,
+      {},
+      {
+        id: 'draft-1',
+        trialId: 'gate-trial',
+        date,
+        readinessId: 'earlier-green',
+        startedAt: `${date}T09:00:00.000Z`,
+        updatedAt: `${date}T09:00:00.000Z`,
+        revision: 1,
+        currentPhaseIndex: 0,
+        definitionSnapshot: { id: 'gate-trial', chapterId: 'chapter-1', phases: [] },
+        phaseResults: [],
+        painEvents: [],
+      },
+    );
+    expect(root.querySelector('.station-dock a')?.getAttribute('href')).toBe(
+      '/road/gate-trial/active',
+    );
     expect(root.querySelector('.station-dock a')?.textContent).toContain('Resume saved trial');
     expect(root.textContent).toContain('Wait for a Green day');
   });
@@ -187,21 +209,34 @@ describe('Station Gate Trial plan', () => {
     expect(entry.textContent).toContain('36 min');
     expect(entry.textContent).toContain('Round 3');
     expect(entry.textContent).toContain('I will show up with care.');
-    expect(entry.querySelector<HTMLAnchorElement>('.station-history__recovery-link')?.getAttribute('href'))
-      .toBe(`/road/gate-trial/recovery/${result.id}`);
+    expect(
+      entry
+        .querySelector<HTMLAnchorElement>('.station-history__recovery-link')
+        ?.getAttribute('href'),
+    ).toBe(`/road/gate-trial/recovery/${result.id}`);
   });
 
   it('shows the linked recovery words with their completed trial', async () => {
     const green = readiness('green');
     const result = createGateTrialResult(completeGateTrialInput(green));
-    const recovery = createPostMissionFunction(result, {
-      id: 'recovery-1', trialResultId: result.id,
-      energy: 'steady', soreness: 'a-little', irritability: 'calm',
-      helpAtHome: 'fully', familyLife: 'partly',
-    }, new Date(Date.parse(result.recordedAt) + 60 * 60_000).toISOString());
+    const recovery = createPostMissionFunction(
+      result,
+      {
+        id: 'recovery-1',
+        trialResultId: result.id,
+        energy: 'steady',
+        soreness: 'a-little',
+        irritability: 'calm',
+        helpAtHome: 'fully',
+        familyLife: 'partly',
+      },
+      new Date(Date.parse(result.recordedAt) + 60 * 60_000).toISOString(),
+    );
     const { root } = await render(green, campaign, {}, null, [result], [recovery]);
     const entry = root.querySelector('.station-history__entry') as HTMLDetailsElement;
-    expect(entry.querySelector('.station-history__recovery')?.textContent).toContain('Helping at home');
+    expect(entry.querySelector('.station-history__recovery')?.textContent).toContain(
+      'Helping at home',
+    );
     expect(entry.querySelector('.station-history__recovery')?.textContent).toContain('Fully');
     expect(entry.querySelector('.station-history__recovery-link')).toBeNull();
   });

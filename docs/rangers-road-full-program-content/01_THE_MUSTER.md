@@ -131,7 +131,7 @@ Deload slightly. Do not chase progression.
 
 # The Gate Trial
 
-Take the Gate Trial on the Monday after Week 4, in place of that week's Forge A. If it is not passed, try again that Thursday (in place of Forge B), then each following Monday and Thursday. Chapter II begins only after a pass. Passing means finishing every part below as written on a Green day, with no pain at 3 or more and no changed movement; there is no time standard. Read 2 Timothy 4:7 on each attempt day.
+Take the Gate Trial once Week 4 is over, on any day you choose (see Trial Timing in `CHAPTERS_AND_TRIALS.md`; the Monday after Week 4 is the suggestion). It replaces that day's order. Until it is passed, every day repeats Week 4, its lighter Forges included. Chapter II begins only after a pass. Passing means finishing every part below as written on a Green day, with no pain at 3 or more and no changed movement; there is no time standard. Read 2 Timothy 4:7 on the day you take it. (Changed 2026-11-09 from Monday and Thursday attempt days, before the Gate Trial was passed.)
 
 ## Part I — Road
 2-mile brisk walk.

@@ -22,11 +22,7 @@ import type {
 } from '../../../core/domain/models';
 import type { SavedGateTrialResult } from '../../../core/domain/trial';
 import { gateTrialPhaseComplete, type TrialPainAction } from '../../../core/domain/trial-draft';
-import {
-  getGateTrialTargetDate,
-  getNextGateTrialAttempt,
-  isGateTrialAttemptDay,
-} from '../../../core/program/campaign';
+import { getGateTrialTargetDate, isGateTrialOpen } from '../../../core/program/campaign';
 import { getChapterOneTrialPass } from '../../../core/program/chapter-one-completion';
 import { getExerciseGuide, getQuickHelpSteps } from '../../../core/program/exercise-guides';
 import { gateTrialDefinition } from '../../../core/program/chapter-one-trial.seed';
@@ -58,7 +54,9 @@ function numeric(value: string, integer = false): number | undefined {
   if (!value.trim()) return undefined;
   const parsed = Number(value);
   if (!Number.isFinite(parsed) || parsed < 0 || (integer && !Number.isInteger(parsed))) {
-    throw new Error(integer ? 'Enter a whole number at or above zero.' : 'Enter a number at or above zero.');
+    throw new Error(
+      integer ? 'Enter a whole number at or above zero.' : 'Enter a number at or above zero.',
+    );
   }
   return parsed;
 }
@@ -99,15 +97,37 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
 
   protected readonly model = signal({
     fullWalk: false,
-    walkMinutes: '', walkRpe: '', heartRate: '', knee: '', back: '', recovery: '',
-    restMinutes: '', circuitMinutes: '',
-    body: '', character: '', family: '',
-    psalmAndPrayer: false, prayerMinutes: '', identity: '', oath: '',
+    walkMinutes: '',
+    walkRpe: '',
+    heartRate: '',
+    knee: '',
+    back: '',
+    recovery: '',
+    restMinutes: '',
+    circuitMinutes: '',
+    body: '',
+    character: '',
+    family: '',
+    psalmAndPrayer: false,
+    prayerMinutes: '',
+    identity: '',
+    oath: '',
   });
   protected readonly fields = form(this.model);
-  protected readonly stationModel = signal({ amount: '', left: '', right: '', setup: '', load: '' });
+  protected readonly stationModel = signal({
+    amount: '',
+    left: '',
+    right: '',
+    setup: '',
+    load: '',
+  });
   protected readonly stationFields = form(this.stationModel);
-  protected readonly painModel = signal({ bodyArea: '', otherArea: '', severity: '', actionTaken: '' });
+  protected readonly painModel = signal({
+    bodyArea: '',
+    otherArea: '',
+    severity: '',
+    actionTaken: '',
+  });
   protected readonly painFields = form(this.painModel);
   protected readonly effortLevels = Array.from({ length: 10 }, (_, index) => index + 1);
   protected readonly painLevels = Array.from({ length: 11 }, (_, level) => level);
@@ -133,27 +153,24 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   );
   protected readonly attemptToday = computed(() => {
     const campaign = this.state.campaign();
-    return !!campaign && isGateTrialAttemptDay(campaign.startDate, this.state.today());
+    return !!campaign && isGateTrialOpen(campaign.startDate, this.state.today());
   });
-  /** The trial opens only on an attempt day before it is passed. */
+  /** The trial opens on any day after Week 4 until it is passed. */
   protected readonly closedMessage = computed(() => {
     const campaign = this.state.campaign();
     if (!campaign || this.state.beforeDayOne()) return null;
     const pass = this.pass();
     if (pass) return `You passed the Gate Trial on ${formatLongDate(pass.date)}.`;
     if (this.attemptToday()) return null;
-    const today = this.state.today();
-    const next = getNextGateTrialAttempt(campaign.startDate, today);
-    return today < getGateTrialTargetDate(campaign.startDate)
-      ? `The Gate Trial opens ${formatLongDate(next)}, the Monday after Week 4.`
-      : `The next attempt is ${formatLongDate(next)}. Attempts fall on Mondays and Thursdays until you pass.`;
+    const opens = getGateTrialTargetDate(campaign.startDate);
+    return `The Gate Trial opens ${formatLongDate(opens)}, after Week 4, on any day you choose.`;
   });
   protected readonly canStart = computed(() =>
     Boolean(
       this.state.campaign() &&
-        !this.state.beforeDayOne() &&
-        !this.closedMessage() &&
-        this.readiness()?.status === 'green',
+      !this.state.beforeDayOne() &&
+      !this.closedMessage() &&
+      this.readiness()?.status === 'green',
     ),
   );
   protected readonly phase = computed(() => this.trial.phases[this.phaseIndex()]);
@@ -167,7 +184,7 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   });
   protected readonly guideSteps = computed(() => {
     const movement = this.movement();
-    return movement ? getQuickHelpSteps(movement.exerciseId) ?? [] : [];
+    return movement ? (getQuickHelpSteps(movement.exerciseId) ?? []) : [];
   });
   protected readonly guideBase = computed(() => {
     const movement = this.movement();
@@ -177,11 +194,16 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     const draft = this.draft();
     return !!draft && draft.date !== this.state.today();
   });
-  protected readonly painBlocks = computed(() =>
-    this.draft()?.painEvents.some((event) => event.severity >= 3 || event.actionTaken !== 'continue') ?? false,
+  protected readonly painBlocks = computed(
+    () =>
+      this.draft()?.painEvents.some(
+        (event) => event.severity >= 3 || event.actionTaken !== 'continue',
+      ) ?? false,
   );
-  protected readonly physicalBlocked = computed(() =>
-    this.phaseIndex() < 2 && (this.staleDate() || this.readiness()?.status !== 'green' || this.painBlocks()),
+  protected readonly physicalBlocked = computed(
+    () =>
+      this.phaseIndex() < 2 &&
+      (this.staleDate() || this.readiness()?.status !== 'green' || this.painBlocks()),
   );
   protected readonly restReady = computed(() => {
     const rest = this.model().restMinutes.trim();
@@ -211,20 +233,27 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     return `The full Gate Trial waits for a same-day ${READINESS_WORDS.green} check.`;
   });
   protected readonly greenWords = READINESS_WORDS.green;
-  protected readonly recordedStations = computed(() =>
-    this.draft()?.phaseResults[1].circuitRounds?.reduce((count, round) => count + round.movements.length, 0) ?? 0,
+  protected readonly recordedStations = computed(
+    () =>
+      this.draft()?.phaseResults[1].circuitRounds?.reduce(
+        (count, round) => count + round.movements.length,
+        0,
+      ) ?? 0,
   );
   protected readonly timerStart = computed(() => {
-    const key = this.phaseIndex() === 0
-      ? 'walkStartedAt'
-      : this.phaseIndex() === 1
-        ? 'circuitStartedAt'
-        : this.phaseIndex() === 3
-          ? 'prayerStartedAt'
-          : null;
+    const key =
+      this.phaseIndex() === 0
+        ? 'walkStartedAt'
+        : this.phaseIndex() === 1
+          ? 'circuitStartedAt'
+          : this.phaseIndex() === 3
+            ? 'prayerStartedAt'
+            : null;
     if (!key) return null;
     const value = this.draft()?.phaseResults[this.phaseIndex()]?.metrics?.[key];
-    return typeof value === 'string' && Number.isFinite(Date.parse(value)) ? Date.parse(value) : null;
+    return typeof value === 'string' && Number.isFinite(Date.parse(value))
+      ? Date.parse(value)
+      : null;
   });
   protected readonly elapsed = computed(() => {
     const start = this.timerStart();
@@ -302,7 +331,8 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
 
   protected async selectPhase(index: number): Promise<void> {
     const draft = this.draft();
-    if (!draft || index < 0 || index > draft.currentPhaseIndex || index === this.phaseIndex()) return;
+    if (!draft || index < 0 || index > draft.currentPhaseIndex || index === this.phaseIndex())
+      return;
     try {
       if (this.autosave) clearTimeout(this.autosave);
       await this.flush();
@@ -333,7 +363,9 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
       const index = this.phaseIndex();
       const partial = await this.flush();
       if (index < 2 && this.physicalBlocked()) {
-        throw new Error('The full physical trial waits for a Green day. Stop and keep this attempt if needed.');
+        throw new Error(
+          'The full physical trial waits for a Green day. Stop and keep this attempt if needed.',
+        );
       }
       if (!gateTrialPhaseComplete(partial.phaseResults[index], index)) {
         const gap = this.incomplete(index);
@@ -391,7 +423,11 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     this.error.set(null);
     try {
       // Stopping must remain possible even if a partially typed field is invalid.
-      try { await this.flush(); } catch { /* keep the last valid saved draft */ }
+      try {
+        await this.flush();
+      } catch {
+        /* keep the last valid saved draft */
+      }
       await this.writes;
       this.stopped.set(await this.history.finishDraft(draft.id, 'stopped'));
       this.draft.set(null);
@@ -417,14 +453,19 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   }
 
   protected async startTimer(): Promise<void> {
-    if (![0, 1, 3].includes(this.phaseIndex()) || (this.phaseIndex() < 2 && this.physicalBlocked())) return;
+    if (![0, 1, 3].includes(this.phaseIndex()) || (this.phaseIndex() < 2 && this.physicalBlocked()))
+      return;
     try {
       const index = this.phaseIndex();
       if (index === 1 && (numeric(this.model().restMinutes) ?? 0) < 5) {
-        throw new FieldError('Rest at least 5 minutes after the walk before starting the circuit.', 'trial-rest');
+        throw new FieldError(
+          'Rest at least 5 minutes after the walk before starting the circuit.',
+          'trial-rest',
+        );
       }
       await this.write((next) => {
-        const key = index === 0 ? 'walkStartedAt' : index === 1 ? 'circuitStartedAt' : 'prayerStartedAt';
+        const key =
+          index === 0 ? 'walkStartedAt' : index === 1 ? 'circuitStartedAt' : 'prayerStartedAt';
         (next.phaseResults[index].metrics ??= {})[key] = new Date().toISOString();
       });
       this.clock.set(Date.now());
@@ -437,16 +478,25 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     const start = this.timerStart();
     if (start === null) return;
     const minutes = String(Math.max(0.1, Math.round((Date.now() - start) / 6000) / 10));
-    this.model.update((value) => this.phaseIndex() === 0
-      ? { ...value, walkMinutes: minutes }
-      : this.phaseIndex() === 1
-        ? { ...value, circuitMinutes: minutes }
-        : { ...value, prayerMinutes: minutes });
+    this.model.update((value) =>
+      this.phaseIndex() === 0
+        ? { ...value, walkMinutes: minutes }
+        : this.phaseIndex() === 1
+          ? { ...value, circuitMinutes: minutes }
+          : { ...value, prayerMinutes: minutes },
+    );
     this.queueAutosave();
   }
 
   protected chooseStation(round: number, index: number): void {
-    if (!this.draft() || round < 1 || round > this.circuit.rounds || index < 0 || index >= this.circuit.movements.length) return;
+    if (
+      !this.draft() ||
+      round < 1 ||
+      round > this.circuit.rounds ||
+      index < 0 ||
+      index >= this.circuit.movements.length
+    )
+      return;
     this.station.set({ round, index });
     this.syncStation(this.draft()!);
     this.helpOpen.set(false);
@@ -462,7 +512,9 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   }
 
   protected stationSaved(round: number, exerciseId: string): boolean {
-    return !!this.draft()?.phaseResults[1].circuitRounds?.find((item) => item.round === round)?.movements.some((item) => item.exerciseId === exerciseId);
+    return !!this.draft()
+      ?.phaseResults[1].circuitRounds?.find((item) => item.round === round)
+      ?.movements.some((item) => item.exerciseId === exerciseId);
   }
 
   protected phaseComplete(index: number): boolean {
@@ -490,7 +542,8 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
             ? `${movement.durationSeconds} seconds`
             : 'Recorded';
     return [
-      this.stationName({ exerciseId: movement.exerciseId }), amount,
+      this.stationName({ exerciseId: movement.exerciseId }),
+      amount,
       ...(movement.setup ? [movement.setup] : []),
       ...(movement.loadPounds !== undefined ? [`${movement.loadPounds} lb`] : []),
     ].join(' · ');
@@ -504,9 +557,13 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     this.saving.set(true);
     this.error.set(null);
     try {
-      if (this.physicalBlocked()) throw new Error('Wait for a Green readiness day before more circuit work.');
+      if (this.physicalBlocked())
+        throw new Error('Wait for a Green readiness day before more circuit work.');
       if ((numeric(this.model().restMinutes) ?? 0) < 5) {
-        throw new FieldError('Rest at least 5 minutes after the walk before starting the circuit.', 'trial-rest');
+        throw new FieldError(
+          'Rest at least 5 minutes after the walk before starting the circuit.',
+          'trial-rest',
+        );
       }
       await this.flush();
       const actual = this.stationActual(movement);
@@ -521,13 +578,19 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
         const prior = round.movements.findIndex((item) => item.exerciseId === movement.exerciseId);
         if (prior < 0) round.movements.push(actual);
         else round.movements[prior] = actual;
-        round.movements.sort((a, b) => this.circuit.movements.findIndex((item) => item.exerciseId === a.exerciseId) - this.circuit.movements.findIndex((item) => item.exerciseId === b.exerciseId));
+        round.movements.sort(
+          (a, b) =>
+            this.circuit.movements.findIndex((item) => item.exerciseId === a.exerciseId) -
+            this.circuit.movements.findIndex((item) => item.exerciseId === b.exerciseId),
+        );
       });
       this.selectFirstMissing(saved);
       this.helpOpen.set(false);
-      this.savedMessage.set(this.meetsTarget(movement, actual)
-        ? 'Station saved on this device.'
-        : 'Station saved. This is below the full trial prescription; stop and keep this attempt if needed.');
+      this.savedMessage.set(
+        this.meetsTarget(movement, actual)
+          ? 'Station saved on this device.'
+          : 'Station saved. This is below the full trial prescription; stop and keep this attempt if needed.',
+      );
       if (this.station()) this.reveal('#trial-station-title', '#trial-station');
       else this.reveal('#trial-all-stations');
     } catch (error) {
@@ -573,17 +636,25 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     try {
       const severity = numeric(values.severity, true);
       if (!bodyArea.trim()) throw new Error('Choose where you felt the pain, or name the place.');
-      if (severity === undefined || severity > 10) throw new Error('Choose a pain level from 0 to 10.');
+      if (severity === undefined || severity > 10)
+        throw new Error('Choose a pain level from 0 to 10.');
       if (!values.actionTaken) throw new Error('Choose what you did about the pain.');
       this.saving.set(true);
       if (this.autosave) clearTimeout(this.autosave);
       // A malformed unsaved field cannot delay an immediate pain record.
-      try { await this.flush(); } catch { /* keep the last valid saved draft */ }
+      try {
+        await this.flush();
+      } catch {
+        /* keep the last valid saved draft */
+      }
       await this.history.recordPain(draft.id, {
         phaseId: this.phaseIndex() === 0 ? 'brisk-walk' : 'controlled-circuit',
-        bodyArea, severity,
+        bodyArea,
+        severity,
         actionTaken: values.actionTaken as TrialPainAction,
-        ...(this.phaseIndex() === 1 && this.movement() ? { exerciseId: this.movement()!.exerciseId } : {}),
+        ...(this.phaseIndex() === 1 && this.movement()
+          ? { exerciseId: this.movement()!.exerciseId }
+          : {}),
       });
       const refreshed = await this.history.activeDraft();
       if (refreshed) this.draft.set(refreshed);
@@ -600,7 +671,9 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
 
   private flush(): Promise<TrialDraft> {
     const index = this.phaseIndex();
-    return this.write((next) => { next.phaseResults[index] = this.phaseFromModel(next, index); });
+    return this.write((next) => {
+      next.phaseResults[index] = this.phaseFromModel(next, index);
+    });
   }
 
   private write(change: (draft: TrialDraft) => void): Promise<TrialDraft> {
@@ -627,7 +700,8 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
         const rpe = numeric(value.walkRpe, true);
         const heartRate = numeric(value.heartRate);
         const timerStart = previous.metrics?.['walkStartedAt'];
-        return { ...previous,
+        return {
+          ...previous,
           metrics: {
             ...(typeof timerStart === 'string' ? { walkStartedAt: timerStart } : {}),
             ...(value.fullWalk ? { distanceMiles: 2 } : {}),
@@ -635,7 +709,11 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
             ...(rpe !== undefined ? { rpe } : {}),
             ...(heartRate !== undefined ? { averageHeartRate: heartRate } : {}),
           },
-          responses: { knee: value.knee, back: value.back, recoveryAfterFiveMinutes: value.recovery },
+          responses: {
+            knee: value.knee,
+            back: value.back,
+            recoveryAfterFiveMinutes: value.recovery,
+          },
         };
       }
       case 1: {
@@ -643,7 +721,8 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
         const minutes = numeric(value.circuitMinutes);
         const timerStart = previous.metrics?.['circuitStartedAt'];
         const effortEndedAt = previous.metrics?.['effortEndedAt'];
-        return { ...previous,
+        return {
+          ...previous,
           metrics: {
             ...(typeof timerStart === 'string' ? { circuitStartedAt: timerStart } : {}),
             ...(typeof effortEndedAt === 'string' ? { effortEndedAt } : {}),
@@ -654,11 +733,15 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
         };
       }
       case 2:
-        return { ...previous, responses: { body: value.body, character: value.character, family: value.family } };
+        return {
+          ...previous,
+          responses: { body: value.body, character: value.character, family: value.family },
+        };
       case 3: {
         const minutes = numeric(value.prayerMinutes);
         const timerStart = previous.metrics?.['prayerStartedAt'];
-        return { ...previous,
+        return {
+          ...previous,
           metrics: {
             ...(typeof timerStart === 'string' ? { prayerStartedAt: timerStart } : {}),
             confirmed: value.psalmAndPrayer,
@@ -680,13 +763,16 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     if (planned.perSide) {
       const left = numeric(value.left, planned.reps !== undefined);
       const right = numeric(value.right, planned.reps !== undefined);
-      if (left === undefined) throw new FieldError('Enter the result for your left side.', 'trial-station-left');
-      if (right === undefined) throw new FieldError('Enter the result for your right side.', 'trial-station-right');
+      if (left === undefined)
+        throw new FieldError('Enter the result for your left side.', 'trial-station-left');
+      if (right === undefined)
+        throw new FieldError('Enter the result for your right side.', 'trial-station-right');
       if (planned.reps !== undefined) actual.repsBySide = { left, right };
       else actual.durationSecondsBySide = { left, right };
     } else {
       const amount = numeric(value.amount, planned.reps !== undefined);
-      if (amount === undefined) throw new FieldError('Enter what you completed at this station.', 'trial-station-amount');
+      if (amount === undefined)
+        throw new FieldError('Enter what you completed at this station.', 'trial-station-amount');
       if (planned.reps !== undefined) actual.reps = amount;
       else actual.durationSeconds = amount;
     }
@@ -699,12 +785,14 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   private meetsTarget(planned: TrialCircuitMovement, actual: TrialCircuitMovementResult): boolean {
     if (planned.reps !== undefined) {
       return planned.perSide
-        ? (actual.repsBySide?.left ?? 0) >= planned.reps && (actual.repsBySide?.right ?? 0) >= planned.reps
+        ? (actual.repsBySide?.left ?? 0) >= planned.reps &&
+            (actual.repsBySide?.right ?? 0) >= planned.reps
         : (actual.reps ?? 0) >= planned.reps;
     }
     const seconds = planned.durationSeconds ?? 0;
     return planned.perSide
-      ? (actual.durationSecondsBySide?.left ?? 0) >= seconds && (actual.durationSecondsBySide?.right ?? 0) >= seconds
+      ? (actual.durationSecondsBySide?.left ?? 0) >= seconds &&
+          (actual.durationSecondsBySide?.right ?? 0) >= seconds
       : (actual.durationSeconds ?? 0) >= seconds;
   }
 
@@ -724,15 +812,18 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
       walkMinutes: displayNumber(walk.metrics?.['durationMinutes']),
       walkRpe: displayNumber(walk.metrics?.['rpe']),
       heartRate: displayNumber(walk.metrics?.['averageHeartRate']),
-      knee: walk.responses?.['knee'] ?? '', back: walk.responses?.['back'] ?? '',
+      knee: walk.responses?.['knee'] ?? '',
+      back: walk.responses?.['back'] ?? '',
       recovery: walk.responses?.['recoveryAfterFiveMinutes'] ?? '',
       restMinutes: displayNumber(circuit.metrics?.['restAfterWalkMinutes']),
       circuitMinutes: displayNumber(circuit.metrics?.['durationMinutes']),
-      body: mind.responses?.['body'] ?? '', character: mind.responses?.['character'] ?? '',
+      body: mind.responses?.['body'] ?? '',
+      character: mind.responses?.['character'] ?? '',
       family: mind.responses?.['family'] ?? '',
       psalmAndPrayer: spirit.metrics?.['confirmed'] === true,
       prayerMinutes: displayNumber(spirit.metrics?.['prayerMinutes']),
-      identity: spirit.responses?.['identity'] ?? '', oath: draft.phaseResults[4].notes ?? '',
+      identity: spirit.responses?.['identity'] ?? '',
+      oath: draft.phaseResults[4].notes ?? '',
     });
     this.selectFirstMissing(draft);
   }
@@ -741,7 +832,11 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     for (let round = 1; round <= this.circuit.rounds; round++) {
       const saved = draft.phaseResults[1].circuitRounds?.find((item) => item.round === round);
       for (let index = 0; index < this.circuit.movements.length; index++) {
-        if (!saved?.movements.some((item) => item.exerciseId === this.circuit.movements[index].exerciseId)) {
+        if (
+          !saved?.movements.some(
+            (item) => item.exerciseId === this.circuit.movements[index].exerciseId,
+          )
+        ) {
           this.station.set({ round, index });
           this.syncStation(draft);
           return;
@@ -755,12 +850,15 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     const cursor = this.station();
     if (!cursor) return;
     const planned = this.circuit.movements[cursor.index];
-    const saved = draft.phaseResults[1].circuitRounds?.find((item) => item.round === cursor.round)?.movements.find((item) => item.exerciseId === planned.exerciseId);
+    const saved = draft.phaseResults[1].circuitRounds
+      ?.find((item) => item.round === cursor.round)
+      ?.movements.find((item) => item.exerciseId === planned.exerciseId);
     this.stationModel.set({
       amount: displayNumber(saved?.reps ?? saved?.durationSeconds),
       left: displayNumber(saved?.repsBySide?.left ?? saved?.durationSecondsBySide?.left),
       right: displayNumber(saved?.repsBySide?.right ?? saved?.durationSecondsBySide?.right),
-      setup: saved?.setup ?? '', load: displayNumber(saved?.loadPounds),
+      setup: saved?.setup ?? '',
+      load: displayNumber(saved?.loadPounds),
     });
   }
 
@@ -782,34 +880,76 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
     const rounds = this.draft()?.phaseResults[1].circuitRounds ?? [];
     const belowPrescription = rounds.some((round) =>
       round.movements.some((recorded) => {
-        const planned = this.circuit.movements.find((item) => item.exerciseId === recorded.exerciseId);
+        const planned = this.circuit.movements.find(
+          (item) => item.exerciseId === recorded.exerciseId,
+        );
         return !planned || !this.meetsTarget(planned, recorded);
       }),
     );
     const gaps: [boolean, string, string][][] = [
       [
         [!value.fullWalk, 'trial-full-walk', 'Confirm you completed the full 2-mile walk.'],
-        [!(amount(value.walkMinutes) > 0), 'trial-walk-minutes', 'Enter your walk time in minutes.'],
-        [!(Number.isInteger(rpe) && rpe >= 1 && rpe <= 10), 'trial-rpe-1', 'Choose your effort from 1 to 10.'],
-        [!!value.heartRate.trim() && !(amount(value.heartRate) > 0), 'trial-heart-rate', 'Enter your average heart rate, or leave it blank.'],
+        [
+          !(amount(value.walkMinutes) > 0),
+          'trial-walk-minutes',
+          'Enter your walk time in minutes.',
+        ],
+        [
+          !(Number.isInteger(rpe) && rpe >= 1 && rpe <= 10),
+          'trial-rpe-1',
+          'Choose your effort from 1 to 10.',
+        ],
+        [
+          !!value.heartRate.trim() && !(amount(value.heartRate) > 0),
+          'trial-heart-rate',
+          'Enter your average heart rate, or leave it blank.',
+        ],
         [!value.knee.trim(), 'trial-knee', 'Describe how your knee responded.'],
         [!value.back.trim(), 'trial-back', 'Describe how your back responded.'],
         [!value.recovery.trim(), 'trial-recovery', 'Describe your recovery after 5 minutes.'],
       ],
       [
-        [!(amount(value.restMinutes) >= 5), 'trial-rest', 'Record at least 5 minutes of rest after the walk.'],
-        [this.recordedStations() < 18, 'trial-station-title', 'Record all 18 stations before continuing.'],
-        [belowPrescription, 'trial-station-index', 'A station is below the full prescription, so this attempt can’t be completed. Stop to keep the partial record.'],
-        [!(amount(value.circuitMinutes) > 0), 'trial-circuit-minutes', 'Enter the circuit time in minutes.'],
+        [
+          !(amount(value.restMinutes) >= 5),
+          'trial-rest',
+          'Record at least 5 minutes of rest after the walk.',
+        ],
+        [
+          this.recordedStations() < 18,
+          'trial-station-title',
+          'Record all 18 stations before continuing.',
+        ],
+        [
+          belowPrescription,
+          'trial-station-index',
+          'A station is below the full prescription, so this attempt can’t be completed. Stop to keep the partial record.',
+        ],
+        [
+          !(amount(value.circuitMinutes) > 0),
+          'trial-circuit-minutes',
+          'Enter the circuit time in minutes.',
+        ],
       ],
       [
         [!value.body.trim(), 'trial-body', 'Write one thing you learned about your body.'],
-        [!value.character.trim(), 'trial-character', 'Write one thing you learned about your character.'],
+        [
+          !value.character.trim(),
+          'trial-character',
+          'Write one thing you learned about your character.',
+        ],
         [!value.family.trim(), 'trial-family', 'Write one thing you learned about your family.'],
       ],
       [
-        [!value.psalmAndPrayer, 'trial-psalm', 'Confirm you read Psalm 121 and spent time in prayer.'],
-        [!(amount(value.prayerMinutes) >= 10), 'trial-prayer-minutes', 'Record at least 10 quiet minutes of prayer.'],
+        [
+          !value.psalmAndPrayer,
+          'trial-psalm',
+          'Confirm you read Psalm 121 and spent time in prayer.',
+        ],
+        [
+          !(amount(value.prayerMinutes) >= 10),
+          'trial-prayer-minutes',
+          'Record at least 10 quiet minutes of prayer.',
+        ],
         [!value.identity.trim(), 'trial-identity', 'Answer the husband and father question.'],
       ],
       [[!value.oath.trim(), 'trial-oath', 'Write your personal Ranger’s Oath.']],
@@ -823,12 +963,20 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   }
 
   /** Scrolls a changed part of the page into view and moves focus there once it renders. */
-  private reveal(focusSelector: string, scrollSelector = focusSelector, block: ScrollLogicalPosition = 'start'): void {
+  private reveal(
+    focusSelector: string,
+    scrollSelector = focusSelector,
+    block: ScrollLogicalPosition = 'start',
+  ): void {
     afterNextRender(
       () => {
         const root = this.host.nativeElement;
-        const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-        root.querySelector<HTMLElement>(scrollSelector)?.scrollIntoView?.({ block, behavior: reduced ? 'auto' : 'smooth' });
+        const reduced =
+          typeof matchMedia === 'function' &&
+          matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root
+          .querySelector<HTMLElement>(scrollSelector)
+          ?.scrollIntoView?.({ block, behavior: reduced ? 'auto' : 'smooth' });
         root.querySelector<HTMLElement>(focusSelector)?.focus({ preventScroll: true });
       },
       { injector: this.injector },
@@ -836,7 +984,9 @@ export class GateTrialActivePage implements OnInit, OnDestroy {
   }
 
   private fail(error: unknown): void {
-    this.error.set(error instanceof Error ? error.message : 'The trial could not be saved. Try again.');
+    this.error.set(
+      error instanceof Error ? error.message : 'The trial could not be saved. Try again.',
+    );
     this.savedMessage.set(null);
     this.invalidField.set(error instanceof FieldError ? error.field : null);
     if (error instanceof FieldError) this.reveal(`#${error.field}`, `#${error.field}`, 'center');
