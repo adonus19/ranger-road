@@ -30,6 +30,11 @@ export class WorkoutHistory {
     return this.withDatabase((database) => database.swapWorkoutExercise(draftId, index, toId));
   }
 
+  /** The other stance on an exercise that offers one, before its first set. */
+  async switchStance(draftId: string, index: number): Promise<WorkoutDraft> {
+    return this.withDatabase((database) => database.switchWorkoutStance(draftId, index));
+  }
+
   async recordPain(draftId: string, input: WorkoutPainInput): Promise<RecordedWorkoutPainEvent> {
     return this.withDatabase((database) => database.recordWorkoutPain(draftId, input));
   }

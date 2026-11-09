@@ -6,7 +6,11 @@ import {
   getDaysUntil,
   getDaysUntilGateTrial,
 } from '../../../core/program/campaign';
-import { getNextAttempt, type CampaignPosition } from '../../../core/program/campaign-position';
+import {
+  getNextAttempt,
+  isTrialAvailable,
+  type CampaignPosition,
+} from '../../../core/program/campaign-position';
 import {
   chapterPrograms,
   formatChapterLine,
@@ -44,6 +48,11 @@ export class KeepBand {
   /** The day the chapter's trial was passed, once it has been. */
   protected readonly trialPassedOn = computed(() => this.position()?.chapter.pass?.date ?? null);
   protected readonly nextChapterStart = computed(() => this.position()?.chapter.nextStart ?? null);
+  /** An any-day trial after its chapter's last week: no countdown, only "Open". */
+  protected readonly trialAvailable = computed(() => {
+    const chapter = this.position()?.chapter;
+    return !!chapter && isTrialAvailable(chapter);
+  });
 
   protected readonly campaignDay = computed(() => {
     const campaign = this.state.campaign();
@@ -63,6 +72,13 @@ export class KeepBand {
     const program = this.program();
     const chapter = this.position()?.chapter;
     const today = this.state.today();
+    if (program.anyDayTrial) {
+      return chapter && today >= chapter.firstAttempt
+        ? [`${program.trialName} available any day you choose.`, program.trialDayNote]
+            .filter(Boolean)
+            .join(' ')
+        : `${program.trialName} after Week ${program.chapter.weeks.at(-1)}, on any day you choose.`;
+    }
     if (!chapter || today < chapter.firstAttempt) {
       return `${program.trialName} on the Monday after Week ${program.chapter.weeks.at(-1)}. If it doesn’t go, try again Thursday.`;
     }

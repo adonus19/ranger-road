@@ -48,6 +48,12 @@ Chapter I uses the dated orders in the [Muster content pack](rangers-road-full-p
 
 Chapter III uses the dated orders in the [High Country pack](rangers-road-full-program-content/03_THE_HIGH_COUNTRY.md), counting Weeks 9–12 from the Monday after the Three-Mile Trial pass (or from the day after a Monday pass). Mission IDs are `chapter-3-week-<n>-day-<d>-…`. After Week 12, every day repeats Week 12 and shows a quiet "High Country Trial available" card. Tuesday's climb shows written steps, the optional interval timer, and the step-down finisher; on a Red day it links Restoration. Forge B's one-arm press has the quiet "Press half-kneeling instead" choice. Week 12 Saturday is trial preparation, Friday a choice of a 20-minute easy walk or Restoration.
 
+Built 2026-11-09 (session 3):
+
+- **Climb.** The written steps name the step-ups and step-downs, and under them "How to: Step-Up" and "How to: Slow Step-Down" open the exercise guides. The optional timer calls its work blocks "Step-ups" and, when it ends, says "Intervals done. Finish with the slow step-downs, 2 × 6 per leg." On a Red day the order reads "Restoration in place of the climb", the steps and guides are hidden, and Restoration opens in the Forge.
+- **Press stance.** On Forge B's one-arm press, before the first set, a quiet row reads "Seated by default." with a "Press half-kneeling instead" button. After the choice it reads "Half-kneeling today." with "Press seated instead". It leaves once a set is marked or a pain note is saved. It is not a swap card: nothing says reduced, because the session stays full.
+- **Trial available.** From the Monday after Week 12 until the pass, Keep shows a quiet row under the main order: "High Country Trial available. Take it on any day you choose. Pick a clear-weather day." Until the trial's own page is built (ticket 04) it opens the Road page's trial plan. The Keep band shows "Open" in place of the countdown, and its note and the Road page's trial line use the any-day wording; before Week 12 ends they say "after Week 12, on any day you choose." There are no Monday or Thursday attempt days for Chapter III.
+
 The **seasonal layer** adds one "Advent" or "Christmas" row to Today so far and to Keep on its real dates (the four Advent Sundays, Christmas Eve, Christmas Day), whatever the chapter. The row shows the theme, the reading reference, and the family question, with a Done button undoable the same day, like the Hearth mission. Nothing counts or tallies it. It returns each year, with dates computed from Christmas Day.
 
 ## Road — Campaign

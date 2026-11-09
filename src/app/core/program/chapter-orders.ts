@@ -23,7 +23,7 @@ export function getWeekContent(day: ChapterDay): ChapterWeekContent {
 
 /** The day's content; an attempt day takes the chapter's trial instead. */
 export function getDayContent(day: ChapterDay): ChapterDayContent {
-  if (day.attemptDay) return day.program.trialAttempt;
+  if (day.attemptDay && day.program.trialAttempt) return day.program.trialAttempt;
   const content = getWeekContent(day).days[day.weekday];
   if (!content) {
     throw new RangeError(
@@ -90,6 +90,9 @@ export function getDayMissions(day: ChapterDay): MissionDefinition[] {
         : {}),
       ...(activityDetails.length ? { activityDetails } : {}),
       ...(content.activity.intervals ? { intervals: content.activity.intervals } : {}),
+      ...(content.activity.exerciseGuideIds?.length
+        ? { exerciseGuideIds: [...content.activity.exerciseGuideIds] }
+        : {}),
       ...(content.activity.plannedTrialId
         ? { plannedTrialId: content.activity.plannedTrialId }
         : {}),
@@ -168,6 +171,7 @@ function getOwnActivityChoices(day: ChapterDay): MissionDefinition[] {
       delete choice.estimatedMinutes;
       delete choice.activityDetails;
       delete choice.intervals;
+      delete choice.exerciseGuideIds;
       if (alternative.fieldcraftPractice && fieldcraft) choice.activityDetails = [fieldcraft];
       return choice;
     }),

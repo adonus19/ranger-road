@@ -3,6 +3,7 @@ import { daysBetween } from './calendar';
 import type { ChapterDay } from './campaign-position';
 import type { ChapterProgram, ChapterSeed, ChapterWeekContent } from './chapter-program';
 import { chapterOneProgram } from './chapter-one.program';
+import { chapterThreeProgram } from './chapter-three.program';
 import { chapterTwoProgram } from './chapter-two.program';
 
 export type { ChapterProgram, ChapterSeed } from './chapter-program';
@@ -11,7 +12,11 @@ export type { ChapterProgram, ChapterSeed } from './chapter-program';
  * Chapters whose dated orders are in the app, in campaign order. A chapter is added here
  * once its content is built; until then the previous chapter shows as complete.
  */
-export const chapterPrograms: readonly ChapterProgram[] = [chapterOneProgram, chapterTwoProgram];
+export const chapterPrograms: readonly ChapterProgram[] = [
+  chapterOneProgram,
+  chapterTwoProgram,
+  chapterThreeProgram,
+];
 
 export function loadChapterSeed(chapterId: string): ChapterSeed | undefined {
   return loadChapterProgram(chapterId);

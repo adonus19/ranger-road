@@ -25,13 +25,20 @@ const completedTrial: TrialResult = {
 };
 
 // A Monday Gate Trial pass on Nov 2 starts Chapter II on Tuesday (Weeks 5–8); a Monday
-// Three-Mile Trial pass on Nov 30 ends it, and Chapter III is not in the app yet.
+// Three-Mile Trial pass on Nov 30 ends it. Chapter III runs Weeks 9–12 from that Monday, and a
+// Monday High Country Trial pass on Dec 28 ends the last chapter in the app.
 const gatePass: TrialResult = { ...completedTrial, date: '2026-11-02' };
 const threeMilePass: TrialResult = {
   ...completedTrial,
   id: 'three-mile-result-1',
   trialId: 'three-mile-trial',
   date: '2026-11-30',
+};
+const highCountryPass: TrialResult = {
+  ...completedTrial,
+  id: 'high-country-result-1',
+  trialId: 'high-country-trial',
+  date: '2026-12-28',
 };
 
 function stateFor(date: string) {
@@ -99,17 +106,22 @@ describe('Forge across chapters', () => {
   });
 
   it('offers no workout once the last chapter in the app is complete', async () => {
-    const { root } = await render(ForgePage, '2026-12-01', [gatePass, threeMilePass]);
-    expect(root.textContent).toContain('Chapter II complete');
+    const { root } = await render(ForgePage, '2026-12-29', [
+      gatePass,
+      threeMilePass,
+      highCountryPass,
+    ]);
+    expect(root.textContent).toContain('Chapter III complete');
     expect(root.querySelector('.choice-list')).toBeNull();
   });
 
   it('blocks a direct workout route after completion', async () => {
-    const { root, history } = await render(ForgeSessionPage, '2026-12-01', [
+    const { root, history } = await render(ForgeSessionPage, '2026-12-29', [
       gatePass,
       threeMilePass,
+      highCountryPass,
     ]);
-    expect(root.textContent).toContain('Chapter II complete');
+    expect(root.textContent).toContain('Chapter III complete');
     expect(root.textContent).not.toContain('Start Forge A');
     expect(history.start).not.toHaveBeenCalled();
   });

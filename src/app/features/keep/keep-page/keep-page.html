@@ -78,6 +78,13 @@
         </article>
       }
 
+      @if (trialAvailable(); as program) {
+        <app-trial-available-card
+          [trialName]="program.trialName"
+          [dayNote]="program.trialDayNote"
+        />
+      }
+
       @if (optionalForge(); as offer) {
         <app-optional-forge-card class="optional-forge" [offer]="offer" />
       }

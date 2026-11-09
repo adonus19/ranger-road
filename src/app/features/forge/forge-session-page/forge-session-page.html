@@ -364,6 +364,14 @@
         } @else if (currentResult()?.swappedFrom) {
           <p class="swap-note">Swapped for your neck or shoulder today. This session is reduced.</p>
         }
+        @if (stanceOffer(); as stance) {
+          <div class="track-step stance-choice">
+            <p>{{ stance.line }}</p>
+            <button type="button" [disabled]="saving()" (click)="switchStance()">
+              {{ stance.action }}
+            </button>
+          </div>
+        }
         @if (trackStep(); as step) {
           <div class="track-step">
             <p>Next step available: {{ step.name }}</p>

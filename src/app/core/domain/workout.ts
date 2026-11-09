@@ -50,9 +50,12 @@ export type RecordedWorkoutPainEvent = PainEvent & {
   workoutSessionId: string;
 };
 
-/** This is the only Chapter I restoration definition in the current source pack. */
+/**
+ * Each chapter's Restoration (`chapter-<n>-restoration`) stays open on a Red day. Matched by ID
+ * so the domain does not import the program catalog, which imports this module.
+ */
 function isRestorationWorkout(definitionId: string): boolean {
-  return definitionId === 'chapter-1-restoration';
+  return /^chapter-\d+-restoration$/.test(definitionId);
 }
 
 function hasSevereWorkoutPain(results: ExerciseResult[]): boolean {
@@ -194,6 +197,7 @@ export function updateWorkoutDraft(
       substitutionId: result.substitutionId,
       modificationNotes: result.modificationNotes?.trim() || undefined,
       ...(original.swappedFrom ? { swappedFrom: original.swappedFrom } : {}),
+      ...(original.stanceFrom ? { stanceFrom: original.stanceFrom } : {}),
     };
   });
   if (
@@ -309,6 +313,48 @@ export function swapWorkoutExercise(
     modificationNotes: `Swapped from the written exercise for neck or shoulder pain (neck ${readiness.neckPain}, shoulder ${readiness.shoulderPain}).`,
   };
   updated.reduced = true;
+  updated.updatedAt = now;
+  return updated;
+}
+
+/**
+ * "Press half-kneeling instead" (and back): the prescription's other stance, chosen before the
+ * first set. It is saved as its own exercise with its own history. Unlike a readiness swap it
+ * is not a substitution: the session is not marked reduced and the dose is unchanged.
+ */
+export function switchWorkoutStance(
+  stored: WorkoutDraft,
+  index: number,
+  now: IsoTimestamp = new Date().toISOString(),
+): WorkoutDraft {
+  assertTimestamp(now, 'Stance time');
+  const current = stored.definitionSnapshot.exercises[index];
+  const result = stored.exerciseResults[index];
+  if (!current || !result) throw new RangeError('That exercise is not in this session.');
+  const toId = current.stanceChoice;
+  if (!toId) throw new Error('This exercise has no other stance.');
+  if (result.swappedFrom) throw new Error('This exercise was swapped today.');
+  if (result.sets.some((set) => set.completed !== undefined) || result.painEvents.length) {
+    throw new Error('Choose the stance before the first set.');
+  }
+  if (stored.exerciseResults.some((item, other) => other !== index && item.exerciseId === toId)) {
+    throw new Error('That exercise is already in this session.');
+  }
+  const updated = structuredClone(stored);
+  const snapshot = updated.definitionSnapshot as WorkoutDefinition;
+  snapshot.exercises[index] = {
+    ...(structuredClone(current) as ExercisePrescription),
+    exerciseId: toId,
+    stanceChoice: current.exerciseId,
+  };
+  // Going back to the written stance clears the mark; otherwise it names the written exercise.
+  const written = result.stanceFrom ?? current.exerciseId;
+  updated.exerciseResults[index] = {
+    exerciseId: toId,
+    sets: Array.from({ length: current.sets ?? 1 }, () => ({})),
+    painEvents: [],
+    ...(written !== toId ? { stanceFrom: written } : {}),
+  };
   updated.updatedAt = now;
   return updated;
 }

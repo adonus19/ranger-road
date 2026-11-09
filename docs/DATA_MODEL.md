@@ -60,6 +60,8 @@ A chapter is in the app once its program is registered in order: its ChapterDefi
 - scriptureReference? (dated Chapter I Morning Watch; reference only, without Bible translation text)
 - reflectionPrompt? (dated reflection, when the program supplies one)
 - activityDetails?, readingMinutes?, readingBookTitle?, optionalFamilyQuest? (dated program content; the Week 1 book title is kept in saved mission snapshots)
+- intervals? (an interval walk as written steps: `warmupMinutes?`, `rounds`, `briskSeconds`, `easySeconds`, `cooldownMinutes?`, and from Chapter III `workLabel?` such as "Step-ups" and `finisher?`, the line shown when the optional timer ends)
+- exerciseGuideIds? (exercises a written order names, such as the Tuesday climb's step-ups and slow step-downs, linked to their guides)
 - plannedTrialId? (a plan shown in Today's Mission; completion is stored as a TrialResult)
 
 Mission types:
@@ -139,7 +141,7 @@ New completed and stopped sessions are immutable, append-only snapshots. A stopp
 - exerciseOrder? (the displayed order as indices into the snapshot; absent means the written order)
 - definitionSnapshot, exerciseResults[], sessionInstructions?, sessionRpe?, notes?
 
-Only one workout draft may be active. It is updated as sets are recorded, can resume at its current set after a reload, and is removed in the same transaction that appends its completed or stopped session. Starting and completing a workout validates the latest same-day readiness check. A newer Red check blocks further Forge sets and Forge completion, while ending as stopped preserves the partial record. The seeded Chapter I restoration remains available on Red when appropriate. Yellow or Red readiness marks a permitted draft reduced. Pain rated 5 or higher during Forge also blocks further set saves and completed outcome; the pain record itself can still be saved immediately, and the partial session can be stopped. A new check after the last draft save must be reviewed before completion. Each planned set must be explicitly marked done or skipped before a completed outcome; a stopped session may retain unmarked sets.
+Only one workout draft may be active. It is updated as sets are recorded, can resume at its current set after a reload, and is removed in the same transaction that appends its completed or stopped session. Starting and completing a workout validates the latest same-day readiness check. A newer Red check blocks further Forge sets and Forge completion, while ending as stopped preserves the partial record. Each chapter's Restoration (`chapter-<n>-restoration`) remains available on Red when appropriate. Yellow or Red readiness marks a permitted draft reduced. Pain rated 5 or higher during Forge also blocks further set saves and completed outcome; the pain record itself can still be saved immediately, and the partial session can be stopped. A new check after the last draft save must be reviewed before completion. Each planned set must be explicitly marked done or skipped before a completed outcome; a stopped session may retain unmarked sets.
 
 ### ExerciseResult
 
@@ -148,6 +150,7 @@ Only one workout draft may be active. It is updated as sets are recorded, can re
 - painEvents[]
 - substitutionId?
 - swappedFrom? (the written exercise, when a readiness swap replaced it)
+- stanceFrom? (the written exercise, when the person chose the prescription's other stance)
 - modificationNotes? (the person's own description of a change; it does not create a new prescribed substitution)
 
 Each set may carry `assistance?` (pounds of band help on an assisted pull-up, 0 for no band, stacked bands added together). It is separate from `load`. Sets saved before it existed simply lack it. For assisted pull-ups, less assistance is the better set, with more reps breaking a tie.
@@ -445,6 +448,12 @@ Forge C is a seeded WorkoutDefinition for Chapter I (`chapter-1-forge-c`) whose 
 ### Readiness swaps
 
 A swap taken on a readiness gate is saved under the exercise actually done: the draft's prescription and the ExerciseResult hold the new exercise, and the result's `swappedFrom?` names the written one. The session is marked reduced, so no load rises after it. The written exercise's next hint holds ("swapped for your shoulder last time") until it is done as written again. Older sessions have no `swappedFrom` and read unchanged; the field is optional, so the database version is unchanged. A press stance choice on a back-pain day is saved as `stance?: 'seated' | 'half-kneeling' | 'standing'` on the ExerciseResult.
+
+### Press stance choice (Chapter III, built 2026-11-09)
+
+A prescription may name `stanceChoice?`, another exercise the person may do instead. Chapter III's Forge B one-arm press names `half-kneeling-one-arm-db-press`. Before the first set (and before any pain note) "Press half-kneeling instead" puts that exercise into the draft's prescription and ExerciseResult, with the same sets and reps; the result's `stanceFrom?` names the written exercise, and the prescription's `stanceChoice` now names the seated one, so "Press seated instead" goes back. It is not a substitution or a readiness swap: the session is not marked reduced, and the half-kneeling press's completed sessions are its own exposures, with its own Last time, hint and history. The seated press's hint is not held by it. Older sessions have neither field and read unchanged; the database version is unchanged.
+
+Open for Chapter IV: the back-pain press rule says it reuses this choice, while the paragraph above plans a `stance?` field. Settle which when Chapter IV is built.
 
 ### Skill parts in trials
 

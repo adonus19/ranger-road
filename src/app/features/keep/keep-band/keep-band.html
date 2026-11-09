@@ -36,6 +36,9 @@
             @if (trialPassedOn()) {
               <dt>{{ program().trialName }}</dt>
               <dd class="keep-band__word">Done</dd>
+            } @else if (trialAvailable()) {
+              <dt>{{ program().trialName }}</dt>
+              <dd class="keep-band__word">Open</dd>
             } @else {
               <dt>Days until {{ program().trialName }}</dt>
               <dd>{{ daysUntilTrial() }}</dd>

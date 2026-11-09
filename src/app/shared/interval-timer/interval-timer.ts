@@ -90,7 +90,7 @@ export class IntervalTimer implements OnDestroy {
   );
   protected readonly phaseLabel = computed(() => {
     const segment = this.progress().segment;
-    return segment ? PHASE_LABELS[segment.phase] : '';
+    return segment ? this.label(segment.phase) : '';
   });
   protected readonly phase = computed(() => this.progress().segment?.phase ?? null);
   protected readonly roundLabel = computed(() => {
@@ -104,14 +104,16 @@ export class IntervalTimer implements OnDestroy {
   });
   protected readonly nextLabel = computed(() => {
     const next = this.segments()[this.progress().index + 1];
-    return next ? `Next: ${PHASE_LABELS[next.phase]}` : 'Last block';
+    return next ? `Next: ${this.label(next.phase)}` : 'Last block';
   });
   /** The plan has no cooldown length, so the walk's own steps say how to finish. */
-  protected readonly finishNote = computed(() =>
-    this.activePlan()?.cooldownMinutes
+  protected readonly finishNote = computed(() => {
+    const plan = this.activePlan();
+    if (plan?.finisher) return `Intervals done. ${plan.finisher}`;
+    return plan?.cooldownMinutes
       ? 'Intervals done. The walk is complete.'
-      : 'Intervals done. Finish the walk at an easy pace.',
-  );
+      : 'Intervals done. Finish the walk at an easy pace.';
+  });
 
   private base = 0;
   private startedAt = 0;
@@ -207,7 +209,13 @@ export class IntervalTimer implements OnDestroy {
   }
 
   private announce(phase: IntervalPhase | undefined): void {
-    if (phase) this.announcement.set(PHASE_LABELS[phase]);
+    if (phase) this.announcement.set(this.label(phase));
+  }
+
+  /** The plan's own name for its work blocks, such as "Step-ups", or "Brisk". */
+  private label(phase: IntervalPhase): string {
+    const work = this.activePlan()?.workLabel;
+    return phase === 'brisk' && work ? work : PHASE_LABELS[phase];
   }
 
   private stopTicker(): void {

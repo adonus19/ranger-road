@@ -193,24 +193,33 @@ describe('RoadPage', () => {
     ).toHaveLength(5);
   });
 
-  it('shows Chapter II complete after the Three-Mile Trial is passed', async () => {
+  it('shows the last chapter complete after its trial is passed', async () => {
     const threeMile: TrialResult = {
       ...completedTrial,
       id: 'three-mile-result-1',
       trialId: 'three-mile-trial',
       date: '2026-11-30',
     };
-    const element = await render('2026-10-05', '2026-12-01', [], undefined, [
+    const highCountry: TrialResult = {
+      ...completedTrial,
+      id: 'high-country-result-1',
+      trialId: 'high-country-trial',
+      date: '2026-12-28',
+    };
+    const element = await render('2026-10-05', '2026-12-29', [], undefined, [
       completedTrial,
       threeMile,
+      highCountry,
     ]);
 
-    expect(element.querySelector('.road-band__meta')?.textContent).toContain('Chapter II complete');
+    expect(element.querySelector('.road-band__meta')?.textContent).toContain(
+      'Chapter III complete',
+    );
     expect(element.querySelector('.trial__target')?.textContent?.trim()).toBe(
-      'Chapter II complete. You passed the Three-Mile Trial on Monday, November 30.',
+      'Chapter III complete. You passed the High Country Trial on Monday, December 28.',
     );
     expect(element.querySelector('.trial__open')?.textContent?.trim()).toBe(
-      'View Three-Mile Trial record',
+      'View High Country Trial record',
     );
   });
 

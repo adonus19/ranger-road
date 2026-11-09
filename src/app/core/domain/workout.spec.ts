@@ -1,13 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import type { ReadinessCheck, WorkoutDefinition, WorkoutSession } from './models';
+import type {
+  ReadinessCheck,
+  WorkoutDefinition,
+  WorkoutDraft,
+  WorkoutSession,
+} from './models';
 import {
   completeWorkoutDraft,
   createRecordedWorkoutPain,
   createWorkoutDraft,
   stepUpWorkoutExercise,
   swapWorkoutExercise,
+  switchWorkoutStance,
   updateWorkoutDraft,
 } from './workout';
+import { chapterThreeForgeB, chapterThreeRestoration } from '../program/chapter-three-workouts';
+import { chapterTwoRestoration } from '../program/chapter-two-workouts';
+import { exposuresFor } from '../program/progression';
 
 const definition: WorkoutDefinition = {
   id: 'chapter-1-forge-a',
@@ -375,5 +384,98 @@ describe('taking a track step in a session', () => {
       swapWorkoutExercise(draft, 0, 'push-up', neck, savedAt).exerciseResults[0].exerciseId,
     ).toBe('push-up');
     expect(() => swapWorkoutExercise(draft, 0, 'band-pull-apart', neck, savedAt)).toThrow();
+  });
+});
+
+/** Every set marked done, with the warm-up and finish, so the draft can be completed. */
+function allDone(draft: WorkoutDraft): WorkoutDraft {
+  const done = structuredClone(draft);
+  for (const result of done.exerciseResults) {
+    result.sets = result.sets.map((set) => ({ ...set, completed: true }));
+  }
+  done.warmupComplete = true;
+  done.finishComplete = true;
+  return done;
+}
+
+describe('Chapter III press stance', () => {
+  const pressIndex = chapterThreeForgeB.exercises.findIndex(
+    (exercise) => exercise.exerciseId === 'one-arm-db-overhead-press',
+  );
+  const start = () =>
+    createWorkoutDraft(
+      { date: green.date, definition: structuredClone(chapterThreeForgeB) },
+      green,
+      startedAt,
+      'stance',
+    );
+
+  it('saves the half-kneeling press as its own exercise, with the same dose, not reduced', () => {
+    const switched = switchWorkoutStance(start(), pressIndex, savedAt);
+    expect(switched.definitionSnapshot.exercises[pressIndex]).toEqual({
+      exerciseId: 'half-kneeling-one-arm-db-press',
+      sets: 3,
+      reps: 8,
+      perSide: true,
+      stanceChoice: 'one-arm-db-overhead-press',
+    });
+    expect(switched.exerciseResults[pressIndex]).toEqual({
+      exerciseId: 'half-kneeling-one-arm-db-press',
+      sets: [{}, {}, {}],
+      painEvents: [],
+      stanceFrom: 'one-arm-db-overhead-press',
+    });
+    expect(switched.reduced).toBe(false);
+
+    // It survives a set save, and the finished session is an exposure of the half-kneeling press.
+    const edited = structuredClone(switched);
+    edited.exerciseResults[pressIndex].sets[0] = { reps: 8, load: 20, completed: true };
+    const saved = updateWorkoutDraft(switched, edited, green, savedAt);
+    expect(saved.exerciseResults[pressIndex].stanceFrom).toBe('one-arm-db-overhead-press');
+    const finished = updateWorkoutDraft(saved, allDone(saved), green, savedAt);
+    const session = completeWorkoutDraft(finished, green, 'completed', savedAt) as WorkoutSession;
+    expect(session.reduced).toBe(false);
+    expect(exposuresFor([session], 'half-kneeling-one-arm-db-press')).toHaveLength(1);
+    expect(exposuresFor([session], 'one-arm-db-overhead-press')).toHaveLength(0);
+  });
+
+  it('goes back to the seated press before the first set', () => {
+    const twice = switchWorkoutStance(switchWorkoutStance(start(), pressIndex, savedAt), pressIndex);
+    expect(twice.definitionSnapshot.exercises[pressIndex]).toEqual(
+      chapterThreeForgeB.exercises[pressIndex],
+    );
+    expect(twice.exerciseResults[pressIndex].exerciseId).toBe('one-arm-db-overhead-press');
+    expect(twice.exerciseResults[pressIndex].stanceFrom).toBeUndefined();
+  });
+
+  it('is offered only where the prescription names a stance, and only before the first set', () => {
+    const draft = start();
+    expect(() => switchWorkoutStance(draft, 0, savedAt)).toThrow('no other stance');
+    const begun = structuredClone(draft);
+    begun.exerciseResults[pressIndex].sets[0] = { reps: 8, completed: true };
+    expect(() => switchWorkoutStance(begun, pressIndex, savedAt)).toThrow('before the first set');
+    // A fresh draft never changes stance on its own.
+    expect(draft.exerciseResults[pressIndex].exerciseId).toBe('one-arm-db-overhead-press');
+  });
+});
+
+describe('Restoration on a Red day', () => {
+  const red: ReadinessCheck = { ...green, id: 'red', backPain: 6, status: 'red' };
+
+  it('starts and completes each chapter’s Restoration, and still blocks a Forge', () => {
+    for (const restoration of [chapterTwoRestoration, chapterThreeRestoration]) {
+      const draft = createWorkoutDraft(
+        { date: red.date, definition: restoration },
+        red,
+        startedAt,
+        restoration.id,
+      );
+      expect(draft.reduced).toBe(true);
+      const finished = updateWorkoutDraft(draft, allDone(draft), red, savedAt);
+      expect(completeWorkoutDraft(finished, red, 'completed', savedAt).outcome).toBe('completed');
+    }
+    expect(() =>
+      createWorkoutDraft({ date: red.date, definition: chapterThreeForgeB }, red, startedAt, 'x'),
+    ).toThrow('Red readiness');
   });
 });

@@ -16,6 +16,8 @@ import {
   getWorkoutChoices,
 } from './chapter-orders';
 
+const gateAttempt = chapterOneProgram.trialAttempt!;
+
 /** A stand-in Chapter II with the real shape: weeks 5–8 and its own trial. */
 const chapterTwo: ChapterProgram = {
   ...chapterOneProgram,
@@ -24,9 +26,9 @@ const chapterTwo: ChapterProgram = {
   trialName: 'Three-Mile Trial',
   leadsIn: false,
   trialAttempt: {
-    ...chapterOneProgram.trialAttempt,
+    ...gateAttempt,
     activity: {
-      ...chapterOneProgram.trialAttempt.activity,
+      ...gateAttempt.activity,
       title: 'Three-Mile Trial',
       plannedTrialId: 'three-mile-trial',
     },

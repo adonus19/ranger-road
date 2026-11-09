@@ -443,6 +443,57 @@ describe('ForgeSessionPage', () => {
     });
   });
 
+  describe('press stance choice', () => {
+    /** A draft on a one-arm press that offers the half-kneeling stance, as Chapter III's does. */
+    function stanceDraft(stanceFrom?: string): WorkoutDraft {
+      const draft = startedDraft('2026-11-10');
+      const current = stanceFrom ? 'half-kneeling-one-arm-db-press' : 'one-arm-db-overhead-press';
+      (draft.definitionSnapshot.exercises as unknown[])[0] = {
+        exerciseId: current,
+        sets: 3,
+        reps: 8,
+        perSide: true,
+        stanceChoice: stanceFrom ?? 'half-kneeling-one-arm-db-press',
+      };
+      draft.exerciseResults[0] = {
+        exerciseId: current,
+        sets: [{}, {}, {}],
+        painEvents: [],
+        ...(stanceFrom ? { stanceFrom } : {}),
+      };
+      return draft;
+    }
+
+    it('offers "Press half-kneeling instead" quietly and saves only on a tap', async () => {
+      const draft = stanceDraft();
+      const switched = stanceDraft('one-arm-db-overhead-press');
+      const switchStance = vi.fn(async () => switched);
+      const element = await render('chapter-2-forge-a', '2026-11-10', {
+        draft,
+        history: { switchStance },
+      });
+      const row = element.querySelector('.stance-choice');
+      expect(row?.textContent).toContain('Seated by default.');
+      expect(switchStance).not.toHaveBeenCalled();
+      expect(element.querySelector('.swap-offer')).toBeNull();
+
+      row!.querySelector('button')!.click();
+      await vi.waitFor(() => expect(switchStance).toHaveBeenCalledWith('draft', 0));
+      await vi.waitFor(() =>
+        expect(element.querySelector('.stance-choice button')?.textContent?.trim()).toBe(
+          'Press seated instead',
+        ),
+      );
+    });
+
+    it('leaves once the first set is marked', async () => {
+      const draft = stanceDraft();
+      draft.exerciseResults[0].sets[0] = { reps: 8, completed: true };
+      const element = await render('chapter-2-forge-a', '2026-11-10', { draft });
+      expect(element.querySelector('.stance-choice')).toBeNull();
+    });
+  });
+
   it('opens a Forge session moved to today by a make-up', async () => {
     const element = await render('chapter-2-forge-a', '2026-11-10');
     expect(element.textContent).not.toContain('not part of today');

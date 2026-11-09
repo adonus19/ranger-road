@@ -73,7 +73,8 @@ export function formatIntervalLength(seconds: number): string {
 /** One plain line for the timer's summary, such as "6 rounds of 1 minute brisk / 2 minutes easy". */
 export function describeIntervalPlan(plan: IntervalPlan): string {
   const rounds = `${plan.rounds} ${plan.rounds === 1 ? 'round' : 'rounds'}`;
-  const core = `${rounds} of ${formatIntervalLength(plan.briskSeconds)} brisk / ${formatIntervalLength(plan.easySeconds)} easy`;
+  const work = plan.workLabel?.toLowerCase() ?? 'brisk';
+  const core = `${rounds} of ${formatIntervalLength(plan.briskSeconds)} ${work} / ${formatIntervalLength(plan.easySeconds)} easy`;
   return plan.warmupMinutes
     ? `${plan.warmupMinutes} ${plan.warmupMinutes === 1 ? 'minute' : 'minutes'} easy, then ${core}`
     : core;

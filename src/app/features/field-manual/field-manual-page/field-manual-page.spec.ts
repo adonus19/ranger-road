@@ -165,11 +165,11 @@ describe('Field Manual routes', () => {
       return opened;
     };
 
-    it('opens Contents on Chapter II, with Chapter I below it', async () => {
+    it('opens Contents on Chapter II, with the other chapters below it', async () => {
       const { harness } = await openChapterTwo('/field-manual/contents');
       const root = harness.routeNativeElement!;
       expect([...root.querySelectorAll('.chapter > h2')].map((h) => h.textContent?.trim())).toEqual(
-        ['Chapter II · The Road', 'Chapter I · The Muster'],
+        ['Chapter II · The Road', 'Chapter I · The Muster', 'Chapter III · The High Country'],
       );
       expect(
         root.querySelector('a[href="/field-manual/cards/navigation-one?from=contents"]'),

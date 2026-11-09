@@ -123,6 +123,16 @@ export class RoadPage implements OnInit {
       return `First attempt on the Monday after Week ${program.chapter.weeks.at(-1)}. ${nextChapter} waits until you pass.`;
     }
     const today = this.state.today();
+    const last = program.chapter.weeks.at(-1);
+    if (program.anyDayTrial) {
+      const when =
+        today < chapter.firstAttempt
+          ? `Available from ${formatLongDate(chapter.firstAttempt)}, after Week ${last}, on any day you choose.`
+          : 'Available any day you choose.';
+      return [when, program.trialDayNote, `${nextChapter} waits until you pass.`]
+        .filter(Boolean)
+        .join(' ');
+    }
     // Civil dates in YYYY-MM-DD form compare correctly as strings.
     if (today < chapter.firstAttempt) {
       return `First attempt ${formatLongDate(chapter.firstAttempt)}, the Monday after Week ${program.chapter.weeks.at(-1)}. If it doesn’t go, try again that Thursday. ${nextChapter} waits until you pass.`;

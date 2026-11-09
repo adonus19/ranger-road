@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import {
   getChapterSessions,
   getScriptureByWeek,
+  getTrialScripture,
   orderedPrograms,
   warmupId,
   type FieldManualWeek,
@@ -92,6 +93,7 @@ function buildParts(
 ): ContentsPart[] {
   const number = program.chapter.number;
   const mine = week.chapter === number;
+  const trialReadings = getTrialScripture(program).length;
   const listed = new Set(week.entryIds);
   const sessions = new Set(week.sessions.map((session) => session.id));
   const principles = listLeadershipPrinciples();
@@ -188,13 +190,18 @@ function buildParts(
             (week.stage === 'week' || week.stage === 'ahead') &&
             week.contentWeek === scripture.week,
         })),
-        {
-          title: `The ${program.trialName}`,
-          note: program.trial.id === 'gate-trial' ? '2 readings' : '1 reading',
-          link: ['/field-manual/scripture'],
-          fragment: program.trial.id,
-          current: week.stage === 'trial' && mine,
-        },
+        // An any-day trial with no attempt-day Scripture has no row.
+        ...(trialReadings
+          ? [
+              {
+                title: `The ${program.trialName}`,
+                note: trialReadings === 1 ? '1 reading' : `${trialReadings} readings`,
+                link: ['/field-manual/scripture'],
+                fragment: program.trial.id,
+                current: week.stage === 'trial' && mine,
+              },
+            ]
+          : []),
       ],
     },
     {

@@ -148,6 +148,20 @@
       @if (showActivityDetails() && mission.intervals; as intervals) {
         <app-interval-timer [plan]="intervals" />
       }
+      @if (showActivityDetails() && exerciseGuides().length) {
+        <ul class="guide-links" role="list" aria-label="How to do these exercises">
+          @for (guide of exerciseGuides(); track guide.id) {
+            <li>
+              <a
+                [routerLink]="['/field-manual/exercises', guide.id]"
+                [queryParams]="{ from: 'mission' }"
+              >
+                <app-icon name="book-open" />How to: {{ guide.name }}
+              </a>
+            </li>
+          }
+        </ul>
+      }
       @if (fieldcraftGuide(); as guide) {
         <a class="fieldcraft-link" [routerLink]="guide.link" [queryParams]="{ from: 'mission' }">
           {{ guide.label }}

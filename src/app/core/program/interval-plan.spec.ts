@@ -74,4 +74,17 @@ describe('interval plans', () => {
     expect(isValidIntervalPlan({ ...ok, easySeconds: 12.5 })).toBe(false);
     expect(isValidIntervalPlan({ ...ok, rounds: Number.NaN })).toBe(false);
   });
+
+  it('names the climb’s work blocks as step-ups', () => {
+    expect(
+      describeIntervalPlan({
+        warmupMinutes: 5,
+        rounds: 7,
+        briskSeconds: 90,
+        easySeconds: 120,
+        cooldownMinutes: 5,
+        workLabel: 'Step-ups',
+      }),
+    ).toBe('5 minutes easy, then 7 rounds of 90 seconds step-ups / 2 minutes easy');
+  });
 });

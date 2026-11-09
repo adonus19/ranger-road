@@ -239,6 +239,21 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       })),
     };
   });
+  /**
+   * The quiet stance choice ("Press half-kneeling instead"), before the exercise's first set.
+   * It is not a swap: the session stays full and the other stance keeps its own history.
+   */
+  protected readonly stanceOffer = computed(() => {
+    const written = this.currentPrescription();
+    const result = this.currentResult();
+    if (!written?.stanceChoice || !result || result.swappedFrom) return null;
+    if (result.sets.some((set) => set.completed !== undefined) || result.painEvents.length) {
+      return null;
+    }
+    return result.stanceFrom
+      ? { line: 'Half-kneeling today.', action: 'Press seated instead' }
+      : { line: 'Seated by default.', action: 'Press half-kneeling instead' };
+  });
   /** Assisted pull-ups, and track steps whose criteria count band help, record it in place of a load. */
   protected readonly isAssisted = computed(() => {
     const id = this.currentPrescription()?.exerciseId ?? '';
@@ -350,12 +365,13 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
   });
   protected readonly weekNote = computed(() => {
     const chapter = this.todayOrders();
-    return chapter?.program.workoutPlan(this.workoutId, chapter.contentWeek).note;
+    return chapter?.program.workoutPlan(this.workoutId, chapter.contentWeek, chapter.weekday).note;
   });
   /** A deload week's set guide, from the week the session was started in. */
   protected readonly volumeGuide = computed(() => {
     const chapter = this.sessionDay();
-    return chapter?.program.workoutPlan(this.workoutId, chapter.contentWeek).volumeGuide;
+    return chapter?.program.workoutPlan(this.workoutId, chapter.contentWeek, chapter.weekday)
+      .volumeGuide;
   });
   protected readonly completedSets = computed(
     () =>
@@ -547,7 +563,11 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
       const definition = this.definition();
       const chapter = this.todayOrders();
       if (!definition || !chapter || !this.allowed()) return;
-      const { note, reduced } = chapter.program.workoutPlan(this.workoutId, chapter.contentWeek);
+      const { note, reduced } = chapter.program.workoutPlan(
+        this.workoutId,
+        chapter.contentWeek,
+        chapter.weekday,
+      );
       // A remembered order names the written exercises, so a track step never drops it.
       const saved = applySavedOrder(definition, await this.history.savedOrder(definition.id));
       if (saved.changed) {
@@ -876,11 +896,25 @@ export class ForgeSessionPage implements OnInit, OnDestroy {
     try {
       await this.state.initialize();
       if (this.blocked()) return;
-      const saved = await this.history.swapExercise(
-        draft.id,
-        draft.currentExerciseIndex,
-        toId,
-      );
+      const saved = await this.history.swapExercise(draft.id, draft.currentExerciseIndex, toId);
+      this.draft.set(saved);
+      this.syncForms(saved);
+    } catch (error) {
+      this.showError(error);
+    } finally {
+      this.saving.set(false);
+    }
+  }
+
+  protected async switchStance(): Promise<void> {
+    const draft = this.draft();
+    if (!draft || !this.stanceOffer() || this.saving()) return;
+    this.saving.set(true);
+    this.error.set(null);
+    try {
+      await this.state.initialize();
+      if (this.blocked()) return;
+      const saved = await this.history.switchStance(draft.id, draft.currentExerciseIndex);
       this.draft.set(saved);
       this.syncForms(saved);
     } catch (error) {

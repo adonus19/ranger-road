@@ -1,6 +1,6 @@
 # 03: Chapter III program in the app
 
-**Status:** ready-for-agent
+**Status:** done (2026-11-09, session 3)
 
 **Blocked by:** 02 approved text is not needed to start; Hearth and lesson text wire in session 5
 
@@ -18,7 +18,7 @@
 - Days after Week 12 repeat Week 12 with a quiet "High Country Trial available" card (the trial itself is ticket 04).
 - Nothing in chapters I and II changes; older sessions, drafts and backups read unchanged.
 
-- [ ] Prescriptions match the pack exactly
-- [ ] Migration check: old saved sessions and drafts still open
-- [ ] Mobile layout checked at 390 px, light and dark
-- [ ] Tests and build pass
+- [x] Prescriptions match the pack exactly
+- [x] Migration check: old saved sessions and drafts still open
+- [x] Mobile layout checked at 390 px, light and dark
+- [x] Tests and build pass

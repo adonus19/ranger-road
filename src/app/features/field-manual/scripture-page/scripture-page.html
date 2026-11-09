@@ -46,25 +46,27 @@
       </section>
     }
 
-    <section
-      class="manual-section"
-      [id]="chapter.trialId"
-      [attr.aria-labelledby]="chapter.trialId + '-title'"
-    >
-      <h3 class="manual-title" [id]="chapter.trialId + '-title'">
-        The {{ chapter.trialName }}
-        @if (week().stage === 'trial' && week().chapter === chapter.number) {
-          <span class="manual-tag"><app-icon name="pine" />This week</span>
-        }
-      </h3>
-      <ul class="manual-rows" role="list">
-        @for (item of chapter.trial; track item.label) {
-          <li class="day" [id]="item.id">
-            <span class="day__name">{{ item.label }}</span>
-            <span class="day__reference">{{ item.reference }}</span>
-          </li>
-        }
-      </ul>
-    </section>
+    @if (chapter.trial.length) {
+      <section
+        class="manual-section"
+        [id]="chapter.trialId"
+        [attr.aria-labelledby]="chapter.trialId + '-title'"
+      >
+        <h3 class="manual-title" [id]="chapter.trialId + '-title'">
+          The {{ chapter.trialName }}
+          @if (week().stage === 'trial' && week().chapter === chapter.number) {
+            <span class="manual-tag"><app-icon name="pine" />This week</span>
+          }
+        </h3>
+        <ul class="manual-rows" role="list">
+          @for (item of chapter.trial; track item.label) {
+            <li class="day" [id]="item.id">
+              <span class="day__name">{{ item.label }}</span>
+              <span class="day__reference">{{ item.reference }}</span>
+            </li>
+          }
+        </ul>
+      </section>
+    }
   }
 </article>

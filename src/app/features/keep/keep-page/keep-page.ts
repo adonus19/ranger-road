@@ -2,7 +2,7 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { MissionInstance, ReadinessStatus, TrialResult } from '../../../core/domain/models';
 import { needsBackOnTrack, previousTwoDays } from '../../../core/program/back-on-track';
-import { resolveCampaignPosition } from '../../../core/program/campaign-position';
+import { isTrialAvailable, resolveCampaignPosition } from '../../../core/program/campaign-position';
 import {
   getActivityChoices,
   getDayOrders,
@@ -26,6 +26,7 @@ import { GateTrialRecoveryReminder } from '../gate-trial-recovery-reminder/gate-
 import { OptionalForgeCard } from '../../forge/optional-forge-card/optional-forge-card';
 import { KeepBand } from '../keep-band/keep-band';
 import { StartDay } from '../start-day/start-day';
+import { TrialAvailableCard } from '../trial-available-card/trial-available-card';
 
 const WATCH_ICONS: Readonly<Record<string, IconName>> = {
   'morning-watch': 'sunrise',
@@ -67,6 +68,7 @@ const READINESS_COPY: Readonly<Record<ReadinessStatus | 'pending', ReadinessCopy
     OptionalForgeCard,
     RouterLink,
     StartDay,
+    TrialAvailableCard,
   ],
   selector: 'app-keep-page',
   styleUrl: './keep-page.css',
@@ -109,6 +111,12 @@ export class KeepPage implements OnInit {
     return campaign && this.position()
       ? this.schedule.dayFor(campaign.startDate, today, today, this.completedTrials())
       : null;
+  });
+
+  /** An any-day trial waiting after its chapter's last week: the quiet "available" row. */
+  protected readonly trialAvailable = computed(() => {
+    const chapter = this.position()?.chapter;
+    return chapter && !this.chapterComplete() && isTrialAvailable(chapter) ? chapter.program : null;
   });
 
   /** The quiet optional Forge row, on the days it is offered. */

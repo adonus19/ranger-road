@@ -4,8 +4,8 @@ import type { VolumeGuide } from './chapter-program';
 /** Prescriptions from docs/rangers-road-full-program-content/02_THE_ROAD.md. */
 export const CHAPTER_TWO_WORKOUT_CONTENT_VERSION = 2;
 
-/** Chapter I's warm-up plus the band pull-apart that Chapter II adds. */
-const forgeWarmup: WorkoutStep[] = [
+/** Chapter I’s warm-up plus the band pull-apart that Chapter II adds; Chapter III keeps it. */
+export const chapterTwoForgeWarmup: WorkoutStep[] = [
   { kind: 'walk', minutes: 2, pace: 'easy' },
   { kind: 'exercise', prescription: { exerciseId: 'cat-camel', sets: 1, reps: 6 } },
   { kind: 'exercise', prescription: { exerciseId: 'glute-bridge', sets: 1, reps: 10 } },
@@ -22,7 +22,7 @@ export const chapterTwoForgeA: WorkoutDefinition = {
   id: 'chapter-2-forge-a',
   title: 'Forge A',
   contentVersion: CHAPTER_TWO_WORKOUT_CONTENT_VERSION,
-  warmup: forgeWarmup,
+  warmup: chapterTwoForgeWarmup,
   exercises: [
     { exerciseId: 'box-squat', sets: 3, reps: 6 },
     { exerciseId: 'bench-press', sets: 3, reps: 6 },
@@ -47,7 +47,7 @@ export const chapterTwoForgeB: WorkoutDefinition = {
   id: 'chapter-2-forge-b',
   title: 'Forge B',
   contentVersion: CHAPTER_TWO_WORKOUT_CONTENT_VERSION,
-  warmup: forgeWarmup,
+  warmup: chapterTwoForgeWarmup,
   exercises: [
     { exerciseId: 'goblet-squat', sets: 3, reps: '8–10' },
     { exerciseId: 'step-up', sets: 3, reps: 8, perSide: true },

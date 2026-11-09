@@ -63,6 +63,10 @@ export interface IntervalPlan {
   easySeconds: number;
   /** Only when the pack gives a length; otherwise the timer ends with a reminder to cool down. */
   cooldownMinutes?: number;
+  /** The work block's name when it is not a brisk walk, such as "Step-ups" on the Tuesday climb. */
+  workLabel?: string;
+  /** What follows the timed blocks, such as the climb's slow step-downs. Shown when the timer ends. */
+  finisher?: string;
 }
 
 export interface MissionDefinition {
@@ -86,6 +90,8 @@ export interface MissionDefinition {
   optionalFamilyQuest?: string;
   /** Brisk intervals written as steps; an optional timer can be started from them. */
   intervals?: IntervalPlan;
+  /** Exercises the written steps name, such as the climb's step-ups, linked to their guides. */
+  exerciseGuideIds?: string[];
   /** A planned trial is completed through TrialResult, never the generic mission logger. */
   plannedTrialId?: string;
   /** Getting ready for the next Gate Trial attempt; screens show it only while the trial is pending. */
@@ -141,6 +147,11 @@ export interface ExercisePrescription {
    * first step; a session's snapshot holds the step actually done. Older prescriptions have none.
    */
   trackId?: string;
+  /**
+   * A stance the person may choose instead, saved as its own exercise with its own history
+   * (Chapter III's "Press half-kneeling instead"). Not a substitution: the session stays full.
+   */
+  stanceChoice?: string;
 }
 
 export interface CompletedSet {
@@ -162,6 +173,8 @@ export interface ExerciseResult {
   modificationNotes?: string;
   /** Set when a readiness swap replaced the written exercise: the exercise that was written. */
   swappedFrom?: string;
+  /** Set when the person chose the other stance: the exercise that was written. */
+  stanceFrom?: string;
 }
 
 export interface WorkoutSession {

@@ -597,6 +597,8 @@ export interface TrialScriptureRow {
 
 /** The Scripture a chapter's trial calls for, with anchors the This week rows link to. */
 export function getTrialScripture(program: ChapterProgram): TrialScriptureRow[] {
+  // An any-day trial has no attempt days, and its pack names no attempt-day Scripture.
+  if (!program.trialAttempt) return [];
   const attempts: TrialScriptureRow = {
     label: 'Each attempt day',
     reference: program.trialAttempt.scriptureReference,
@@ -776,7 +778,7 @@ export function getFieldManualIndex(): FieldManualEntry[] {
       }
     }
     const [attempts, spirit] = getTrialScripture(program);
-    addUse(attempts.reference, `${program.trialName} attempts`, attempts.id);
+    if (attempts) addUse(attempts.reference, `${program.trialName} attempts`, attempts.id);
     if (spirit) addUse(spirit.reference, `the ${program.trialName}`, spirit.id);
   }
   for (const [reference, use] of uses) {

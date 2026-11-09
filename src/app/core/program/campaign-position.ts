@@ -26,7 +26,10 @@ export interface ChapterDay<T extends TrialRecord = TrialRecord> {
   leadIn: boolean;
   /** After the chapter's last full week, while its trial waits for a pass. */
   afterLastWeek: boolean;
-  /** A Monday or Thursday after the last week, until the day of the pass. */
+  /**
+   * A Monday or Thursday after the last week, until the day of the pass. Always false for an
+   * any-day trial, whose days after the last week repeat that week.
+   */
   attemptDay: boolean;
   /** The first day of this chapter's own orders. */
   start: LocalDate;
@@ -120,7 +123,11 @@ export function getChapterDay<T extends TrialRecord>(
     weekday,
     leadIn,
     afterLastWeek,
-    attemptDay: afterLastWeek && (weekday === 1 || weekday === 4) && (!pass || date <= pass.date),
+    attemptDay:
+      afterLastWeek &&
+      !program.anyDayTrial &&
+      (weekday === 1 || weekday === 4) &&
+      (!pass || date <= pass.date),
     start,
     firstMonday,
     firstAttempt,
@@ -159,6 +166,13 @@ export function getNextAttemptFrom(firstAttempt: LocalDate, from: LocalDate): Lo
   return addDays(from, weekday === 1 ? 0 : weekday <= 4 ? 4 - weekday : 8 - weekday);
 }
 
+/** The next day the trial can be taken: any day from the first, for an any-day trial. */
 export function getNextAttempt(chapter: ChapterDay, from: LocalDate): LocalDate {
+  if (chapter.program.anyDayTrial) return from < chapter.firstAttempt ? chapter.firstAttempt : from;
   return getNextAttemptFrom(chapter.firstAttempt, from);
+}
+
+/** An any-day trial that can be taken today: its chapter's last week is over and it is not passed. */
+export function isTrialAvailable(chapter: ChapterDay): boolean {
+  return !!chapter.program.anyDayTrial && chapter.afterLastWeek && !chapter.pass;
 }

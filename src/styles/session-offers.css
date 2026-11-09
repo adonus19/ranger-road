@@ -1,4 +1,7 @@
-/* The calm choices on the Current Set screen: the shoulder swap and the skill-track step. */
+/*
+ * The calm choices on the Current Set screen: the shoulder swap, the skill-track step, and the
+ * press stance choice (which reuses the track-step row).
+ */
 .swap-offer {
   display: grid;
   gap: 0.5rem;

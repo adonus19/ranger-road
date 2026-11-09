@@ -22,6 +22,7 @@ import {
   getHearthMission,
   getDayOrders,
 } from '../../../core/program/chapter-orders';
+import { getExerciseGuide } from '../../../core/program/exercise-guide-data';
 import { getWeeklyFieldcraft } from '../../../core/program/field-manual.seed';
 import {
   chapterPrograms,
@@ -268,6 +269,14 @@ export class MissionPage {
       mission.missionType !== 'restoration'
     );
   });
+
+  /** The exercises a written order names, such as the climb's step-ups, with their guides. */
+  protected readonly exerciseGuides = computed(() =>
+    (this.definition()?.exerciseGuideIds ?? []).flatMap((id) => {
+      const guide = getExerciseGuide(id);
+      return guide ? [{ id, name: guide.name }] : [];
+    }),
+  );
 
   /** Restoration stays open on Red, and it serves as the easy mobility on a mobility day. */
   protected readonly restorationLink = computed(() => {

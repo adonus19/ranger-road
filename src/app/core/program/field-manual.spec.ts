@@ -224,7 +224,7 @@ describe('This week in Chapter II', () => {
     );
   });
 
-  it('shows the Three-Mile Trial after Week 8, then Chapter II complete after a pass', () => {
+  it('shows the Three-Mile Trial after Week 8, then Chapter III after a pass', () => {
     const trial = week('2026-12-07');
     expect(trial.stage).toBe('trial');
     expect(trial.heading).toBe('The Three-Mile Trial');
@@ -240,9 +240,15 @@ describe('This week in Chapter II', () => {
     expect(week('2026-12-07', trials).subline).toBe(
       'Chapter II · The Road · Chapter III begins Tue, Dec 8',
     );
-    const complete = week('2026-12-08', trials);
+    const third = week('2026-12-08', trials);
+    expect(third.stage).toBe('week');
+    expect(third.heading).toBe('Week 9 · Perseverance');
+
+    // The last chapter in the app shows as complete once its trial is passed.
+    const all = [...trials, { trialId: 'high-country-trial', date: '2027-01-06' }];
+    const complete = week('2027-01-11', all);
     expect(complete.stage).toBe('complete');
-    expect(complete.heading).toBe('Chapter II complete');
+    expect(complete.heading).toBe('Chapter III complete');
     expect(complete.rows).toEqual([]);
   });
 });

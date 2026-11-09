@@ -109,6 +109,31 @@ h1 {
   font-size: 0.875rem;
 }
 
+/* Guides for the exercises a written order names: quiet links, each a full touch target. */
+.guide-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guide-links a {
+  display: inline-flex;
+  min-height: var(--touch-target);
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.guide-links app-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex: none;
+}
+
 .reading-link,
 .fieldcraft-link {
   display: inline-flex;

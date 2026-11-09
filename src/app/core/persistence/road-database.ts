@@ -47,6 +47,7 @@ import {
   latestWorkoutReadiness,
   stepUpWorkoutExercise,
   swapWorkoutExercise,
+  switchWorkoutStance,
   updateWorkoutDraft,
   type RecordedWorkoutPainEvent,
   type WorkoutPainInput,
@@ -523,6 +524,30 @@ export class RoadDatabase {
       transaction.oncomplete = () => resolve(structuredClone(swapped!));
       transaction.onabort = () =>
         reject(failure ?? transaction.error ?? new Error('Unable to swap the exercise.'));
+    });
+  }
+
+  /** The prescription's other stance (Chapter III's half-kneeling press), before the first set. */
+  switchWorkoutStance(draftId: string, index: number): Promise<WorkoutDraft> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction('workoutDrafts', 'readwrite');
+      let switched: WorkoutDraft | undefined;
+      let failure: Error | undefined;
+      const request = transaction.objectStore('workoutDrafts').get(draftId);
+      request.onsuccess = () => {
+        try {
+          const stored = request.result as WorkoutDraft | undefined;
+          if (!stored) throw new Error('The active workout was not found.');
+          switched = switchWorkoutStance(stored, index);
+          transaction.objectStore('workoutDrafts').put(switched);
+        } catch (error) {
+          failure = error instanceof Error ? error : new Error('The stance could not be saved.');
+          transaction.abort();
+        }
+      };
+      transaction.oncomplete = () => resolve(structuredClone(switched!));
+      transaction.onabort = () =>
+        reject(failure ?? transaction.error ?? new Error('Unable to change the stance.'));
     });
   }
 

@@ -46,6 +46,8 @@ export interface ChapterActivityContent {
   trialPreparation?: string;
   /** Brisk intervals as written steps; an optional timer can be started from them. */
   intervals?: IntervalPlan;
+  /** Exercises the written steps name, linked to their guides (the climb's step-ups). */
+  exerciseGuideIds?: readonly string[];
   /** The main order's own name when it is offered beside alternatives. */
   choiceTitle?: string;
   alternatives?: readonly ChapterActivityAlternative[];
@@ -117,12 +119,23 @@ export interface ChapterProgram extends ChapterSeed {
   leadsIn: boolean;
   /** Dated weeks in order; the first is `chapter.weeks[0]`. */
   weeks: readonly ChapterWeekContent[];
-  /** A Monday or Thursday after the last week, while the trial waits for a pass. */
-  trialAttempt: ChapterDayContent;
+  /**
+   * A Monday or Thursday after the last week, while the trial waits for a pass. Only chapters
+   * whose trial keeps those attempt days have one; an any-day trial has none.
+   */
+  trialAttempt?: ChapterDayContent;
+  /**
+   * The trial can be taken on any day once the last week has ended (Trial Timing,
+   * CHAPTERS_AND_TRIALS.md). There are no attempt days: every later day repeats the last week.
+   */
+  anyDayTrial?: boolean;
+  /** A short line on choosing the day, such as "Pick a clear-weather day." */
+  trialDayNote?: string;
   workouts: readonly WorkoutDefinition[];
   /** Also open as needed, outside the dated order. */
   restorationId: string;
-  workoutPlan(workoutId: string, week: number): WorkoutWeekPlan;
+  /** `weekday` is the order's day, for a note that belongs to one day, such as Week 9 Wednesday's. */
+  workoutPlan(workoutId: string, week: number, weekday?: Weekday): WorkoutWeekPlan;
   /** The session the optional Forge card opens, such as Chapter I's Forge C. */
   optionalForgeId?: string;
   /**
