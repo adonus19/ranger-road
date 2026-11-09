@@ -258,6 +258,8 @@ Hebrews goes on to say "let us consider how to stir up one another to love and g
 
 Chapter III's leadership theme is decision-making. All four lessons follow one framework, Calm Decisions: Stop, Observe, Prioritize, Decide, Communicate, Reassess. Week 9 covers Stop and Observe, Week 10 Prioritize and Decide, Week 11 Communicate, and Week 12 Reassess.
 
+Reading this chapter is one 10-minute block on Wednesdays, which won't cover a whole book in four weeks. Each lesson's "From your reading" points to the part of the book worth your time that week. The "For later" books are a list for after the current book. Nothing here asks you to read them now.
+
 ### Week 9 · Perseverance: Stop before you quit
 
 - Principles: Remain stable under fatigue. Own responsibilities fully.
@@ -300,7 +302,7 @@ You can't control how the other person responds. You can choose to start.
 
 - From your reading: DeYoung separates the things God has already made plain, like how to treat people and what's right, from the choices he leaves to your wisdom. Which kind is the conversation you've been putting off?
 - For later: _Crucial Conversations_ by Kerry Patterson, Joseph Grenny, Ron McMillan and Al Switzler, on talking through high-stakes disagreements without going silent or getting angry.
-- Sunday: What did I fear would happen in the conversation I'd been avoiding, and what happened?
+- Sunday: What did I fear would happen in the conversation I'd been avoiding, and what happened? If it hasn't happened yet, what's still in the way?
 
 ### Week 11 · Humility: Say the plan out loud
 
@@ -621,7 +623,7 @@ Read the shape of the land on a map: how high the trail climbs, where it gets st
 - Also turn back if:
   - the weather turns, or you hear thunder
   - you lose the trail and can't find it again
-  - pain reaches 3 or more, or changes how you move
+  - pain reaches 4 or more, or changes how you move
   - you're running low on water
   - you're far behind your time estimate
   - anyone with you is struggling
