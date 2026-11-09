@@ -33,9 +33,9 @@ The [full program content pack](rangers-road-full-program-content/PROGRAM_INDEX.
 
 Chapter I has four complete Monday–Sunday weeks. When the chosen Day 1 is Tuesday through Sunday, the days from Day 1 through the first Sunday are a short lead-in: use Week 1's existing content for each matching weekday, then begin the full Week 1 on Monday. A Monday Day 1 begins Week 1 immediately. The lead-in adds no new progression step or trial.
 
-Every chapter's trial follows the Trial Timing rule in `CHAPTERS_AND_TRIALS.md`: it comes after the chapter's last full week, on the next week's Forge A day (Monday), then Forge B day (Thursday), and each following Monday and Thursday until it is passed. The next chapter begins only after a pass. While the Gate Trial is pending after Week 4, the non-attempt days repeat the Week 4 weekday template. Chapter I is complete once the Gate Trial is passed.
+Every chapter's trial follows the Trial Timing rule in `CHAPTERS_AND_TRIALS.md`. The Gate Trial was set on Mondays and Thursdays after Week 4. From the Three-Mile Trial on, a trial can be started on any day once the chapter's last week has ended (the Monday after is the suggestion); it replaces that day's order, and days between attempts repeat the last week. The next chapter begins only after a pass. Chapter I is complete once the Gate Trial is passed.
 
-Chapter II's Three-Mile Trial follows the same rule on the Monday after Week 8 (retries Thursday, then Mondays and Thursdays), with Week 8 Saturday as its preparation day.
+Chapter II's Three-Mile Trial has Week 8 Saturday as its preparation day. Chapter III's High Country Trial has Week 12 Saturday (an easy walk, choose the trail, check the forecast, pack).
 
 For Week 4 Forge B, the documented reduction of about 25% means completing around 15 of the standard 20 work sets. Week 8 Forge B has 28 work sets, so its 25% guide is around 21. The person chooses about seven sets to skip and records those skips; the base Forge B prescription remains available as a historical snapshot. Do not automatically add load or make the deload harder on a Yellow or pain-affected day.
 
@@ -109,7 +109,7 @@ The optional Forge is not offered in a three-Forge week.
 
 **Deload weeks.** Deload weeks (Weeks 4 and 8, the week before a trial) never take a make-up or a three-Forge week, and a Forge missed inside a deload week is dropped. The week before a deload (Weeks 3 and 7) may take make-ups and three-Forge weeks. A dropped make-up changes nothing else: the normal deload days stand. The person may add walks or light cardio of their own choosing (see Light Activity below), never required.
 
-**Trials are never moved.** Make-ups never move, replace or delay a trial attempt day.
+**Trials are never moved.** Make-ups never delay a trial. A trial started on a day that holds a moved Forge replaces it, and the moved session is dropped.
 
 **How this fits the rules.** "Never miss twice" is served by a quick return. "No punishment workouts" holds because nothing is added: a make-up replaces the missed session, and the only week with a third session is optional, reducible, and never in a deload or trial week. "Only 3 days feel like major commitments" is relaxed only in a three-Forge week, where the person may reduce every session and the Saturday walk.
 
@@ -213,7 +213,7 @@ One variant per Forge; Forge A and B never use the same one in a chapter. From C
 ### Press stance
 
 - Chapters I and II: always seated.
-- Chapter III: a transition. Seated by default; the half-kneeling one-arm press is offered.
+- Chapter III: a transition. Seated by default; the half-kneeling one-arm press is offered as "Press half-kneeling instead" on Forge B's one-arm press.
 - Chapter IV on: when today's readiness has back pain at 2 or more, the press is done seated or half-kneeling, as the person chooses. For the barbell press that means the seated barbell press with a "Reduce the load" note, or a swap to dumbbells if the person prefers. Otherwise standing is allowed.
 
 ### Curls
@@ -231,6 +231,19 @@ Hammer curl is required and light. Forge A has it in every chapter. Forge B has 
 ### Balance (Chapter V on)
 
 In Forge B's tenth slot when it is not the glute bridge: single-leg balance with harder versions (eyes closed, head turns, soft pad), the slow lateral step-down, the single-leg reach in three directions, and a light single-leg Romanian deadlift, which follows the same back-pain rule as the Elevated Light Hinge.
+
+## Chapter III — The High Country
+
+Decided 2026-11-04 and 2026-11-09; dated work is in the [High Country pack](rangers-road-full-program-content/03_THE_HIGH_COUNTRY.md).
+
+- **Names.** Forge A's squat is the Box Squat (`box-squat`) with a "slow 3-second lowering, light touch" cue; its calf work is `calf-raise`; its press is `seated-two-db-overhead-press`.
+- **Half-kneeling press.** On Forge B's one-arm press the person may choose "Press half-kneeling instead", a quiet choice like the shoulder-swap card. It is saved as its own exercise, `half-kneeling-one-arm-db-press`, with its own history. Chapter IV's back-pain press rule reuses it.
+- **Tuesday climb.** Bodyweight step-ups on the Forge box or stairs, as written steps with the optional interval timer. 5 minutes easy walking before; 5 minutes easy walking plus a finisher of slow step-downs, 2 x 6/leg, after. On a Red day the Restoration routine shows instead.
+- **Restoration.** Restoration II is reused as written. Week 9 Wednesday's "ankle mobility" means one extra round of ankle rock.
+- **Loose days.** Friday is a 25–30 minute easy road walk in Weeks 9–11. Week 12 Friday is a recovery choice: a 20-minute easy walk or Restoration. Saturdays take the pack's range and the person picks within it. Wednesday reading stays 10 minutes (_Just Do Something_).
+- **Week 12.** Both Forges get the usual guide of about 25% fewer work sets (a guide, not a save limit), with no load increases, saved as reduced. The climb is the reduced dose as written. Saturday is trial preparation.
+- **After Week 12.** Every day repeats Week 12 (reduced Forges included) with a quiet "High Country Trial available" card. The trial replaces that day's order; the circuit replaces a Forge if it falls on one.
+- **Seasonal layer.** Advent and Christmas family readings are shown on their real dates, whatever the week (see `FAITH_AND_LEADERSHIP.md`).
 
 ## Readiness Gates
 

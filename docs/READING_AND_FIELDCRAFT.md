@@ -40,6 +40,9 @@ Navigation II:
 - ridges/valleys
 - route time
 - weather
+- turnaround criteria
+
+A written field card with no pictures; a contour diagram may be added later, only once verified. Field mission on Week 11's Saturday rehearsal: predict the elevation gain and the turnaround point from the map, then check afterward. The optional daughter quest is on the same walk.
 
 ### Chapter IV
 Load management:

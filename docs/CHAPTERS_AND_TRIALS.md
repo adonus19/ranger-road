@@ -4,14 +4,20 @@
 
 A chapter's trial comes after its last full week, not inside it, so the person starts the trial rested rather than at the tired end of a week.
 
-- The trial takes the place of the next week's first strength day (Forge A, Monday). If it is not passed, the next attempt takes that week's second strength day (Forge B, Thursday), then each following Monday and Thursday until it is passed.
+**Any-day trials (decided 2026-11-09, for every trial from the Three-Mile Trial on).** Once a chapter's last week has ended, the person may start its trial on any day. The content pack's day is shown only as a suggestion.
+
+- The trial replaces that day's main order (Forge, walk or Restoration). Nothing is added on top.
+- There is no required gap between attempts. The person tries again when they feel able.
 - A trial is passed when every part is finished as written on a Green day: the full distances and rounds, the written reflections, the prayer, and the oath, without pain at 3 or more and without a changed movement. There is no time standard; the program does not race.
-- A Yellow or Red morning, a missed day, or a stopped attempt is simply not a pass that day. The next attempt day follows. Stopped attempts and their pain notes stay in history.
-- The next chapter begins only after a pass. After a Monday pass it continues that same week from Tuesday, because the trial took the place of its first strength day. After a pass on any other day it begins the following Monday, and the days in between repeat the previous chapter's final-week easy days.
-- Make-ups never move a trial attempt day, and a make-up or three-Forge week is never placed in the deload week before a trial (see Missed Forge Make-ups in `RANGERS_ROAD_PROGRAM.md`).
-- Days between attempts repeat the final week's non-strength days. Nothing new or harder is added while a trial is pending.
+- The trial's own rules apply on whichever day is picked, including pieces that need separate days (the High Country Trial's hike and circuit) and the Green check on each physical piece.
+- A Yellow or Red morning, a missed day, or a stopped attempt is simply not a pass that day. Stopped attempts and their pain notes stay in history. A trial postponed for weather is recorded as a postponement, never a failed attempt.
+- Days between attempts repeat the chapter's final week, Forges included at that week's dose. Nothing new or harder is added while a trial is pending, and no load rises.
+- The next chapter begins only after a pass. After a Monday pass it continues that same week from Tuesday, because the trial took the place of its first strength day. After a pass on any other day it begins the following Monday, and the days in between repeat the previous chapter's final week.
+- A make-up never delays a trial. When a trial is started on a day that holds a moved Forge session, the trial takes the day and the moved session is dropped (confirmed 2026-11-09).
 - Each week of retries moves every later chapter back by a week. Monthly check-ins stay anchored to Day 1.
-- Longer trials may need different attempt days (Chapter III is a mountain hike; Chapters VI, VIII, and IX are long efforts). Each later chapter's attempt days are settled when that chapter is built; the rule that the next chapter waits for a pass does not change. Chapter II's Three-Mile Trial is settled: it follows the rule above on Mondays and Thursdays, like the Gate Trial. Until Chapters III–IX are built, their content packs still list each trial on its last Saturday.
+- The Gate Trial was passed under the earlier Monday and Thursday rule and is unchanged.
+
+Content packs may still list a trial on a named day. That is a suggestion only. Each trial's page states its parts; the High Country Trial and its stand-in are below.
 
 ## Skill Parts in Trials
 
@@ -108,7 +114,7 @@ Trial: **The Three-Mile Trial**
 - leadership reflection
 - prayer for family
 
-The Three-Mile Trial follows the Trial Timing rule above, exactly as the Gate Trial does. Its first attempt is the Monday after Week 8 in place of Forge A; the retry days are that week's Thursday, then each following Monday and Thursday, and it opens only on those days. Week 8 Saturday is a 30-minute easy walk plus preparation for Monday: choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs. Psalm 121 is read on Saturday and on every attempt day. Passing means finishing every part as written on a Green day with no pain at 3 or more and no changed movement; there is no time standard. Days between attempts repeat Week 8's non-strength days. Chapter III begins only after a pass: after a Monday pass from Tuesday, otherwise the following Monday.
+The Three-Mile Trial follows the Trial Timing rule above, including the any-day rule: once Week 8 is over it can be started on any day, with the Monday after Week 8 as the suggestion. Week 8 Saturday is a 30-minute easy walk plus preparation for Monday: choose the 3-mile route, set out the 30-lb suitcase carry weight, and find three flights of stairs. Psalm 121 is read on Saturday and on every attempt day. Passing means finishing every part as written on a Green day with no pain at 3 or more and no changed movement; there is no time standard. Days between attempts repeat Week 8, Forges included at Week 8's dose. Chapter III begins only after a pass: after a Monday pass from Tuesday, otherwise the following Monday.
 
 Friday's brisk-interval walks are always written as plain steps. An optional on-screen interval timer may be offered, started only by the person and never required. Week 8 Monday (Forge A) keeps the written sets and reps with no load increases. Week 8 Thursday (Forge B) is about 25% lighter, around 21 of its 28 work sets (curl and chin-up included) chosen by the person; like Week 4, this is a guide and not a hard limit on saving.
 
@@ -148,13 +154,21 @@ Fieldcraft:
 - weather
 
 Trial: **The High Country Trial**
+- pre-start plan (direction, junctions, expected distance and elevation, turnaround point and time)
 - real mountain hike
-- navigation checks
-- short physical test
-- reflection at high point
-- optional daughter participation
+- one location estimate before checking the phone
+- 5 quiet minutes and reflection at the high point
+- circuit on a later Green day
+- skill parts, after the circuit
+- optional daughter participation (Hearth mission and daughter quest, not a trial part)
 
----
+Pack: [The High Country](rangers-road-full-program-content/03_THE_HIGH_COUNTRY.md). It follows the any-day rule above, with these settled details (2026-11-09):
+
+- **Pieces and days.** The hike and the circuit are on separate days. Each needs a Green day with no pain at 3 or more. A passed hike stays passed; the circuit may be done on any later Green day. Forty-eight hours is a target note, not enforced. The hike takes the day's order; the circuit takes a Forge if it falls on one. Week 12 Saturday is preparation: an easy walk, choose the trail, check the forecast, pack.
+- **Weather.** The hike wants a clear-weather day ("pick a clear-weather day"). The person can mark an attempt "postponed for weather". Turning back under the Navigation II turnaround criteria is also a postponement. Neither is a failed attempt. A stop for pain is a stopped attempt as usual.
+- **Winter stand-in.** Allowed any time, as the person's choice, with an optional "weather reason" field. It is one continuous walk of 1.5–2 hours. No treadmill: elevation gain comes from outdoor terrain (local gentle hills, stairs) when possible, otherwise an indoor track, and gain is recorded, not required. Navigation is on paper with a real trail map (route, junctions, distance, gain, turnaround), with location estimates at set checkpoints. The 5 quiet minutes and the reflection come at the halfway mark.
+- **Skill parts** follow Skill Parts in Trials below, after the circuit.
+- **No photo.** The trial has no photo step. Photos are not part of the app's trials.
 
 ## IV — Bearing the Load (Weeks 13–16)
 

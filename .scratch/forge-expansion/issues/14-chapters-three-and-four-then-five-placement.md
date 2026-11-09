@@ -4,7 +4,7 @@
 
 **Blocked by:** the person's planning of Chapters III and IV
 
-**Status:** needs-triage (written 2026-11-04; the person said Chapters III and IV need planning before any of this is built)
+**Status:** planning for Chapter III done 2026-11-09 (see `.scratch/chapter-three/planning.md`); Chapter IV planned after Chapter III is built
 
 **Model / effort:** to be set after planning
 

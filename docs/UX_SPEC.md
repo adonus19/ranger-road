@@ -34,6 +34,8 @@ Must show:
 
 The trial countdown points at the next Gate Trial attempt: the Monday after Week 4, then each Thursday and Monday until the trial is passed (see Trial Timing in `CHAPTERS_AND_TRIALS.md`). The band's note says when the next attempt is, or that the trial is today if the person is Green. On an attempt day, and on the day of a pass, the check-in reminder waits until the next day so its tests never land on top of the trial. Once the trial is passed, the countdown reads Done, the day's order reads Gate Trial passed, and the note names the day Chapter II begins.
 
+**Any-day trials (from the Three-Mile Trial).** Once a chapter's last week has ended, Keep's trial band says the trial can be started any day, names the suggested day, and links to the trial page. There is no attempt-day countdown and no required gap between attempts. A trial started today replaces today's main order. The check-in reminder still waits until the day after a trial day or a pass.
+
 From Chapter II's first day (the day after a Monday pass, or the Monday after any other pass), Keep shows Chapter I complete in place of the daily mission board until Chapter II's orders are in the app. Check-in and trial recovery reminders remain available. A pass saved under the older rules, before the trial window opened, starts Chapter II on the first attempt day while the remaining dated Week 4 orders continue through Sunday.
 
 ## Today's Mission
@@ -42,11 +44,17 @@ Chapter II uses the dated orders in the [Road content pack](rangers-road-full-pr
 
 Chapter I uses the dated orders in the [Muster content pack](rangers-road-full-program-content/01_THE_MUSTER.md). The lead-in uses Week 1's matching weekday orders and distinct mission IDs. Wednesday offers restoration plus the specified nonexertional skill in Week 2 (tool inspection) and Week 3 (basic knots). Weeks 1 and 4 have restoration only. Restoration requires a same-day readiness check; the two nonexertional skills do not. Weeks 1–3 Friday offers the documented easy walk or restoration; Week 4 Friday is easy mobility or rest. Until a same-day readiness check is saved, a path that needs one says so; after that, each path describes itself instead. Week 2 Saturday's fieldcraft practice shows that week's tool-inspection description. On a Red day, a walk or workout's own instructions (such as brisk intervals) are hidden and the Restoration routine is linked instead; Week 4 Friday's easy mobility links the same routine. Each choice has its own mission definition, and saved attempts keep that definition as a snapshot. A later attempt is added to history without replacing the first. A record whose old week-based ID no longer matches the day's order remains visible with its saved snapshot. Week 4 Saturday is a 30-minute easy walk, followed by preparation for Monday's attempt while the trial is pending. After Week 4, Mondays and Thursdays are Gate Trial attempts; the other days repeat Week 4's orders. An attempt is a plan: the trial uses its dedicated result flow, so Today's Mission says Gate Trial today, names the next attempt in case today doesn't go, and links to the trial. Once the trial is passed, the order reads Gate Trial passed, names Chapter II's first day, and links to the record.
 
+### Chapter III and the seasonal layer
+
+Chapter III uses the dated orders in the [High Country pack](rangers-road-full-program-content/03_THE_HIGH_COUNTRY.md), counting Weeks 9–12 from the Monday after the Three-Mile Trial pass (or from the day after a Monday pass). Mission IDs are `chapter-3-week-<n>-day-<d>-…`. After Week 12, every day repeats Week 12 and shows a quiet "High Country Trial available" card. Tuesday's climb shows written steps, the optional interval timer, and the step-down finisher; on a Red day it links Restoration. Forge B's one-arm press has the quiet "Press half-kneeling instead" choice. Week 12 Saturday is trial preparation, Friday a choice of a 20-minute easy walk or Restoration.
+
+The **seasonal layer** adds one "Advent" or "Christmas" row to Today so far and to Keep on its real dates (the four Advent Sundays, Christmas Eve, Christmas Day), whatever the chapter. The row shows the theme, the reading reference, and the family question, with a Done button undoable the same day, like the Hearth mission. Nothing counts or tallies it. It returns each year, with dates computed from Christmas Day.
+
 ## Road — Campaign
 
 Visual 9-chapter campaign map.
 
-Current build: Chapters I and II. The current chapter's four full weeks are drawn as a route, with a Today mark and the chapter's trial at the end, on its first attempt day (the Monday after the chapter's last week). Chapter I's route begins on Day 1 and shows any short lead-in; Chapter II's begins on its first Monday and labels its weeks 5–8. Before Day 1 the route shows the start date. From the first attempt on, the Today mark rests on the trial. The trial section names the first attempt before it arrives, then the next attempt, and says the next chapter waits for a pass; once the trial is passed, it names the day and when the next chapter begins, and links to the record. Chapters III–IX join the map once their content is seeded.
+Current build: Chapters I and II (Chapter III is planned for the app by 2026-11-30). The current chapter's four full weeks are drawn as a route, with a Today mark and the chapter's trial at the end, on its first attempt day (the Monday after the chapter's last week). Chapter I's route begins on Day 1 and shows any short lead-in; Chapter II's begins on its first Monday and labels its weeks 5–8. Before Day 1 the route shows the start date. From the first attempt on, the Today mark rests on the trial. The trial section names the first attempt before it arrives, then the next attempt, and says the next chapter waits for a pass; once the trial is passed, it names the day and when the next chapter begins, and links to the record. Chapters III–IX join the map once their content is seeded.
 
 An older campaign may keep a separately chosen Gate Trial target date; attempts still follow the Monday and Thursday rule.
 
@@ -222,8 +230,11 @@ Trial should feel distinct:
 - timers/data entry
 - reflection
 - completion summary
-- optional photo
 - permanent campaign history
+
+The photo step was removed 2026-11-09: photos are not part of the app's trials. Photos may stay optional elsewhere (such as the Journal), but no photo uploader is to be built for now.
+
+**Any day.** From the Three-Mile Trial on, a trial's page opens once the chapter's last week has ended, and an active trial can start on any day with a same-day Green check. The Gate Trial keeps its earlier Monday and Thursday rule. A trial with parts on separate days (the High Country Trial) shows which pieces are done and what is next, and its draft stays open between days.
 
 The Gate Trial preparation screen uses the Station composition to show the five documented parts, readiness guidance, and the full circuit. The trial opens only on an attempt day before it is passed; on other days the screen names the next attempt, or the day it was passed. On an attempt day, a same-day Green check opens the active trial, and a Yellow or Red check names the next attempt. Passing means a completed result: every part finished as written on a Green day. The active screen saves a resumable local draft through Road, Gate Circuit, Mind, Spirit, and Oath. It records actual results for each of the six circuit stations in each of three rounds, keeps exercise help and generated movement media on the circuit screen, and saves pain immediately. Stop trial asks once before it ends the attempt; stopping retains a partial attempt and its pain notes in history. A review precedes the completed result, which remains in local campaign history. If a later readiness check is Yellow or Red, or pain or a reduced response changes the attempt, the full trial waits for another Green day.
 
@@ -296,7 +307,7 @@ When a Forge session is missed, the next morning's Keep, Today's Mission and For
 
 ## The Three-Mile Trial
 
-`/road/three-mile-trial` shows the plan, today's status and recorded attempts; `/road/three-mile-trial/active` records it in five parts, saving as it goes, with the same Green check, pain notes, stop-and-keep, and review-then-save as the Gate Trial. It opens only on its attempt days (the Monday after Week 8, then Mondays and Thursdays until passed). Recording choices settled in the build, each from "finishing every part as written":
+`/road/three-mile-trial` shows the plan, today's status and recorded attempts; `/road/three-mile-trial/active` records it in five parts, saving as it goes, with the same Green check, pain notes, stop-and-keep, and review-then-save as the Gate Trial. It can be started on any day once Week 8 is over (the Monday after is the suggestion), until passed. Recording choices settled in the build, each from "finishing every part as written":
 
 - Walk: a "full 3 continuous miles" confirmation, time, effort 1–10, knee and back discomfort, recovery after 5 minutes; splits (text) and average heart rate are optional. A walk timer is offered.
 - Carry: weight (prefilled 30 lb; at least 30 lb to pass), seconds in each hand (at least 60 each), and grip, core and posture difficulty as plain words: Easy, Moderate, Hard. The Suitcase Carry's Quick Help and pictures open from this part.
@@ -304,3 +315,14 @@ When a Forge session is missed, the next morning's Keep, Today's Mission and For
 - Leadership reflection: both prompts answered. Prayer: a confirmation that Psalm 121 was read and the family prayed for.
 - Pain notes can be recorded during the walk, carry and stairs, and during any skill parts. The end of the stair test (or of the skill parts, when the trial has them) is saved as the end of physical effort, for the recovery check.
 - The recovery check works as it does for the Gate Trial: it opens 60 minutes after the stair test ends (`/road/three-mile-trial/recovery/:resultId`), and the Keep reminder, which looks across every chapter's trial, links to the right one for 12 hours. The saved check and any pain notes appear in the trial's recorded attempts.
+
+## The High Country Trial
+
+`/road/high-country-trial` shows the plan, which pieces are done, and recorded attempts; `/road/high-country-trial/active` records it, saving as it goes, with the same Green check, pain notes, stop-and-keep and review-then-save as the other trials. It can be started any day once Week 12 is over. Decided 2026-11-09.
+
+- **Pieces.** Pre-start plan (direction, junctions, expected distance and elevation, turnaround point and time); the hike (time, distance, gain if known, RPE, knee and back); one location estimate before checking the phone; 5 quiet minutes and the written reflection at the high point; the circuit; then skill parts. The hike and the circuit are on separate days. A completed hike stays done; the circuit can follow on any later Green day. A line says 48 hours is a target, not a rule.
+- **Weather.** A "Postponed for weather" button records a postponement, not a failed attempt. Turning back on the trail under the turnaround criteria is recorded the same way. A "pick a clear-weather day" note shows on the plan.
+- **Winter stand-in.** A choice on the plan, with an optional "weather reason" field. One continuous walk of 1.5–2 hours; elevation gain is recorded, not required, from outdoor terrain or an indoor track, never a treadmill. A paper trail map is used for navigation, with location estimates at set checkpoints; the quiet minutes and reflection come at the halfway mark.
+- **Skill parts** come after the circuit, with the same choices and styles as the Three-Mile Trial.
+- **Recovery check** counts from the end of physical effort (the circuit, or the last skill part).
+- **Large touch targets, plain language and mobile-first layout** as everywhere. No photo.

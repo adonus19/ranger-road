@@ -27,7 +27,7 @@
 
 ### Campaign Position (derived, never stored)
 
-Today's chapter, week, and weekday come from Day 1 and the saved trial results, so a restored copy always lands in the same place. Chapter I starts on Day 1, with a short lead-in when Day 1 is not a Monday. Each later chapter starts the day after its predecessor's trial pass if that was a Monday, otherwise the following Monday. Its first week is the Monday–Sunday week that holds that first day, so after a Monday pass the trial day counts as the new chapter's first Monday. Campaign week numbers run across chapters (Chapter II is Weeks 5–8). After a chapter's last week, its Mondays and Thursdays are trial attempts until the day of the pass, and the other days repeat the last week. A chapter whose orders are not in the app yet shows the previous chapter as complete from its first day.
+Today's chapter, week, and weekday come from Day 1 and the saved trial results, so a restored copy always lands in the same place. Chapter I starts on Day 1, with a short lead-in when Day 1 is not a Monday. Each later chapter starts the day after its predecessor's trial pass if that was a Monday, otherwise the following Monday. Its first week is the Monday–Sunday week that holds that first day, so after a Monday pass the trial day counts as the new chapter's first Monday. Campaign week numbers run across chapters (Chapter II is Weeks 5–8). After a chapter's last week, the Gate Trial's Mondays and Thursdays are attempts until its pass; from the Three-Mile Trial on, any day is an attempt day (see Any-day trials below). Days that are not a trial repeat the last week. A chapter whose orders are not in the app yet shows the previous chapter as complete from its first day.
 
 Mission IDs name the chapter and week (`chapter-2-week-5-day-3-weekly`), the chapter and trial on attempt days (`chapter-2-three-mile-trial-attempt-day-1-weekly`), or Chapter I's lead-in (`chapter-1-lead-in-day-4-weekly`). Chapter I's IDs are unchanged by the multi-chapter schedule.
 
@@ -284,7 +284,7 @@ Measurement entries are append-only; held tests are added as a new `tests` entry
   - Oath: the written personal Ranger's Oath
 - Rest or prayer may last longer than the pack's suggested 5–10 and 10–15 minutes when needed for safety. Record actual durations on new completed results.
 - reflection (for the Gate Trial, the mind reflection)
-- photoAsset?
+- photoAsset? (legacy and optional; no trial asks for a photo from 2026-11-09, and older rows read unchanged)
 - postMissionFunction? (in the person's words, not a score; omit from an immediate completion and assess 60–120 minutes after the effort as described in `NUTRITION_AND_RECOVERY.md`)
 - readinessId? (required on newly saved completed physical trials; optional only for older local rows)
 - recordedAt? (required on new results; older local rows may lack it)
@@ -311,7 +311,7 @@ The check opens 60 minutes after physical effort and suggests 60–120 minutes a
 - painEvents[] (copies of immediately appended trial-linked pain history)
 - photoAsset? (optional attachment reference carried into a completed or stopped snapshot)
 
-Only one trial draft may be active. Starting requires an attempt day (a Monday or Thursday after Week 4), no completed result for the trial yet, and the latest same-day Green readiness check. Draft autosave keeps partial observations even if readiness later turns Yellow or Red. Advancing past either physical phase and saving a completed result requires the latest same-day Green check. Pain at 3 or more, or a reduce, substitute, or end-exercise response, prevents that attempt from being recorded as a full completed Gate Trial. The person can stop and retain the partial attempt.
+Only one trial draft may be active. Starting requires an attempt day (for the Gate Trial, a Monday or Thursday after Week 4; from the Three-Mile Trial on, any day once the chapter's last week has ended), no completed result for the trial yet, and the latest same-day Green readiness check. Draft autosave keeps partial observations even if readiness later turns Yellow or Red. Advancing past either physical phase and saving a completed result requires the latest same-day Green check. Pain at 3 or more, or a reduce, substitute, or end-exercise response, prevents that attempt from being recorded as a full completed Gate Trial. The person can stop and retain the partial attempt.
 
 ### TrialAttempt
 
@@ -375,7 +375,7 @@ A completed trial result is the pass for its chapter. The next chapter's first d
 
 ## DailyCheck (database version 5)
 
-Store `dailyChecks`: `{ id: "<date>:<item>", date, item: 'hearth' | 'reading' | 'family-quest', doneAt }`. A Done tap writes the row; Undo deletes it. Included in backups; a backup made before version 5 restores with no checks.
+Store `dailyChecks`: `{ id: "<date>:<item>", date, item: 'hearth' | 'reading' | 'family-quest' (| 'seasonal', planned for the Advent and Christmas layer), doneAt }`. A Done tap writes the row; Undo deletes it. Included in backups; a backup made before version 5 restores with no checks.
 
 ## Make-up schedule and Light Activity (database version 6)
 
@@ -384,6 +384,18 @@ The make-up schedule (`core/program/makeup-schedule.ts`, applied as `ChapterDay.
 ## Saved exercise order (database version 7)
 
 Store `exerciseOrders`: `{ id: <workoutDefinitionId>, exerciseIds: string[], updatedAt }`. One row per workout (for example a Chapter II Forge A), written when the person changes the order, removed by "Use written order". It is included in backups, and a backup made before version 7 restores with none. Like the campaign row, saved orders are left out of the record counts shown before saving or restoring a copy. When a workout starts, the saved order applies only if its exercise IDs are exactly the workout's current exercise IDs; otherwise the row is ignored and the written order is used, with a one-line note. Make-ups and deload weeks use the saved order. The upgrade only adds the store and leaves every existing record unchanged.
+
+## Any-day trials and the High Country Trial (planned, decided 2026-11-09)
+
+The shape below is for the Chapter III build (session 4). Every change only adds optional fields, so the database version and older rows are unchanged unless the build finds it needs a new store.
+
+- **Any day.** For the Three-Mile Trial and later trials, `TrialDraft` start requires only that the chapter's last week has ended, no completed result for the trial, and a same-day Green check for a physical piece. The content pack's day is a `suggestedDay` in the seed, used for display only. A trial started on a day replaces that day's order; a moved Forge on that day is dropped, not rescheduled (confirmed 2026-11-09).
+- **Pieces.** A trial definition may list pieces on separate days (`pieces[]`, each with its phases). A completed piece is stored on the draft with its own `date` and `readinessId`; the draft stays the only active draft between days. A passed piece stays passed. Stopping a later piece keeps the stopped attempt in `trialAttempts` and does not undo earlier pieces. The completed `TrialResult` is dated by its last piece, and that date is the pass for deriving the next chapter's first day (the day after a Monday pass, else the following Monday).
+- **Weather.** `TrialAttempt.outcome` gains `postponed-for-weather` (also used for a turnaround under the Navigation II criteria), with optional `weatherReason?` text. It is not a stopped or failed attempt, does not appear as one in history, and removes nothing from the draft.
+- **Stand-in.** `HighCountryHikePhase.standIn?: { weatherReason?: string }`. A stand-in hike records the same fields as the hike (time, distance, RPE, knee and back) plus `elevationGain?` (recorded, never required), `terrain` (outdoor or indoor track), checkpoint location estimates, and the halfway reflection. No treadmill value exists.
+- **Hike phase fields.** Pre-start plan (direction, junctions, expected distance, expected elevation, turnaround point, turnaround time), time, distance, gain if known, RPE, knee, back, location estimate before checking the phone, and the high-point reflection. The circuit phase holds two rounds of the five stations. Skill parts follow the circuit and reuse `skillResults`.
+- **Chapter counted for a pass.** The chapter of a step pass is worked out only up to the last chapter in the app. Registering Chapter III fixes that for passes made after the Three-Mile Trial; check `stepPasses` dates against the new chapter then.
+- **Seasonal layer.** Seed content, never stored: for each year, the dates (Advent 1 to 4 on the four Sundays before December 25, Christmas Eve, Christmas Day) with theme, reference and family question. The Done mark is a `dailyChecks` row with `item: 'seasonal'` (the id is `<date>:seasonal`). Older backups restore with no such rows. Adding the item changes no store, so the database version stays at its current number.
 
 ## Forge expansion (planned)
 

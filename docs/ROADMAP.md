@@ -46,6 +46,7 @@ Build:
 - campaign summaries
 
 ## Phase 4 — Formation Content
+(Advent and Christmas family readings, a yearly seasonal layer, belong here.)
 - faith content
 - leadership lessons
 - reading assignments

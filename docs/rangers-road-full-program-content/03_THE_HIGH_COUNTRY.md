@@ -3,17 +3,19 @@
 **Theme:** Climb deliberately.  
 **Trial:** The High Country Trial.
 
+Planning decisions for this chapter were settled 2026-11-04 and 2026-11-09 (`.scratch/chapter-three/planning.md`). Text marked **(draft)** is written in the Field Manual session and needs the person's approval before it is built.
+
 # Forge A
-- Controlled Box Squat — 3 x 6
+- Controlled Box Squat (`box-squat`, with a "slow 3-second lowering, light touch" cue) — 3 x 6
 - Bench Press — 3 x 6
 - Assisted Pull-Up (pull track) — 3 x 6–8
 - Step-Up — 3 x 8/leg
-- Two-DB Overhead Press — 3 x 8
+- Two-DB Overhead Press (`seated-two-db-overhead-press`) — 3 x 8
 - Suitcase Carry — 2 x 45 sec/side
 - Two-Hand Overhead Carry — 2 x 30–45 sec (heavier)
 - Side Plank — 2 x 30–40 sec/side
 - Hammer Curl — 2 x 10 (light, required)
-- Standing Calf Raise — 2 x 12
+- Standing Calf Raise (`calf-raise`) — 2 x 12
 
 # Forge B
 - Goblet Squat — 3 x 8
@@ -28,57 +30,83 @@
 - Glute Bridge — 3 x 12
 - Chin-Up (band-assisted) — 2 x 5–8
 
-Press stance: seated by default. Half-kneeling is offered for the one-arm press. Press comes before the carries; the overhead carry is the last carry.
+Press stance: seated by default. On Forge B's one-arm press the person may choose "Press half-kneeling instead", a quiet choice like the shoulder-swap card. It is saved as its own exercise (`half-kneeling-one-arm-db-press`), with its own history. Press comes before the carries; the overhead carry is the last carry.
+
+Week 12 reduced Forges: both get the usual guide of about 25% fewer work sets (a guide, not a limit on saving), no load increases, and are saved as reduced.
 
 # Tuesday Climb Conditioning
-Week 9: 5 min easy + 6 x (1 min step-ups / 2 min easy walk).  
-Week 10: 7 x (90 sec step-ups / 2 min walk).  
-Week 11: 6 x (2 min step-ups / 2 min walk).  
-Week 12: 4 x (90 sec step-ups / 2 min easy).
+Bodyweight step-ups on the Forge box or on stairs, written as plain steps. The optional interval timer is offered, never required. Each Tuesday: 5 minutes of easy walking first; the intervals; then 5 minutes easy walking plus the finisher, slow step-downs, 2 x 6/leg. On a Red day, the Restoration routine is shown in place of the climb.
+
+Week 9: 6 x (1 min step-ups / 2 min easy walk).  
+Week 10: 7 x (90 sec step-ups / 2 min easy walk).  
+Week 11: 6 x (2 min step-ups / 2 min easy walk).  
+Week 12 (reduced): 4 x (90 sec step-ups / 2 min easy walk). The step-down finisher stays.
 
 # Week 9 — Perseverance
 Monday: Forge A. Romans 5:1–5.  
 Tuesday: Climb conditioning. James 1:2–4.  
-Wednesday: Restoration + ankle mobility. Hebrews 10:35–39.  
+Wednesday: Restoration (Restoration II) with one extra round of ankle rock. Hebrews 10:35–39.  
 Thursday: Forge B. Galatians 6:7–10.  
 Friday: 25–30 min easy road. Psalm 37:3–7.  
-Saturday: 60-min mixed-surface walk. Hebrews 12:1–3.  
+Saturday: 60-minute mixed-surface walk (the person picks the length within the range the pack gives). Hebrews 12:1–3.  
 Sunday: Psalm 27. Reflection: **Where do I tend to quit when progress becomes slow?**
+
+Hearth mission, four parts across the week (text **(draft)** in the Field Manual session):
+- Ask your spouse what feels stuck in your life together, and carry one piece of it.
+- Finish one tedious recurring household task every day this week.
+- Tell your daughter about a time you nearly quit something, and what kept you going.
+- At a meal each day, the family prays together for one thing you are still waiting for.
 
 # Week 10 — Courage
 Monday: Forge A. Joshua 1:6–9.  
 Tuesday: Climb conditioning. Psalm 56:1–4.  
 Wednesday: Restoration. 2 Timothy 1:6–7.  
 Thursday: Forge B. Psalm 27:1–5.  
-Friday: easy road. John 16:33.  
-Saturday: 60–70 min, include stairs/step-ups. Isaiah 41:8–10.  
-Sunday: Psalm 112.
+Friday: 25–30 min easy road. John 16:33.  
+Saturday: 60–70 min, include stairs/step-ups (the person picks within the range). Isaiah 41:8–10.  
+Sunday: Psalm 112. Reflection **(draft)**: written in the Field Manual session, looking back on the week's conversation.
 
-Leadership mission: have one needed conversation you have been avoiding; be clear, calm, and non-confrontational.
+Hearth mission: have one needed conversation you have been avoiding; be clear, calm, and non-confrontational.
 
 # Week 11 — Humility
 Monday: Forge A. Philippians 2:1–8.  
 Tuesday: Climb conditioning. Proverbs 11:2.  
-Wednesday: Restoration. James 4:6–10.  
+Wednesday: Restoration. James 4:6–10. Reading stays 10 minutes (_Just Do Something_).  
 Thursday: Forge B. Micah 6:8.  
-Friday: easy road. Romans 12:3–10.  
-Saturday: 60–90 min local trail rehearsal. 1 Peter 5:5–7.  
+Friday: 25–30 min easy road. Romans 12:3–10.  
+Saturday: 60–90 min local trail rehearsal (the person picks within the range). 1 Peter 5:5–7.  
 Sunday: Psalm 25. Reflection: **Where am I more concerned with being right than being useful?**
+
+Hearth mission: plan a family outing: destination, timing, weather, transportation, food and snacks, needed gear. The outing is the trial hike if the family comes, otherwise Saturday's trail rehearsal.
+
+Daughter quest: on Saturday's rehearsal, let your daughter help navigate a marked trail and own one simple navigation responsibility. Optional, like other family quests.
+
+Field mission (Navigation II): before the rehearsal, study the trail map and predict the elevation gain and where the turnaround point would be; check afterward.
 
 # Week 12 — The Climb
 Monday: reduced Forge A. Psalm 121.  
 Tuesday: reduced climb conditioning. Isaiah 40:28–31.  
 Wednesday: Restoration. Psalm 18:29–36.  
 Thursday: reduced Forge B. Habakkuk 3:17–19.  
-Friday: recovery. Hebrews 12:1–3.  
-Saturday: High Country Trial. Psalm 24.  
-Sunday: Psalm 46.
+Friday: recovery: a 20-minute easy walk or Restoration, the person's choice. Hebrews 12:1–3.  
+Saturday: trial preparation: an easy walk, choose the trail, check the forecast, pack. Psalm 24.  
+Sunday: Psalm 46. Reflection **(forward form)**: **What am I climbing toward that is actually worth reaching?** The trial asks the original, looking-back question at the high point.
+
+Hearth mission, parts across the week (text **(draft)**):
+- Tell your spouse the plan: where you are going, your turnaround point, and when you will be back.
+- Invite the family along. If your daughter comes, give her one job.
+- At a meal, the family prays for the climb and the weather.
+- After the trial, tell your spouse your answer to the high-point question.
+
+The fifth part, one unhurried phone-free family evening at Christmas, now belongs to the seasonal layer (below), not to Week 12.
 
 # Leadership Framework — Calm Decisions
 Stop -> Observe -> Prioritize -> Decide -> Communicate -> Reassess.
 
+Weekly Field Manual lessons for Weeks 9–12 **(draft)** are built on this framework and the week's Scripture, as in Chapters I and II.
+
 # Fieldcraft — Navigation II
-Learn:
+A written field card with no pictures (a contour diagram may be added later, only once verified). Learn:
 - contour lines
 - elevation gain
 - ridgelines, valleys, saddles
@@ -88,21 +116,40 @@ Learn:
 - turnaround criteria
 - weather awareness
 
-# Hearth Mission
-Plan a family outing: destination, timing, weather, transportation, food/snacks, needed gear.
+Field mission and daughter quest are on Week 11's Saturday (above).
 
-# Daughter Quest
-Let daughter help navigate a marked trail and own one simple navigation responsibility.
+# Seasonal Layer — Advent and Christmas
+A seasonal layer on the calendar, shown on Today on its real dates whatever the chapter or week, and returning each year (dates computed from Christmas Day). It is a family reading, not training. Readings are Scripture references only.
+
+- Advent 1, Hope: Isaiah 9:2–7
+- Advent 2, Peace: Isaiah 40:1–11
+- Advent 3, Joy: Luke 1:46–55
+- Advent 4, Love: Matthew 1:18–25
+- Christmas Eve: Luke 2:1–20, with one unhurried phone-free family evening
+- Christmas Day: John 1:1–14
+
+Each reading gets one short family question **(draft)**. When Advent 4 falls on December 24, both readings show.
 
 # High Country Trial
-1. Complete selected well-maintained mountain trail at steady effort.
-2. Before start, identify direction, major junctions, expected distance/elevation, and turnaround point.
-3. At least once, estimate your location before checking phone.
-4. If appropriate, within 48 hours perform 2 rounds:
+Take the trial once Week 12 is finished, on any day the person chooses (see Trial Timing in `CHAPTERS_AND_TRIALS.md`). The hike and the circuit stay on separate days. The hike needs a clear-weather day, so pick one.
+
+Parts, in order:
+1. **Pre-start plan:** direction, major junctions, expected distance and elevation, turnaround point and turnaround time.
+2. **The hike:** a real, well-maintained mountain trail at steady effort. Record time, distance, elevation gain if known, RPE, and knee and back response.
+3. **Location estimate:** at least once, estimate where you are before checking the phone.
+4. **High point:** 5 quiet minutes at the highest practical point, then the written answer to: **What have I been climbing toward that is actually worth reaching?**
+5. **The circuit** (required), on a later Green day, a target of within 48 hours but not enforced. Two rounds:
    - 10 step-ups/leg
    - 10 push-ups
    - 5 assisted pull-ups
    - 45-sec farmer carry
    - 30-sec side plank/side
-5. At highest practical point take 5 quiet minutes and answer: **What have I been climbing toward that is actually worth reaching?**
-6. Optional: attach a photo with daughter/family to trial record.
+6. **Skill parts**, after the circuit, as after the Three-Mile Trial's stairs.
+
+Each physical piece needs a Green day with no pain at 3 or more. A passed hike stays passed; the circuit may be done on any later Green day.
+
+**Weather postponement.** The person can mark an attempt "postponed for weather". It is not a failed attempt. Turning back on the trail under the Navigation II turnaround criteria is also a postponement, not a failure. Pain or a stopped piece is a stopped attempt, kept in history as for any trial.
+
+**Winter stand-in.** Allowed at any time, as the person's choice, with an optional "weather reason" note. The stand-in is one continuous walk of 1.5–2 hours. There is no treadmill: elevation gain comes from outdoor terrain (local gentle hills, stairs) when possible, otherwise an indoor track; gain is recorded, not required. Navigation is on paper with a real trail map (route, junctions, distance, gain, turnaround), with location estimates at set checkpoints. The 5 quiet minutes and the reflection come at the halfway mark. Every other part is unchanged.
+
+The pack's former optional trial photo is removed. Photos are not part of the app's trials, and no photo uploader is to be built for now.

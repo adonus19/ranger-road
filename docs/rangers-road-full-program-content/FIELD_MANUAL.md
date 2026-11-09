@@ -1,6 +1,6 @@
 # Field Manual Content
 
-**Status: Chapter I content approved 2026-09-29. Chapter II content approved 2026-10-08.** The lessons, principles, reading plan and field cards were reviewed and approved for release. The knot cards ship with written steps. Each knot's step pictures are added once they are checked against a tied knot: the square knot's were approved 2026-09-29; the bowline's and two half hitches' follow. Scripture is stored as references only.
+**Status: Chapter I content approved 2026-09-29. Chapter II content approved 2026-10-08.** The lessons, principles, reading plan and field cards were reviewed and approved for release. The knot cards ship with written steps. Each knot's step pictures are added once they are checked against a tied knot: the square knot's were approved 2026-09-29; the bowline's and two half hitches' follow. Scripture is stored as references only. **Chapter III content (lessons, Navigation II, Advent and Christmas questions) is a draft awaiting approval**, marked as such below.
 
 This file holds the Field Manual's written content: the leadership principles, the weekly leadership lessons, the reading plan and the field cards. The chapter packs keep the day-by-day orders, and this file keeps the material those orders point to.
 
@@ -252,6 +252,99 @@ Hebrews goes on to say "let us consider how to stir up one another to love and g
 - For later: _Just Do Something_ by Kevin DeYoung, on making decisions and seeking God's will without freezing. It leads into Chapter III.
 - Sunday: Where has consistent small effort begun changing me?
 
+## Chapter III leadership lessons (DRAFT, awaiting approval)
+
+> **Draft written 2026-11-09 (session 2). Not approved; do not build from it yet.**
+
+Chapter III's leadership theme is decision-making. All four lessons follow one framework, Calm Decisions: Stop, Observe, Prioritize, Decide, Communicate, Reassess. Week 9 covers Stop and Observe, Week 10 Prioritize and Decide, Week 11 Communicate, and Week 12 Reassess.
+
+### Week 9 · Perseverance: Stop before you quit
+
+- Principles: Remain stable under fatigue. Own responsibilities fully.
+- Scripture: Romans 5:1–5 (Monday), James 1:2–4 (Tuesday)
+- Hearth mission, in four parts across the week:
+  - Ask your spouse what feels stuck in your life together. Listen to the whole answer, then pick up one piece of it and carry it.
+  - Finish one tedious recurring household task every day this week.
+  - Tell your daughter about a time you nearly quit something, and what kept you going.
+  - At a meal each day, pray together as a family for one thing you're still waiting for.
+
+Chapter III climbs. The Tuesday step-ups get longer each week, the Saturday walks find hills and stairs, and the chapter ends with a hike up a real mountain trail. For four weeks the lessons follow one way of making decisions, called Calm Decisions: Stop, Observe, Prioritize, Decide, Communicate, Reassess. It works on a trail when the weather turns, and it works at home when the evening goes sideways.
+
+This week covers the first two steps. Stop means you don't act on your first impulse. Observe means you look at what's actually in front of you before you decide what it means.
+
+Most quitting skips both. Progress slows, a set feels as heavy as it did last week, and the thought shows up that this isn't working. Romans 5 describes a slower chain, where hard things build endurance, endurance builds character, and character gives hope. James says testing produces steadfastness. Neither passage says it will feel like progress while it's happening.
+
+So when you feel the pull to quit, stop and look. Are you hurt, or bored? Is the plan wrong, or only slow? Pain changes the plan, and the readiness check handles that. A slow week doesn't.
+
+The Hearth mission practices the same habit at home. When your spouse tells you what feels stuck, hear all of it before you decide what it means, then carry one piece. The daily task is the kind that's easy to drop when nobody's checking. Your daughter will hit her own slow stretch someday, and your story gives her something to remember when she does. The family prayer at meals keeps one unanswered thing in front of all of you while you wait together.
+
+- From your reading: If you've finished _The Ruthless Elimination of Hurry_, begin _Just Do Something_ by Kevin DeYoung. If not, keep going; there's no deadline. DeYoung argues that many Christians wait for a sign before they decide, when God has already given them his Word, wisdom and counsel to decide with. Notice where you've been waiting for a certainty you weren't promised.
+- For later: _Decisive_ by Chip Heath and Dan Heath, on the common traps in how people make choices and a simple process for getting around them.
+- Sunday: Where do I tend to quit when progress becomes slow?
+
+### Week 10 · Courage: Choose, then go
+
+- Principles: Repair quickly. Listen before solving.
+- Scripture: Joshua 1:6–9 (Monday), 2 Timothy 1:6–7 (Wednesday)
+- Hearth mission: Have one needed conversation you have been avoiding. Be clear, calm, and non-confrontational.
+
+Joshua takes over from Moses with a hard job ahead, and God tells him three times to be strong and courageous. The reason comes with the command: God will be with him wherever he goes. Paul reminds Timothy that God gave him power, love and self-control, and that fear doesn't come from the same place.
+
+Last week was Stop and Observe. This week adds Prioritize and Decide. Once you can see the situation, ask what matters most right now, and then choose. On a trail the order is simple: everyone's safety first, then getting home, then the summit. At home it's less tidy, but the question is the same.
+
+Courage often just looks like deciding. Most avoided conversations stay avoided because we keep observing. We wait for a better time, more information or a calmer mood, and the waiting turns into the decision.
+
+The Hearth mission is to have one of those conversations this week. Prioritize what has to be said, ideally one thing. Decide when you'll say it, and put it on a day. Then say it clearly and calmly, without turning it into a fight, and listen to the reply all the way through. If it goes badly, go back soon and repair it.
+
+You can't control how the other person responds. You can choose to start.
+
+- From your reading: DeYoung separates the things God has already made plain, like how to treat people and what's right, from the choices he leaves to your wisdom. Which kind is the conversation you've been putting off?
+- For later: _Crucial Conversations_ by Kerry Patterson, Joseph Grenny, Ron McMillan and Al Switzler, on talking through high-stakes disagreements without going silent or getting angry.
+- Sunday: What did I fear would happen in the conversation I'd been avoiding, and what happened?
+
+### Week 11 · Humility: Say the plan out loud
+
+- Principles: Reduce household friction. Teach without humiliating.
+- Scripture: Philippians 2:1–8 (Monday), 1 Peter 5:5–7 (Saturday)
+- Hearth mission: Plan a family outing: destination, timing, weather, transportation, food and snacks, and needed gear. The outing is the trial hike if the family comes, otherwise Saturday's trail rehearsal.
+- Daughter quest (optional): On Saturday's rehearsal, let your daughter help navigate a marked trail and own one simple navigation job.
+
+Communicate is the step that pride skips. Once you've thought a decision through, explaining it can feel slow, so you just act. But your family can't help with a plan they don't know about, and they can't plan around it either.
+
+Philippians 2 asks you to look to other people's interests as well as your own, and points to Jesus, who set aside what was his by right in order to serve. Peter tells the church to put on humility toward one another, and to hand their worries to God because he cares for them.
+
+The Hearth mission is a plan that needs other people. Work out the outing's destination, timing, weather, travel, food and gear, then share it early and ask what you've missed. Your spouse may know the snack situation better than you do. Your daughter may have opinions about the trail. Change the plan when they're right.
+
+On Saturday, hand your daughter one piece of the navigation, like calling the turn at a junction or watching for blazes. If she gets it wrong, let her notice, show her once, and give the job back. Trusting her with part of the decision is communication too.
+
+- From your reading: DeYoung puts weight on asking wise people before you decide. Notice who you go to for counsel, and whether your spouse is one of them.
+- For later: _The Freedom of Self-Forgetfulness_ by Timothy Keller, a very short book on humility.
+- Sunday: Where am I more concerned with being right than being useful?
+
+### Week 12 · The Climb: Look again
+
+- Principles: Keep promises. Protect family time.
+- Scripture: Psalm 121 (Monday), Isaiah 40:28–31 (Tuesday)
+- Hearth mission, in four parts across the week:
+  - Tell your spouse the plan: where you're going, your turnaround point, and when you'll be back.
+  - Invite the family along. If your daughter comes, give her one job.
+  - At a meal, pray together as a family for the climb and the weather.
+  - After the trial, tell your spouse your answer to the high-point question.
+
+Training eases off this week so you come to the High Country Trial rested. On Saturday you choose the trail, check the forecast and pack.
+
+The last step is Reassess. Once you act, the situation changes, so you look again. On the mountain this is the turnaround. You set a turnaround point and a turnaround time before you start, and on the trail you keep checking the weather, the daylight, your knees and back, and the clock. If it's time to turn back, you turn back. In the trial, a turnaround for weather or time is a postponement, not a failure, and you try again on another day.
+
+Psalm 121 is a song for travelers on their way up to Jerusalem. Their help comes from the Lord, who doesn't sleep and keeps watch over their going out and coming in. Isaiah 40 promises new strength to the weary who wait for the Lord, which fits a week of lighter training.
+
+The Hearth mission starts with a promise. Tell your spouse where you're going, where you'll turn around and when you'll be home, then keep that time, and call if the plan changes. Invite the family, and if your daughter comes, give her one real job. Pray together for the climb and the weather. When it's done, tell your spouse what you wrote at the high point.
+
+If Christmas falls this week, the seasonal readings add a family evening on Christmas Eve. Protect it.
+
+- From your reading: The book's title is its advice: once you've prayed and sought wisdom, make the choice and go. Pick one idea from it that you'll keep using after this chapter.
+- For later: _The Motive_ by Patrick Lencioni, first suggested in Week 3, a short story about the two reasons people lead: for the reward, or out of responsibility. It leads into Chapter IV.
+- Sunday: What am I climbing toward that is actually worth reaching?
+
 ## Reading plan
 
 Read one book at a time, in the 10-minute blocks the week's orders list. When you finish a book, start the next one on the list. The chapter beside each title is where the book fits best, and there's no deadline for finishing it. If a book isn't working for you, move on to the next.
@@ -463,8 +556,125 @@ Afterward, check each one. What did you get right, and what was off?
 
 On the same walk, let your daughter lead along one simple marked stretch, such as between two junctions. She watches for the blazes and says which way to go at the junction. Stay right beside her. If she misses a turn, let her notice, then show her once and let her find the next one.
 
+## Chapter III field cards (DRAFT, awaiting approval)
+
+> **Draft written 2026-11-09 (session 2). Not approved; do not build from it yet.**
+
+Written only; no pictures. A contour diagram may be added later, only once it is checked.
+
+### Navigation II
+
+Weeks 9–12: learn it across the month. Week 11: Saturday's field mission and daughter quest. Use it for the High Country Trial's pre-start plan.
+
+Read the shape of the land on a map: how high the trail climbs, where it gets steep, and how long it will take. Then decide before you start when you'll turn back. Keep your phone charged and with you as a backup.
+
+#### Contour lines
+
+- A contour line joins points at the same height. If you walked along one, you would neither climb nor drop.
+- The contour interval is the height between one line and the next. It's printed near the scale bar or in the legend, and it differs from map to map, so check it every time.
+- On most topographic maps every fifth line is thicker and labeled with its elevation. Count up or down from those.
+- Lines close together mean steep ground. Lines far apart mean gentle ground.
+- A small closed loop is a hilltop.
+- If your trail map has no contour lines, find a printed topographic map of the area or turn on the topo layer in your map app.
+
+#### Elevation gain
+
+- Elevation gain is every climb on the route added together. It's usually more than the difference between the trailhead and the high point, because most trails go up and down along the way.
+- To estimate it, count the contour lines your route crosses going uphill and multiply by the interval. Do that for each climb, then add them up. Fifteen lines at a 40-foot interval is 600 feet.
+- On an out-and-back trail, the dips on the way out become climbs on the way back. Count both directions.
+- Many trail guides and apps list the gain. Use your count to check theirs, and theirs to check yours.
+
+#### Ridges, valleys and saddles
+
+- On a ridge, the contour lines bend into U or V shapes that point downhill, away from the high ground.
+- In a valley, they bend into V shapes that point uphill. Where a stream runs through, the V points upstream.
+- A saddle is the low point on a ridge between two higher points. On the map it looks like an hourglass: two sets of closed loops with the lines pinched together between them. Trails often cross a ridge at a saddle.
+- A ridgeline has more wind and sun and no shelter from lightning. A valley holds streams and colder air, and in winter it often loses the sun early in the afternoon.
+
+#### Switchbacks
+
+- A switchback is a turn where the trail doubles back on itself to climb a steep slope at a walkable grade. A climb often has many in a row.
+- On the map, they show as a trail zigzagging across contour lines that are close together.
+- Stay on the trail through each turn. Cutting a switchback erodes the slope and damages the trail.
+- Count the turns as you climb. If the map shows eight and you've done five, you know where you are.
+
+#### Trail intersections
+
+- Before you start, list every junction on your route in order, with the trail name, number or color you'll take at each.
+- At each junction, stop. Read the sign, check the map, and say which way you're going before you go.
+- Look back at each junction before you leave it. It will look different on the way home, and one look now makes it easier to recognize later.
+- Note the time at each junction. It tells you how your pace compares with your estimate.
+- If a junction has no sign or doesn't match the map, use STOP from Navigation I.
+
+#### Hiking-time estimates
+
+- Start with your own pace on flat ground, from your logged walks, in minutes per mile.
+- Add about 30 minutes for every 1,000 feet of gain. This comes from Naismith's rule, an old hill walkers' rule of thumb that assumes about 3 miles an hour on easy ground plus an hour for every 2,000 feet of climb.
+- Add time for steep downhill, rough footing, cold, breaks, and the 5 quiet minutes at the high point. Treat the total as the least time the hike will take.
+- Example: 5 miles at 20 minutes a mile is 100 minutes. 1,200 feet of gain adds about 36 minutes. With breaks, plan for about 2½ hours.
+- Check your times at each junction. If you're well behind at the first ones, expect to stay behind for the rest of the day.
+
+#### Turnaround criteria
+
+- Before you start, set a turnaround point and a turnaround time. Turn back at whichever comes first, even if the top is close.
+- Set the time so you finish with daylight to spare. Winter days are short, and a valley or a north-facing slope loses the light early.
+- Also turn back if:
+  - the weather turns, or you hear thunder
+  - you lose the trail and can't find it again
+  - pain reaches 3 or more, or changes how you move
+  - you're running low on water
+  - you're far behind your time estimate
+  - anyone with you is struggling
+- Once you've decided to turn back, go. Don't reopen the decision on the way down.
+- In the High Country Trial, turning back for weather, daylight, time or a lost trail is a postponement, and you try again another day. Turning back for pain is a stopped attempt, kept in history like any trial. Either way, turning back was the right call.
+
+#### Weather awareness
+
+- Check the forecast the night before and again in the morning, for the trailhead and for the high point if you can. Higher ground is usually colder and windier than the parking lot.
+- Look for thunderstorms, high wind, freezing rain, snow or ice, and note when the sun sets.
+- Pick another day if the forecast shows storms or ice. Postponing for weather doesn't count as a failed attempt.
+- On the trail, watch the sky to the west. In most of the US, weather usually moves in from that direction.
+- If you hear thunder, you're close enough to be struck. Get off ridges and peaks and head down right away, without waiting for rain. Stay away from lone trees, open ground, metal fences and water. Wait 30 minutes after the last thunder before going back up.
+- Dress in layers you can add and take off. Carry a warm layer, a hat and gloves even if it's mild at the trailhead. Wind and wet clothes make you cold much faster.
+- Ice on a steep trail is a reason to turn back.
+
+#### Map north and compass north
+
+- Navigation I noted that a compass points to magnetic north, which differs from the map's north. The difference is called declination. Many maps print it near the north arrow, and NOAA's online calculator gives it for any location.
+- On a marked trail, a few degrees won't lead you astray. Declination matters when you follow a compass bearing across open ground, which this card doesn't cover.
+
+#### Field mission (Week 11 Saturday)
+
+Before the trail rehearsal, study the trail map and write down two predictions:
+
+1. The route's total elevation gain, from counting contour lines.
+2. Where your turnaround point would be, and the time you'd turn at it.
+
+Afterward, check both. Compare your gain with your phone's record or the trail guide. Would your turnaround point have left enough time and daylight? On a gentle local trail the gain may be small. Count it anyway, because the method is the same on a mountain.
+
+#### Daughter quest (Week 11 Saturday)
+
+Optional. On the same walk, give your daughter one navigation job on a marked trail and let her own it the whole way. She might call the turn at each junction, count the switchbacks, or say when she hasn't seen a blaze for a while. Stay beside her. If she misses something, let her notice, show her once, and give the job back.
+
+## Advent and Christmas family questions (DRAFT, awaiting approval)
+
+> **Draft written 2026-11-09 (session 2). Not approved; do not build from it yet.**
+
+One short question for the family after each seasonal reading. Read the passage aloud together, then ask the question.
+
+| Day | Reading | Family question |
+|---|---|---|
+| Advent 1, Hope | Isaiah 9:2–7 | The child in this reading is given four names. Which one means the most to you right now, and why? |
+| Advent 2, Peace | Isaiah 40:1–11 | God is pictured as a shepherd carrying the lambs close. When have you felt carried? |
+| Advent 3, Joy | Luke 1:46–55 | Mary lists what God has done. What has God done for our family this year that we can thank him for? |
+| Advent 4, Love | Matthew 1:18–25 | Joseph did the hard, right thing quietly. What is one quiet way we can love someone this week? |
+| Christmas Eve | Luke 2:1–20 | The shepherds hurried to see, then told everyone. If you had been there, what would you have told people first? |
+| Christmas Day | John 1:1–14 | John says the light came into the world and the darkness could not put it out. Where do we need that light in our home this year? |
+
 ## Sources checked for this content
 
 The tool checks and sharpening cautions were compared with the [US Forest Service axe inspection standards](https://www.fs.usda.gov/t-d/pubs/pdf/03511207.pdf) and [Forest Service guidance on pick and mattock handles](https://www.fs.usda.gov/t-d/pubs/pdfpubs/pdf05232810/pdf05232810dpi300.pdf). The oily-rag caution follows the [NFPA safety sheet](https://www.nfpa.org/-/media/project/storefront/catalog/files/safety-tip-sheets/oilyragssafetytips.pdf?rev=fd599a96c5614eceb612a2a7bc7e4b5c). Knot steps and uses were compared with [Scout Life's basic knot instructions](https://scoutlife.org/outdoors/176401/how-to-tie-the-7-basic-scout-knots/) and [The Scout Association's knot sheet](https://prod-cms.scouts.org.uk/media/2732/a-knotty-challenge-what-knot.pdf).
 
 The Navigation I card's lost-hiker steps and trip-plan advice follow the [US Forest Service's If You Get Lost guidance](https://www.fs.usda.gov/visit/know-before-you-go/if-you-get-lost). The blaze size, double blazes, blue side-trail blazes and the few-hundred-yards rule follow the [Appalachian Trail Conservancy's A.T. Basics](https://appalachiantrail.org/experience/hike-the-trail/at-basics/).
+
+Navigation II (draft): the index-contour convention follows the [USGS index contour description](https://www.usgs.gov/media/images/ondemand-100k-elv-index-label). The time rule follows [Naismith's rule](https://en.wikipedia.org/wiki/Naismith%27s_rule). The lightning steps (thunder means you're in range, leave ridges and peaks, avoid lone trees, open ground, fences and water, wait 30 minutes) follow the [National Weather Service lightning safety sheet](https://www.weather.gov/media/rnk/outdoors/Lightning%20Safety.pdf) and the [Washington Trails Association's lightning guidance](https://www.wta.org/hiking-info/basics/how-to/stay-safe-in-a-lightning-storm). Declination is from [NOAA's magnetic field calculator](https://www.ngdc.noaa.gov/geomag/calculators/magcalc.shtml).

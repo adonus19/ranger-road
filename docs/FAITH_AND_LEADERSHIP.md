@@ -55,6 +55,21 @@ Leadership is part of the normal training week, not a separate course:
 
 The approved lessons, the principles with their Scripture and practice, and the reading plan are in [Field Manual Content](rangers-road-full-program-content/FIELD_MANUAL.md). Later chapters get their lessons when their content is built.
 
+## Seasonal Layer: Advent and Christmas
+
+Decided 2026-11-09. A calendar layer, not part of any chapter or week: it appears on Today on its real dates, whatever the chapter, and returns every year with the dates computed from Christmas Day. It is a family reading and a question, not training, and nothing about it is scored.
+
+| Day | Theme | Reading |
+|---|---|---|
+| Advent 1 (Sunday) | Hope | Isaiah 9:2–7 |
+| Advent 2 (Sunday) | Peace | Isaiah 40:1–11 |
+| Advent 3 (Sunday) | Joy | Luke 1:46–55 |
+| Advent 4 (Sunday) | Love | Matthew 1:18–25 |
+| Christmas Eve | | Luke 2:1–20, with one unhurried phone-free family evening |
+| Christmas Day | | John 1:1–14 |
+
+Advent Sundays are the four Sundays before Christmas Day. If Advent 4 falls on December 24, both readings show. Each reading carries one short family question (drafted for approval). Scripture is kept as references, as everywhere. The Done mark works like the Hearth mission's: today only, undoable, never tallied. This layer replaces the Chapter III Week 12 Hearth part about a Christmas evening.
+
 ## Family Leadership Principles
 
 - lead yourself first
@@ -81,6 +96,8 @@ Examples:
 - teach a practical skill
 - remain present for 30 minutes when tired
 - handle logistics so others can simply enjoy the activity
+
+Chapter III's Hearth missions: Week 9 (four parts: ask what feels stuck and carry a piece, finish one tedious recurring task daily, tell your daughter about nearly quitting, the family prays for one awaited thing at a meal each day), Week 10 (one avoided conversation), Week 11 (plan a family outing), Week 12 (tell your spouse the plan and turnaround, invite the family with a job for your daughter, family prayer for the climb and weather, tell your spouse your high-point answer). The chapter's leadership lessons use the Calm Decisions framework: Stop, Observe, Prioritize, Decide, Communicate, Reassess.
 
 ## Chapter Leadership Themes
 

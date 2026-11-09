@@ -19,3 +19,45 @@ Timing: if the Three-Mile Trial passes Mon 2026-11-30, Chapter III runs Tue 2026
 11. **Navigation II:** a written field card with no pictures (a contour diagram may come later, only once verified). Field mission on Week 11's Saturday rehearsal: predict elevation gain and the turnaround point from the map, check afterward.
 12. **Drafted writing:** Field Manual leadership lessons for Weeks 9–12 on the Calm Decisions framework, and the missing Sunday reflections, are drafted for approval in a later session. Week 12's Sunday reflection is the trial's high-point question.
 13. **Trial photo:** left out. The person's decision: photos do not need to be part of the app. The pack's "optional photo" line is removed when the docs are updated.
+
+## Round 2 answers (2026-11-09)
+
+1. **Trial pass:** parts are pre-start plan (direction, junctions, expected distance and elevation, turnaround point and time), the hike (time, distance, gain if known, RPE, knee/back), one location estimate before checking the phone, 5 quiet minutes and the reflection at the high point, the circuit, then skill parts. Each piece needs a Green day with no pain at 3+. A passed hike stays passed; the circuit may be done on any later Green day (48 hours is a target note, not enforced).
+2. **Days after Week 12:** every day repeats Week 12 (reduced Forges included) with a quiet "High Country Trial available" card. The hike replaces that day's order; the circuit replaces a Forge if it falls on one. Week 12's Saturday becomes prep: easy walk, choose the trail, check the forecast, pack.
+3. **Stand-in:** the area is mostly flat with gentle hills. A winter stand-in that can be indoors, such as a track, is wanted. Details in round 3.
+4. **Week 9 Hearth:** all four parts (ask spouse what feels stuck and carry a piece; finish one tedious recurring task daily; tell daughter about nearly quitting; family prays for one awaited thing at a meal each day).
+5. **Week 12 Hearth:** (a) tell spouse the plan, turnaround and return time; (b) invite the family, daughter gets one job; (c) family prays for the climb and weather; (d) after the trial, tell spouse the high-point answer; (e) one unhurried phone-free family Christmas evening with a suggested Scripture. The person also wants Advent Scripture for the family to read together during Chapter III (round 3).
+6. **Week 12 Sunday:** forward form, "What am I climbing toward that is actually worth reaching?"; the trial asks the original at the high point.
+7. **Chapter IV:** planned in its own session after Chapter III is built.
+8. **Sessions:** the six-session split is approved (1 docs, Sonnet medium; 2 Field Manual drafts, Opus medium; 3 program, Opus high; 4 trial, Opus high; 5 Field Manual wiring, Sonnet medium; 6 walkthrough and deploy, Opus medium, by about Nov 27). Each starts fresh.
+
+**New request:** because trials are long, the person wants the option to take a chapter trial on any day they choose. The trial's own rules still apply on whichever day is picked (for Chapter III, the hike and the circuit stay on separate days). Scope in round 3.
+
+## Round 3 answers (2026-11-09)
+
+1. **Any-day trials apply to every trial from now on**, the Three-Mile Trial included (it must ship before Mon 2026-11-30).
+2. **How it works:** once the chapter's last week ends, the trial can be started on any day; the doc's day is shown only as a suggestion. The trial replaces that day's order (Forge, walk or Restoration). Days between attempts repeat the last week. The trial's own rules still apply (Green day, no pain at 3+, multi-day pieces such as the hike then the circuit). The next chapter starts the Monday after a pass; a Monday pass still continues from Tuesday. **No gap between attempts:** the person retries when they feel able.
+3. **Winter stand-in:** allowed any time, as the person's choice, with an **optional "weather reason" field**. Effort: a continuous walk of 1.5–2 hours. No treadmill: gain comes from outdoor terrain (local gentle hills, stairs) when possible, otherwise an indoor track; gain is recorded, not required. Navigation on paper with a real trail map (route, junctions, distance, gain, turnaround), with location estimates at set checkpoints. The 5 quiet minutes and the reflection come at the halfway mark.
+4. **Advent and Christmas are a seasonal layer on the calendar**, shown on Today on their real dates whatever the chapter or week. Week 12's Christmas evening (Hearth part e) moves into this layer.
+5. **Readings:** Advent 1 (Hope) Isaiah 9:2–7; Advent 2 (Peace) Isaiah 40:1–11; Advent 3 (Joy) Luke 1:46–55; Advent 4 (Love) Matthew 1:18–25; Christmas Eve Luke 2:1–20 with the phone-free family evening; Christmas Day John 1:1–14. Sundays plus Christmas Eve and Day. **Comes back each year** (dates computed from Christmas). A short family question per reading is drafted in session 2 for approval.
+6. **Sessions:** any-day trials fold into session 4; the seasonal layer is new session 4b (Opus 5.5, medium); session 1 records both in the docs; walkthrough about Nov 28.
+
+## Session plan (each starts fresh, ends with tests, build, deploy if code, and a line in the log below)
+
+| # | Deliverable | Model / effort |
+|---|---|---|
+| 1 | Docs: write every decision above into `03_THE_HIGH_COUNTRY.md`, CHAPTERS_AND_TRIALS (any-day rule for all trials, High Country parts, stand-in, weather postponement), RANGERS_ROAD_PROGRAM, UX_SPEC, DATA_MODEL, FAITH_AND_LEADERSHIP (seasonal layer); remove the trial photo line; write tickets for sessions 2–6 in `.scratch/chapter-three/issues/` | Sonnet 5.5, medium |
+| 2 | Field Manual drafts for review: Weeks 9–12 leadership lessons (Calm Decisions), Navigation II card, Week 9 and 12 Hearth text, Week 10 and 12 Sunday reflections, Advent family questions (humanizer) | Opus 5.5, medium |
+| 3 | Chapter III program: Forge A/B, dated orders, Tuesday climb (timer, step-down finisher), Week 12 reduced, box-squat cue, half-kneeling press offer, Week 12 Saturday prep (angular-developer, impeccable) | Opus 5.5, high |
+| 4 | Any-day trials (all trials, Three-Mile included) and the High Country Trial: parts, stand-in, weather postponement and reason, circuit retry, skill parts, fix for the chapter a pass counts in | Opus 5.5, high |
+| 4b | Seasonal layer: Advent and Christmas family readings on their dates, yearly | Opus 5.5, medium |
+| 5 | Field Manual wiring for Chapter III (This week, Contents, Scripture, Exercises) | Sonnet 5.5, medium |
+| 6 | Walkthrough on a production build (pinned clock, offline) and deploy, by about 2026-11-28 | Opus 5.5, medium |
+
+After session 6: plan Chapter IV in its own grilling session, then Chapter V placement (ticket 14).
+
+## Hand-off log
+
+- 2026-11-09: Planning rounds 1–3 done. Waiting on the person's confirmation of shared understanding. Next: session 1 (docs), Sonnet 5.5, medium.
+- 2026-11-09 (session 1, Sonnet 5.5): docs done. Written into `03_THE_HIGH_COUNTRY.md`, CHAPTERS_AND_TRIALS (any-day rule, High Country parts, stand-in, weather), RANGERS_ROAD_PROGRAM (Chapter III section), UX_SPEC, DATA_MODEL, FAITH_AND_LEADERSHIP (seasonal layer), READING_AND_FIELDCRAFT, ROADMAP; trial photo line removed. Tickets 02–06 and 04b are in `.scratch/chapter-three/issues/`. Open points flagged for later sessions: step-down finisher kept in Week 12; a trial on a moved-Forge day drops the moved session; the journal's own "photos optional" line was left alone. Next: session 2 (Field Manual drafts), Opus 5.5, medium.
+- 2026-11-09 (session 2, Opus 5.5): Field Manual drafts written into `FIELD_MANUAL.md`, marked DRAFT: Weeks 9–12 lessons (Calm Decisions: 9 Stop/Observe, 10 Prioritize/Decide, 11 Communicate, 12 Reassess), Week 9 and 12 Hearth text, Week 10 Sunday reflection, Week 12 forward reflection, Navigation II card with Week 11 field mission and daughter quest, Advent and Christmas family questions, Navigation II sources. No code changed. Waiting on the person's approval and answers to the open points listed in the session hand-off (declination section, pain turnaround wording, 3+ pain threshold on the trail, Christmas line in Week 12, For-later books). Next: session 3 (Chapter III program), Opus 5.5, high, once drafts are approved or edited.
