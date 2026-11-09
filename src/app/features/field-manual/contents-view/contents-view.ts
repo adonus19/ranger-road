@@ -5,6 +5,7 @@ import {
   getScriptureByWeek,
   getTrialScripture,
   orderedPrograms,
+  trialCircuitId,
   warmupId,
   type FieldManualWeek,
 } from '../../../core/program/field-manual';
@@ -210,7 +211,8 @@ function buildParts(
       note: `${guideCount} guides`,
       entries: chapterSessions.map((session) => ({
         title: session.title,
-        note: session.id === 'gate-circuit' ? program.trialName : session.when.split(',')[0],
+        note:
+          session.id === trialCircuitId(program) ? program.trialName : session.when.split(',')[0],
         link: ['/field-manual/exercises'],
         fragment: session.id,
         current:

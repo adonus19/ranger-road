@@ -1,6 +1,6 @@
 # 04: Any-day trials and the High Country Trial
 
-**Status:** ready-for-agent
+**Status:** done (2026-11-09, session 4; the Gate Trial joined the any-day rule at the person's request)
 
 **Blocked by:** 03
 
@@ -19,6 +19,6 @@
 - Confirmed 2026-11-09, build: a trial started on a day with a moved Forge drops the moved session.
 - No trial photo step.
 
-- [ ] Existing trial records, drafts, attempts and backups read unchanged
-- [ ] Tests and build pass; 390 px light and dark; offline
-- [ ] Deployed before 2026-11-30
+- [x] Existing trial records, drafts, attempts and backups read unchanged
+- [x] Tests and build pass; 390 px light and dark; offline
+- [x] Deployed before 2026-11-30

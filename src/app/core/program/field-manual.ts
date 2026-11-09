@@ -155,6 +155,15 @@ function exerciseIds(workout: WorkoutDefinition): { warmup: string[]; exercises:
 /** The Gate Trial's circuit keeps its own guides; the Three-Mile Trial has no circuit. */
 const GATE_CIRCUIT_ID = 'gate-circuit';
 
+/** A trial circuit's session ID: the Gate Circuit keeps its own, later ones are named by trial. */
+export function trialCircuitId(program: ChapterProgram): string {
+  return program.trial.id === 'gate-trial' ? GATE_CIRCUIT_ID : `${program.trial.id}-circuit`;
+}
+
+function trialCircuitTitle(program: ChapterProgram): string {
+  return program.trial.id === 'gate-trial' ? 'Gate Circuit' : `${program.trialName} circuit`;
+}
+
 function trialCircuitIds(program: ChapterProgram): string[] {
   return (
     program.trial.phases
@@ -166,7 +175,7 @@ function trialCircuitIds(program: ChapterProgram): string[] {
 /** The workout session a day's order calls for, if any. */
 function sessionIdFor(day: ChapterDay): string | undefined {
   const program = day.program;
-  if (day.attemptDay) return trialCircuitIds(program).length ? GATE_CIRCUIT_ID : undefined;
+  if (day.attemptDay) return trialCircuitIds(program).length ? trialCircuitId(program) : undefined;
   const activity = getDayContent(day).activity;
   if (activity.definitionId && program.workouts.some((w) => w.id === activity.definitionId)) {
     return activity.definitionId;
@@ -195,11 +204,12 @@ function sessionsForDays(
     const id = sessionIdFor(day.day);
     if (id) used.set(id, [...(used.get(id) ?? []), weekdayName(day)]);
   }
-  if (trialOpen && !used.has(GATE_CIRCUIT_ID) && trialCircuitIds(program).length) {
-    used.set(GATE_CIRCUIT_ID, ['the day you take the trial']);
+  const circuitId = trialCircuitId(program);
+  if (trialOpen && !used.has(circuitId) && trialCircuitIds(program).length) {
+    used.set(circuitId, ['the day you take the trial']);
   }
   const [forgeA, forgeB] = program.workouts;
-  const order = [forgeA?.id, forgeB?.id, GATE_CIRCUIT_ID, program.restorationId];
+  const order = [forgeA?.id, forgeB?.id, circuitId, program.restorationId];
   return order.flatMap((id): FieldManualSession[] => {
     const names = id ? used.get(id) : undefined;
     if (!id || !names) return [];
@@ -209,7 +219,7 @@ function sessionsForDays(
         ? { id, title: workout.title, days: joinWords(names), ...exerciseIds(workout) }
         : {
             id,
-            title: 'Gate Circuit',
+            title: trialCircuitTitle(program),
             days: joinWords(names),
             warmup: [],
             exercises: trialCircuitIds(program),
@@ -227,7 +237,7 @@ function sessionsTitle(program: ChapterProgram, sessions: readonly FieldManualSe
   if (hasA && hasB) names.push('Forge');
   else if (hasA) names.push('Forge A');
   else if (hasB) names.push('Forge B');
-  if (ids.includes(GATE_CIRCUIT_ID)) names.push('Gate Circuit');
+  if (ids.includes(trialCircuitId(program))) names.push(trialCircuitTitle(program));
   if (ids.includes(program.restorationId)) names.push('Restoration');
   return joinWords(names);
 }
@@ -575,11 +585,14 @@ export function getChapterSessions(program: ChapterProgram): SessionDetail[] {
   ];
   const circuit = program.trial.phases.find((phase) => phase.circuit)?.circuit;
   if (circuit) {
+    const gate = program.trial.id === 'gate-trial';
     sessions.push({
-      id: GATE_CIRCUIT_ID,
+      id: trialCircuitId(program),
       chapter,
-      title: 'Gate Circuit',
-      when: `The ${program.trialName}, ${circuit.rounds} controlled rounds`,
+      title: trialCircuitTitle(program),
+      when: gate
+        ? `The ${program.trialName}, ${circuit.rounds} controlled rounds`
+        : `The ${program.trialName}, ${circuit.rounds} rounds on a later Green day`,
       movements: circuit.movements.map((movement) => ({
         exerciseId: movement.exerciseId,
         dose: doseText(movement),

@@ -1,0 +1,65 @@
+/* The two pieces, as a short numbered list between the guidance and the pace note. */
+.hc-pieces {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: piece;
+}
+
+.hc-pieces li {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  column-gap: 0.75rem;
+  align-items: baseline;
+  counter-increment: piece;
+}
+
+.hc-pieces li::before {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  grid-row: span 2;
+  place-items: center;
+  border: 1px solid var(--accent-line);
+  border-radius: 50%;
+  color: var(--icon-gold);
+  content: counter(piece);
+  font-family: var(--font-display);
+  font-variant-numeric: lining-nums;
+}
+
+.hc-pieces li.is-done::before {
+  border-color: var(--action);
+  background: var(--action);
+  color: var(--on-action);
+  content: '✓';
+}
+
+.hc-pieces strong {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.hc-pieces span {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+.hc-prompt {
+  font-family: var(--font-display);
+  font-size: 1.1875rem;
+  color: var(--text) !important;
+}
+
+.hc-stations {
+  margin: 0.6rem 0 0;
+  padding-left: 1.3rem;
+  color: var(--text-secondary);
+}
+
+.hc-stations li {
+  padding: 0.15rem 0 0.15rem 0.3rem;
+}

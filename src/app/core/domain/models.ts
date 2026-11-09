@@ -366,8 +366,12 @@ export interface RoadSession {
   editedAt?: IsoTimestamp;
 }
 
-/** A Done tap for one of the day's smaller orders. Today only; undoing removes the row. */
-export type DailyCheckItem = 'hearth' | 'reading' | 'family-quest';
+/**
+ * A Done tap for one of the day's smaller orders. Today only; undoing removes the row.
+ * 'high-point-told' is Week 12's Hearth part (d): telling your spouse the high-point answer
+ * after the High Country hike (decided 2026-11-09).
+ */
+export type DailyCheckItem = 'hearth' | 'reading' | 'family-quest' | 'high-point-told';
 
 export interface DailyCheck {
   /** `${date}:${item}`, so a second tap on the same day is the same row. */
@@ -549,6 +553,20 @@ export interface TrialResult {
   recordedAt?: IsoTimestamp;
   /** One result per skill part in the snapshot, in the same order. Absent on older rows. */
   skillResults?: TrialSkillPartResult[];
+  /** A trial in pieces on separate days (the High Country Trial): each piece's day and check. */
+  pieces?: TrialPieceRecord[];
+}
+
+/**
+ * One piece of a trial taken on its own day, such as the High Country Trial's hike. Its Green
+ * check is its own; `completedAt` is set once every part of the piece is finished as written.
+ */
+export interface TrialPieceRecord {
+  pieceId: string;
+  date: LocalDate;
+  readinessId: string;
+  startedAt: IsoTimestamp;
+  completedAt?: IsoTimestamp;
 }
 
 export type RecoveryEnergy = 'low' | 'steady' | 'good';
@@ -596,12 +614,23 @@ export interface TrialDraft {
   photoAsset?: string;
   /** One slot per skill part in the snapshot; absent when the trial has none. */
   skillResults?: TrialSkillPartResult[];
+  /**
+   * A trial in pieces on separate days: finished pieces, then the open one. Absent on the
+   * trials taken in one sitting and on older rows.
+   */
+  pieces?: TrialPieceRecord[];
 }
 
-/** An immutable historical record when an in-progress trial is stopped. */
+/**
+ * An immutable historical record when an in-progress trial (or one piece of it) is stopped,
+ * or postponed. A postponement (weather, or a turnaround under the Navigation II criteria) is
+ * not a failed attempt.
+ */
 export interface TrialAttempt extends Omit<TrialDraft, 'updatedAt'> {
-  outcome: 'stopped';
+  outcome: 'stopped' | 'postponed-for-weather';
   stoppedAt: IsoTimestamp;
+  /** The optional reason given for a postponement. */
+  weatherReason?: string;
 }
 
 export interface HearthMission {

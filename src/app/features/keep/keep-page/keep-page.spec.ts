@@ -329,6 +329,41 @@ describe('KeepPage', () => {
     );
   });
 
+  it('shows Week 12’s Hearth part (d) after the hike, until marked Done on an earlier day', async () => {
+    const state = fakeState({
+      ...campaign,
+      startDate: '2026-10-05',
+      trialTargetDate: '2026-11-02',
+    });
+    const passes = [
+      { ...completedTrial, date: '2026-11-02' },
+      { ...completedTrial, id: 'three-mile-1', trialId: 'three-mile-trial', date: '2026-11-30' },
+    ];
+    state.today.set('2026-12-30');
+    const draft = {
+      trialId: 'high-country-trial',
+      pieces: [
+        { pieceId: 'hike', date: '2026-12-29', readinessId: 'g', startedAt: 'x', completedAt: 'y' },
+      ],
+    };
+    TestBed.overrideProvider(TrialHistory, {
+      useValue: {
+        forTrial: async (id: string) => passes.filter((pass) => pass.trialId === id),
+        recoveries: async () => [],
+        activeDraft: async () => draft,
+        checksFor: async () => [],
+      },
+    });
+    const element = await render(state, [], passes);
+    await vi.waitFor(() =>
+      expect(text(element, '.high-point strong')).toBe('Hearth · after the hike'),
+    );
+    expect(text(element, '.high-point__text span')).toBe(
+      'Tell your spouse your answer to the high-point question.',
+    );
+    expect(text(element, '.high-point__done')).toBe('Done');
+  });
+
   it('shows the High Country Trial as available any day after Week 12, as a quiet row', async () => {
     const state = fakeState({
       ...campaign,

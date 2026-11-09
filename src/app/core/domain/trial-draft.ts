@@ -9,9 +9,16 @@ import type {
   TrialDefinition,
   TrialDraft,
   TrialPhaseResult,
+  TrialPieceRecord,
   TrialResult,
   TrialSkillPart,
 } from './models';
+import {
+  HIGH_COUNTRY_PIECES,
+  highCountryPhaseComplete,
+  highCountryReflection,
+  validateCompletedHighCountryTrialResult,
+} from './high-country-trial';
 import { classifyReadiness } from './readiness';
 import {
   SKILL_PARTS_PHASE_ID,
@@ -31,6 +38,7 @@ import {
 } from './trial';
 import { gateTrialDefinition } from '../program/chapter-one-trial.seed';
 import { threeMileTrialDefinition } from '../program/chapter-two-trial.seed';
+import { highCountryTrialDefinition } from '../program/chapter-three-trial.seed';
 import { isLocalDate } from '../program/campaign';
 
 /** What differs between trials; drafts, pain, stopping and saving share everything else. */
@@ -42,6 +50,19 @@ export interface TrialRules {
   phaseComplete(phase: TrialPhaseResult, index: number): boolean;
   validate(result: TrialResult): SavedTrialResult;
   reflection(phases: readonly TrialPhaseResult[]): string;
+  /**
+   * Pieces taken on separate days, in order (the High Country Trial). Each needs its own Green
+   * day; pain at `painLimit` or more stops it. Without pieces the whole trial is one sitting.
+   */
+  pieces?: readonly TrialPiece[];
+}
+
+export interface TrialPiece {
+  id: string;
+  title: string;
+  firstPhase: number;
+  lastPhase: number;
+  painLimit: number;
 }
 
 const TRIAL_RULES: Record<string, TrialRules> = {
@@ -68,7 +89,49 @@ const TRIAL_RULES: Record<string, TrialRules> = {
     validate: validateCompletedThreeMileTrialResult,
     reflection: threeMileReflection,
   },
+  [highCountryTrialDefinition.id]: {
+    definition: highCountryTrialDefinition,
+    name: 'High Country Trial',
+    physicalPhases: highCountryTrialDefinition.phases.length,
+    phaseComplete: highCountryPhaseComplete,
+    validate: validateCompletedHighCountryTrialResult,
+    reflection: highCountryReflection,
+    pieces: HIGH_COUNTRY_PIECES,
+  },
 };
+
+/** The day whose Green check governs the draft now: its open (or last) piece's, else its own. */
+export function trialActiveDate(draft: Pick<TrialDraft, 'date' | 'pieces'>): LocalDate {
+  const open = draft.pieces?.find((piece) => !piece.completedAt);
+  return open?.date ?? draft.pieces?.at(-1)?.date ?? draft.date;
+}
+
+/** The piece being recorded now, with its rules, or null between pieces. */
+export function openTrialPiece(
+  draft: Pick<TrialDraft, 'trialId' | 'pieces'>,
+): { record: TrialPieceRecord; piece: TrialPiece } | null {
+  const record = draft.pieces?.find((item) => !item.completedAt);
+  const piece = record && TRIAL_RULES[draft.trialId]?.pieces?.find((p) => p.id === record.pieceId);
+  return record && piece ? { record, piece } : null;
+}
+
+/** The next piece to start, once the earlier ones are finished; null when none is waiting. */
+export function nextTrialPiece(draft: Pick<TrialDraft, 'trialId' | 'pieces'>): TrialPiece | null {
+  const pieces = TRIAL_RULES[draft.trialId]?.pieces;
+  if (!pieces || openTrialPiece(draft)) return null;
+  return pieces[(draft.pieces ?? []).length] ?? null;
+}
+
+/** Pain at or above this ends that phase's piece; 3 for a trial taken in one sitting. */
+function painLimitFor(rules: TrialRules, phaseId: string): number {
+  const index = rules.definition.phases.findIndex((phase) => phase.id === phaseId);
+  const piece = rules.pieces?.find(
+    (item) =>
+      (index >= item.firstPhase && index <= item.lastPhase) ||
+      (phaseId === SKILL_PARTS_PHASE_ID && item === rules.pieces!.at(-1)),
+  );
+  return piece?.painLimit ?? 3;
+}
 
 export function trialRulesFor(trialId: string): TrialRules {
   const rules = TRIAL_RULES[trialId];
@@ -153,6 +216,13 @@ export function createTrialDraft(
     phaseResults: definition.phases.map((phase) => ({ phaseId: phase.id })),
     painEvents: [],
     ...(skillParts.length ? { skillResults: blankSkillResults(skillParts) } : {}),
+    ...(rules.pieces
+      ? {
+          pieces: [
+            { pieceId: rules.pieces[0].id, date, readinessId: readiness!.id, startedAt: now },
+          ],
+        }
+      : {}),
   };
 }
 
@@ -199,7 +269,33 @@ export function updateTrialDraft(
   ) {
     throw new RangeError(`Move through the ${rules.name} one phase at a time.`);
   }
-  const phaseResults = normalizePartialPhases(edited.phaseResults, stored.definitionSnapshot);
+  const open = rules.pieces ? openTrialPiece(stored) : null;
+  if (rules.pieces && edited.currentPhaseIndex !== stored.currentPhaseIndex) {
+    if (
+      !open ||
+      edited.currentPhaseIndex < open.piece.firstPhase ||
+      edited.currentPhaseIndex > open.piece.lastPhase
+    ) {
+      const next = rules.pieces.find((piece) => piece.firstPhase === edited.currentPhaseIndex);
+      throw new Error(
+        next
+          ? `${next.title} opens on a later Green day.`
+          : `Move through the ${rules.name} one piece at a time.`,
+      );
+    }
+  }
+  let phaseResults = normalizePartialPhases(edited.phaseResults, stored.definitionSnapshot);
+  // A finished piece's parts stay as they were saved.
+  if (rules.pieces) {
+    const done = rules.pieces.filter((piece) =>
+      stored.pieces?.some((record) => record.pieceId === piece.id && record.completedAt),
+    );
+    phaseResults = phaseResults.map((phase, index) =>
+      done.some((piece) => index >= piece.firstPhase && index <= piece.lastPhase)
+        ? structuredClone(stored.phaseResults[index])
+        : phase,
+    );
+  }
   const skillResults = normalizeSkillResults(edited.skillResults, stored.definitionSnapshot);
   if (edited.photoAsset !== undefined && !edited.photoAsset.trim()) {
     throw new Error('An attached trial photo needs an asset reference.');
@@ -210,8 +306,8 @@ export function updateTrialDraft(
       throw new Error(`Finish this ${rules.name} phase before moving on.`);
     }
     if (stored.currentPhaseIndex < rules.physicalPhases) {
-      assertGreenReadiness(latestReadiness, stored.date, now, rules.name);
-      assertNoUnsafeTrialPain(stored.painEvents);
+      assertGreenReadiness(latestReadiness, trialActiveDate(stored), now, rules.name);
+      assertNoUnsafeTrialPain(stored.painEvents, (phaseId) => painLimitFor(rules, phaseId));
     }
     // The skill parts follow the last physical phase, so they are recorded before moving on.
     if (stored.currentPhaseIndex === rules.physicalPhases - 1) {
@@ -228,7 +324,141 @@ export function updateTrialDraft(
     /** A stale form cannot remove pain already saved in the historical store. */
     painEvents: structuredClone(stored.painEvents),
     ...(skillResults ? { skillResults } : {}),
+    ...(stored.pieces ? { pieces: structuredClone(stored.pieces) } : {}),
   };
+}
+
+/**
+ * Finish the open piece when it is not the trial's last (the High Country hike): every part of
+ * it as written, on its own Green day, with no pain at its limit. A finished piece stays done.
+ */
+export function completeTrialPiece(
+  draft: TrialDraft,
+  latestReadiness: ReadinessCheck | undefined,
+  now: IsoTimestamp = new Date().toISOString(),
+): TrialDraft {
+  const rules = trialRulesFor(draft.trialId);
+  const open = openTrialPiece(draft);
+  if (!rules.pieces || !open) throw new Error(`No ${rules.name} piece is open.`);
+  if (open.piece === rules.pieces.at(-1)) {
+    throw new Error(`Complete the ${rules.name} to finish its last piece.`);
+  }
+  assertTimestamp(now, 'Piece completion time');
+  if (Date.parse(now) < Date.parse(draft.updatedAt)) {
+    throw new Error('Piece completion time cannot precede the last saved entry.');
+  }
+  if (draft.currentPhaseIndex !== open.piece.lastPhase) {
+    throw new Error(`Finish ${open.piece.title.toLowerCase()} in order.`);
+  }
+  for (let index = open.piece.firstPhase; index <= open.piece.lastPhase; index++) {
+    if (!rules.phaseComplete(draft.phaseResults[index], index)) {
+      throw new Error(`Finish ${rules.definition.phases[index].title} first.`);
+    }
+  }
+  assertGreenReadiness(latestReadiness, open.record.date, now, rules.name);
+  assertNoUnsafeTrialPain(draft.painEvents, (phaseId) => painLimitFor(rules, phaseId));
+  return {
+    ...structuredClone(draft),
+    updatedAt: now,
+    revision: draft.revision + 1,
+    pieces: draft.pieces!.map((record) =>
+      record === open.record ? { ...record, completedAt: now } : { ...record },
+    ),
+  };
+}
+
+/** Open the next piece, on a later day than the one before it, with that day's Green check. */
+export function startTrialPiece(
+  draft: TrialDraft,
+  date: LocalDate,
+  readiness: ReadinessCheck | undefined,
+  now: IsoTimestamp = new Date().toISOString(),
+): TrialDraft {
+  const rules = trialRulesFor(draft.trialId);
+  const next = nextTrialPiece(draft);
+  if (!rules.pieces || !next) throw new Error(`No ${rules.name} piece is waiting to start.`);
+  if (!isLocalDate(date)) throw new RangeError(`Enter a valid ${rules.name} date.`);
+  assertTimestamp(now, 'Piece start time');
+  const previous = draft.pieces?.at(-1);
+  if (previous && date <= previous.date) {
+    throw new Error(
+      `${next.title} is taken on a later day than ${previous.pieceId === 'hike' ? 'the hike' : 'the last piece'}.`,
+    );
+  }
+  assertGreenReadiness(readiness, date, now, rules.name);
+  return {
+    ...structuredClone(draft),
+    updatedAt: now,
+    revision: draft.revision + 1,
+    currentPhaseIndex: next.firstPhase,
+    pieces: [
+      ...(draft.pieces ?? []).map((record) => ({ ...record })),
+      { pieceId: next.id, date, readinessId: readiness!.id, startedAt: now },
+    ],
+  };
+}
+
+/**
+ * Stop or postpone the open piece. The attempt keeps that piece's entries and pain notes. A
+ * stopped first piece ends the draft as for any trial; otherwise the draft stays open with its
+ * finished pieces. A stopped piece starts fresh next time; a postponed one keeps its entries.
+ */
+export function stopTrialPiece(
+  draft: TrialDraft,
+  outcome: TrialAttempt['outcome'],
+  weatherReason?: string,
+  now: IsoTimestamp = new Date().toISOString(),
+): { attempt: TrialAttempt; draft?: TrialDraft } {
+  const rules = trialRulesFor(draft.trialId);
+  const open = openTrialPiece(draft);
+  if (!rules.pieces || !open) throw new Error(`No ${rules.name} piece is open.`);
+  assertTimestamp(now, 'Trial stop time');
+  if (Date.parse(now) < Date.parse(draft.updatedAt)) {
+    throw new Error('Trial stop time cannot precede its last saved entry.');
+  }
+  const reason = weatherReason?.trim();
+  const finished = draft.pieces!.filter((record) => record.completedAt);
+  const inPiece = (phaseId: string) => {
+    const index = rules.definition.phases.findIndex((phase) => phase.id === phaseId);
+    return (
+      (index >= open.piece.firstPhase && index <= open.piece.lastPhase) ||
+      (phaseId === SKILL_PARTS_PHASE_ID && open.piece === rules.pieces!.at(-1))
+    );
+  };
+  const piecePain = draft.painEvents.filter((event) => inPiece(event.trialPhaseId ?? ''));
+  const ends = outcome === 'stopped' && finished.length === 0;
+  const attempt: TrialAttempt = {
+    ...stopGateTrialDraft(draft, now),
+    ...(ends ? {} : { id: `${draft.id}-${open.record.pieceId}-${draft.revision}` }),
+    date: open.record.date,
+    readinessId: open.record.readinessId,
+    painEvents: structuredClone(piecePain),
+    pieces: structuredClone(draft.pieces!),
+    outcome,
+    ...(outcome === 'postponed-for-weather' && reason ? { weatherReason: reason } : {}),
+  };
+  if (ends) return { attempt };
+  const fresh = outcome === 'stopped';
+  const last = open.piece === rules.pieces.at(-1);
+  const kept: TrialDraft = {
+    ...structuredClone(draft),
+    updatedAt: now,
+    revision: draft.revision + 1,
+    currentPhaseIndex: finished.length
+      ? rules.pieces[finished.length - 1].lastPhase
+      : open.piece.firstPhase,
+    pieces: structuredClone(finished),
+    painEvents: structuredClone(draft.painEvents.filter((event) => !piecePain.includes(event))),
+    phaseResults: draft.phaseResults.map((phase, index) =>
+      fresh && index >= open.piece.firstPhase && index <= open.piece.lastPhase
+        ? { phaseId: phase.phaseId }
+        : structuredClone(phase),
+    ),
+  };
+  if (fresh && last && draft.definitionSnapshot.skillParts?.length) {
+    kept.skillResults = blankSkillResults(draft.definitionSnapshot.skillParts);
+  }
+  return { attempt, draft: kept };
 }
 
 export function createRecordedTrialPain(
@@ -306,8 +536,15 @@ export function completeTrialDraft(
   if (Date.parse(now) < Date.parse(draft.updatedAt)) {
     throw new Error('Trial completion time cannot precede the last saved entry.');
   }
-  assertGreenReadiness(latestReadiness, draft.date, now, rules.name);
-  assertNoUnsafeTrialPain(draft.painEvents);
+  const date = trialActiveDate(draft);
+  if (rules.pieces) {
+    const open = openTrialPiece(draft);
+    if (!open || open.piece !== rules.pieces.at(-1)) {
+      throw new Error(`Finish each ${rules.name} piece on its own day first.`);
+    }
+  }
+  assertGreenReadiness(latestReadiness, date, now, rules.name);
+  assertNoUnsafeTrialPain(draft.painEvents, (phaseId) => painLimitFor(rules, phaseId));
   if (draft.currentPhaseIndex !== rules.definition.phases.length - 1) {
     throw new Error(`Complete the ${rules.name} phases in order.`);
   }
@@ -327,9 +564,16 @@ export function completeTrialDraft(
   return validateCompletedTrialResult({
     id: draft.id,
     trialId: draft.trialId,
-    date: draft.date,
+    date,
     readinessId: latestReadiness!.id,
     recordedAt: now,
+    ...(draft.pieces
+      ? {
+          pieces: draft.pieces.map((record) =>
+            record.completedAt ? { ...record } : { ...record, completedAt: now },
+          ),
+        }
+      : {}),
     definitionSnapshot: structuredClone(draft.definitionSnapshot),
     phaseResults: phases,
     ...(draft.photoAsset ? { photoAsset: draft.photoAsset } : {}),
@@ -563,8 +807,16 @@ function assertGreenReadiness(
   }
 }
 
-function assertNoUnsafeTrialPain(events: PainEvent[]): void {
-  if (events.some((event) => event.severity >= 3 || event.actionTaken !== 'continue')) {
+function assertNoUnsafeTrialPain(
+  events: PainEvent[],
+  limitFor: (phaseId: string) => number = () => 3,
+): void {
+  if (
+    events.some(
+      (event) =>
+        event.severity >= limitFor(event.trialPhaseId ?? '') || event.actionTaken !== 'continue',
+    )
+  ) {
     throw new Error(
       'This trial was reduced or pain rose. Stop it and try the full trial on a Green day.',
     );

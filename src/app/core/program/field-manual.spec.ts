@@ -346,6 +346,30 @@ describe('Chapter II reference pages', () => {
     });
   });
 
+  it('names each trial’s circuit by its trial: Gate Circuit stays, Chapter III gets its own', () => {
+    const [one, , three] = chapterPrograms;
+    expect(getChapterSessions(one).at(-1)).toMatchObject({
+      id: 'gate-circuit',
+      title: 'Gate Circuit',
+      when: 'The Gate Trial, 3 controlled rounds',
+    });
+    expect(getChapterSessions(three).at(-1)).toMatchObject({
+      id: 'high-country-trial-circuit',
+      title: 'High Country Trial circuit',
+      when: 'The High Country Trial, 2 rounds on a later Green day',
+      movements: [
+        { exerciseId: 'step-up', dose: expect.any(String) },
+        { exerciseId: 'push-up', dose: expect.any(String) },
+        { exerciseId: 'assisted-pull-up', dose: expect.any(String) },
+        { exerciseId: 'farmer-carry', dose: expect.any(String) },
+        { exerciseId: 'side-plank', dose: expect.any(String) },
+      ],
+    });
+    expect(getChapterSessions(chapterTwo).some((session) => session.id.endsWith('circuit'))).toBe(
+      false,
+    );
+  });
+
   it('indexes Chapter II’s Scripture alongside Chapter I’s', () => {
     const index = getFieldManualIndex();
     expect(index.find((entry) => entry.name === 'James 1:19–20')?.detail).toBe(

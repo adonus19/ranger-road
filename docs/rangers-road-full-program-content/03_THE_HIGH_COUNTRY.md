@@ -96,7 +96,7 @@ Hearth mission, parts across the week (text **(draft)**):
 - Tell your spouse the plan: where you are going, your turnaround point, and when you will be back.
 - Invite the family along. If your daughter comes, give her one job.
 - At a meal, the family prays for the climb and the weather.
-- After the trial, tell your spouse your answer to the high-point question.
+- After the trial, tell your spouse your answer to the high-point question. (Shown on Keep from the day the hike is finished until marked Done.)
 
 The fifth part, one unhurried phone-free family evening at Christmas, now belongs to the seasonal layer (below), not to Week 12.
 
@@ -146,7 +146,7 @@ Parts, in order:
    - 30-sec side plank/side
 6. **Skill parts**, after the circuit, as after the Three-Mile Trial's stairs.
 
-Each physical piece needs a Green day with no pain at 3 or more. A passed hike stays passed; the circuit may be done on any later Green day.
+Each physical piece needs a Green day with no pain at 3 or more. On the trail, turn back at pain 4 or more (pain at 3 is noted and the hike still counts); the circuit keeps the limit of 3. A passed hike stays passed; the circuit may be done on any later Green day.
 
 **Weather postponement.** The person can mark an attempt "postponed for weather". It is not a failed attempt. Turning back on the trail under the Navigation II turnaround criteria is also a postponement, not a failure. Pain or a stopped piece is a stopped attempt, kept in history as for any trial.
 

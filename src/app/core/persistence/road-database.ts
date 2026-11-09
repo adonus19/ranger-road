@@ -31,9 +31,13 @@ import { createRoadSession } from '../domain/road-session';
 import type { SavedTrialResult } from '../domain/trial';
 import {
   completeTrialDraft,
+  completeTrialPiece,
   createTrialDraft,
   createRecordedTrialPain,
+  startTrialPiece,
   stopTrialDraft,
+  stopTrialPiece,
+  trialActiveDate,
   trialRulesFor,
   updateTrialDraft,
   validateCompletedTrialResult,
@@ -274,6 +278,10 @@ export class RoadDatabase {
   /** Done taps for the day's smaller orders; a tap can be undone the same day. */
   async getDailyChecksForDate(date: LocalDate): Promise<DailyCheck[]> {
     return (await this.readAll<DailyCheck>('dailyChecks')).filter((check) => check.date === date);
+  }
+
+  async getDailyChecksForItem(item: DailyCheck['item']): Promise<DailyCheck[]> {
+    return (await this.readAll<DailyCheck>('dailyChecks')).filter((check) => check.item === item);
   }
 
   setDailyCheck(check: DailyCheck): Promise<void> {
@@ -664,17 +672,23 @@ export class RoadDatabase {
   }
 
   /**
-   * The days a trial was started on: the active draft's and each kept attempt's. With the
-   * passes, they are the days a trial took in place of the day's order (Trial Timing).
+   * The days a trial was started on: the active draft's and each kept attempt's, and each
+   * piece's day of a trial in pieces (passed ones included). With the passes, they are the
+   * days a trial took in place of the day's order (Trial Timing).
    */
   async getTrialDays(): Promise<{ trialId: string; date: LocalDate }[]> {
-    const [drafts, attempts] = await Promise.all([
+    const [drafts, attempts, results] = await Promise.all([
       this.readAll<TrialDraft>('trialDrafts'),
       this.readAll<TrialAttempt>('trialAttempts'),
+      this.getAllHistorical('trialResults'),
     ]);
     const days = new Map<string, { trialId: string; date: LocalDate }>();
-    for (const { trialId, date } of [...drafts, ...attempts]) {
-      days.set(`${trialId}:${date}`, { trialId, date });
+    const withPieces = results.filter((result) => result.pieces?.length);
+    for (const record of [...drafts, ...attempts, ...withPieces]) {
+      // A trial in pieces takes each piece's day as well as the day it began.
+      for (const date of [record.date, ...(record.pieces ?? []).map((piece) => piece.date)]) {
+        days.set(`${record.trialId}:${date}`, { trialId: record.trialId, date });
+      }
     }
     return [...days.values()];
   }
@@ -813,7 +827,8 @@ export class RoadDatabase {
       const saveWhenLoaded = () => {
         if (!stored || !checks || saved) return;
         try {
-          saved = updateTrialDraft(stored, edited, latestSameDayReadiness(checks, stored.date));
+          const day = trialActiveDate(stored);
+          saved = updateTrialDraft(stored, edited, latestSameDayReadiness(checks, day));
           transaction.objectStore('trialDrafts').put(saved);
         } catch (error) {
           fail(error);
@@ -822,16 +837,19 @@ export class RoadDatabase {
       const draftRequest = transaction.objectStore('trialDrafts').get(edited.id);
       draftRequest.onsuccess = () => {
         stored = draftRequest.result as TrialDraft | undefined;
-        if (!stored) fail(new Error('The active Gate Trial was not found.'));
-        else saveWhenLoaded();
-      };
-      const checksRequest = transaction
-        .objectStore('readinessChecks')
-        .index('date')
-        .getAll(edited.date);
-      checksRequest.onsuccess = () => {
-        checks = checksRequest.result as ReadinessCheck[];
-        saveWhenLoaded();
+        if (!stored) {
+          fail(new Error('The active trial was not found.'));
+          return;
+        }
+        // The open piece's day (a later piece of a trial in pieces) governs its Green check.
+        const checksRequest = transaction
+          .objectStore('readinessChecks')
+          .index('date')
+          .getAll(trialActiveDate(stored));
+        checksRequest.onsuccess = () => {
+          checks = checksRequest.result as ReadinessCheck[];
+          saveWhenLoaded();
+        };
       };
       transaction.oncomplete = () => resolve(structuredClone(saved!));
       transaction.onabort = () =>
@@ -896,6 +914,14 @@ export class RoadDatabase {
           const draft = draftRequest.result as TrialDraft | undefined;
           if (!draft) throw new Error('The active Gate Trial was not found.');
           if (outcome === 'stopped') {
+            if (draft.pieces) {
+              const stopped = stopTrialPiece(draft, 'stopped');
+              saved = stopped.attempt;
+              transaction.objectStore('trialAttempts').add(saved);
+              if (stopped.draft) transaction.objectStore('trialDrafts').put(stopped.draft);
+              else transaction.objectStore('trialDrafts').delete(draftId);
+              return;
+            }
             saved = stopTrialDraft(draft);
             transaction.objectStore('trialAttempts').add(saved);
             transaction.objectStore('trialDrafts').delete(draftId);
@@ -908,15 +934,16 @@ export class RoadDatabase {
               if (!campaign || getCampaignDay(campaign.startDate, draft.date) < 1) {
                 throw new Error('The Gate Trial cannot be completed before campaign Day 1.');
               }
+              const day = trialActiveDate(draft);
               const checksRequest = transaction
                 .objectStore('readinessChecks')
                 .index('date')
-                .getAll(draft.date);
+                .getAll(day);
               checksRequest.onsuccess = () => {
                 try {
                   saved = completeTrialDraft(
                     draft,
-                    latestSameDayReadiness(checksRequest.result as ReadinessCheck[], draft.date),
+                    latestSameDayReadiness(checksRequest.result as ReadinessCheck[], day),
                   );
                   transaction.objectStore('trialResults').add(saved);
                   transaction.objectStore('trialDrafts').delete(draftId);
@@ -935,6 +962,93 @@ export class RoadDatabase {
       transaction.oncomplete = () => resolve(structuredClone(saved!));
       transaction.onabort = () =>
         reject(failure ?? transaction.error ?? new Error('Unable to finish the Gate Trial.'));
+    });
+  }
+
+  /** Finish the open piece of a trial in pieces (the High Country hike) on its own Green day. */
+  completeTrialPiece(draftId: string): Promise<TrialDraft> {
+    return this.changeTrialPiece(draftId, (draft, checks) =>
+      completeTrialPiece(draft, latestSameDayReadiness(checks, trialActiveDate(draft))),
+    );
+  }
+
+  /** Open the next piece on `date`, a later day, with that day's latest Green check. */
+  startTrialPiece(draftId: string, date: LocalDate): Promise<TrialDraft> {
+    return this.changeTrialPiece(
+      draftId,
+      (draft, checks) => startTrialPiece(draft, date, latestSameDayReadiness(checks, date)),
+      date,
+    );
+  }
+
+  /**
+   * Postpone the open piece for weather, or for a turnaround under the Navigation II criteria.
+   * The attempt is kept, never as a failed one, and the draft stays open.
+   */
+  postponeTrialPiece(draftId: string, weatherReason?: string): Promise<TrialAttempt> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(['trialDrafts', 'trialAttempts'], 'readwrite');
+      let attempt: TrialAttempt | undefined;
+      let failure: Error | undefined;
+      const request = transaction.objectStore('trialDrafts').get(draftId);
+      request.onsuccess = () => {
+        try {
+          const draft = request.result as TrialDraft | undefined;
+          if (!draft) throw new Error('The active trial was not found.');
+          const postponed = stopTrialPiece(draft, 'postponed-for-weather', weatherReason);
+          attempt = postponed.attempt;
+          transaction.objectStore('trialAttempts').add(attempt);
+          transaction.objectStore('trialDrafts').put(postponed.draft!);
+        } catch (error) {
+          failure = error instanceof Error ? error : new Error('The trial could not be postponed.');
+          transaction.abort();
+        }
+      };
+      transaction.oncomplete = () => resolve(structuredClone(attempt!));
+      transaction.onabort = () =>
+        reject(failure ?? transaction.error ?? new Error('Unable to postpone the trial.'));
+    });
+  }
+
+  private changeTrialPiece(
+    draftId: string,
+    change: (draft: TrialDraft, checks: ReadinessCheck[]) => TrialDraft,
+    date?: LocalDate,
+  ): Promise<TrialDraft> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.database.transaction(
+        ['readinessChecks', 'trialDrafts'],
+        'readwrite',
+      );
+      let saved: TrialDraft | undefined;
+      let failure: Error | undefined;
+      const fail = (error: unknown) => {
+        failure = error instanceof Error ? error : new Error('The trial could not be saved.');
+        transaction.abort();
+      };
+      const request = transaction.objectStore('trialDrafts').get(draftId);
+      request.onsuccess = () => {
+        const draft = request.result as TrialDraft | undefined;
+        if (!draft) {
+          fail(new Error('The active trial was not found.'));
+          return;
+        }
+        const checksRequest = transaction
+          .objectStore('readinessChecks')
+          .index('date')
+          .getAll(date ?? trialActiveDate(draft));
+        checksRequest.onsuccess = () => {
+          try {
+            saved = change(draft, checksRequest.result as ReadinessCheck[]);
+            transaction.objectStore('trialDrafts').put(saved);
+          } catch (error) {
+            fail(error);
+          }
+        };
+      };
+      transaction.oncomplete = () => resolve(structuredClone(saved!));
+      transaction.onabort = () =>
+        reject(failure ?? transaction.error ?? new Error('Unable to save the trial.'));
     });
   }
 

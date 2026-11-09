@@ -1,0 +1,19 @@
+@if (status(); as current) {
+  <div class="high-point" role="group" aria-labelledby="high-point-title">
+    <app-icon class="high-point__icon" name="hearth" />
+    <span class="high-point__text">
+      <strong id="high-point-title">Hearth · after the hike</strong>
+      <span>Tell your spouse your answer to the high-point question.</span>
+    </span>
+    <button
+      type="button"
+      class="high-point__done"
+      [class.is-done]="current === 'done-today'"
+      [attr.aria-pressed]="current === 'done-today'"
+      [disabled]="saving()"
+      (click)="toggle()"
+    >
+      {{ current === 'done-today' ? 'Undo' : 'Done' }}
+    </button>
+  </div>
+}

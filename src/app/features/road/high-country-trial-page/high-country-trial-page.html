@@ -1,0 +1,264 @@
+<section class="station-scene" aria-labelledby="trial-title">
+  <picture class="station-scene__image">
+    <source srcset="images/forest-band.webp" type="image/webp" />
+    <img src="images/forest-band.png" alt="" width="1728" height="960" decoding="async" />
+  </picture>
+  <div class="station-scene__content">
+    <h1 id="trial-title">The High Country Trial</h1>
+    <p>The High Country · Chapter III</p>
+  </div>
+</section>
+
+<div class="station-page">
+  <a class="station-back" routerLink="/road">
+    <app-icon name="arrow-left" />
+    Back to Road
+  </a>
+
+  <nav class="station-progress" aria-label="High Country Trial parts">
+    <ol>
+      @for (phase of trial.phases; track phase.id; let index = $index) {
+        <li>
+          <a [href]="'#' + phase.id" [attr.aria-label]="'Part ' + (index + 1) + ': ' + phase.title">
+            <span class="visually-hidden">{{ phase.title }}</span>
+          </a>
+        </li>
+      }
+    </ol>
+  </nav>
+
+  <section class="station-walk" id="pieces" aria-labelledby="pieces-title">
+    <h2 id="pieces-title">Two days, two pieces</h2>
+    <p class="station-walk__guidance" [attr.role]="state.error() ? 'alert' : 'status'">
+      {{ guidance() }}
+    </p>
+    <ol class="hc-pieces">
+      <li [class.is-done]="!!hikeDoneOn()">
+        <strong>The hike</strong>
+        <span>
+          @if (hikeDoneOn(); as day) {
+            Done {{ shortDate(day) }}
+          } @else {
+            Plan, hike, location estimate, and 5 quiet minutes at the high point
+          }
+        </span>
+      </li>
+      <li>
+        <strong>The circuit</strong>
+        <span>
+          On a later Green day, then
+          {{
+            skillParts().length === 1
+              ? 'a skill part'
+              : skillParts().length
+                ? 'skill parts'
+                : 'you’re done'
+          }}
+        </span>
+      </li>
+    </ol>
+    <p class="station-walk__pace">
+      Pick a clear-weather day for the hike. A finished hike stays finished. The circuit follows on
+      any later Green day; within 48 hours is the target, not a rule.
+    </p>
+  </section>
+
+  <div class="station-parts">
+    @for (phase of trial.phases.slice(0, 4); track phase.id) {
+      <section [id]="phase.id" [attr.aria-labelledby]="phase.id + '-title'">
+        <h2 [id]="phase.id + '-title'">{{ phase.title }}</h2>
+        @for (instruction of phase.instructions ?? []; track instruction) {
+          <p>{{ instruction }}</p>
+        }
+        @for (prompt of phase.reflectionPrompts ?? []; track prompt) {
+          <p class="hc-prompt">{{ prompt }}</p>
+        }
+        @if (phase.id === 'hike') {
+          <p>
+            Record your time, distance, elevation gain if you know it, effort (RPE), and how your
+            knees and back responded.
+          </p>
+          <p>Turn back if pain reaches 4 or more, or changes how you move.</p>
+        }
+      </section>
+    }
+
+    <section id="stand-in" aria-labelledby="stand-in-title">
+      <h2 id="stand-in-title">Winter stand-in</h2>
+      <p>
+        You can choose the stand-in on any day, with an optional weather reason. It is one
+        continuous walk of 1.5 to 2 hours. No treadmill: take gain from local hills or stairs
+        outdoors when you can, otherwise an indoor track. Gain is recorded, not required.
+      </p>
+      <p>
+        Navigate on paper with a real trail map: route, junctions, distance, gain and turnaround.
+        Estimate your location at set checkpoints. The 5 quiet minutes and the reflection come at
+        the halfway mark.
+      </p>
+    </section>
+
+    <section id="weather" aria-labelledby="weather-title">
+      <h2 id="weather-title">Weather and turning back</h2>
+      <p>
+        If the weather turns, or you turn back for daylight, time, a lost trail or another
+        turnaround reason, mark the hike “Postponed”. A postponement is not a failed attempt; try
+        again another day. Turning back for pain ends that attempt, kept in your history like any
+        trial.
+      </p>
+    </section>
+
+    <section [id]="circuit.id" aria-labelledby="circuit-title">
+      <h2 id="circuit-title">{{ circuit.title }}</h2>
+      <p>On a later Green day, two rounds:</p>
+      <ul class="hc-stations">
+        @for (movement of circuit.circuit?.movements ?? []; track movement.exerciseId) {
+          <li>
+            {{ exerciseName(movement.exerciseId) }} ·
+            @if (movement.reps) {
+              {{ movement.reps }}{{ movement.perSide ? ' per side' : '' }}
+            } @else {
+              {{ movement.durationSeconds }} seconds{{ movement.perSide ? ' per side' : '' }}
+            }
+          </li>
+        }
+      </ul>
+      <p>
+        If the circuit doesn’t go, your hike stays done. Try the circuit again on another Green day.
+      </p>
+    </section>
+
+    @if (skillParts().length) {
+      <section id="skill-parts" aria-labelledby="skill-parts-title">
+        <h2 id="skill-parts-title">
+          {{ skillParts().length === 1 ? 'Skill part' : 'Skill parts' }}
+        </h2>
+        <p>
+          After the circuit. You passed
+          @for (
+            part of skillParts();
+            track part.stepExerciseId;
+            let last = $last;
+            let first = $first
+          ) {
+            {{ first ? '' : last ? ' and ' : ', ' }}{{ exerciseName(part.stepExerciseId) }}
+          }
+          in your Forge this chapter, so the trial asks you to show
+          {{ skillParts().length === 1 ? 'it' : 'each one' }}, or the step just below.
+        </p>
+      </section>
+    }
+    <p>
+      Passing means finishing every part as written, each physical piece on a Green day, with no
+      changed movement, no pain at 4 or more on the trail, and no pain at 3 or more in the circuit.
+    </p>
+  </div>
+
+  @if (!historyLoading() && completedResults().length) {
+    <app-chapter-summary class="station-summary" [chapter]="3" />
+  }
+
+  @if (historyError()) {
+    <p class="station-history__error" role="alert">
+      Trial history could not open from local storage.
+      <button type="button" (click)="retry()">Try again</button>
+    </p>
+  } @else if (!historyLoading() && (completedResults().length || attempts().length)) {
+    <section class="station-history" aria-labelledby="station-history-title">
+      <h2 id="station-history-title">Recorded attempts</h2>
+      @for (result of completedResults(); track result.id) {
+        <details class="station-history__entry">
+          <summary>
+            <span>Completed · {{ shortDate(result.date) }}</span>
+            <span>View record</span>
+          </summary>
+          <div class="station-history__detail">
+            <h3>
+              {{ standIn(result.phaseResults) ? 'Winter stand-in' : 'Hike' }} ·
+              {{ pieceDate(result, 'hike') }}
+            </h3>
+            <p>
+              {{ metric(result.phaseResults[1], 'distanceMiles') }} miles ·
+              {{ metric(result.phaseResults[1], 'durationMinutes') }} min · RPE
+              {{ metric(result.phaseResults[1], 'rpe') }}
+              @if (result.phaseResults[1]?.metrics?.['elevationGainFeet'] !== undefined) {
+                · {{ metric(result.phaseResults[1], 'elevationGainFeet') }} ft gain
+              }
+            </p>
+            <p>Knee: {{ response(result.phaseResults[1], 'knee') }}</p>
+            <p>Back: {{ response(result.phaseResults[1], 'back') }}</p>
+            <p>Location estimate: {{ response(result.phaseResults[2], 'estimate-1') }}</p>
+            <h3>High point</h3>
+            <p>{{ response(result.phaseResults[3], 'reflection') }}</p>
+            <h3>Circuit · {{ pieceDate(result, 'circuit') }}</h3>
+            <p>Two rounds as written</p>
+            @for (part of result.definitionSnapshot?.skillParts ?? []; track part.stepExerciseId) {
+              <h3>{{ exerciseName(part.stepExerciseId) }}</h3>
+              <p>{{ outcomeWords(result.skillResults?.[$index]) }}</p>
+            }
+            @if (recoveries()[result.id]; as recovery) {
+              <h3>After the effort</h3>
+              <p>Checked {{ minutes(recovery.minutesAfter) }} after physical work.</p>
+              <dl class="station-history__recovery">
+                @for (area of recoveryAreas; track area.key) {
+                  <div>
+                    <dt>{{ area.label }}</dt>
+                    <dd>{{ recoveryWord(area.key, recovery[area.key]) }}</dd>
+                  </div>
+                }
+              </dl>
+              @if (recovery.note) {
+                <p>{{ recovery.note }}</p>
+              }
+            } @else if (recoveryOpensAt(result)) {
+              <a
+                class="station-history__recovery-link"
+                [routerLink]="['/road/high-country-trial/recovery', result.id]"
+                >Open recovery check</a
+              >
+            }
+          </div>
+        </details>
+      }
+      @for (attempt of postponedAttempts(); track attempt.id) {
+        <details class="station-history__entry">
+          <summary>
+            <span>Postponed · {{ shortDate(attempt.date) }}</span>
+            <span>View record</span>
+          </summary>
+          <div class="station-history__detail">
+            <p>Postponed {{ attemptPiece(attempt) }}. Not a failed attempt.</p>
+            @if (attempt.weatherReason) {
+              <p>Reason: {{ attempt.weatherReason }}</p>
+            }
+          </div>
+        </details>
+      }
+      @for (attempt of stoppedAttempts(); track attempt.id) {
+        <details class="station-history__entry">
+          <summary>
+            <span>Stopped · {{ shortDate(attempt.date) }}</span>
+            <span>View record</span>
+          </summary>
+          <div class="station-history__detail">
+            <p>Stopped during {{ attemptPiece(attempt) }}. This attempt did not count as a pass.</p>
+            @for (pain of attempt.painEvents; track pain.id) {
+              <p>Pain: {{ pain.bodyArea }} · {{ pain.severity }}/10 · {{ pain.actionTaken }}</p>
+            }
+          </div>
+        </details>
+      }
+    </section>
+  }
+</div>
+
+<div class="station-dock">
+  @if (state.loading() || historyLoading()) {
+    <span class="station-dock__waiting" role="status">Opening campaign…</span>
+  } @else if (state.error() || historyError()) {
+    <button type="button" (click)="retry()">Try again</button>
+  } @else if (waitingMessage(); as message) {
+    <span class="station-dock__waiting" role="status">{{ message }}</span>
+  } @else {
+    <a [routerLink]="actionLink()">{{ actionLabel() }}</a>
+  }
+</div>

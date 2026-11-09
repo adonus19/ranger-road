@@ -1,0 +1,104 @@
+.hc-note {
+  display: block;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.hc-estimate {
+  padding: 0.25rem 0 0.75rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+/* One round of the circuit: each station is a large tap target marked done as written. */
+.hc-round {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.hc-round legend {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+}
+
+.hc-round[aria-invalid='true'] legend {
+  color: var(--focus);
+}
+
+.hc-round__done {
+  color: var(--text-label);
+  font-family: var(--font-body, inherit);
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hc-station {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.hc-station__toggle {
+  display: flex;
+  width: 100%;
+  min-height: 3.5rem;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.5rem 0.25rem;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.hc-station__toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.hc-station__mark {
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: none;
+  place-items: center;
+  border: 1.5px solid var(--accent-line);
+  border-radius: 50%;
+}
+
+.hc-station__toggle.is-done .hc-station__mark {
+  border-color: var(--action);
+  background: var(--action);
+}
+
+.hc-station__toggle.is-done .hc-station__mark::after {
+  width: 0.45rem;
+  height: 0.8rem;
+  margin-top: -0.15rem;
+  border: solid var(--on-action);
+  border-width: 0 2px 2px 0;
+  content: '';
+  transform: rotate(45deg);
+}
+
+.hc-station__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.hc-station__text strong {
+  font-weight: 600;
+}
+
+.hc-station__text span {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.hc-station__help {
+  margin: 0 0 0.5rem 2.625rem;
+}

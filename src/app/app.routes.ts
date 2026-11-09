@@ -81,6 +81,33 @@ export const routes: Routes = [
     data: { headerOverScene: true },
   },
   {
+    path: 'road/high-country-trial/recovery/:resultId',
+    loadComponent: () =>
+      import('./features/road/gate-trial-recovery-page/gate-trial-recovery-page').then(
+        (m) => m.GateTrialRecoveryPage,
+      ),
+    data: { trialId: 'high-country-trial', headerOverScene: true },
+    title: 'Recovery Check | The Ranger’s Road',
+  },
+  {
+    path: 'road/high-country-trial/active',
+    loadComponent: () =>
+      import('./features/road/high-country-trial-active-page/high-country-trial-active-page').then(
+        (m) => m.HighCountryTrialActivePage,
+      ),
+    title: 'Record the High Country Trial | The Ranger’s Road',
+    data: { headerOverScene: true },
+  },
+  {
+    path: 'road/high-country-trial',
+    loadComponent: () =>
+      import('./features/road/high-country-trial-page/high-country-trial-page').then(
+        (m) => m.HighCountryTrialPage,
+      ),
+    title: 'The High Country Trial | The Ranger’s Road',
+    data: { headerOverScene: true },
+  },
+  {
     path: 'road/log',
     loadComponent: () =>
       import('./features/road/road-log-page/road-log-page').then((m) => m.RoadLogPage),

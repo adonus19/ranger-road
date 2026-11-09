@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import type {
+  DailyCheck,
   LocalDate,
   PostMissionFunction,
   TrialAttempt,
@@ -80,6 +81,46 @@ export class TrialHistory {
       return outcome === 'completed'
         ? await database.finishTrialDraft(draftId, 'completed')
         : await database.finishTrialDraft(draftId, 'stopped');
+    } finally {
+      database.close();
+    }
+  }
+
+  /** Finish the open piece of a trial in pieces, such as the High Country hike. */
+  async completePiece(draftId: string): Promise<TrialDraft> {
+    const database = await RoadDatabase.open();
+    try {
+      return await database.completeTrialPiece(draftId);
+    } finally {
+      database.close();
+    }
+  }
+
+  /** Open the next piece today (a later day than the one before). */
+  async startPiece(draftId: string, date: LocalDate): Promise<TrialDraft> {
+    const database = await RoadDatabase.open();
+    try {
+      return await database.startTrialPiece(draftId, date);
+    } finally {
+      database.close();
+    }
+  }
+
+  /** Postpone the open piece for weather or a turnaround; never a failed attempt. */
+  async postponePiece(draftId: string, weatherReason?: string): Promise<TrialAttempt> {
+    const database = await RoadDatabase.open();
+    try {
+      return await database.postponeTrialPiece(draftId, weatherReason);
+    } finally {
+      database.close();
+    }
+  }
+
+  /** Every Done tap for one item, on any day. */
+  async checksFor(item: DailyCheck['item']): Promise<DailyCheck[]> {
+    const database = await RoadDatabase.open();
+    try {
+      return await database.getDailyChecksForItem(item);
     } finally {
       database.close();
     }

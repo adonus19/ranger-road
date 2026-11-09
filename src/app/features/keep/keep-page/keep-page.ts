@@ -26,6 +26,7 @@ import { GateTrialRecoveryReminder } from '../gate-trial-recovery-reminder/gate-
 import { OptionalForgeCard } from '../../forge/optional-forge-card/optional-forge-card';
 import { KeepBand } from '../keep-band/keep-band';
 import { StartDay } from '../start-day/start-day';
+import { HighPointReminder } from '../high-point-reminder/high-point-reminder';
 import { TrialAvailableCard } from '../trial-available-card/trial-available-card';
 
 const WATCH_ICONS: Readonly<Record<string, IconName>> = {
@@ -63,6 +64,7 @@ const READINESS_COPY: Readonly<Record<ReadinessStatus | 'pending', ReadinessCopy
     CheckInReminder,
     DoneMark,
     GateTrialRecoveryReminder,
+    HighPointReminder,
     Icon,
     KeepBand,
     OptionalForgeCard,
@@ -112,6 +114,12 @@ export class KeepPage implements OnInit {
       ? this.schedule.dayFor(campaign.startDate, today, today, this.completedTrials())
       : null;
   });
+
+  /** Chapter III is today's chapter: Week 12's Hearth part (d) may follow the hike. */
+  protected readonly highCountryChapter = computed(
+    () =>
+      !this.chapterComplete() && this.position()?.chapter.program.trial.id === 'high-country-trial',
+  );
 
   /** An any-day trial waiting after its chapter's last week: the quiet "available" row. */
   protected readonly trialAvailable = computed(() => {

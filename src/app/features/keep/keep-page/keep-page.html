@@ -162,6 +162,10 @@
       </section>
     }
 
+    @if (highCountryChapter()) {
+      <app-high-point-reminder />
+    }
+
     @if (!trialDay()) {
       <div class="check-in-reminder">
         <app-check-in-reminder />

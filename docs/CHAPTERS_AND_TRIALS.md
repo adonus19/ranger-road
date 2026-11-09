@@ -164,11 +164,12 @@ Trial: **The High Country Trial**
 
 Pack: [The High Country](rangers-road-full-program-content/03_THE_HIGH_COUNTRY.md). It follows the any-day rule above, with these settled details (2026-11-09):
 
-- **Pieces and days.** The hike and the circuit are on separate days. Each needs a Green day with no pain at 3 or more. A passed hike stays passed; the circuit may be done on any later Green day. Forty-eight hours is a target note, not enforced. The hike takes the day's order; the circuit takes a Forge if it falls on one. Week 12 Saturday is preparation: an easy walk, choose the trail, check the forecast, pack.
+- **Pieces and days.** The hike and the circuit are on separate days. Each needs a Green day with no pain at 3 or more on the morning check. On the trail the turnaround is at pain 4 or more (decided 2026-11-09): pain at 3 during the hike is recorded but does not stop it, while pain at 4 or more, or a changed movement, ends that attempt. The circuit keeps the usual limit of 3. A passed hike stays passed; the circuit may be done on any later Green day. Forty-eight hours is a target note, not enforced. The hike takes the day's order; the circuit takes a Forge if it falls on one. Week 12 Saturday is preparation: an easy walk, choose the trail, check the forecast, pack.
 - **Weather.** The hike wants a clear-weather day ("pick a clear-weather day"). The person can mark an attempt "postponed for weather". Turning back under the Navigation II turnaround criteria is also a postponement. Neither is a failed attempt. A stop for pain is a stopped attempt as usual.
 - **Winter stand-in.** Allowed any time, as the person's choice, with an optional "weather reason" field. It is one continuous walk of 1.5–2 hours. No treadmill: elevation gain comes from outdoor terrain (local gentle hills, stairs) when possible, otherwise an indoor track, and gain is recorded, not required. Navigation is on paper with a real trail map (route, junctions, distance, gain, turnaround), with location estimates at set checkpoints. The 5 quiet minutes and the reflection come at the halfway mark.
 - **Skill parts** follow Skill Parts in Trials below, after the circuit.
 - **No photo.** The trial has no photo step. Photos are not part of the app's trials.
+- **Hearth part (d).** Week 12's "after the trial, tell your spouse your answer to the high-point question" shows on Keep from the day the hike is finished until it is marked Done, or until Chapter IV begins (decided 2026-11-09).
 
 ## IV — Bearing the Load (Weeks 13–16)
 
