@@ -3,7 +3,7 @@
 **Theme:** Climb deliberately.  
 **Trial:** The High Country Trial.
 
-Planning decisions for this chapter were settled 2026-11-04 and 2026-11-09 (`.scratch/chapter-three/planning.md`). Text marked **(draft)** is written in the Field Manual session and needs the person's approval before it is built.
+Planning decisions for this chapter were settled 2026-11-04 and 2026-11-09 (`.scratch/chapter-three/planning.md`). The Field Manual text (lessons, Hearth wording, Sunday reflections, Navigation II) was approved 2026-11-09.
 
 # Forge A
 - Controlled Box Squat (`box-squat`, with a "slow 3-second lowering, light touch" cue) — 3 x 6
@@ -51,7 +51,7 @@ Friday: 25–30 min easy road. Psalm 37:3–7.
 Saturday: 60-minute mixed-surface walk (the person picks the length within the range the pack gives). Hebrews 12:1–3.  
 Sunday: Psalm 27. Reflection: **Where do I tend to quit when progress becomes slow?**
 
-Hearth mission, four parts across the week (text **(draft)** in the Field Manual session):
+Hearth mission, four parts across the week (text approved 2026-11-09, in `FIELD_MANUAL.md`):
 - Ask your spouse what feels stuck in your life together, and carry one piece of it.
 - Finish one tedious recurring household task every day this week.
 - Tell your daughter about a time you nearly quit something, and what kept you going.
@@ -64,7 +64,7 @@ Wednesday: Restoration. 2 Timothy 1:6–7.
 Thursday: Forge B. Psalm 27:1–5.  
 Friday: 25–30 min easy road. John 16:33.  
 Saturday: 60–70 min, include stairs/step-ups (the person picks within the range). Isaiah 41:8–10.  
-Sunday: Psalm 112. Reflection **(draft)**: written in the Field Manual session, looking back on the week's conversation.
+Sunday: Psalm 112. Reflection (approved 2026-11-09): **What did I fear would happen in the conversation I'd been avoiding, and what happened? If it hasn't happened yet, what's still in the way?**
 
 Hearth mission: have one needed conversation you have been avoiding; be clear, calm, and non-confrontational.
 
@@ -92,7 +92,7 @@ Friday: recovery: a 20-minute easy walk or Restoration, the person's choice. Heb
 Saturday: trial preparation: an easy walk, choose the trail, check the forecast, pack. Psalm 24.  
 Sunday: Psalm 46. Reflection **(forward form)**: **What am I climbing toward that is actually worth reaching?** The trial asks the original, looking-back question at the high point.
 
-Hearth mission, parts across the week (text **(draft)**):
+Hearth mission, parts across the week (text approved 2026-11-09, in `FIELD_MANUAL.md`):
 - Tell your spouse the plan: where you are going, your turnaround point, and when you will be back.
 - Invite the family along. If your daughter comes, give her one job.
 - At a meal, the family prays for the climb and the weather.
@@ -103,7 +103,7 @@ The fifth part, one unhurried phone-free family evening at Christmas, now belong
 # Leadership Framework — Calm Decisions
 Stop -> Observe -> Prioritize -> Decide -> Communicate -> Reassess.
 
-Weekly Field Manual lessons for Weeks 9–12 **(draft)** are built on this framework and the week's Scripture, as in Chapters I and II.
+Weekly Field Manual lessons for Weeks 9–12 (approved 2026-11-09) are built on this framework and the week's Scripture, as in Chapters I and II.
 
 # Fieldcraft — Navigation II
 A written field card with no pictures (a contour diagram may be added later, only once verified). Learn:

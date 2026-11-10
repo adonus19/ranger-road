@@ -6,6 +6,8 @@ import {
   getDayContent,
   getDayMissions,
   getDayOrders,
+  getHearthMission,
+  getHearthMissionParts,
   getWorkoutChoices,
 } from './chapter-orders';
 import { chapterThreeDailySeed } from './chapter-three-daily.seed';
@@ -25,8 +27,7 @@ const passes = [
   { trialId: 'gate-trial', date: '2026-11-02' },
   { trialId: 'three-mile-trial', date: '2026-11-30' },
 ];
-const at = (date: string, trials = passes) =>
-  resolveCampaignPosition(start, date, trials)!.chapter;
+const at = (date: string, trials = passes) => resolveCampaignPosition(start, date, trials)!.chapter;
 
 /** Monday through Sunday of Weeks 9–12, transcribed from 03_THE_HIGH_COUNTRY.md. */
 const datedOrders = [
@@ -264,8 +265,9 @@ describe('After Week 12', () => {
       expect(isTrialAvailable(day)).toBe(true);
     }
     expect(getDayMissions(at('2026-12-28'))[1].id).toBe('chapter-3-week-12-day-1-weekly');
-    expect(chapterThreeProgram.workoutPlan('chapter-3-forge-b', at('2026-12-31').contentWeek))
-      .toMatchObject({ reduced: true });
+    expect(
+      chapterThreeProgram.workoutPlan('chapter-3-forge-b', at('2026-12-31').contentWeek),
+    ).toMatchObject({ reduced: true });
   });
 
   it('opens the trial any day from the Monday after Week 12 until it is passed', () => {
@@ -283,5 +285,52 @@ describe('After Week 12', () => {
   it('names no attempt-day Scripture for the any-day trial', () => {
     expect(chapterThreeProgram.trialAttempt).toBeUndefined();
     expect(getTrialScripture(chapterThreeProgram)).toEqual([]);
+  });
+});
+
+describe('Chapter III Hearth missions', () => {
+  it('gives Week 9 four parts, with a one-line summary for Today’s Mission', () => {
+    const week9 = at('2026-12-02');
+    expect(getHearthMission(week9)).toBe(
+      'Ask what feels stuck and carry one piece, finish a tedious task each day, tell your daughter about nearly quitting, and pray at a meal for something you are waiting for.',
+    );
+    expect(getHearthMissionParts(week9).map((part) => part.text)).toEqual([
+      'Ask your spouse what feels stuck in your life together. Listen to the whole answer, then pick up one piece of it and carry it.',
+      'Finish one tedious recurring household task every day this week.',
+      'Tell your daughter about a time you nearly quit something, and what kept you going.',
+      'At a meal each day, pray together as a family for one thing you’re still waiting for.',
+    ]);
+  });
+
+  it('gives Week 10 one conversation and Week 11 the family outing, in a single part each', () => {
+    expect(getHearthMission(at('2026-12-08'))).toBe(
+      'Have one needed conversation you have been avoiding. Be clear, calm, and non-confrontational.',
+    );
+    expect(getHearthMission(at('2026-12-15'))).toBe(
+      'Plan a family outing: destination, timing, weather, transportation, food and snacks, and needed gear. The outing is the trial hike if the family comes, otherwise Saturday’s trail rehearsal.',
+    );
+    expect(getHearthMissionParts(at('2026-12-08'))).toEqual([]);
+    expect(getHearthMissionParts(at('2026-12-15'))).toEqual([]);
+  });
+
+  it('gives Week 12 parts a to c; part d is the Keep row and part e the seasonal layer', () => {
+    const week12 = at('2026-12-22');
+    expect(getHearthMissionParts(week12).map((part) => part.text)).toEqual([
+      'Tell your spouse the plan: where you’re going, your turnaround point, and when you’ll be back.',
+      'Invite the family along. If your daughter comes, give her one job.',
+      'At a meal, pray together as a family for the climb and the weather.',
+    ]);
+    expect(getHearthMission(week12)).toBe(
+      'Tell your spouse the plan, invite the family, and pray together for the climb and the weather.',
+    );
+    expect(
+      getHearthMissionParts(week12)
+        .map((part) => part.text)
+        .join(' '),
+    ).not.toMatch(/Christmas|high-point/);
+  });
+
+  it('keeps repeating Week 12’s mission on the days after it, while the trial waits', () => {
+    expect(getHearthMissionParts(at('2027-01-13')).length).toBe(3);
   });
 });

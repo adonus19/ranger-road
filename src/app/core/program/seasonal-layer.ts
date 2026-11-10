@@ -80,3 +80,16 @@ export function getSeasonalDays(date: LocalDate): SeasonalDay[] {
     .filter(([day]) => day === date)
     .map(([, key]) => ({ key, ...SEASONAL_DAYS[key] }));
 }
+
+/** All six readings in calendar order, for the Field Manual's Scripture page and Index. */
+export function listSeasonalReadings(): SeasonalDay[] {
+  const order: SeasonalKey[] = [
+    'advent-1',
+    'advent-2',
+    'advent-3',
+    'advent-4',
+    'christmas-eve',
+    'christmas-day',
+  ];
+  return order.map((key) => ({ key, ...SEASONAL_DAYS[key] }));
+}

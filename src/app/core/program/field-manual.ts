@@ -8,6 +8,7 @@ import { getDayContent, getWeekContent } from './chapter-orders';
 import type { ChapterProgram } from './chapter-program';
 import { listExerciseGuides } from './exercise-guides';
 import { chapterPrograms } from './program-catalog';
+import { listSeasonalReadings } from './seasonal-layer';
 import { chapterOneForgeA, chapterOneForgeB, chapterOneRestoration } from './chapter-one-workouts';
 import {
   EXTRA_BOOK_SUGGESTIONS,
@@ -71,7 +72,7 @@ export interface FieldManualWeek {
   stage: 'ahead' | 'week' | 'trial' | 'complete';
   /** The chapter's number: 1 for Chapter I. */
   chapter: number;
-  /** The campaign week whose content applies: 1–4 in Chapter I, 5–8 in Chapter II. */
+  /** The campaign week whose content applies: 1–4 in Chapter I, 5–8 in Chapter II, 9–12 in Chapter III. */
   contentWeek: number;
   heading: string;
   subline: string;
@@ -180,6 +181,7 @@ function sessionIdFor(day: ChapterDay): string | undefined {
   if (activity.definitionId && program.workouts.some((w) => w.id === activity.definitionId)) {
     return activity.definitionId;
   }
+  if (program.climbSession && activity.exerciseGuideIds?.length) return program.climbSession.id;
   // Chapter I's Friday easier option, and easy mobility or recovery, use the Restoration routine.
   const restoration =
     activity.missionType === 'restoration' ||
@@ -209,21 +211,34 @@ function sessionsForDays(
     used.set(circuitId, ['the day you take the trial']);
   }
   const [forgeA, forgeB] = program.workouts;
-  const order = [forgeA?.id, forgeB?.id, circuitId, program.restorationId];
+  const climb = program.climbSession;
+  const order = [forgeA?.id, forgeB?.id, climb?.id, circuitId, program.restorationId];
   return order.flatMap((id): FieldManualSession[] => {
     const names = id ? used.get(id) : undefined;
     if (!id || !names) return [];
     const workout = program.workouts.find((item) => item.id === id);
+    if (workout) {
+      return [{ id, title: workout.title, days: joinWords(names), ...exerciseIds(workout) }];
+    }
+    if (climb && id === climb.id) {
+      return [
+        {
+          id,
+          title: climb.title,
+          days: joinWords(names),
+          warmup: [],
+          exercises: climb.movements.map((movement) => movement.exerciseId),
+        },
+      ];
+    }
     return [
-      workout
-        ? { id, title: workout.title, days: joinWords(names), ...exerciseIds(workout) }
-        : {
-            id,
-            title: trialCircuitTitle(program),
-            days: joinWords(names),
-            warmup: [],
-            exercises: trialCircuitIds(program),
-          },
+      {
+        id,
+        title: trialCircuitTitle(program),
+        days: joinWords(names),
+        warmup: [],
+        exercises: trialCircuitIds(program),
+      },
     ];
   });
 }
@@ -237,6 +252,9 @@ function sessionsTitle(program: ChapterProgram, sessions: readonly FieldManualSe
   if (hasA && hasB) names.push('Forge');
   else if (hasA) names.push('Forge A');
   else if (hasB) names.push('Forge B');
+  if (program.climbSession && ids.includes(program.climbSession.id)) {
+    names.push(program.climbSession.title);
+  }
   if (ids.includes(trialCircuitId(program))) names.push(trialCircuitTitle(program));
   if (ids.includes(program.restorationId)) names.push('Restoration');
   return joinWords(names);
@@ -293,6 +311,11 @@ function scriptureRow(
       ? trialAttemptsFragment(day.program.trial.id)
       : scriptureDayId(day.contentWeek, day.weekday),
   };
+}
+
+/** The anchor of a seasonal reading on the Scripture page. */
+export function seasonalReadingId(key: string): string {
+  return `seasonal-${key}`;
 }
 
 /** A unique anchor for a dated reference, even if another day uses the same passage. */
@@ -452,7 +475,7 @@ export interface ScriptureDay {
 }
 
 export interface ScriptureWeek {
-  /** Campaign week: 1–4 in Chapter I, 5–8 in Chapter II. */
+  /** Campaign week: 1–4 in Chapter I, 5–8 in Chapter II, 9–12 in Chapter III. */
   week: number;
   name: string;
   days: ScriptureDay[];
@@ -494,6 +517,8 @@ export function orderedPrograms(currentChapter: number): ChapterProgram[] {
 export interface SessionMovement {
   exerciseId: string;
   dose: string;
+  /** A cue or choice the pack adds to the dose, shown from Chapter III on. */
+  note?: string;
 }
 
 export interface SessionDetail {
@@ -536,6 +561,7 @@ function sessionWeekdays(program: ChapterProgram, id: string): string[] {
       const activity = content.activity;
       const uses =
         activity.definitionId === id ||
+        (program.climbSession?.id === id && !!activity.exerciseGuideIds?.length) ||
         (id === program.restorationId &&
           (activity.missionType === 'restoration' ||
             activity.alternatives?.some((choice) => choice.contentReferences.includes(id))));
@@ -548,11 +574,27 @@ function sessionWeekdays(program: ChapterProgram, id: string): string[] {
 /** Every session in a chapter with its documented doses, for the exercise guides page. */
 export function getChapterSessions(program: ChapterProgram): SessionDetail[] {
   const chapter = program.chapter.number;
+  // Chapters I and II keep their approved pages; from Chapter III the pack's cues show too.
+  const withNotes = chapter >= 3;
   const work = (workout: WorkoutDefinition): SessionMovement[] =>
-    workout.exercises.map((exercise) => ({
-      exerciseId: exercise.exerciseId,
-      dose: doseText(exercise),
-    }));
+    workout.exercises.flatMap((exercise): SessionMovement[] => {
+      const movement: SessionMovement = {
+        exerciseId: exercise.exerciseId,
+        dose: doseText(exercise),
+        ...(withNotes && exercise.notes ? { note: exercise.notes } : {}),
+      };
+      // A quiet stance choice, such as pressing half-kneeling instead, has its own guide.
+      return withNotes && exercise.stanceChoice
+        ? [
+            movement,
+            {
+              exerciseId: exercise.stanceChoice,
+              dose: doseText(exercise),
+              note: 'Your choice, instead of the press above.',
+            },
+          ]
+        : [movement];
+    });
   const [forgeA, forgeB] = program.workouts;
   const warmup: SessionMovement[] = (forgeA?.warmup ?? []).flatMap((step) =>
     step.kind === 'exercise'
@@ -583,6 +625,16 @@ export function getChapterSessions(program: ChapterProgram): SessionDetail[] {
       };
     }),
   ];
+  const climb = program.climbSession;
+  if (climb) {
+    sessions.push({
+      id: climb.id,
+      chapter,
+      title: climb.title,
+      when: joinWords(sessionWeekdays(program, climb.id)),
+      movements: climb.movements.map((movement) => ({ ...movement })),
+    });
+  }
   const circuit = program.trial.phases.find((phase) => phase.circuit)?.circuit;
   if (circuit) {
     const gate = program.trial.id === 'gate-trial';
@@ -786,11 +838,13 @@ export function getFieldManualIndex(): FieldManualEntry[] {
     }
   }
 
-  const uses = new Map<string, { days: string[]; fragment: string }>();
-  const addUse = (reference: string, day: string, fragment: string) => {
+  const uses = new Map<string, { days: string[]; fragment: string; keywords: string }>();
+  const addUse = (reference: string, day: string, fragment: string, keywords = '') => {
     const found = uses.get(reference);
-    if (found) found.days.push(day);
-    else uses.set(reference, { days: [day], fragment });
+    if (found) {
+      found.days.push(day);
+      found.keywords = `${found.keywords} ${keywords}`;
+    } else uses.set(reference, { days: [day], fragment, keywords });
   };
   for (const program of chapterPrograms) {
     for (const week of getScriptureByWeek(program)) {
@@ -806,6 +860,10 @@ export function getFieldManualIndex(): FieldManualEntry[] {
     if (attempts) addUse(attempts.reference, `${program.trialName} attempts`, attempts.id);
     if (spirit) addUse(spirit.reference, `the ${program.trialName}`, spirit.id);
   }
+  // The Advent and Christmas readings are Scripture too; each family question is searchable.
+  for (const reading of listSeasonalReadings()) {
+    addUse(reading.reference, reading.title, seasonalReadingId(reading.key), reading.question);
+  }
   for (const [reference, use] of uses) {
     entries.push(
       entry(
@@ -815,6 +873,7 @@ export function getFieldManualIndex(): FieldManualEntry[] {
         `Scripture · ${joinWords(use.days)}`,
         ['/field-manual/scripture'],
         use.fragment,
+        use.keywords,
       ),
     );
   }

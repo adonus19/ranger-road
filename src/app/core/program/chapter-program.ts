@@ -109,6 +109,16 @@ export interface ChapterSeed {
   fieldcraft: readonly string[];
 }
 
+/**
+ * A written session that is not a saved workout, such as Chapter III's Tuesday climb. Any
+ * day whose order names exercise guides (`exerciseGuideIds`) belongs to it.
+ */
+export interface WrittenSession {
+  id: string;
+  title: string;
+  movements: readonly { exerciseId: string; dose: string }[];
+}
+
 /** A chapter whose dated orders are in the app. */
 export interface ChapterProgram extends ChapterSeed {
   /** The trial's name in orders and notes, such as "Gate Trial". */
@@ -128,6 +138,8 @@ export interface ChapterProgram extends ChapterSeed {
   /** A short line on choosing the day, such as "Pick a clear-weather day." */
   trialDayNote?: string;
   workouts: readonly WorkoutDefinition[];
+  /** The Field Manual's listing for a conditioning day that names exercise guides. */
+  climbSession?: WrittenSession;
   /** Also open as needed, outside the dated order. */
   restorationId: string;
   /** `weekday` is the order's day, for a note that belongs to one day, such as Week 9 Wednesday's. */

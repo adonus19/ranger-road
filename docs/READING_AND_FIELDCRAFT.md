@@ -92,7 +92,7 @@ Demonstration:
 
 ## Field Card Shape
 
-A card teaches one practical skill. Tool cards use titled sections of checks; knot cards use numbered steps with a way to check the result. Chapter I's approved cards are in [Field Manual Content](rangers-road-full-program-content/FIELD_MANUAL.md) and in `src/app/core/program/field-manual.seed.ts`.
+A card teaches one practical skill. Tool cards use titled sections of checks; knot cards use numbered steps with a way to check the result. Chapter I's, Chapter II's (Navigation I) and Chapter III's (Navigation II, written only) approved cards are in [Field Manual Content](rangers-road-full-program-content/FIELD_MANUAL.md) and in `src/app/core/program/field-manual.seed.ts`.
 
 ```ts
 interface FieldCard {

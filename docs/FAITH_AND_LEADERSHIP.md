@@ -53,7 +53,7 @@ Leadership is part of the normal training week, not a separate course:
 - Each lesson ties into the current book and suggests one book for later. The reading plan keeps one book at a time, with no deadline.
 - Nothing about the lessons is scored.
 
-The approved lessons, the principles with their Scripture and practice, and the reading plan are in [Field Manual Content](rangers-road-full-program-content/FIELD_MANUAL.md). Later chapters get their lessons when their content is built.
+The approved lessons, the principles with their Scripture and practice, and the reading plan are in [Field Manual Content](rangers-road-full-program-content/FIELD_MANUAL.md). Chapter III's lessons (Weeks 9–12, Calm Decisions) were approved 2026-11-09 and are built; later chapters get theirs when their content is built.
 
 ## Seasonal Layer: Advent and Christmas
 

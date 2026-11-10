@@ -210,4 +210,81 @@ describe('Field Manual routes', () => {
       expect(harness.routeNativeElement?.textContent).toContain('Chapter II · Forge A');
     });
   });
+  describe('in Chapter III', () => {
+    // Gate Trial passed Mon Nov 2 and Three-Mile Trial Mon Nov 30: Week 9 begins Tue Dec 1.
+    const pass = (trialId: string, date: string): TrialResult => ({
+      id: trialId,
+      trialId,
+      date,
+      phaseResults: [],
+      reflection: '',
+    });
+    const openChapterThree = async (url: string, today = '2026-12-02') => {
+      const opened = await open(url, {
+        'gate-trial': [pass('gate-trial', '2026-11-02')],
+        'three-mile-trial': [pass('three-mile-trial', '2026-11-30')],
+      });
+      opened.state.today.set(today);
+      opened.harness.detectChanges();
+      await vi.waitFor(() => {
+        opened.harness.detectChanges();
+        expect(opened.harness.routeNativeElement?.textContent).toContain('Chapter III');
+      });
+      return opened;
+    };
+
+    it('lists four lessons and a card in Contents, with this week’s marked', async () => {
+      const { harness } = await openChapterThree('/field-manual/contents');
+      const root = harness.routeNativeElement!;
+      await vi.waitFor(() => {
+        harness.detectChanges();
+        expect(root.querySelector('.chapter > h2')?.textContent?.trim()).toBe(
+          'Chapter III · The High Country',
+        );
+      });
+      const chapter = root.querySelector('.chapter')!;
+      expect(chapter.querySelector('.part__note')?.textContent).toBe('4 lessons');
+      expect(
+        chapter.querySelector('a[href="/field-manual/cards/navigation-two?from=contents"]'),
+      ).not.toBeNull();
+      expect(
+        chapter.querySelector(
+          'a[href="/field-manual/lessons/stop-before-you-quit?from=contents"] .tag',
+        ),
+      ).not.toBeNull();
+      expect(root.textContent).toContain('Advent and Christmas');
+    });
+
+    it('shows the box-squat cue, the climb’s step-down finisher and the half-kneeling choice', async () => {
+      const { harness } = await openChapterThree('/field-manual/exercises');
+      const root = harness.routeNativeElement!;
+      await vi.waitFor(() => {
+        harness.detectChanges();
+        expect(root.querySelector('#chapter-3-climb')).not.toBeNull();
+      });
+      expect(root.querySelector('#chapter-3-forge-a')?.textContent).toContain(
+        'Slow 3-second lowering, light touch.',
+      );
+      expect(root.querySelector('#chapter-3-climb')?.textContent).toContain('Slow Step-Down');
+      expect(root.querySelector('#chapter-3-forge-b')?.textContent).toContain(
+        'Half-Kneeling One-Arm DB Press',
+      );
+      expect(root.querySelector('#chapter-3-climb .manual-tag')).not.toBeNull();
+    });
+
+    it('lists Chapter III’s Scripture and the seasonal readings by reference only', async () => {
+      const { harness } = await openChapterThree('/field-manual/scripture');
+      const root = harness.routeNativeElement!;
+      await vi.waitFor(() => {
+        harness.detectChanges();
+        expect(root.querySelector('#week-9')).not.toBeNull();
+      });
+      expect(root.querySelector('#week-9-day-1 .day__reference')?.textContent).toContain(
+        'Romans 5:1–5',
+      );
+      expect(root.querySelector('#seasonal-advent-1 .day__reference')?.textContent).toContain(
+        'Isaiah 9:2–7',
+      );
+    });
+  });
 });

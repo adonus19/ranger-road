@@ -17,6 +17,7 @@ import {
   listReadingPlan,
 } from '../../../core/program/field-manual.seed';
 import { Icon } from '../../../shared/icon/icon';
+import { listSeasonalReadings } from '../../../core/program/seasonal-layer';
 import { FieldManualWeekState } from '../field-manual-week-state';
 
 interface ContentsEntry {
@@ -200,6 +201,17 @@ function buildParts(
                 link: ['/field-manual/scripture'],
                 fragment: program.trial.id,
                 current: week.stage === 'trial' && mine,
+              },
+            ]
+          : []),
+        ...(first
+          ? [
+              {
+                title: 'Advent and Christmas',
+                note: `${listSeasonalReadings().length} readings`,
+                link: ['/field-manual/scripture'],
+                fragment: 'seasonal',
+                current: false,
               },
             ]
           : []),

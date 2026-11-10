@@ -29,10 +29,12 @@ const summary = (today: string, extra: Record<string, string> = {}) =>
   getFieldManualWeek({ startDate, today, ...extra }).rows.map((row) => [row.title, row.line]);
 
 describe('Field Manual content', () => {
-  it('has a lesson for each week of Chapters I and II built on the documented principles', () => {
+  it('has a lesson for each week of Chapters I to III built on the documented principles', () => {
     const principles = new Set(listLeadershipPrinciples().map((principle) => principle.id));
     expect(principles.size).toBe(12);
-    expect(listLeadershipLessons().map((lesson) => lesson.week)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+    expect(listLeadershipLessons().map((lesson) => lesson.week)).toEqual([
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+    ]);
     for (const lesson of listLeadershipLessons()) {
       expect(lesson.principleIds.every((id) => principles.has(id))).toBe(true);
       expect(lesson.paragraphs.length).toBeGreaterThan(1);
@@ -72,6 +74,153 @@ describe('Field Manual content', () => {
       expect(data.toString('ascii', 8, 12), path).toBe('WEBP');
       expect(statSync(path).size, path).toBeGreaterThan(5_000);
     }
+  });
+});
+
+describe('Chapter III Field Manual content', () => {
+  it('names a specific chapter of Just Do Something in each Wednesday reading pointer', () => {
+    const chapters: Record<number, [string, string]> = {
+      9: ['chapter 4', 'Our Magic 8-Ball God'],
+      10: ['chapter 5', 'A Better Way'],
+      11: ['chapter 8', 'The Way of Wisdom'],
+      12: ['chapter 10', 'The End of the Matter'],
+    };
+    for (const [week, [number, title]] of Object.entries(chapters)) {
+      const pointer = getLeadershipLessonForWeek(Number(week))!.fromReading;
+      expect(pointer, `week ${week}`).toContain(number);
+      expect(pointer, `week ${week}`).toContain(title);
+    }
+  });
+
+  it('writes the Calm Decisions lessons on the week’s own Scripture, with no Bible text', () => {
+    const lessons = listLeadershipLessons().filter((lesson) => lesson.week >= 9);
+    expect(lessons.map((lesson) => lesson.title)).toEqual([
+      'Stop before you quit',
+      'Choose, then go',
+      'Say the plan out loud',
+      'Look again',
+    ]);
+    expect(lessons.map((lesson) => lesson.scripture.map((item) => item.reference))).toEqual([
+      ['Romans 5:1–5', 'James 1:2–4'],
+      ['Joshua 1:6–9', '2 Timothy 1:6–7'],
+      ['Philippians 2:1–8', '1 Peter 5:5–7'],
+      ['Psalm 121', 'Isaiah 40:28–31'],
+    ]);
+    expect(lessons[3].paragraphs.join(' ')).toContain('If Christmas falls this week');
+  });
+
+  it('has a written Navigation II card for Weeks 9–12 with no pictures', () => {
+    const card = getFieldCard('navigation-two')!;
+    expect(card).toMatchObject({ week: 9, lastWeek: 12, skill: 'navigation' });
+    expect(card.sequence).toBeUndefined();
+    expect(card.sections!.map((section) => section.heading)).toEqual([
+      'Contour lines',
+      'Elevation gain',
+      'Ridges, valleys and saddles',
+      'Switchbacks',
+      'Trail intersections',
+      'Hiking-time estimates',
+      'Turnaround criteria',
+      'Weather awareness',
+      'Map north and compass north',
+      'Field mission (Week 11 Saturday)',
+      'Daughter quest (Week 11 Saturday)',
+    ]);
+    const turnaround = card.sections!.find((s) => s.heading === 'Turnaround criteria')!;
+    expect(turnaround.items.join(' ')).toContain('pain reaches 4 or more');
+    for (const week of [9, 10, 11, 12]) {
+      expect(getWeeklyFieldcraft(week)?.cardIds).toEqual(['navigation-two']);
+    }
+  });
+
+  const passes = [
+    { trialId: 'gate-trial', date: '2026-11-02' },
+    { trialId: 'three-mile-trial', date: '2026-11-30' },
+  ];
+
+  it('lists Week 9 Wednesday’s lesson, card, reading, Scripture and sessions', () => {
+    const week = getFieldManualWeek({ startDate, today: '2026-12-02', completedTrials: passes });
+    expect(week.heading).toBe('Week 9 · Perseverance');
+    expect(week.rows.map((row) => [row.kind, row.title, row.line])).toEqual([
+      ['lesson', 'Stop before you quit', 'Leadership lesson · Read Tuesday, 3 minutes'],
+      ['fieldcraft', 'Navigation II', 'Field card · learn it this month'],
+      ['reading', 'Just Do Something', 'Reading · Wednesday, 10 minutes'],
+      ['scripture', 'Hebrews 10:35–39', 'Scripture today · four more this week'],
+      [
+        'exercises',
+        'Forge B, Climb conditioning and Restoration',
+        expect.stringContaining('movements this week'),
+      ],
+    ]);
+    expect(week.entryIds).toContain('card-navigation-two');
+    expect(week.entryIds).toContain('lesson-stop-before-you-quit');
+    expect(week.entryIds).toContain('exercise-slow-step-down');
+    expect(week.entryIds).toContain('exercise-goblet-squat');
+  });
+
+  it('points Week 11 Saturday’s field mission at the card', () => {
+    const week = getFieldManualWeek({ startDate, today: '2026-12-19', completedTrials: passes });
+    expect(week.heading).toBe('Week 11 · Humility');
+    expect(week.rows.find((row) => row.kind === 'fieldcraft')?.line).toBe(
+      'Field card · Saturday’s field mission',
+    );
+  });
+
+  it('lists the climb, the slow step-down finisher, the box-squat cue and the half-kneeling press', () => {
+    const three = chapterPrograms[2];
+    const sessions = getChapterSessions(three);
+    const climb = sessions.find((session) => session.id === 'chapter-3-climb')!;
+    expect(climb).toMatchObject({ title: 'Climb conditioning', when: 'Tuesday' });
+    expect(climb.movements.map((movement) => movement.exerciseId)).toEqual([
+      'step-up',
+      'slow-step-down',
+    ]);
+    expect(climb.movements[1].dose).toBe('2 sets × 6 reps per leg');
+    const forgeA = sessions.find((session) => session.id === 'chapter-3-forge-a')!;
+    expect(forgeA.movements[0]).toMatchObject({
+      exerciseId: 'box-squat',
+      note: 'Slow 3-second lowering, light touch.',
+    });
+    const forgeB = sessions.find((session) => session.id === 'chapter-3-forge-b')!;
+    const press = forgeB.movements.findIndex(
+      (movement) => movement.exerciseId === 'one-arm-db-overhead-press',
+    );
+    expect(forgeB.movements[press + 1]).toMatchObject({
+      exerciseId: 'half-kneeling-one-arm-db-press',
+      note: expect.stringContaining('instead'),
+    });
+    expect(forgeA.movements.some((movement) => movement.exerciseId === 'calf-raise')).toBe(true);
+    // Chapter I and II pages keep their approved text.
+    expect(
+      getChapterSessions(chapterPrograms[1]).every((session) =>
+        session.movements.every((movement) => !('note' in movement)),
+      ),
+    ).toBe(true);
+  });
+
+  it('finds Chapter III content in the Index', () => {
+    const index = getFieldManualIndex();
+    const by = (name: string) => index.find((entry) => entry.name === name);
+    expect(by('Navigation II')).toMatchObject({
+      kind: 'card',
+      detail: 'Field card · Weeks 9–12',
+    });
+    expect(by('Stop before you quit')?.detail).toBe('Leadership lesson · Week 9');
+    expect(by('Decisive')?.detail).toBe('Book · suggested in Week 9');
+    expect(by('Crucial Conversations')).toBeDefined();
+    expect(by('The Freedom of Self-Forgetfulness')).toBeDefined();
+    expect(by('Just Do Something')?.detail).toBe('Book · Chapter III');
+    expect(by('Hebrews 10:35–39')?.detail).toBe('Scripture · Week 9 Wednesday');
+    expect(by('Slow Step-Down')?.kind).toBe('exercise');
+    expect(by('Isaiah 9:2–7')).toMatchObject({
+      kind: 'scripture',
+      detail: 'Scripture · Advent 1 · Hope',
+      fragment: 'seasonal-advent-1',
+    });
+    expect(by('Luke 2:1–20')?.detail).toBe('Scripture · Christmas Eve');
+    // A family question is searchable through its reading.
+    expect(by('John 1:1–14')?.keywords).toContain('light came into the world');
+    expect(by('Isaiah 40:1–11')?.detail).toBe('Scripture · Advent 2 · Peace');
   });
 });
 
@@ -117,6 +266,7 @@ describe('This week', () => {
     expect(cards.map((entry) => [entry.name, entry.skill])).toEqual([
       ['Bowline', 'knot'],
       ['Navigation I', 'navigation'],
+      ['Navigation II', 'navigation'],
       ['Square knot', 'knot'],
       ['Tool inspection', 'tool'],
       ['Two half hitches', 'knot'],
@@ -277,7 +427,7 @@ describe('Index and Scripture', () => {
     const index = getFieldManualIndex();
     expect(new Set(index.map((entry) => entry.id)).size).toBe(index.length);
     expect(index.filter((entry) => entry.kind === 'exercise')).toHaveLength(76);
-    expect(index.filter((entry) => entry.kind === 'book')).toHaveLength(14);
+    expect(index.filter((entry) => entry.kind === 'book')).toHaveLength(17);
     expect(index.find((entry) => entry.name === 'The Motive')?.letter).toBe('M');
     expect(index.find((entry) => entry.name === '1 Corinthians 9:24–27')?.letter).toBe('C');
     const keys = index.map((entry) => entry.sortKey);

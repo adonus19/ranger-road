@@ -4,7 +4,9 @@ import {
   getTrialScripture,
   orderedPrograms,
   scriptureDayId,
+  seasonalReadingId,
 } from '../../../core/program/field-manual';
+import { listSeasonalReadings } from '../../../core/program/seasonal-layer';
 import { formatChapterNumeral } from '../../../core/program/program-catalog';
 import { getWeekday } from '../../../core/program/campaign';
 import { CampaignState } from '../../../core/state/campaign-state';
@@ -56,6 +58,12 @@ export class ScripturePage implements OnInit {
   private readonly weekState = inject(FieldManualWeekState);
   private readonly campaignState = inject(CampaignState);
   protected readonly week = this.weekState.week;
+
+  /** The Advent and Christmas readings, the same every year. */
+  protected readonly seasonal = listSeasonalReadings().map((reading) => ({
+    ...reading,
+    id: seasonalReadingId(reading.key),
+  }));
 
   /** The chapter the campaign is in first, then the others in order. */
   protected readonly chapters = computed(() =>

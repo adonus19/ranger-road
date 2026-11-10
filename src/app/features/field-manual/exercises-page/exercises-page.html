@@ -41,6 +41,9 @@
                 <span class="manual-row__text">
                   <strong>{{ movement.name }}</strong>
                   <span>{{ movement.dose }}</span>
+                  @if (movement.note) {
+                    <span>{{ movement.note }}</span>
+                  }
                 </span>
                 <app-icon class="manual-row__arrow" name="arrow-right" />
               </a>

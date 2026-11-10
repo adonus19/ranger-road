@@ -2,7 +2,7 @@ import type { ChapterDefinition } from '../domain/models';
 import { CUSTOM_FORGE_ID } from '../domain/workout';
 import { chapterOneWeeklyRhythm } from './chapter-one.seed';
 import type { ChapterProgram } from './chapter-program';
-import { chapterThreeDailySeed } from './chapter-three-daily.seed';
+import { chapterThreeClimbSession, chapterThreeDailySeed } from './chapter-three-daily.seed';
 import { highCountryTrialDefinition } from './chapter-three-trial.seed';
 import {
   chapterThreeForgeA,
@@ -34,7 +34,7 @@ export const chapterThreeProgram: ChapterProgram = {
   trial: highCountryTrialDefinition,
   weeklyRhythm: chapterOneWeeklyRhythm,
   faithThemes: ['perseverance', 'courage', 'humility', 'endurance'],
-  // Each week names its own Hearth mission in the daily seed (wired in ticket 05).
+  // Each week names its own Hearth mission in the daily seed.
   leadership: [],
   fieldcraft: ['Navigation II'],
   trialName: 'High Country Trial',
@@ -43,6 +43,7 @@ export const chapterThreeProgram: ChapterProgram = {
   leadsIn: false,
   weeks: chapterThreeDailySeed,
   workouts: [chapterThreeForgeA, chapterThreeForgeB, chapterThreeRestoration],
+  climbSession: chapterThreeClimbSession,
   restorationId: chapterThreeRestoration.id,
   optionalForgeId: CUSTOM_FORGE_ID,
   // Week 12, and every day that repeats it while the trial waits, is reduced with no load increases.

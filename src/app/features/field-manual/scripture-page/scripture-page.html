@@ -69,4 +69,21 @@
       </section>
     }
   }
+
+  <h2 class="manual-chapter">Advent and Christmas</h2>
+  <section class="manual-section" id="seasonal" aria-labelledby="seasonal-title">
+    <h3 class="manual-title" id="seasonal-title">Family readings</h3>
+    <p class="manual-subline">
+      Read aloud together on these Sundays and on Christmas Eve and Christmas Day, every year.
+    </p>
+    <ul class="manual-rows" role="list">
+      @for (reading of seasonal; track reading.key) {
+        <li class="day" [id]="reading.id">
+          <span class="day__name">{{ reading.title }}</span>
+          <span class="day__reference">{{ reading.reference }}</span>
+          <span class="day__question">{{ reading.question }}</span>
+        </li>
+      }
+    </ul>
+  </section>
 </article>

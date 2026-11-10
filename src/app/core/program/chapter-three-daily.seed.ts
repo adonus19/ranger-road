@@ -1,5 +1,5 @@
 import { formatIntervalLength } from './interval-plan';
-import type { ChapterActivityContent, ChapterWeekContent } from './chapter-program';
+import type { ChapterActivityContent, ChapterWeekContent, WrittenSession } from './chapter-program';
 import {
   chapterThreeForgeA,
   chapterThreeForgeB,
@@ -7,6 +7,16 @@ import {
 } from './chapter-three-workouts';
 
 const STEP_DOWNS = 'slow step-downs, 2 × 6 per leg';
+
+/** Tuesday's climb as the Field Manual lists it: the step-ups, then the step-down finisher. */
+export const chapterThreeClimbSession: WrittenSession = {
+  id: 'chapter-3-climb',
+  title: 'Climb conditioning',
+  movements: [
+    { exerciseId: 'step-up', dose: 'Timed rounds, bodyweight' },
+    { exerciseId: 'slow-step-down', dose: '2 sets × 6 reps per leg' },
+  ],
+};
 
 /**
  * Tuesday's climb: bodyweight step-ups as plain steps, with an optional timer. 5 minutes easy
@@ -65,7 +75,9 @@ const restDay = { title: 'Rest and worship', missionType: 'reflection' } as cons
  * Chapter III's dated orders, from 03_THE_HIGH_COUNTRY.md. Chapter III starts the day after a
  * Monday pass of the Three-Mile Trial, or the Monday after any other pass. After Week 12 every
  * day repeats Week 12 until the High Country Trial is passed; the trial can be taken any day.
- * Hearth missions and the Week 11 field card are wired with the Field Manual (ticket 05).
+ * Hearth wording is the approved Field Manual text (2026-11-09). Week 12's part d, telling your
+ * spouse the high-point answer, is the Keep row "Hearth · after the hike"; the Christmas evening
+ * belongs to the seasonal layer.
  */
 export const chapterThreeDailySeed: readonly ChapterWeekContent[] = [
   {
@@ -97,6 +109,26 @@ export const chapterThreeDailySeed: readonly ChapterWeekContent[] = [
         reflectionPrompt: 'Where do I tend to quit when progress becomes slow?',
       },
     },
+    hearthMission:
+      'Ask what feels stuck and carry one piece, finish a tedious task each day, tell your daughter about nearly quitting, and pray at a meal for something you are waiting for.',
+    hearthMissionParts: [
+      {
+        label: 'Ask what feels stuck',
+        text: 'Ask your spouse what feels stuck in your life together. Listen to the whole answer, then pick up one piece of it and carry it.',
+      },
+      {
+        label: 'Finish a tedious task every day',
+        text: 'Finish one tedious recurring household task every day this week.',
+      },
+      {
+        label: 'Tell your daughter about nearly quitting',
+        text: 'Tell your daughter about a time you nearly quit something, and what kept you going.',
+      },
+      {
+        label: 'Pray at a meal while you wait',
+        text: 'At a meal each day, pray together as a family for one thing you’re still waiting for.',
+      },
+    ],
   },
   {
     name: 'Courage',
@@ -122,6 +154,8 @@ export const chapterThreeDailySeed: readonly ChapterWeekContent[] = [
           'What did I fear would happen in the conversation I’d been avoiding, and what happened? If it hasn’t happened yet, what’s still in the way?',
       },
     },
+    hearthMission:
+      'Have one needed conversation you have been avoiding. Be clear, calm, and non-confrontational.',
   },
   {
     name: 'Humility',
@@ -147,6 +181,8 @@ export const chapterThreeDailySeed: readonly ChapterWeekContent[] = [
         reflectionPrompt: 'Where am I more concerned with being right than being useful?',
       },
     },
+    hearthMission:
+      'Plan a family outing: destination, timing, weather, transportation, food and snacks, and needed gear. The outing is the trial hike if the family comes, otherwise Saturday’s trail rehearsal.',
     fieldcraft:
       'Navigation II field mission: before the rehearsal, study the trail map and predict the elevation gain and where the turnaround point would be; check afterward.',
   },
@@ -203,5 +239,21 @@ export const chapterThreeDailySeed: readonly ChapterWeekContent[] = [
         reflectionPrompt: 'What am I climbing toward that is actually worth reaching?',
       },
     },
+    hearthMission:
+      'Tell your spouse the plan, invite the family, and pray together for the climb and the weather.',
+    hearthMissionParts: [
+      {
+        label: 'Tell your spouse the plan',
+        text: 'Tell your spouse the plan: where you’re going, your turnaround point, and when you’ll be back.',
+      },
+      {
+        label: 'Invite the family',
+        text: 'Invite the family along. If your daughter comes, give her one job.',
+      },
+      {
+        label: 'Pray for the climb and the weather',
+        text: 'At a meal, pray together as a family for the climb and the weather.',
+      },
+    ],
   },
 ];

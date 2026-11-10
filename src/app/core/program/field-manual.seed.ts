@@ -21,7 +21,7 @@ export interface BookSuggestion {
  */
 export interface LeadershipLesson {
   id: string;
-  /** Campaign week: 1–4 for Chapter I, 5–8 for Chapter II. */
+  /** Campaign week: 1–4 for Chapter I, 5–8 for Chapter II, 9–12 for Chapter III. */
   week: number;
   title: string;
   principleIds: readonly string[];
@@ -373,6 +373,101 @@ const lessons: readonly LeadershipLesson[] = [
       note: 'On making decisions and seeking God’s will without freezing. It leads into Chapter III.',
     },
   },
+  {
+    id: 'stop-before-you-quit',
+    week: 9,
+    title: 'Stop before you quit',
+    principleIds: ['stable-under-fatigue', 'own-responsibilities'],
+    scripture: [
+      { reference: 'Romans 5:1–5', day: 'Monday' },
+      { reference: 'James 1:2–4', day: 'Tuesday' },
+    ],
+    paragraphs: [
+      'Chapter III climbs. The Tuesday step-ups get longer each week, the Saturday walks find hills and stairs, and the chapter ends with a hike up a real mountain trail. For four weeks the lessons follow one way of making decisions, called Calm Decisions: Stop, Observe, Prioritize, Decide, Communicate, Reassess. It works on a trail when the weather turns, and it works at home when the evening goes sideways.',
+      'This week covers the first two steps. Stop means you don’t act on your first impulse. Observe means you look at what’s actually in front of you before you decide what it means.',
+      'Most quitting skips both. Progress slows, a set feels as heavy as it did last week, and the thought shows up that this isn’t working. Romans 5 describes a slower chain, where hard things build endurance, endurance builds character, and character gives hope. James says testing produces steadfastness. Neither passage says it will feel like progress while it’s happening.',
+      'So when you feel the pull to quit, stop and look. Are you hurt, or bored? Is the plan wrong, or only slow? Pain changes the plan, and the readiness check handles that. A slow week doesn’t.',
+      'The Hearth mission practices the same habit at home. When your spouse tells you what feels stuck, hear all of it before you decide what it means, then carry one piece. The daily task is the kind that’s easy to drop when nobody’s checking. Your daughter will hit her own slow stretch someday, and your story gives her something to remember when she does. The family prayer at meals keeps one unanswered thing in front of all of you while you wait together.',
+    ],
+    fromReading:
+      'If you’ve finished The Ruthless Elimination of Hurry, begin Just Do Something by Kevin DeYoung. If not, keep going; there’s no deadline. Wednesday’s reading is chapter 4, “Our Magic 8-Ball God.” DeYoung argues that many Christians wait for a sign before they decide, when God has already given them his Word, wisdom and counsel to decide with. Notice where you’ve been waiting for a certainty you weren’t promised.',
+    forLater: {
+      title: 'Decisive',
+      author: 'Chip Heath and Dan Heath',
+      note: 'On the common traps in how people make choices and a simple process for getting around them.',
+    },
+  },
+  {
+    id: 'choose-then-go',
+    week: 10,
+    title: 'Choose, then go',
+    principleIds: ['repair-quickly', 'listen-before-solving'],
+    scripture: [
+      { reference: 'Joshua 1:6–9', day: 'Monday' },
+      { reference: '2 Timothy 1:6–7', day: 'Wednesday' },
+    ],
+    paragraphs: [
+      'Joshua takes over from Moses with a hard job ahead, and God tells him three times to be strong and courageous. The reason comes with the command: God will be with him wherever he goes. Paul reminds Timothy that God gave him power, love and self-control, and that fear doesn’t come from the same place.',
+      'Last week was Stop and Observe. This week adds Prioritize and Decide. Once you can see the situation, ask what matters most right now, and then choose. On a trail the order is simple: everyone’s safety first, then getting home, then the summit. At home it’s less tidy, but the question is the same.',
+      'Courage often just looks like deciding. Most avoided conversations stay avoided because we keep observing. We wait for a better time, more information or a calmer mood, and the waiting turns into the decision.',
+      'The Hearth mission is to have one of those conversations this week. Prioritize what has to be said, ideally one thing. Decide when you’ll say it, and put it on a day. Then say it clearly and calmly, without turning it into a fight, and listen to the reply all the way through. If it goes badly, go back soon and repair it.',
+      'You can’t control how the other person responds. You can choose to start.',
+    ],
+    fromReading:
+      'Wednesday’s reading is chapter 5 of Just Do Something, “A Better Way.” DeYoung separates the things God has already made plain, like how to treat people and what’s right, from the choices he leaves to your wisdom. Which kind is the conversation you’ve been putting off?',
+    forLater: {
+      title: 'Crucial Conversations',
+      author: 'Kerry Patterson, Joseph Grenny, Ron McMillan and Al Switzler',
+      note: 'On talking through high-stakes disagreements without going silent or getting angry.',
+    },
+  },
+  {
+    id: 'say-the-plan-out-loud',
+    week: 11,
+    title: 'Say the plan out loud',
+    principleIds: ['reduce-friction', 'teach-without-humiliating'],
+    scripture: [
+      { reference: 'Philippians 2:1–8', day: 'Monday' },
+      { reference: '1 Peter 5:5–7', day: 'Saturday' },
+    ],
+    paragraphs: [
+      'Communicate is the step that pride skips. Once you’ve thought a decision through, explaining it can feel slow, so you just act. But your family can’t help with a plan they don’t know about, and they can’t plan around it either.',
+      'Philippians 2 asks you to look to other people’s interests as well as your own, and points to Jesus, who set aside what was his by right in order to serve. Peter tells the church to put on humility toward one another, and to hand their worries to God because he cares for them.',
+      'The Hearth mission is a plan that needs other people. Work out the outing’s destination, timing, weather, travel, food and gear, then share it early and ask what you’ve missed. Your spouse may know the snack situation better than you do. Your daughter may have opinions about the trail. Change the plan when they’re right.',
+      'On Saturday, hand your daughter one piece of the navigation, like calling the turn at a junction or watching for blazes. If she gets it wrong, let her notice, show her once, and give the job back. Trusting her with part of the decision is communication too.',
+    ],
+    fromReading:
+      'Wednesday’s reading is chapter 8 of Just Do Something, “The Way of Wisdom.” DeYoung puts weight on asking wise people before you decide. Notice who you go to for counsel, and whether your spouse is one of them.',
+    forLater: {
+      title: 'The Freedom of Self-Forgetfulness',
+      author: 'Timothy Keller',
+      note: 'A very short book on humility.',
+    },
+  },
+  {
+    id: 'look-again',
+    week: 12,
+    title: 'Look again',
+    principleIds: ['keep-promises', 'protect-family-time'],
+    scripture: [
+      { reference: 'Psalm 121', day: 'Monday' },
+      { reference: 'Isaiah 40:28–31', day: 'Tuesday' },
+    ],
+    paragraphs: [
+      'Training eases off this week so you come to the High Country Trial rested. On Saturday you choose the trail, check the forecast and pack.',
+      'The last step is Reassess. Once you act, the situation changes, so you look again. On the mountain this is the turnaround. You set a turnaround point and a turnaround time before you start, and on the trail you keep checking the weather, the daylight, your knees and back, and the clock. If it’s time to turn back, you turn back. In the trial, a turnaround for weather or time is a postponement, not a failure, and you try again on another day.',
+      'Psalm 121 is a song for travelers on their way up to Jerusalem. Their help comes from the Lord, who doesn’t sleep and keeps watch over their going out and coming in. Isaiah 40 promises new strength to the weary who wait for the Lord, which fits a week of lighter training.',
+      'The Hearth mission starts with a promise. Tell your spouse where you’re going, where you’ll turn around and when you’ll be home, then keep that time, and call if the plan changes. Invite the family, and if your daughter comes, give her one real job. Pray together for the climb and the weather. When it’s done, tell your spouse what you wrote at the high point.',
+      'If Christmas falls this week, the seasonal readings add a family evening on Christmas Eve. Protect it.',
+    ],
+    fromReading:
+      'Wednesday’s reading is chapter 10 of Just Do Something, “The End of the Matter.” The book’s title is its advice: once you’ve prayed and sought wisdom, make the choice and go. Pick one idea from it that you’ll keep using after this chapter.',
+    forLater: {
+      title: 'The Motive',
+      author: 'Patrick Lencioni',
+      note: 'First suggested in Week 3, a short story about the two reasons people lead: for the reward, or out of responsibility. It leads into Chapter IV.',
+    },
+  },
 ];
 
 const readingPlan: readonly ReadingPlanEntry[] = [
@@ -695,6 +790,128 @@ const fieldCards: readonly FieldCard[] = [
     ],
     relatedSkills: ['Navigation II (Chapter III)'],
   },
+  {
+    id: 'navigation-two',
+    title: 'Navigation II',
+    skill: 'navigation',
+    week: 9,
+    lastWeek: 12,
+    when: 'Weeks 9–12: learn it across the month. Week 11: Saturday’s field mission and daughter quest. Use it for the High Country Trial’s pre-start plan.',
+    summary:
+      'Read the shape of the land on a map: how high the trail climbs, where it gets steep, and how long it will take. Then decide before you start when you’ll turn back. Keep your phone charged and with you as a backup.',
+    sections: [
+      {
+        heading: 'Contour lines',
+        items: [
+          'A contour line joins points at the same height. If you walked along one, you would neither climb nor drop.',
+          'The contour interval is the height between one line and the next. It’s printed near the scale bar or in the legend, and it differs from map to map, so check it every time.',
+          'On most topographic maps every fifth line is thicker and labeled with its elevation. Count up or down from those.',
+          'Lines close together mean steep ground. Lines far apart mean gentle ground.',
+          'A small closed loop is a hilltop.',
+          'If your trail map has no contour lines, find a printed topographic map of the area or turn on the topo layer in your map app.',
+        ],
+      },
+      {
+        heading: 'Elevation gain',
+        items: [
+          'Elevation gain is every climb on the route added together. It’s usually more than the difference between the trailhead and the high point, because most trails go up and down along the way.',
+          'To estimate it, count the contour lines your route crosses going uphill and multiply by the interval. Do that for each climb, then add them up. Fifteen lines at a 40-foot interval is 600 feet.',
+          'On an out-and-back trail, the dips on the way out become climbs on the way back. Count both directions.',
+          'Many trail guides and apps list the gain. Use your count to check theirs, and theirs to check yours.',
+        ],
+      },
+      {
+        heading: 'Ridges, valleys and saddles',
+        items: [
+          'On a ridge, the contour lines bend into U or V shapes that point downhill, away from the high ground.',
+          'In a valley, they bend into V shapes that point uphill. Where a stream runs through, the V points upstream.',
+          'A saddle is the low point on a ridge between two higher points. On the map it looks like an hourglass: two sets of closed loops with the lines pinched together between them. Trails often cross a ridge at a saddle.',
+          'A ridgeline has more wind and sun and no shelter from lightning. A valley holds streams and colder air, and in winter it often loses the sun early in the afternoon.',
+        ],
+      },
+      {
+        heading: 'Switchbacks',
+        items: [
+          'A switchback is a turn where the trail doubles back on itself to climb a steep slope at a walkable grade. A climb often has many in a row.',
+          'On the map, they show as a trail zigzagging across contour lines that are close together.',
+          'Stay on the trail through each turn. Cutting a switchback erodes the slope and damages the trail.',
+          'Count the turns as you climb. If the map shows eight and you’ve done five, you know where you are.',
+        ],
+      },
+      {
+        heading: 'Trail intersections',
+        items: [
+          'Before you start, list every junction on your route in order, with the trail name, number or color you’ll take at each.',
+          'At each junction, stop. Read the sign, check the map, and say which way you’re going before you go.',
+          'Look back at each junction before you leave it. It will look different on the way home, and one look now makes it easier to recognize later.',
+          'Note the time at each junction. It tells you how your pace compares with your estimate.',
+          'If a junction has no sign or doesn’t match the map, use STOP from Navigation I.',
+        ],
+      },
+      {
+        heading: 'Hiking-time estimates',
+        items: [
+          'Start with your own pace on flat ground, from your logged walks, in minutes per mile.',
+          'Add about 30 minutes for every 1,000 feet of gain. This comes from Naismith’s rule, an old hill walkers’ rule of thumb that assumes about 3 miles an hour on easy ground plus an hour for every 2,000 feet of climb.',
+          'Add time for steep downhill, rough footing, cold, breaks, and the 5 quiet minutes at the high point. Treat the total as the least time the hike will take.',
+          'Example: 5 miles at 20 minutes a mile is 100 minutes. 1,200 feet of gain adds about 36 minutes. With breaks, plan for about 2½ hours.',
+          'Check your times at each junction. If you’re well behind at the first ones, expect to stay behind for the rest of the day.',
+        ],
+      },
+      {
+        heading: 'Turnaround criteria',
+        intro:
+          'Before you start, set a turnaround point and a turnaround time. Turn back at whichever comes first, even if the top is close. Set the time so you finish with daylight to spare. Winter days are short, and a valley or a north-facing slope loses the light early. Also turn back if:',
+        items: [
+          'the weather turns, or you hear thunder',
+          'you lose the trail and can’t find it again',
+          'pain reaches 4 or more, or changes how you move',
+          'you’re running low on water',
+          'you’re far behind your time estimate',
+          'anyone with you is struggling',
+        ],
+        outro:
+          'Once you’ve decided to turn back, go. Don’t reopen the decision on the way down. In the High Country Trial, turning back for weather, daylight, time or a lost trail is a postponement, and you try again another day. Turning back for pain is a stopped attempt, kept in history like any trial. Either way, turning back was the right call.',
+      },
+      {
+        heading: 'Weather awareness',
+        items: [
+          'Check the forecast the night before and again in the morning, for the trailhead and for the high point if you can. Higher ground is usually colder and windier than the parking lot.',
+          'Look for thunderstorms, high wind, freezing rain, snow or ice, and note when the sun sets.',
+          'Pick another day if the forecast shows storms or ice. Postponing for weather doesn’t count as a failed attempt.',
+          'On the trail, watch the sky to the west. In most of the US, weather usually moves in from that direction.',
+          'If you hear thunder, you’re close enough to be struck. Get off ridges and peaks and head down right away, without waiting for rain. Stay away from lone trees, open ground, metal fences and water. Wait 30 minutes after the last thunder before going back up.',
+          'Dress in layers you can add and take off. Carry a warm layer, a hat and gloves even if it’s mild at the trailhead. Wind and wet clothes make you cold much faster.',
+          'Ice on a steep trail is a reason to turn back.',
+        ],
+      },
+      {
+        heading: 'Map north and compass north',
+        items: [
+          'Navigation I noted that a compass points to magnetic north, which differs from the map’s north. The difference is called declination. Many maps print it near the north arrow, and NOAA’s online calculator gives it for any location.',
+          'On a marked trail, a few degrees won’t lead you astray. Declination matters when you follow a compass bearing across open ground, which this card doesn’t cover.',
+        ],
+      },
+      {
+        heading: 'Field mission (Week 11 Saturday)',
+        intro: 'Before the trail rehearsal, study the trail map and write down two predictions:',
+        ordered: true,
+        items: [
+          'The route’s total elevation gain, from counting contour lines.',
+          'Where your turnaround point would be, and the time you’d turn at it.',
+        ],
+        outro:
+          'Afterward, check both. Compare your gain with your phone’s record or the trail guide. Would your turnaround point have left enough time and daylight? On a gentle local trail the gain may be small. Count it anyway, because the method is the same on a mountain.',
+      },
+      {
+        heading: 'Daughter quest (Week 11 Saturday)',
+        intro:
+          'Optional. On the same walk, give your daughter one navigation job on a marked trail and let her own it the whole way. She might call the turn at each junction, count the switchbacks, or say when she hasn’t seen a blaze for a while. Stay beside her. If she misses something, let her notice, show her once, and give the job back.',
+        items: [],
+      },
+    ],
+    relatedSkills: ['Navigation I'],
+  },
 ];
 
 const weeklyFieldcraft: readonly WeeklyFieldcraft[] = [
@@ -724,6 +941,14 @@ const weeklyFieldcraft: readonly WeeklyFieldcraft[] = [
     days: week === 6 ? 'Saturday’s field mission' : 'learn it this month',
     cardIds: ['navigation-one'],
   })),
+  // Navigation II is learned across Chapter III; Week 11's Saturday rehearsal carries its field mission.
+  ...[9, 10, 11, 12].map((week): WeeklyFieldcraft => ({
+    week,
+    title: 'Navigation II',
+    skill: 'navigation',
+    days: week === 11 ? 'Saturday’s field mission' : 'learn it this month',
+    cardIds: ['navigation-two'],
+  })),
 ];
 
 /** Books the weekly lessons suggest that are not on the reading plan. */
@@ -733,6 +958,9 @@ export const EXTRA_BOOK_SUGGESTIONS: readonly string[] = [
   'Celebration of Discipline',
   'The Lost Art of Listening',
   'The Tech-Wise Family',
+  'Decisive',
+  'Crucial Conversations',
+  'The Freedom of Self-Forgetfulness',
 ];
 
 export function listLeadershipPrinciples(): LeadershipPrinciple[] {

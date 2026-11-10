@@ -1,6 +1,6 @@
 # Field Manual Content
 
-**Status: Chapter I content approved 2026-09-29. Chapter II content approved 2026-10-08.** The lessons, principles, reading plan and field cards were reviewed and approved for release. The knot cards ship with written steps. Each knot's step pictures are added once they are checked against a tied knot: the square knot's were approved 2026-09-29; the bowline's and two half hitches' follow. Scripture is stored as references only. **Chapter III content (lessons, Navigation II, Advent and Christmas questions) is a draft awaiting approval**, marked as such below.
+**Status: Chapter I content approved 2026-09-29. Chapter II content approved 2026-10-08. Chapter III content (lessons, Navigation II) approved 2026-11-09. The Advent and Christmas questions were approved 2026-11-10.** The lessons, principles, reading plan and field cards were reviewed and approved for release. The knot cards ship with written steps. Each knot's step pictures are added once they are checked against a tied knot: the square knot's were approved 2026-09-29; the bowline's and two half hitches' follow. Scripture is stored as references only.
 
 This file holds the Field Manual's written content: the leadership principles, the weekly leadership lessons, the reading plan and the field cards. The chapter packs keep the day-by-day orders, and this file keeps the material those orders point to.
 
@@ -252,9 +252,7 @@ Hebrews goes on to say "let us consider how to stir up one another to love and g
 - For later: _Just Do Something_ by Kevin DeYoung, on making decisions and seeking God's will without freezing. It leads into Chapter III.
 - Sunday: Where has consistent small effort begun changing me?
 
-## Chapter III leadership lessons (DRAFT, awaiting approval)
-
-> **Draft written 2026-11-09 (session 2). Not approved; do not build from it yet.**
+## Chapter III leadership lessons
 
 Chapter III's leadership theme is decision-making. All four lessons follow one framework, Calm Decisions: Stop, Observe, Prioritize, Decide, Communicate, Reassess. Week 9 covers Stop and Observe, Week 10 Prioritize and Decide, Week 11 Communicate, and Week 12 Reassess.
 
@@ -280,7 +278,7 @@ So when you feel the pull to quit, stop and look. Are you hurt, or bored? Is the
 
 The Hearth mission practices the same habit at home. When your spouse tells you what feels stuck, hear all of it before you decide what it means, then carry one piece. The daily task is the kind that's easy to drop when nobody's checking. Your daughter will hit her own slow stretch someday, and your story gives her something to remember when she does. The family prayer at meals keeps one unanswered thing in front of all of you while you wait together.
 
-- From your reading: If you've finished _The Ruthless Elimination of Hurry_, begin _Just Do Something_ by Kevin DeYoung. If not, keep going; there's no deadline. DeYoung argues that many Christians wait for a sign before they decide, when God has already given them his Word, wisdom and counsel to decide with. Notice where you've been waiting for a certainty you weren't promised.
+- From your reading: If you've finished _The Ruthless Elimination of Hurry_, begin _Just Do Something_ by Kevin DeYoung. If not, keep going; there's no deadline. Wednesday's reading is chapter 4, "Our Magic 8-Ball God." DeYoung argues that many Christians wait for a sign before they decide, when God has already given them his Word, wisdom and counsel to decide with. Notice where you've been waiting for a certainty you weren't promised.
 - For later: _Decisive_ by Chip Heath and Dan Heath, on the common traps in how people make choices and a simple process for getting around them.
 - Sunday: Where do I tend to quit when progress becomes slow?
 
@@ -300,7 +298,7 @@ The Hearth mission is to have one of those conversations this week. Prioritize w
 
 You can't control how the other person responds. You can choose to start.
 
-- From your reading: DeYoung separates the things God has already made plain, like how to treat people and what's right, from the choices he leaves to your wisdom. Which kind is the conversation you've been putting off?
+- From your reading: Wednesday's reading is chapter 5 of _Just Do Something_, "A Better Way." DeYoung separates the things God has already made plain, like how to treat people and what's right, from the choices he leaves to your wisdom. Which kind is the conversation you've been putting off?
 - For later: _Crucial Conversations_ by Kerry Patterson, Joseph Grenny, Ron McMillan and Al Switzler, on talking through high-stakes disagreements without going silent or getting angry.
 - Sunday: What did I fear would happen in the conversation I'd been avoiding, and what happened? If it hasn't happened yet, what's still in the way?
 
@@ -319,7 +317,7 @@ The Hearth mission is a plan that needs other people. Work out the outing's dest
 
 On Saturday, hand your daughter one piece of the navigation, like calling the turn at a junction or watching for blazes. If she gets it wrong, let her notice, show her once, and give the job back. Trusting her with part of the decision is communication too.
 
-- From your reading: DeYoung puts weight on asking wise people before you decide. Notice who you go to for counsel, and whether your spouse is one of them.
+- From your reading: Wednesday's reading is chapter 8 of _Just Do Something_, "The Way of Wisdom." DeYoung puts weight on asking wise people before you decide. Notice who you go to for counsel, and whether your spouse is one of them.
 - For later: _The Freedom of Self-Forgetfulness_ by Timothy Keller, a very short book on humility.
 - Sunday: Where am I more concerned with being right than being useful?
 
@@ -343,7 +341,7 @@ The Hearth mission starts with a promise. Tell your spouse where you're going, w
 
 If Christmas falls this week, the seasonal readings add a family evening on Christmas Eve. Protect it.
 
-- From your reading: The book's title is its advice: once you've prayed and sought wisdom, make the choice and go. Pick one idea from it that you'll keep using after this chapter.
+- From your reading: Wednesday's reading is chapter 10 of _Just Do Something_, "The End of the Matter." The book's title is its advice: once you've prayed and sought wisdom, make the choice and go. Pick one idea from it that you'll keep using after this chapter.
 - For later: _The Motive_ by Patrick Lencioni, first suggested in Week 3, a short story about the two reasons people lead: for the reward, or out of responsibility. It leads into Chapter IV.
 - Sunday: What am I climbing toward that is actually worth reaching?
 
@@ -363,7 +361,7 @@ Read one book at a time, in the 10-minute blocks the week's orders list. When yo
 | VIII · The Watch        | Stability                   | _Tender Warrior_ by Stu Weber                                                               |
 | IX · The Ranger's Trial | Integration and legacy      | _Spiritual Leadership_ by J. Oswald Sanders                                                 |
 
-The weekly lessons also suggest books outside this list: _The Common Rule_ (Week 1), _Extreme Ownership_ (Week 2), _Celebration of Discipline_ (Week 5), _The Lost Art of Listening_ (Week 6) and _The Tech-Wise Family_ (Week 7).
+The weekly lessons also suggest books outside this list: _The Common Rule_ (Week 1), _Extreme Ownership_ (Week 2), _Celebration of Discipline_ (Week 5), _The Lost Art of Listening_ (Week 6) and _The Tech-Wise Family_ (Week 7), _Decisive_ (Week 9), _Crucial Conversations_ (Week 10) and _The Freedom of Self-Forgetfulness_ (Week 11).
 
 ## Chapter I field cards
 
@@ -558,9 +556,7 @@ Afterward, check each one. What did you get right, and what was off?
 
 On the same walk, let your daughter lead along one simple marked stretch, such as between two junctions. She watches for the blazes and says which way to go at the junction. Stay right beside her. If she misses a turn, let her notice, then show her once and let her find the next one.
 
-## Chapter III field cards (DRAFT, awaiting approval)
-
-> **Draft written 2026-11-09 (session 2). Not approved; do not build from it yet.**
+## Chapter III field cards
 
 Written only; no pictures. A contour diagram may be added later, only once it is checked.
 
@@ -679,4 +675,4 @@ The tool checks and sharpening cautions were compared with the [US Forest Servic
 
 The Navigation I card's lost-hiker steps and trip-plan advice follow the [US Forest Service's If You Get Lost guidance](https://www.fs.usda.gov/visit/know-before-you-go/if-you-get-lost). The blaze size, double blazes, blue side-trail blazes and the few-hundred-yards rule follow the [Appalachian Trail Conservancy's A.T. Basics](https://appalachiantrail.org/experience/hike-the-trail/at-basics/).
 
-Navigation II (draft): the index-contour convention follows the [USGS index contour description](https://www.usgs.gov/media/images/ondemand-100k-elv-index-label). The time rule follows [Naismith's rule](https://en.wikipedia.org/wiki/Naismith%27s_rule). The lightning steps (thunder means you're in range, leave ridges and peaks, avoid lone trees, open ground, fences and water, wait 30 minutes) follow the [National Weather Service lightning safety sheet](https://www.weather.gov/media/rnk/outdoors/Lightning%20Safety.pdf) and the [Washington Trails Association's lightning guidance](https://www.wta.org/hiking-info/basics/how-to/stay-safe-in-a-lightning-storm). Declination is from [NOAA's magnetic field calculator](https://www.ngdc.noaa.gov/geomag/calculators/magcalc.shtml).
+Navigation II: the index-contour convention follows the [USGS index contour description](https://www.usgs.gov/media/images/ondemand-100k-elv-index-label). The time rule follows [Naismith's rule](https://en.wikipedia.org/wiki/Naismith%27s_rule). The lightning steps (thunder means you're in range, leave ridges and peaks, avoid lone trees, open ground, fences and water, wait 30 minutes) follow the [National Weather Service lightning safety sheet](https://www.weather.gov/media/rnk/outdoors/Lightning%20Safety.pdf) and the [Washington Trails Association's lightning guidance](https://www.wta.org/hiking-info/basics/how-to/stay-safe-in-a-lightning-storm). Declination is from [NOAA's magnetic field calculator](https://www.ngdc.noaa.gov/geomag/calculators/magcalc.shtml).
