@@ -501,6 +501,41 @@ describe('MissionPage', () => {
     expect(setDone).toHaveBeenLastCalledWith(date, 'hearth', false);
   });
 
+  it('shows the Advent reading on its real date, whatever the week, with Done and Undo', async () => {
+    const advent1 = '2026-11-29';
+    const { fixture, setDone } = setup(readiness('green', advent1), advent1);
+    const root = await ready(fixture);
+    const row = Array.from(root.querySelectorAll('.progress li')).find((li) =>
+      li.textContent?.includes('Advent 1'),
+    )!;
+    expect(row.textContent).toContain('Advent 1 · Hope');
+    expect(row.textContent).toContain('Isaiah 9:2–7');
+    expect(row.textContent).toContain('Which one means the most to you right now, and why?');
+
+    row.querySelector('button')!.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(setDone).toHaveBeenCalledWith(advent1, 'seasonal', true);
+    expect(row.querySelector('button')!.textContent?.trim()).toBe('Undo');
+    row.querySelector('button')!.click();
+    await fixture.whenStable();
+    expect(setDone).toHaveBeenLastCalledWith(advent1, 'seasonal', false);
+  });
+
+  it('carries the phone-free evening on Christmas Eve and shows no seasonal row on other days', async () => {
+    const eve = setup(readiness('green', '2026-12-24'), '2026-12-24');
+    const eveRoot = await ready(eve.fixture);
+    const progress = eveRoot.querySelector('.progress')!.textContent!;
+    expect(progress).toContain('Christmas Eve');
+    expect(progress).toContain('Luke 2:1–20');
+    expect(progress).toContain('One unhurried, phone-free family evening.');
+    TestBed.resetTestingModule();
+
+    const ordinary = setup(readiness('green', '2026-11-30'), '2026-11-30');
+    const root = await ready(ordinary.fixture);
+    expect(root.querySelector('.progress')!.textContent).not.toMatch(/Advent|Christmas/);
+  });
+
   it('shows a missed Forge A the next morning with the day’s walk as optional', async () => {
     const tuesday = '2026-09-22';
     const { fixture } = setup(readiness('green', tuesday), tuesday, [], [], [], {

@@ -68,7 +68,7 @@ Decided 2026-11-09. A calendar layer, not part of any chapter or week: it appear
 | Christmas Eve | | Luke 2:1–20, with one unhurried phone-free family evening |
 | Christmas Day | | John 1:1–14 |
 
-Advent Sundays are the four Sundays before Christmas Day. If Advent 4 falls on December 24, both readings show. Each reading carries one short family question (drafted for approval). Scripture is kept as references, as everywhere. The Done mark works like the Hearth mission's: today only, undoable, never tallied. This layer replaces the Chapter III Week 12 Hearth part about a Christmas evening.
+Advent Sundays are the four Sundays before Christmas Day. If Advent 4 falls on December 24, both readings show. Each reading carries one short family question (approved 2026-11-10; listed in `FIELD_MANUAL.md`, "Advent and Christmas family questions"). Scripture is kept as references, as everywhere. The Done mark works like the Hearth mission's: today only, undoable, never tallied. This layer replaces the Chapter III Week 12 Hearth part about a Christmas evening.
 
 ## Family Leadership Principles
 

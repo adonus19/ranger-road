@@ -22,6 +22,7 @@ import {
   getDayOrders,
 } from '../../../core/program/chapter-orders';
 import { getExerciseGuide } from '../../../core/program/exercise-guide-data';
+import { getSeasonalDays } from '../../../core/program/seasonal-layer';
 import { getWeeklyFieldcraft } from '../../../core/program/field-manual.seed';
 import {
   chapterPrograms,
@@ -198,9 +199,13 @@ export class MissionPage {
       ? `Read ${first.readingBookTitle} for ${first.readingMinutes} minutes`
       : `Read for ${first.readingMinutes} minutes`;
   });
+  /** Advent or Christmas on its real date, whatever the chapter (seasonal layer). */
+  protected readonly seasonalDays = computed(() => getSeasonalDays(this.state.today()));
   protected readonly doneError = signal<string | null>(null);
 
-  protected async toggleDone(item: 'hearth' | 'reading' | 'family-quest'): Promise<void> {
+  protected async toggleDone(
+    item: 'hearth' | 'reading' | 'family-quest' | 'seasonal',
+  ): Promise<void> {
     this.doneError.set(null);
     try {
       await this.progress.setDone(this.state.today(), item, !this.progress.isDone(item));

@@ -104,6 +104,37 @@ describe('records backup persistence', () => {
     database.close();
   });
 
+  it('restores a seasonal Done mark, and an older copy that has none', async () => {
+    const database = await RoadDatabase.open(`records-${crypto.randomUUID()}`);
+    const seasonal = {
+      id: '2026-11-29:seasonal',
+      date: '2026-11-29',
+      item: 'seasonal' as const,
+      doneAt: '2026-11-29T19:00:00.000Z',
+    };
+    const hearth = {
+      id: '2026-10-06:hearth',
+      date: '2026-10-06',
+      item: 'hearth' as const,
+      doneAt: '2026-10-06T19:00:00.000Z',
+    };
+    await database.replaceRecords({
+      ...emptyStores(),
+      campaigns: [{ ...campaign }],
+      dailyChecks: [seasonal],
+    });
+    expect(await database.getDailyChecksForDate('2026-11-29')).toEqual([seasonal]);
+
+    await database.replaceRecords({
+      ...emptyStores(),
+      campaigns: [{ ...campaign }],
+      dailyChecks: [hearth],
+    });
+    expect(await database.getDailyChecksForItem('seasonal')).toEqual([]);
+    expect(await database.getDailyChecksForDate('2026-10-06')).toEqual([hearth]);
+    database.close();
+  });
+
   it('leaves this device unchanged when any row in the copy cannot be stored', async () => {
     const database = await RoadDatabase.open(`records-${crypto.randomUUID()}`);
     await database.putCampaign(campaign);

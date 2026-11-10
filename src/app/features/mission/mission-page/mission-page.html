@@ -66,6 +66,25 @@
             </button>
           </li>
         }
+        @if (seasonalDays().length) {
+          <li class="progress__seasonal">
+            <app-done-mark [done]="progress.isDone('seasonal')" />
+            <span class="progress__text seasonal">
+              @for (day of seasonalDays(); track day.key) {
+                <span class="seasonal__day">
+                  <strong>{{ day.title }}</strong>
+                  <span>Read {{ day.reference }} together, then ask: {{ day.question }}</span>
+                  @if (day.evening) {
+                    <span>{{ day.evening }}</span>
+                  }
+                </span>
+              }
+            </span>
+            <button type="button" (click)="toggleDone('seasonal')">
+              {{ progress.isDone('seasonal') ? 'Undo' : 'Done' }}
+            </button>
+          </li>
+        }
         @if (readingOrder(); as reading) {
           <li>
             <app-done-mark [done]="progress.isDone('reading')" />

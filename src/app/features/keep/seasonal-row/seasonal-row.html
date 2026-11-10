@@ -1,0 +1,28 @@
+@if (days().length) {
+  <section class="seasonal" aria-labelledby="seasonal-title">
+    <app-icon class="seasonal__icon" name="book-open" />
+    <div class="seasonal__text">
+      <h2 class="visually-hidden" id="seasonal-title">Family reading</h2>
+      @for (day of days(); track day.key) {
+        <div class="seasonal__day">
+          <strong>{{ day.title }}</strong>
+          <span class="seasonal__ref">Read {{ day.reference }} together</span>
+          <span class="seasonal__question">{{ day.question }}</span>
+          @if (day.evening) {
+            <span class="seasonal__evening">{{ day.evening }}</span>
+          }
+        </div>
+      }
+    </div>
+    <button
+      type="button"
+      class="seasonal__done"
+      [class.is-done]="done()"
+      [attr.aria-pressed]="done()"
+      [disabled]="saving()"
+      (click)="toggle()"
+    >
+      {{ done() ? 'Undo' : 'Done' }}
+    </button>
+  </section>
+}

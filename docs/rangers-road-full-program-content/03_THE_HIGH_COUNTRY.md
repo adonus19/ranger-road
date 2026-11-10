@@ -128,7 +128,7 @@ A seasonal layer on the calendar, shown on Today on its real dates whatever the 
 - Christmas Eve: Luke 2:1–20, with one unhurried phone-free family evening
 - Christmas Day: John 1:1–14
 
-Each reading gets one short family question **(draft)**. When Advent 4 falls on December 24, both readings show.
+Each reading gets one short family question (approved 2026-11-10; see `FIELD_MANUAL.md`). When Advent 4 falls on December 24, both readings show.
 
 # High Country Trial
 Take the trial once Week 12 is finished, on any day the person chooses (see Trial Timing in `CHAPTERS_AND_TRIALS.md`). The hike and the circuit stay on separate days. The hike needs a clear-weather day, so pick one.

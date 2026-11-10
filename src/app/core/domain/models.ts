@@ -369,9 +369,11 @@ export interface RoadSession {
 /**
  * A Done tap for one of the day's smaller orders. Today only; undoing removes the row.
  * 'high-point-told' is Week 12's Hearth part (d): telling your spouse the high-point answer
- * after the High Country hike (decided 2026-11-09).
+ * after the High Country hike (decided 2026-11-09). 'seasonal' is the Advent or Christmas
+ * family reading on its real date (core/program/seasonal-layer.ts); one row per day, even when
+ * Advent 4 and Christmas Eve share December 24. Added without a database version change.
  */
-export type DailyCheckItem = 'hearth' | 'reading' | 'family-quest' | 'high-point-told';
+export type DailyCheckItem = 'hearth' | 'reading' | 'family-quest' | 'high-point-told' | 'seasonal';
 
 export interface DailyCheck {
   /** `${date}:${item}`, so a second tap on the same day is the same row. */

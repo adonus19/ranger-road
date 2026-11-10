@@ -46,7 +46,7 @@ Build:
 - campaign summaries
 
 ## Phase 4 — Formation Content
-(Advent and Christmas family readings, a yearly seasonal layer, belong here.)
+(Advent and Christmas family readings, a yearly seasonal layer: built 2026-11-10.)
 - faith content
 - leadership lessons
 - reading assignments

@@ -658,9 +658,9 @@ Afterward, check both. Compare your gain with your phone's record or the trail g
 
 Optional. On the same walk, give your daughter one navigation job on a marked trail and let her own it the whole way. She might call the turn at each junction, count the switchbacks, or say when she hasn't seen a blaze for a while. Stay beside her. If she misses something, let her notice, show her once, and give the job back.
 
-## Advent and Christmas family questions (DRAFT, awaiting approval)
+## Advent and Christmas family questions
 
-> **Draft written 2026-11-09 (session 2). Not approved; do not build from it yet.**
+> Approved 2026-11-10. Shown on Keep and Today's Mission on their dates by the seasonal layer.
 
 One short question for the family after each seasonal reading. Read the passage aloud together, then ask the question.
 

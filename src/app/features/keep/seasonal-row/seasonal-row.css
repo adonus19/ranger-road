@@ -1,0 +1,75 @@
+:host {
+  display: block;
+}
+
+/* The Keep reminder-row form (see the high-point row), grown to hold a reading and a question. */
+.seasonal {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0.25rem 0.75rem 0.9375rem;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--text);
+}
+
+.seasonal__icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: none;
+  color: var(--icon-gold);
+}
+
+.seasonal__text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-left: 1.125rem;
+  border-left: 1px solid var(--line-soft);
+}
+
+.seasonal__day {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.seasonal__day strong {
+  font-family: var(--font-display);
+  font-size: 1.140625rem;
+  line-height: 1.15;
+}
+
+.seasonal__ref {
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.seasonal__question,
+.seasonal__evening {
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.seasonal__done {
+  min-width: 4.5rem;
+  min-height: 2.75rem;
+  flex: none;
+  padding: 0 0.875rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.seasonal__done.is-done {
+  border-color: transparent;
+  background: var(--surface-tint);
+  color: var(--text-secondary);
+}

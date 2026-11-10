@@ -29,6 +29,7 @@
       <a [routerLink]="program().trialRoute">View {{ program().trialName }} record</a>
     </section>
     <div class="check-in-reminder">
+      <app-seasonal-row />
       <app-check-in-reminder />
       <app-backup-reminder />
     </div>
@@ -168,11 +169,13 @@
 
     @if (!trialDay()) {
       <div class="check-in-reminder">
+        <app-seasonal-row />
         <app-check-in-reminder />
         <app-backup-reminder />
       </div>
     } @else {
       <div class="check-in-reminder">
+        <app-seasonal-row />
         <app-backup-reminder />
       </div>
     }

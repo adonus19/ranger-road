@@ -27,6 +27,7 @@ import { OptionalForgeCard } from '../../forge/optional-forge-card/optional-forg
 import { KeepBand } from '../keep-band/keep-band';
 import { StartDay } from '../start-day/start-day';
 import { HighPointReminder } from '../high-point-reminder/high-point-reminder';
+import { SeasonalRow } from '../seasonal-row/seasonal-row';
 import { TrialAvailableCard } from '../trial-available-card/trial-available-card';
 
 const WATCH_ICONS: Readonly<Record<string, IconName>> = {
@@ -65,6 +66,7 @@ const READINESS_COPY: Readonly<Record<ReadinessStatus | 'pending', ReadinessCopy
     DoneMark,
     GateTrialRecoveryReminder,
     HighPointReminder,
+    SeasonalRow,
     Icon,
     KeepBand,
     OptionalForgeCard,

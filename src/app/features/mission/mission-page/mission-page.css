@@ -497,6 +497,34 @@ h1 {
   font-weight: 600;
 }
 
+.progress li.progress__seasonal {
+  align-items: flex-start;
+  padding: 0.6rem 0;
+}
+
+.progress li.progress__seasonal > app-done-mark,
+.progress li.progress__seasonal > button {
+  margin-top: 0.1rem;
+}
+
+.seasonal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.seasonal__day {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.seasonal__day span {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
 .light-activity-link {
   display: flex;
   min-height: var(--touch-target);
