@@ -81,12 +81,6 @@ export class HighCountryTrialPage implements OnInit {
   protected readonly skillParts = computed(
     () => this.ownDraft()?.definitionSnapshot.skillParts ?? this.previewParts(),
   );
-  protected readonly stoppedAttempts = computed(() =>
-    this.attempts().filter((attempt) => attempt.outcome === 'stopped'),
-  );
-  protected readonly postponedAttempts = computed(() =>
-    this.attempts().filter((attempt) => attempt.outcome === 'postponed-for-weather'),
-  );
   /** The hike's day once it is finished and kept in the open draft. */
   protected readonly hikeDoneOn = computed(
     () =>

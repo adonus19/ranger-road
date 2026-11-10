@@ -152,7 +152,21 @@ export function getActivityChoices(day: ChapterDay): MissionDefinition[] {
     return copy;
   };
   const primary = getOwnActivityChoices(day.makeup.primary).map(strip);
-  if (primary[0]) primary[0] = { ...primary[0], ...dayExtras };
+  if (primary[0]) {
+    // A field mission, such as Week 11's Navigation II, also stays with its day.
+    const fieldMission = getDayContent(day).activity.fieldcraftPractice
+      ? getWeekContent(day).fieldcraft
+      : undefined;
+    const activityDetails = [
+      ...(primary[0].activityDetails ?? []),
+      ...(fieldMission ? [fieldMission] : []),
+    ];
+    primary[0] = {
+      ...primary[0],
+      ...dayExtras,
+      ...(activityDetails.length ? { activityDetails } : {}),
+    };
+  }
   const optional = day.makeup.optional.flatMap((source) =>
     getOwnActivityChoices(source).map((choice) => ({
       ...strip(choice),
@@ -220,7 +234,9 @@ export function getDayOrders(
     guidance = 'Check readiness before training.';
   }
 
-  if (day.makeup?.note) guidance = guidance ? `${day.makeup.note} ${guidance}` : day.makeup.note;
+  // A Red morning holds every Forge, moved or not, so the move note would contradict it.
+  if (day.makeup?.note && readinessStatus !== 'red')
+    guidance = guidance ? `${day.makeup.note} ${guidance}` : day.makeup.note;
 
   return [
     {

@@ -129,4 +129,46 @@ describe('High Country Trial plan', () => {
     expect(history).toContain('Not a failed attempt');
     expect(history).not.toContain('Stopped');
   });
+
+  it('lists postponed and stopped attempts newest first, with the pain noted on each', async () => {
+    const attempt = (
+      day: string,
+      id: string,
+      outcome: TrialAttempt['outcome'],
+      severity: number,
+    ): TrialAttempt => ({
+      ...createTrialDraft(
+        'high-country-trial',
+        day,
+        { ...green, date: day, checkedAt: `${day}T10:00:00.000Z` },
+        `${day}T10:30:00.000Z`,
+        id,
+      ),
+      outcome,
+      stoppedAt: `${day}T11:00:00.000Z`,
+      painEvents: [
+        {
+          id: `pain-${id}`,
+          timestamp: `${day}T10:45:00.000Z`,
+          bodyArea: 'Knee',
+          severity,
+          actionTaken: 'continue',
+          trialAttemptId: id,
+          trialPhaseId: 'hike',
+        },
+      ],
+    });
+    // Newest first, as the database returns them: stopped on the 12th, postponed on the 11th.
+    const root = await render(undefined, [
+      attempt('2027-01-12', 'hc-stopped', 'stopped', 4),
+      attempt('2027-01-11', 'hc-postponed', 'postponed-for-weather', 3),
+    ]);
+    const entries = [...root.querySelectorAll('.station-history__entry')].map(
+      (entry) => entry.textContent ?? '',
+    );
+    expect(entries[0]).toContain('Stopped · Tue, Jan 12');
+    expect(entries[0]).toContain('Knee · 4/10');
+    expect(entries[1]).toContain('Postponed · Mon, Jan 11');
+    expect(entries[1]).toContain('Knee · 3/10');
+  });
 });

@@ -219,28 +219,26 @@
           </div>
         </details>
       }
-      @for (attempt of postponedAttempts(); track attempt.id) {
+      @for (attempt of attempts(); track attempt.id) {
         <details class="station-history__entry">
           <summary>
-            <span>Postponed · {{ shortDate(attempt.date) }}</span>
+            <span
+              >{{ attempt.outcome === 'postponed-for-weather' ? 'Postponed' : 'Stopped' }} ·
+              {{ shortDate(attempt.date) }}</span
+            >
             <span>View record</span>
           </summary>
           <div class="station-history__detail">
-            <p>Postponed {{ attemptPiece(attempt) }}. Not a failed attempt.</p>
-            @if (attempt.weatherReason) {
-              <p>Reason: {{ attempt.weatherReason }}</p>
+            @if (attempt.outcome === 'postponed-for-weather') {
+              <p>Postponed {{ attemptPiece(attempt) }}. Not a failed attempt.</p>
+              @if (attempt.weatherReason) {
+                <p>Reason: {{ attempt.weatherReason }}</p>
+              }
+            } @else {
+              <p>
+                Stopped during {{ attemptPiece(attempt) }}. This attempt did not count as a pass.
+              </p>
             }
-          </div>
-        </details>
-      }
-      @for (attempt of stoppedAttempts(); track attempt.id) {
-        <details class="station-history__entry">
-          <summary>
-            <span>Stopped · {{ shortDate(attempt.date) }}</span>
-            <span>View record</span>
-          </summary>
-          <div class="station-history__detail">
-            <p>Stopped during {{ attemptPiece(attempt) }}. This attempt did not count as a pass.</p>
             @for (pain of attempt.painEvents; track pain.id) {
               <p>Pain: {{ pain.bodyArea }} · {{ pain.severity }}/10 · {{ pain.actionTaken }}</p>
             }

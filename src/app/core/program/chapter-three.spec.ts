@@ -11,6 +11,7 @@ import {
   getWorkoutChoices,
 } from './chapter-orders';
 import { chapterThreeDailySeed } from './chapter-three-daily.seed';
+import { withMakeup } from './makeup-schedule';
 import { chapterThreeProgram } from './chapter-three.program';
 import {
   chapterThreeForgeA,
@@ -161,6 +162,22 @@ describe('Chapter III dated orders', () => {
       'Navigation II field mission: before the rehearsal, study the trail map and predict the elevation gain and where the turnaround point would be; check afterward.',
     ]);
     expect(saturday.optionalFamilyQuest).toContain('help navigate a marked trail');
+  });
+
+  it('keeps the field mission with Week 11’s Saturday when a missed Forge B moves onto it', () => {
+    // Thursday Dec 17's Forge B was not saved, so it leads Saturday Dec 19.
+    const resolve = (date: string) => at(date);
+    const saturday = withMakeup(at('2026-12-19'), '2026-12-19', '2026-12-19', resolve, {
+      records: [],
+      sessions: [],
+      redDates: new Set(),
+    });
+    const [forge] = getActivityChoices(saturday);
+    expect(forge.title).toBe('Forge B');
+    expect(forge.activityDetails).toContain(
+      'Navigation II field mission: before the rehearsal, study the trail map and predict the elevation gain and where the turnaround point would be; check afterward.',
+    );
+    expect(forge.optionalFamilyQuest).toContain('help navigate a marked trail');
   });
 
   it('offers Week 12 Friday as an easy walk or Restoration, and Saturday as trial preparation', () => {

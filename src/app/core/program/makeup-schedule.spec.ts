@@ -43,6 +43,15 @@ describe('Missed Forge make-ups', () => {
     expect(main?.guidance).toContain('optional');
   });
 
+  it('leaves the move note off Keep on a Red morning, so it reads only as a Red day', () => {
+    const tuesday = day('2026-10-06', '2026-10-06');
+    const main = getDayOrders(tuesday, 'red').find((order) => order.kind === 'weekly');
+    expect(main?.title).toBe('Restoration or easy movement, if appropriate');
+    expect(main?.guidance).toBe(
+      'No strength mission. Do only what is appropriate for your symptoms.',
+    );
+  });
+
   it('shows nothing moved on Monday itself, or once Forge A is recorded', () => {
     expect(day('2026-10-05', '2026-10-05').makeup).toBeUndefined();
     expect(
